@@ -21,7 +21,7 @@ impl fmt::Display for ParseError {
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
-struct BlogpostMetadata {
+pub struct BlogpostMetadata {
     pub title: String,
     pub filename: PathBuf,
     pub date: DateTime<FixedOffset>,
@@ -58,8 +58,7 @@ fn get_secure_filename(path: &str) -> Result<PathBuf, ParseError> {
     Ok(Path::new(filename).to_path_buf())
 }
 
-fn parse_blogpost_metadata(head: &str) -> Result<BlogpostMetadata, ParseError> {
-    let props = parse_metadata(head)?;
+fn parse_blogpost_metadata(props: HashMap<&str, &str>) -> Result<BlogpostMetadata, ParseError> {
     let title = props
         .get("title")
         .copied()
@@ -100,6 +99,12 @@ fn split_file_content(content: &str) -> Result<(HashMap<&str, &str>, &str), Pars
         .ok_or_else(|| ParseError::new("No content after header".to_owned()))?;
 
     Ok((header_map, content))
+}
+
+pub fn parse_blogpost(content: &str) -> Result<(BlogpostMetadata, &str), ParseError> {
+    let (header_map, content) = split_file_content(content)?;
+    let metadata = parse_blogpost_metadata(header_map)?;
+    Ok((metadata, content))
 }
 
 #[cfg(test)]
@@ -222,7 +227,10 @@ mod tests {
     #[test]
     fn parse_blogpost_metadata_should_parse_minimal_metadata() {
         // given
-        let input = "title: Lorem ipsum\nfilename: lipsum\ndate:2020-05-11T12:13:14+02:00\n";
+        let mut input = HashMap::with_capacity(3);
+        input.insert("title", "Lorem ipsum");
+        input.insert("filename", "lipsum");
+        input.insert("date", "2020-05-11T12:13:14+02:00");
 
         // when
         let result = parse_blogpost_metadata(input).expect("Expected valid result");
@@ -241,7 +249,9 @@ mod tests {
     #[test]
     fn parse_blogpost_metadata_should_fail_for_missing_title() {
         // given
-        let input = "filename: lipsum\ndate:2020-05-11T12:13:14+02:00\n";
+        let mut input = HashMap::with_capacity(3);
+        input.insert("filename", "lipsum");
+        input.insert("date", "2020-05-11T12:13:14+02:00");
 
         // when
         let result = parse_blogpost_metadata(input);
@@ -253,7 +263,9 @@ mod tests {
     #[test]
     fn parse_blogpost_metadata_should_fail_for_missing_filename() {
         // given
-        let input = "title: Lorem ipsum\ndate:2020-05-11T12:13:14+02:00\n";
+        let mut input = HashMap::with_capacity(3);
+        input.insert("title", "Lorem ipsum");
+        input.insert("date", "2020-05-11T12:13:14+02:00");
 
         // when
         let result = parse_blogpost_metadata(input);
@@ -265,7 +277,10 @@ mod tests {
     #[test]
     fn parse_blogpost_metadata_should_fail_for_bad_date() {
         // given
-        let input = "title: Lorem ipsum\nfilename: lipsum\ndate:2020-05-11+02:00\n";
+        let mut input = HashMap::with_capacity(3);
+        input.insert("title", "Lorem ipsum");
+        input.insert("filename", "lipsum");
+        input.insert("date", "2020-05-11+02:00");
 
         // when
         let result = parse_blogpost_metadata(input);
@@ -282,7 +297,9 @@ mod tests {
     #[test]
     fn parse_blogpost_metadata_should_fail_for_missing_date() {
         // given
-        let input = "title: Lorem ipsum\nfilename: lipsum\n";
+        let mut input = HashMap::with_capacity(3);
+        input.insert("title", "Lorem ipsum");
+        input.insert("filename", "lipsum");
 
         // when
         let result = parse_blogpost_metadata(input);
