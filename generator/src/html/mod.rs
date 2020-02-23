@@ -15,10 +15,30 @@ fn base<T: Render>(title: &str, content: T) -> Markup {
             body {
                 div.wrap-all {
                     div.wrapper {
+                        (header())
                         main.content {
                             (content)
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+fn header() -> Markup {
+    html! {
+        header {
+            div.banner {
+                h1 {
+                    a href="/" {"Stranger Than Usual"}
+                }
+            }
+            nav.navigation {
+                ul.main-nav {
+                    li { a href="/" {"Home"} }
+                    li { a href="#" {"Archiv"} }
+                    li { a href="#" {"Kategorien"} }
                 }
             }
         }
