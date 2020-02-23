@@ -1,0 +1,164 @@
+/*********** SCSS color variables ***************/
+$main-background-color: #fffff6;
+/* color for borders, captions, links */
+$main-foreground-color: #80bb66;
+
+$link-hover-color: #44bb11;
+
+$button-background-color: #e8ffd8;
+$button-background-color-hover: #d8ffc8;
+$button-text-color: DarkSlateGray;
+
+/******************************************   B O D Y   ******************************************/
+
+    body {
+        margin: 0;
+        vertical-align: top;
+        background-color: $main-background-color;
+        height: 100%;
+    }
+
+    /* Grundformatierung sämtlicher Links */
+    a:link, a:active, a:visited {
+        text-decoration: none;
+        color: $main-foreground-color;
+    }
+    a:hover {
+        text-decoration: underline;
+        color: $link-hover-color;
+    }
+
+/****************************   T E X T F O R M A T I E R U N G E N   ****************************/
+
+    /*** Grundelegende Textformatierungen ***/
+    /*** BLOCKQUOTE, CODE, IMG, UL, OL ETC. ***/
+
+    blockquote::before {
+      content: "”";
+      position: absolute;
+      left: -0.11em;
+      top: -0.15em;
+
+      font-family: georgia, serif;
+      font-size: 3.5em;
+      font-weight: bold;
+    }
+    /* Zitatboxen */
+    blockquote {
+        position: relative; //needed for positioning of "”"
+        font-style: italic;
+
+        padding: 0 1.5625em 0 1.875em;
+        background-position: left top;
+        background-repeat: no-repeat;
+        em {
+          font-style: normal;
+        }
+        margin: 1.25em 1.875em 1.25em 1.875em;
+    }
+
+/******************************   G L O B A L E R   W R A P P E R   ******************************/
+
+    .wrap-all {
+        margin: 0;
+        width: 100%;    /* Füllt das gesamte Browserfenster aus */
+        height: 100%;
+    }
+
+/****************************************   W R A P P E R   **************************************/
+
+    .wrapper {
+        height: 100%;
+        text-align: left;
+        margin: 0 auto 0 auto;  /* Zentriert die Website */
+
+        max-width: 51.25em;    /* Breite der Website */
+    }
+        /* Desktop, iPad, etc. */
+        @media only screen and (min-device-width: 481px) {
+            .wrapper {
+                padding: 0 .625em 0 .625em; /* Abstand der Rahmen zum Content (Wird zur width hinzugerechnet) */
+
+                border-left-style: solid;
+                border-left-width: 1px;
+                border-left-color: $main-foreground-color;
+
+                border-right-style: solid;
+                border-right-width: 1px;
+                border-right-color: $main-foreground-color;
+            }
+        }
+        /* Kleinere Geräte */
+        @media only screen and (max-device-width: 480px) {
+            .wrapper {
+                padding: 0;
+                margin: 0 1em 0 1em;
+            }
+        }
+
+/*****************************************   H E A D E R   ***************************************/
+
+@import 'header';
+
+/*******************************   C O N T E N T - W R A P P E R   *******************************/
+
+    .wrapper .content {
+        width: inherit;
+        padding-top: 1.875em;
+    }
+
+    /* Überschriften über bestimmten Bereichen der Website */
+    h2.section-heading {
+        font-family: Georgia, serif;
+        color: $main-foreground-color;
+
+        margin: 0 0 2em .625em;
+        font-size: 2em;
+    }
+
+    /* Artikel Vor/Zurück */
+    .pagination {
+        text-align: right;
+    }
+        /* Kleinere Geräte */
+        @media only screen and (max-device-width: 480px) {
+            /* Artikel Vor/Zurück */
+            .pagination {
+                padding-bottom: 2em;
+            }
+        }
+
+
+    /* Ein einzelner Blogpost */
+    article.blogpost {
+        width: inherit;
+
+        padding-bottom: 2.5em;
+    }
+
+    /* Fließtext des Postings */
+    article.blogpost .entry {
+        font-family: serif;
+
+        margin-top: .8em;
+        margin-bottom: 1.4em;
+    }
+
+    /* Metadaten unter dem Posting */
+    article.blogpost footer span {
+        font-family: Verdana, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        font-size: .9em;
+    }
+
+    article.blogpost img {
+        max-width: 100%;
+    }
+
+/******************************   Q U O T E   O F   T H E   D A Y   ******************************/
+
+    .quote-author-links a:link, .quote-author-links a:active, .quote-author-linksn a:visited {
+        color: #000000;
+        text-decoration: none;
+    }

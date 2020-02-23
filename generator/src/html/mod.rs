@@ -11,6 +11,9 @@ fn base<T: Render>(title: &str, content: T) -> Markup {
                 meta charset="utf-8";
                 meta name="viewport" content="width=device-width, initial-scale=1";
                 title {"Stranger Than Usual — " (title)};
+                // TODO: add cache-hash to the favicon and style filenames
+                link rel="stylesheet" media="screen" href="/assets/style.css";
+                link rel="icon" type="image/png" href="/assets/favicon.png";
             }
             body {
                 div.wrap-all {

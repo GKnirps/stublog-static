@@ -1,0 +1,56 @@
+    .wrapper header {
+        width: inherit;
+    }
+
+/****************************************   B A N N E R   ****************************************/
+
+    .wrapper header .banner {
+        width: inherit;
+    }
+
+    /* Blog-Überschrift */
+    h1 {
+        font-family: Georgia, serif;
+        color: $main-foreground-color;
+        text-align: center;
+
+        margin: 0;
+        padding: 1em 0 1.2em 0;
+        font-size: 3em;
+    }
+
+    h1 a:hover {
+        text-decoration: none;
+    }
+
+/************************************   N A V I G A T I O N    ***********************************/
+
+
+    .wrapper header .navigation {
+        padding: .0625em .3125em .0625em .3125em; /* Raum um das Set der Navigations-Buttons */
+        border-top: solid 1px $main-foreground-color;
+        border-bottom: solid 1px $main-foreground-color;
+    }
+
+
+    header .navigation ul.main-nav {
+        display: flex;    //Show menu elements in a line
+        flex-wrap: wrap;  //wrape menu elements if horizontal space is insufficient.
+
+        list-style-type: none;
+
+        padding-left: 0px;
+    }
+
+    /* Element-Beschriftungen Inaktiv (Unbesucht & Besucht) */
+    ul.main-nav li a:link, ul.main-nav li a:visited {
+        font-family: Georgia, serif;
+
+        margin-right: .3125em;  /* Abstand zwischen den Elementen */
+        font-size: 1.5em;
+    }
+
+    /* Hover über aktivem Element */
+    ul.main-nav li a:hover {
+        text-decoration: none;
+    }
