@@ -152,6 +152,10 @@ $button-text-color: DarkSlateGray;
         font-size: .9em;
     }
 
+    article.blogpost footer > span {
+        display: block;
+    }
+
     article.blogpost img {
         max-width: 100%;
     }
