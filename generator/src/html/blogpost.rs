@@ -1,18 +1,11 @@
-use crate::parser::BlogpostMetadata;
+use crate::blogposts::Blogpost;
 use maud::{html, Markup, PreEscaped};
-use pulldown_cmark::{html::push_html, Parser};
 
-fn render_cmark(input: &str) -> String {
-    let parser = Parser::new(input);
-    let mut buf = String::with_capacity(input.len() * 2);
-    push_html(&mut buf, parser);
-    buf
-}
-
-pub fn render_blogpost(metadata: &BlogpostMetadata, content: &str) -> Markup {
-    let html_content = html! {
+pub fn render_blogpost(blogpost: &Blogpost) -> Markup {
+    let metadata = &blogpost.metadata;
+    html! {
         article.blogpost {
-            div.entry { (PreEscaped(render_cmark(content))) }
+            div.entry { (PreEscaped(&blogpost.content_html)) }
             footer {
                 span.post-time {
                     (super::time(&metadata.date))
@@ -25,19 +18,22 @@ pub fn render_blogpost(metadata: &BlogpostMetadata, content: &str) -> Markup {
                 }
             }
         }
-    };
-    super::base(&metadata.title, html_content)
+    }
+}
+
+pub fn render_blogpost_page(blogpost: &Blogpost) -> Markup {
+    super::base(&blogpost.metadata.title, render_blogpost(blogpost))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::blogposts::Blogpost;
+    use crate::parser::BlogpostMetadata;
     use chrono::{FixedOffset, TimeZone};
     use std::path::Path;
 
-    #[test]
-    fn render_blogpost_should_render_blogpost_with_footer() {
-        // given
+    fn create_blogpost() -> Blogpost {
         let date = FixedOffset::east(3600 * 2)
             .ymd(2020, 5, 11)
             .and_hms(12, 13, 14);
@@ -46,14 +42,39 @@ mod tests {
             filename: Path::new("foobar").to_owned(),
             date,
         };
-        let content = "*foo*bar";
+        let content_html = "<p><em>foo</em>bar</p>".to_owned();
+
+        Blogpost {
+            metadata,
+            content_html,
+        }
+    }
+
+    #[test]
+    fn render_blogpost_should_render_blogpost_with_footer() {
+        // given
+        let blogpost = create_blogpost();
 
         // when
-        let result = render_blogpost(&metadata, content).into_string();
+        let result = render_blogpost(&blogpost).into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);
-        assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p>\n</div>"));
+        assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p></div>"));
+        assert!(result.contains("11.05.2020 12:13"));
+    }
+
+    #[test]
+    fn render_blogpost_page_should_render_blogpost() {
+        // given
+        let blogpost = create_blogpost();
+
+        // when
+        let result = render_blogpost_page(&blogpost).into_string();
+
+        // then
+        println!("Checking rendered html:\n{}", result);
+        assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p></div>"));
         assert!(result.contains("<title>Nevermind</title>"));
         assert!(result.contains("11.05.2020 12:13"));
     }

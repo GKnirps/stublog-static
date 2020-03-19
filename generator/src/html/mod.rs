@@ -2,6 +2,7 @@ use chrono::{DateTime, FixedOffset};
 use maud::{html, Markup, Render, DOCTYPE};
 
 pub mod blogpost;
+pub mod home;
 
 fn base<T: Render>(title: &str, content: T) -> Markup {
     html! {
@@ -10,7 +11,7 @@ fn base<T: Render>(title: &str, content: T) -> Markup {
             head {
                 meta charset="utf-8";
                 meta name="viewport" content="width=device-width, initial-scale=1";
-                title {"Stranger Than Usual — " (title)};
+                title {(title)};
                 // TODO: add cache-hash to the favicon and style filenames
                 link rel="stylesheet" media="screen" href="/assets/style.css";
                 link rel="icon" type="image/png" href="/assets/favicon.png";
@@ -39,7 +40,6 @@ fn header() -> Markup {
             }
             nav.navigation {
                 ul.main-nav {
-                    li { a href="/" {"Home"} }
                     li { a href="#" {"Archiv"} }
                     li { a href="#" {"Kategorien"} }
                 }

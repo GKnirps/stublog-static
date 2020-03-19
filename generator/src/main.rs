@@ -23,7 +23,11 @@ fn main() -> Result<(), String> {
         .map_err(|e| format!("Failed to read all blogposts: {}", e))?;
     let blogposts = blogposts::parse_blogposts(&raw_blogposts)
         .map_err(|e| format!("Failed to parse all blogposts: {}", e))?;
-    let blogpost_dir: PathBuf = [&odir, "blogposts"].iter().collect();
+    let blogpost_dir: PathBuf = [&odir, "blogpost"].iter().collect();
     blogposts::write_blogposts(&blogpost_dir, &blogposts)
-        .map_err(|e| format!("Failed to write all blogposts: {}", e))
+        .map_err(|e| format!("Failed to write all blogposts: {}", e))?;
+
+    // TODO: it does not really make sense to put this in blogposts. rename blogposts?
+    blogposts::write_home(Path::new(&odir), &blogposts)
+        .map_err(|e| format!("Failed to write home page: {}", e))
 }
