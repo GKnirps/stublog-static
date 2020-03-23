@@ -3,7 +3,6 @@ use maud::{html, Markup};
 use super::blogpost::render_blogpost;
 use crate::blogposts::Blogpost;
 
-// TODO: create links to every blogpost
 pub fn render_home(blogposts: &[Blogpost]) -> Markup {
     let html_content = html! {
         div.blogposts {

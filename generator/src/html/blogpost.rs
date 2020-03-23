@@ -1,8 +1,10 @@
 use crate::blogposts::Blogpost;
+use crate::paths::blogpost_path;
 use maud::{html, Markup, PreEscaped};
 
 pub fn render_blogpost(blogpost: &Blogpost) -> Markup {
     let metadata = &blogpost.metadata;
+    let permalink = blogpost_path(metadata);
     html! {
         article.blogpost {
             div.entry { (PreEscaped(&blogpost.content_html)) }
@@ -15,6 +17,13 @@ pub fn render_blogpost(blogpost: &Blogpost) -> Markup {
                 }
                 span.tags {
                     "Tags: TODO"
+                }
+                span.permalink {
+                    // TODO: is there a way to make permalinks nicer (e.g. use the headline of the
+                    // article as link)?
+                    a href=(permalink) {
+                        "Permalink"
+                    }
                 }
             }
         }

@@ -47,6 +47,7 @@ pub fn write_blogposts(dir: &Path, posts: &[Blogpost]) -> std::io::Result<()> {
 fn write_blogpost(dir: &Path, blogpost: &Blogpost) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push(&blogpost.metadata.filename);
+    filename.set_extension("html");
     let file = OpenOptions::new()
         .write(true)
         .create(true)

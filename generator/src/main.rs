@@ -7,6 +7,7 @@ mod blogposts;
 mod file;
 mod html;
 mod parser;
+mod paths;
 
 fn main() -> Result<(), String> {
     let mut arg = args();
