@@ -9,6 +9,9 @@ mod html;
 mod parser;
 mod paths;
 
+#[cfg(test)]
+mod test_utils;
+
 fn main() -> Result<(), String> {
     let mut arg = args();
     let prog_name = arg.next().expect("Expected at least one argument");

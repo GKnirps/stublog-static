@@ -18,32 +18,16 @@ pub fn render_home(blogposts: &[Blogpost]) -> Markup {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parser::BlogpostMetadata;
-    use chrono::{FixedOffset, TimeZone};
-    use std::path::Path;
+    use crate::test_utils::create_blogpost;
 
     #[test]
     fn render_home_should_render_all_given_blogposts() {
         // given
-        let date = FixedOffset::east(3600 * 2)
-            .ymd(2020, 5, 11)
-            .and_hms(12, 13, 14);
-        let post1 = Blogpost {
-            content_html: "Post1".to_owned(),
-            metadata: BlogpostMetadata {
-                title: "t1".to_owned(),
-                filename: Path::new("foo1").to_owned(),
-                date,
-            },
-        };
-        let post2 = Blogpost {
-            content_html: "Post2".to_owned(),
-            metadata: BlogpostMetadata {
-                title: "t2".to_owned(),
-                filename: Path::new("foo2").to_owned(),
-                date: date.clone(),
-            },
-        };
+        let mut post1 = create_blogpost();
+        post1.content_html = "Post1".to_owned();
+
+        let mut post2 = create_blogpost();
+        post2.content_html = "Post2".to_owned();
 
         // when
         let result = render_home(&[post1, post2]).into_string();
