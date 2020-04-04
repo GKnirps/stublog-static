@@ -18,7 +18,7 @@ pub struct Blogpost {
     pub content_html: String,
 }
 
-pub fn parse_blogposts<'a>(inputs: &'a [String]) -> Result<Vec<Blogpost>, parser::ParseError> {
+pub fn parse_blogposts(inputs: &[String]) -> Result<Vec<Blogpost>, parser::ParseError> {
     // TODO: it would be more helpful if we knew which blogpost failed to parse
     inputs
         .iter()
