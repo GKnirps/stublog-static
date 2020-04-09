@@ -1,8 +1,11 @@
+use crate::paths::archive_path;
 use chrono::{DateTime, FixedOffset};
 use maud::{html, Markup, Render, DOCTYPE};
 
+pub mod archive;
 pub mod blogpost;
 pub mod home;
+pub mod pager;
 
 fn base<T: Render>(title: &str, content: T) -> Markup {
     html! {
@@ -40,7 +43,7 @@ fn header() -> Markup {
             }
             nav.navigation {
                 ul.main-nav {
-                    li { a href="#" {"Archiv"} }
+                    li { a href=(archive_path(0)) {"Archiv"} }
                     li { a href="#" {"Kategorien"} }
                 }
             }
@@ -77,6 +80,10 @@ mod tests {
         assert!(result
             .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
         assert!(result.contains("<title>There will be cake</title>"));
+        assert!(
+            result.contains("<a href=\"/blogposts/0\">Archiv</a>"),
+            "Expected archive link to be on the page"
+        );
         assert!(result.contains(content));
     }
 

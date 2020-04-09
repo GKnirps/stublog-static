@@ -32,6 +32,9 @@ fn main() -> Result<(), String> {
         .map_err(|e| format!("Failed to write all blogposts: {}", e))?;
 
     // TODO: it does not really make sense to put this in blogposts. rename blogposts?
+    let archive_dir: PathBuf = [&odir, "blogposts"].iter().collect();
+    blogposts::write_archive(&archive_dir, &blogposts)
+        .map_err(|e| format!("Failed to write archive: {}", e))?;
     blogposts::write_home(Path::new(&odir), &blogposts)
         .map_err(|e| format!("Failed to write home page: {}", e))
 }
