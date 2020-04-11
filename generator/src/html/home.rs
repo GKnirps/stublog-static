@@ -6,7 +6,7 @@ use crate::blogposts::Blogpost;
 pub fn render_home(blogposts: &[Blogpost]) -> Markup {
     let html_content = html! {
         div.blogposts {
-            @for post in blogposts {
+            @for post in blogposts.iter().rev() {
                 (render_blogpost(post))
             }
         }
@@ -35,7 +35,11 @@ mod tests {
         // then
         println!("Checking rendered html:\n{}", result);
         assert!(result.contains("<div class=\"blogposts\">"));
-        assert!(result.contains("Post1"));
-        assert!(result.contains("Post2"));
+        let post1_pos = result.find("Post1").expect("Expected to find post 1");
+        let post2_pos = result.find("Post2").expect("Expected to find post 2");
+        assert!(
+            post1_pos > post2_pos,
+            "Expected posts to be in reverse order"
+        );
     }
 }
