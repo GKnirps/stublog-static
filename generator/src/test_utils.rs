@@ -11,6 +11,7 @@ pub fn create_blogpost() -> Blogpost {
         title: "Nevermind".to_owned(),
         filename: Path::new("foobar").to_owned(),
         date,
+        tags: vec!["foo".to_owned(), "bar".to_owned()],
     };
     let content_html = "<p><em>foo</em>bar</p>".to_owned();
 

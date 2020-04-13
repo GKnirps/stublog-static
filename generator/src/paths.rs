@@ -24,6 +24,7 @@ mod tests {
             title: "Nevermind".to_owned(),
             filename: Path::new("foobar").to_owned(),
             date,
+            tags: vec![],
         };
 
         // when
