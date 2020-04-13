@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -eu
+
+DIR="$(dirname $0)/.."
+
+sassc -t compressed $DIR/assets/stylesheets/style.css.scss $DIR/dist/assets/style.css
+cp $DIR/assets/favicon.png $DIR/dist/assets

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -eu
+
+DIR="$(dirname $0)/.."
+
+nginx -c cfg/nginx-test.conf -p $DIR

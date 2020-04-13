@@ -1,3 +1,4 @@
 example-content
 generator/target
 dist
+nginx.pid
