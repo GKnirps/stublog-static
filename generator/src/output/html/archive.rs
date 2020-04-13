@@ -1,8 +1,8 @@
 use maud::{html, Markup};
 
+use super::super::blogposts::Blogpost;
 use super::blogpost::render_blogpost;
 use super::pager::pager;
-use crate::blogposts::Blogpost;
 
 pub fn render_archive(blogposts: &[Blogpost], current_page: usize, num_pages: usize) -> Markup {
     let html_pager = pager(current_page, num_pages);

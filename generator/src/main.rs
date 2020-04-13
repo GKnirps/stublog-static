@@ -3,14 +3,15 @@
 use std::env::args;
 use std::path::{Path, PathBuf};
 
-mod blogposts;
-mod file;
-mod html;
-mod parser;
+mod input;
+mod output;
 mod paths;
 
 #[cfg(test)]
 mod test_utils;
+
+use input::file;
+use output::blogposts;
 
 fn main() -> Result<(), String> {
     let mut arg = args();

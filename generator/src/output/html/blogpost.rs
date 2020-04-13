@@ -1,4 +1,4 @@
-use crate::blogposts::Blogpost;
+use super::super::blogposts::Blogpost;
 use crate::paths::blogpost_path;
 use maud::{html, Markup, PreEscaped};
 

@@ -1,7 +1,7 @@
 use maud::{html, Markup};
 
+use super::super::blogposts::Blogpost;
 use super::blogpost::render_blogpost;
-use crate::blogposts::Blogpost;
 
 pub fn render_home(blogposts: &[Blogpost]) -> Markup {
     let html_content = html! {

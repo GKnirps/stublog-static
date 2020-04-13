@@ -1,10 +1,11 @@
 use pulldown_cmark::{html::push_html, Parser};
-use std::fs::{create_dir, File, OpenOptions};
-use std::io::{BufWriter, Write};
+use std::fs::create_dir;
+use std::io::Write;
 use std::path::Path;
 
+use super::file::open_for_write;
 use super::html;
-use super::parser;
+use crate::input::parser;
 
 fn render_cmark(input: &str) -> String {
     let parser = Parser::new(input);
@@ -30,15 +31,6 @@ pub fn parse_blogposts(inputs: &[String]) -> Result<Vec<Blogpost>, parser::Parse
             })
         })
         .collect()
-}
-
-pub fn open_for_write(filename: &Path) -> std::io::Result<BufWriter<File>> {
-    OpenOptions::new()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open(filename)
-        .map(BufWriter::new)
 }
 
 pub fn write_blogposts(dir: &Path, posts: &[Blogpost]) -> std::io::Result<()> {
