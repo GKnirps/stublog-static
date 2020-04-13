@@ -9,4 +9,5 @@ edition = "2018"
 [dependencies]
 chrono = "^0.4.10"
 maud = "^0.21.0"
-pulldown-cmark = "0.7.0"
+pulldown-cmark = "^0.7.0"
+percent-encoding = "^1.0.1"

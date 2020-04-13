@@ -1,7 +1,14 @@
 use crate::input::parser::BlogpostMetadata;
+use percent_encoding::{percent_encode, PATH_SEGMENT_ENCODE_SET};
 
 pub fn blogpost_path(metadata: &BlogpostMetadata) -> String {
-    format!("/blogpost/{}", metadata.filename.to_string_lossy())
+    format!(
+        "/blogpost/{}",
+        percent_encode(
+            metadata.filename.to_string_lossy().as_bytes(),
+            PATH_SEGMENT_ENCODE_SET
+        )
+    )
 }
 
 pub fn archive_path(page: usize) -> String {
@@ -22,7 +29,7 @@ mod tests {
             .and_hms(12, 13, 14);
         let metadata = BlogpostMetadata {
             title: "Nevermind".to_owned(),
-            filename: Path::new("foobar").to_owned(),
+            filename: Path::new("foö/bar").to_owned(),
             date,
             tags: vec![],
         };
@@ -31,7 +38,7 @@ mod tests {
         let result = blogpost_path(&metadata);
 
         // then
-        assert_eq!(&result, "/blogpost/foobar");
+        assert_eq!(&result, "/blogpost/fo%C3%B6%2Fbar");
     }
 
     #[test]
