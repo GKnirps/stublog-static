@@ -15,6 +15,16 @@ pub fn archive_path(page: usize) -> String {
     format!("/blogposts/{}", page)
 }
 
+pub static TAGLIST_PATH: &str = "/tags";
+
+pub fn tag_path(tag: &str) -> String {
+    return format!(
+        "{}/{}",
+        TAGLIST_PATH,
+        percent_encode(tag.as_bytes(), PATH_SEGMENT_ENCODE_SET)
+    );
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -51,5 +61,17 @@ mod tests {
 
         // then
         assert_eq!(&result, "/blogposts/42");
+    }
+
+    #[test]
+    fn test_tag_path() {
+        // given
+        let tag = "högr";
+
+        // when
+        let result = tag_path(tag);
+
+        // then
+        assert_eq!(&result, "/tags/h%C3%B6gr");
     }
 }

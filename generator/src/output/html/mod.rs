@@ -6,6 +6,7 @@ pub mod archive;
 pub mod blogpost;
 pub mod home;
 pub mod pager;
+pub mod tag;
 
 fn base<T: Render>(title: &str, content: T) -> Markup {
     html! {

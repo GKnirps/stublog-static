@@ -11,7 +11,7 @@ mod paths;
 mod test_utils;
 
 use input::file;
-use output::blogposts;
+use output::{blogposts, tags};
 
 fn main() -> Result<(), String> {
     let mut arg = args();
@@ -37,5 +37,11 @@ fn main() -> Result<(), String> {
     blogposts::write_archive(&archive_dir, &blogposts)
         .map_err(|e| format!("Failed to write archive: {}", e))?;
     blogposts::write_home(Path::new(&odir), &blogposts)
-        .map_err(|e| format!("Failed to write home page: {}", e))
+        .map_err(|e| format!("Failed to write home page: {}", e))?;
+
+    let tags_by_posts =
+        tags::blogpost_metadata_by_tag(blogposts.iter().map(|blogpost| &blogpost.metadata));
+    let tags_dir: PathBuf = [&odir, "tags"].iter().collect();
+    tags::write_tag_pages(&tags_dir, &tags_by_posts)
+        .map_err(|e| format!("Failed to write tag pages: {}", e))
 }

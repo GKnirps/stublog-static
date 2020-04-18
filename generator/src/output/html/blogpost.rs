@@ -1,5 +1,5 @@
 use super::super::blogposts::Blogpost;
-use crate::paths::blogpost_path;
+use crate::paths::{blogpost_path, tag_path};
 use maud::{html, Markup, PreEscaped};
 
 pub fn render_blogpost(blogpost: &Blogpost) -> Markup {
@@ -15,8 +15,16 @@ pub fn render_blogpost(blogpost: &Blogpost) -> Markup {
                 span.category {
                     "Kategorie: TODO"
                 }
-                span.tags {
-                    "Tags: TODO"
+                @if !metadata.tags.is_empty() {
+                    span.tags {
+                        "Tags: "
+                        @for (i, tag) in metadata.tags.iter().enumerate() {
+                            a href=(tag_path(tag)) {
+                                (tag)
+                            }
+                            @if i + 1 < metadata.tags.len() { ", " }
+                        }
+                    }
                 }
                 span.permalink {
                     // TODO: is there a way to make permalinks nicer (e.g. use the headline of the
