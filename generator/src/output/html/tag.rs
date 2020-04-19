@@ -1,6 +1,23 @@
 use crate::input::parser::BlogpostMetadata;
-use crate::paths::blogpost_path;
+use crate::paths::{blogpost_path, tag_path};
 use maud::{html, Markup};
+
+pub fn render_tag_list(tags: &[(&str, usize)]) -> Markup {
+    let content = html! {
+        h2.section-heading { "Alle Tags" }
+        ul {
+            @for (name, num) in tags {
+                li {
+                    a href=(tag_path(name)) {
+                        (name) " (" (num) ")"
+                    }
+                }
+            }
+        }
+    };
+
+    super::base("Stranger Than Usual — Tags", content)
+}
 
 pub fn render_tag_page(tag_name: &str, posts: &[&BlogpostMetadata]) -> Markup {
     let title = format!("Stranger Than Usual — Tag: {}", tag_name);
@@ -26,6 +43,22 @@ mod tests {
     use super::*;
     use crate::test_utils::create_blogpost_metadata;
     use std::path::PathBuf;
+
+    #[test]
+    fn render_tag_list_renders_list_of_tags() {
+        // given
+        let tags = &[("foo", 2), ("bar", 42)];
+
+        // when
+        let result = render_tag_list(tags).into_string();
+
+        // then
+        println!("Checking html:\n{}", result);
+        assert!(result.contains(
+            "<ul><li><a href=\"/tags/foo\">foo (2)</a></li>\
+        <li><a href=\"/tags/bar\">bar (42)</a></li></ul>",
+        ))
+    }
 
     #[test]
     fn render_tag_page_renders_all_entries() {

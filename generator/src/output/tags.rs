@@ -23,6 +23,41 @@ where
     result
 }
 
+fn sort_tags<'a>(posts_by_tag: &HashMap<&'a str, Vec<&BlogpostMetadata>>) -> Vec<(&'a str, usize)> {
+    let mut tags: Vec<(&str, usize)> = posts_by_tag
+        .iter()
+        .map(|(name, posts)| (*name, posts.len()))
+        .collect();
+    tags.sort_by(|(name1, num1), (name2, num2)| {
+        if num2 == num1 {
+            name1.cmp(name2)
+        } else {
+            num2.cmp(num1)
+        }
+    });
+
+    tags
+}
+
+pub fn write_tag_index(
+    dir: &Path,
+    posts_by_tag: &HashMap<&str, Vec<&BlogpostMetadata>>,
+) -> std::io::Result<()> {
+    if !dir.is_dir() {
+        create_dir(dir)?;
+    }
+    let mut filename = dir.to_path_buf();
+    filename.push("index.html");
+
+    let tags = sort_tags(posts_by_tag);
+    let mut writer = open_for_write(&filename)?;
+    write!(
+        writer,
+        "{}",
+        html::tag::render_tag_list(&tags).into_string()
+    )
+}
+
 pub fn write_tag_pages(
     dir: &Path,
     posts_by_tag: &HashMap<&str, Vec<&BlogpostMetadata>>,
@@ -91,5 +126,22 @@ mod tests {
             Some(&vec![&post2]),
             "Unexpected post for tag bar"
         );
+    }
+
+    #[test]
+    fn sort_tags_should_sort_tags_by_occurences_and_name() {
+        // given
+        let dummy_post = create_blogpost_metadata();
+
+        let mut input: HashMap<&str, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
+        input.insert("foo", vec![&dummy_post]);
+        input.insert("a", vec![&dummy_post, &dummy_post]);
+        input.insert("bar", vec![&dummy_post, &dummy_post]);
+
+        // when
+        let result = sort_tags(&input);
+
+        // then
+        assert_eq!(&result, &[("a", 2), ("bar", 2), ("foo", 1)]);
     }
 }

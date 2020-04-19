@@ -42,6 +42,8 @@ fn main() -> Result<(), String> {
     let tags_by_posts =
         tags::blogpost_metadata_by_tag(blogposts.iter().map(|blogpost| &blogpost.metadata));
     let tags_dir: PathBuf = [&odir, "tags"].iter().collect();
+    tags::write_tag_index(&tags_dir, &tags_by_posts)
+        .map_err(|e| format!("Failed to write tag index page: {}", e))?;
     tags::write_tag_pages(&tags_dir, &tags_by_posts)
         .map_err(|e| format!("Failed to write tag pages: {}", e))
 }
