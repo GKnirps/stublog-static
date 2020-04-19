@@ -64,7 +64,7 @@ fn parse_tags(tagstring: &str) -> Vec<String> {
         .split(',')
         .map(|s| s.trim())
         .filter(|s| !s.is_empty())
-        .map(|s| s.to_owned())
+        .map(|s| s.to_lowercase())
         .collect()
 }
 
@@ -240,9 +240,9 @@ mod tests {
     }
 
     #[test]
-    fn parse_tags_should_split_and_trim_tags() {
+    fn parse_tags_should_split_and_trim_and_lowercase_tags() {
         // given
-        let tagstring = " foo, bar, ,foobar ";
+        let tagstring = " foO, Bar, ,fÖbär ";
 
         // when
         let result = parse_tags(tagstring);
@@ -250,7 +250,7 @@ mod tests {
         // then
         assert_eq!(
             &result,
-            &["foo".to_owned(), "bar".to_owned(), "foobar".to_owned()]
+            &["foo".to_owned(), "bar".to_owned(), "föbär".to_owned()]
         );
     }
 
