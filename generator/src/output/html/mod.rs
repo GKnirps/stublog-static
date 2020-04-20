@@ -1,4 +1,4 @@
-use crate::paths::archive_path;
+use crate::paths::{archive_path, TAGLIST_PATH};
 use chrono::{DateTime, FixedOffset};
 use maud::{html, Markup, Render, DOCTYPE};
 
@@ -46,6 +46,7 @@ fn header() -> Markup {
                 ul.main-nav {
                     li { a href=(archive_path(0)) {"Archiv"} }
                     li { a href="#" {"Kategorien"} }
+                    li { a href=(TAGLIST_PATH) {"Tags"} }
                 }
             }
         }
