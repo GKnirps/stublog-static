@@ -69,7 +69,6 @@ $button-text-color: DarkSlateGray;
 
     .wrapper {
         height: 100%;
-        text-align: left;
         margin: 0 auto 0 auto;  /* Zentriert die Website */
 
         max-width: 51.25em;    /* Breite der Website */
@@ -104,7 +103,7 @@ $button-text-color: DarkSlateGray;
 
     .wrapper .content {
         width: inherit;
-        padding-top: 1.875em;
+        margin-top: 1.875em;
     }
 
     /* Überschriften über bestimmten Bereichen der Website */
@@ -135,7 +134,7 @@ $button-text-color: DarkSlateGray;
     article.blogpost {
         width: inherit;
 
-        padding-bottom: 2.5em;
+        margin-bottom: 3em;
     }
 
     /* Fließtext des Postings */
@@ -149,8 +148,6 @@ $button-text-color: DarkSlateGray;
     /* Metadaten unter dem Posting */
     article.blogpost footer span {
         font-family: Verdana, Arial, sans-serif;
-        margin: 0;
-        padding: 0;
         font-size: .9em;
     }
 
