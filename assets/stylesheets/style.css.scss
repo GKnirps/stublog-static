@@ -12,7 +12,7 @@ $button-text-color: DarkSlateGray;
 /******************************************   B O D Y   ******************************************/
 
     body {
-        margin: 0;
+        margin: 0 0 1em 0;
         vertical-align: top;
         background-color: $main-background-color;
         height: 100%;
@@ -118,16 +118,18 @@ $button-text-color: DarkSlateGray;
 
     /* Artikel Vor/Zurück */
     .pagination {
-        text-align: right;
-    }
-        /* Kleinere Geräte */
-        @media only screen and (max-device-width: 480px) {
-            /* Artikel Vor/Zurück */
-            .pagination {
-                padding-bottom: 2em;
-            }
-        }
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
 
+            padding: 0;
+        }
+        li {
+            display: inline;
+            margin-left: 0.5em;
+        }
+    }
 
     /* Ein einzelner Blogpost */
     article.blogpost {

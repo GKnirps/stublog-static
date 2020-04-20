@@ -67,11 +67,13 @@ pub fn pager(page_index: usize, num_pages: usize) -> Markup {
 
     html! {
         nav.pagination {
-            (prev_link(page_index))
-            @for i in 0..num_pages {
-                (numbered_page_link(i, page_index))
+            ul {
+                li { (prev_link(page_index)) }
+                @for i in 0..num_pages {
+                    li { (numbered_page_link(i, page_index)) }
+                }
+                li { (next_link(page_index, num_pages)) }
             }
-            (next_link(page_index, num_pages))
         }
     }
 }
@@ -221,6 +223,12 @@ mod tests {
         let result = pager(page_index, num_pages).into_string();
 
         // then
-        assert_eq!(&result, "<nav class=\"pagination\"><a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/blogposts/0\" title=\"zurückblättern\">← zurück</a><a aria-label=\"Seite 1\" href=\"/blogposts/0\" title=\"Seite 1\">1</a><span class=\"current\" aria-label=\"Seite 2\" title=\"Seite 2\">2</span><a aria-label=\"Seite 3\" href=\"/blogposts/2\" title=\"Seite 3\">3</a><a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/blogposts/2\" title=\"weiterblättern\">vorwärts →</a></nav>");
+        assert_eq!(&result, "<nav class=\"pagination\"><ul>\
+        <li><a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/blogposts/0\" title=\"zurückblättern\">← zurück</a></li>\
+        <li><a aria-label=\"Seite 1\" href=\"/blogposts/0\" title=\"Seite 1\">1</a></li>\
+        <li><span class=\"current\" aria-label=\"Seite 2\" title=\"Seite 2\">2</span></li>\
+        <li><a aria-label=\"Seite 3\" href=\"/blogposts/2\" title=\"Seite 3\">3</a></li>\
+        <li><a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/blogposts/2\" title=\"weiterblättern\">vorwärts →</a></li>\
+        </ul></nav>");
     }
 }
