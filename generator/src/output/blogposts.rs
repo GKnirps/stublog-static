@@ -5,6 +5,7 @@ use std::path::Path;
 
 use super::file::open_for_write;
 use super::html;
+use crate::input;
 use crate::input::parser;
 
 fn render_cmark(input: &str) -> String {
@@ -15,7 +16,7 @@ fn render_cmark(input: &str) -> String {
 }
 
 pub struct Blogpost {
-    pub metadata: parser::BlogpostMetadata,
+    pub metadata: input::BlogpostMetadata,
     pub content_html: String,
 }
 
@@ -23,7 +24,7 @@ pub fn parse_blogposts(inputs: &[String]) -> Result<Vec<Blogpost>, parser::Parse
     // TODO: it would be more helpful if we knew which blogpost failed to parse
     inputs
         .iter()
-        .map(|input| parser::parse_blogpost(&input))
+        .map(|input| parser::blogpost::parse_blogpost(&input))
         .map(|parse_result| {
             parse_result.map(|(metadata, content)| Blogpost {
                 metadata,

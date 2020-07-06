@@ -10,7 +10,7 @@ mod paths;
 #[cfg(test)]
 mod test_utils;
 
-use crate::input::parser::BlogpostMetadata;
+use crate::input::BlogpostMetadata;
 use input::file;
 use output::{blogposts, tags};
 use std::collections::{HashMap, HashSet};

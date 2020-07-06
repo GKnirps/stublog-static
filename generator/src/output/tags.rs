@@ -1,6 +1,6 @@
 use super::file::open_for_write;
 use super::html;
-use crate::input::parser::BlogpostMetadata;
+use crate::input::BlogpostMetadata;
 use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;

@@ -1,5 +1,5 @@
 use crate::blogposts::Blogpost;
-use crate::input::parser::BlogpostMetadata;
+use crate::input::BlogpostMetadata;
 use chrono::{FixedOffset, TimeZone};
 use std::path::Path;
 
