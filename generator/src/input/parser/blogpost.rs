@@ -16,16 +16,16 @@ fn parse_blogpost_metadata(props: HashMap<&str, &str>) -> Result<BlogpostMetadat
     let title = props
         .get("title")
         .copied()
-        .ok_or_else(|| ParseError::new("Missing title".to_owned()))?
+        .ok_or_else(|| ParseError::from("Missing title"))?
         .to_owned();
     let filename = get_secure_filename(
         props
             .get("filename")
-            .ok_or_else(|| ParseError::new("Missing filename".to_owned()))?,
+            .ok_or_else(|| ParseError::from("Missing filename"))?,
     )?;
     let date_string = props
         .get("date")
-        .ok_or_else(|| ParseError::new("Missing date".to_owned()))?;
+        .ok_or_else(|| ParseError::from("Missing date"))?;
     let date = DateTime::parse_from_rfc3339(date_string)
         .map_err(|e| ParseError::new(format!("Invalid date '{}': {}", date_string, e)))?;
     let tags = props
@@ -116,7 +116,7 @@ mod tests {
         let result = parse_blogpost_metadata(input);
 
         // then
-        assert_eq!(result, Err(ParseError::new("Missing title".to_owned())));
+        assert_eq!(result, Err(ParseError::from("Missing title")));
     }
 
     #[test]
@@ -130,7 +130,7 @@ mod tests {
         let result = parse_blogpost_metadata(input);
 
         // then
-        assert_eq!(result, Err(ParseError::new("Missing filename".to_owned())));
+        assert_eq!(result, Err(ParseError::from("Missing filename")));
     }
 
     #[test]
@@ -147,8 +147,8 @@ mod tests {
         // then
         assert_eq!(
             result,
-            Err(ParseError::new(
-                "Invalid date \'2020-05-11+02:00\': input contains invalid characters".to_owned()
+            Err(ParseError::from(
+                "Invalid date \'2020-05-11+02:00\': input contains invalid characters"
             ))
         );
     }
@@ -164,7 +164,7 @@ mod tests {
         let result = parse_blogpost_metadata(input);
 
         // then
-        assert_eq!(result, Err(ParseError::new("Missing date".to_owned())));
+        assert_eq!(result, Err(ParseError::from("Missing date")));
     }
 
     #[test]

@@ -13,6 +13,12 @@ impl ParseError {
     fn new(msg: String) -> ParseError {
         ParseError { msg }
     }
+
+    fn from(msg: &str) -> ParseError {
+        ParseError {
+            msg: msg.to_owned(),
+        }
+    }
 }
 
 impl fmt::Display for ParseError {
@@ -47,7 +53,7 @@ fn get_secure_filename(path: &str) -> Result<PathBuf, ParseError> {
 
     let filename = unchecked
         .file_name()
-        .ok_or_else(|| ParseError::new("Empty filename".to_owned()))?;
+        .ok_or_else(|| ParseError::from("Empty filename"))?;
 
     Ok(Path::new(filename).to_path_buf())
 }
@@ -56,17 +62,17 @@ fn split_file_content(content: &str) -> Result<(HashMap<&str, &str>, &str), Pars
     let mut sections = content.splitn(3, "---");
 
     if sections.next().map(|s| s.trim().is_empty()) != Some(true) {
-        return Err(ParseError::new("Content before header".to_owned()));
+        return Err(ParseError::from("Content before header"));
     }
 
     let header_raw = sections
         .next()
-        .ok_or_else(|| ParseError::new("No header found".to_owned()))?;
+        .ok_or_else(|| ParseError::from("No header found"))?;
     let header_map = parse_metadata(header_raw)?;
 
     let content = sections
         .next()
-        .ok_or_else(|| ParseError::new("No content after header".to_owned()))?;
+        .ok_or_else(|| ParseError::from("No content after header"))?;
 
     Ok((header_map, content))
 }
@@ -98,10 +104,7 @@ mod tests {
         let result = parse_metadata_line("");
 
         // then
-        assert_eq!(
-            result,
-            Err(ParseError::new("Header line '' has no value".to_owned()))
-        );
+        assert_eq!(result, Err(ParseError::from("Header line '' has no value")));
     }
 
     #[test]
@@ -115,9 +118,7 @@ mod tests {
         // then
         assert_eq!(
             result,
-            Err(ParseError::new(
-                "Header line 'title' has no value".to_owned()
-            ))
+            Err(ParseError::from("Header line 'title' has no value"))
         );
     }
 
@@ -145,9 +146,7 @@ mod tests {
         // then
         assert_eq!(
             result,
-            Err(ParseError::new(
-                "Header line 'foobar' has no value".to_owned()
-            ))
+            Err(ParseError::from("Header line 'foobar' has no value"))
         );
     }
 
@@ -184,7 +183,7 @@ mod tests {
         let result = get_secure_filename(input);
 
         // then
-        assert_eq!(result, Err(ParseError::new("Empty filename".to_owned())));
+        assert_eq!(result, Err(ParseError::from("Empty filename")));
     }
 
     #[test]
@@ -210,7 +209,7 @@ mod tests {
         let result = split_file_content(input);
 
         // then
-        assert_eq!(result, Err(ParseError::new("No header found".to_owned())));
+        assert_eq!(result, Err(ParseError::from("No header found")));
     }
 
     #[test]
@@ -222,10 +221,7 @@ mod tests {
         let result = split_file_content(input);
 
         // then
-        assert_eq!(
-            result,
-            Err(ParseError::new("Content before header".to_owned()))
-        );
+        assert_eq!(result, Err(ParseError::from("Content before header")));
     }
 
     #[test]
@@ -238,9 +234,6 @@ mod tests {
         let result = split_file_content(input);
 
         // then
-        assert_eq!(
-            result,
-            Err(ParseError::new("No content after header".to_owned()))
-        );
+        assert_eq!(result, Err(ParseError::from("No content after header")));
     }
 }
