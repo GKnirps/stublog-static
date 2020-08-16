@@ -12,7 +12,7 @@ mod test_utils;
 
 use crate::input::BlogpostMetadata;
 use input::file;
-use output::{blogposts, tags};
+use output::{blogposts, categories, tags};
 use std::collections::{HashMap, HashSet};
 
 fn main() -> Result<(), String> {
@@ -26,17 +26,16 @@ fn main() -> Result<(), String> {
         .ok_or_else(|| format!("Usage: {} <input dir> <output dir>", prog_name))?;
 
     let blogpost_indir: PathBuf = [&indir, "blogposts"].iter().collect();
-    let raw_blogposts = file::read_files_sorted(&Path::new(&blogpost_indir))
+    let raw_blogposts = file::read_files_sorted(&blogpost_indir)
         .map_err(|e| format!("Failed to read all blogposts: {}", e))?;
     let blogposts = blogposts::parse_blogposts(&raw_blogposts)
         .map_err(|e| format!("Failed to parse all blogposts: {}", e))?;
     check_duplicate_blogpost_names(&blogposts)?;
-    let blogpost_dir: PathBuf = [&odir, "blogpost"].iter().collect();
+    let blogpost_dir: PathBuf = [&odir, "blogposts"].iter().collect();
     blogposts::write_blogposts(&blogpost_dir, &blogposts)
         .map_err(|e| format!("Failed to write all blogposts: {}", e))?;
 
-    // TODO: it does not really make sense to put this in blogposts. rename blogposts?
-    let archive_dir: PathBuf = [&odir, "blogposts"].iter().collect();
+    let archive_dir: PathBuf = [&odir, "archive"].iter().collect();
     blogposts::write_archive(&archive_dir, &blogposts)
         .map_err(|e| format!("Failed to write archive: {}", e))?;
     blogposts::write_home(Path::new(&odir), &blogposts)
@@ -49,7 +48,18 @@ fn main() -> Result<(), String> {
     tags::write_tag_index(&tags_dir, &post_by_tags)
         .map_err(|e| format!("Failed to write tag index page: {}", e))?;
     tags::write_tag_pages(&tags_dir, &post_by_tags)
-        .map_err(|e| format!("Failed to write tag pages: {}", e))
+        .map_err(|e| format!("Failed to write tag pages: {}", e))?;
+
+    let categories_indir: PathBuf = [&indir, "categories"].iter().collect();
+    let raw_categories = file::read_files_sorted(&Path::new(&categories_indir))
+        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+    let categories = categories::parse_categories(&raw_categories)
+        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+    let category_dir: PathBuf = [&odir, "categories"].iter().collect();
+    categories::write_category_index(&category_dir, &categories)
+        .map_err(|e| format!("Failed to write category index page: {}", e))?;
+    categories::write_category_pages(&category_dir, &categories)
+        .map_err(|e| format!("Failed to write all category pages: {}", e))
 }
 
 fn check_duplicate_blogpost_names(posts: &[blogposts::Blogpost]) -> Result<(), String> {

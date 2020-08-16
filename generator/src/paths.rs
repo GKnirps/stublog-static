@@ -1,9 +1,9 @@
-use crate::input::BlogpostMetadata;
+use crate::input::{BlogpostMetadata, CategoryMetadata};
 use percent_encoding::{percent_encode, PATH_SEGMENT_ENCODE_SET};
 
 pub fn blogpost_path(metadata: &BlogpostMetadata) -> String {
     format!(
-        "/blogpost/{}",
+        "/blogposts/{}",
         percent_encode(
             metadata.filename.to_string_lossy().as_bytes(),
             PATH_SEGMENT_ENCODE_SET
@@ -12,22 +12,36 @@ pub fn blogpost_path(metadata: &BlogpostMetadata) -> String {
 }
 
 pub fn archive_path(page: usize) -> String {
-    format!("/blogposts/{}", page)
+    format!("/archive/{}", page)
 }
 
 pub static TAGLIST_PATH: &str = "/tags";
 
 pub fn tag_path(tag: &str) -> String {
-    return format!(
+    format!(
         "{}/{}",
         TAGLIST_PATH,
         percent_encode(tag.as_bytes(), PATH_SEGMENT_ENCODE_SET)
-    );
+    )
+}
+
+pub static CATEGORIES_PATH: &str = "/categories";
+
+pub fn category_path(metadata: &CategoryMetadata) -> String {
+    format!(
+        "{}/{}",
+        CATEGORIES_PATH,
+        percent_encode(
+            metadata.filename.to_string_lossy().as_bytes(),
+            PATH_SEGMENT_ENCODE_SET
+        )
+    )
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test_utils::create_category_metadata;
     use chrono::{FixedOffset, TimeZone};
     use std::path::Path;
 
@@ -48,7 +62,7 @@ mod tests {
         let result = blogpost_path(&metadata);
 
         // then
-        assert_eq!(&result, "/blogpost/fo%C3%B6%2Fbar");
+        assert_eq!(&result, "/blogposts/fo%C3%B6%2Fbar");
     }
 
     #[test]
@@ -60,7 +74,7 @@ mod tests {
         let result = archive_path(page);
 
         // then
-        assert_eq!(&result, "/blogposts/42");
+        assert_eq!(&result, "/archive/42");
     }
 
     #[test]
@@ -73,5 +87,18 @@ mod tests {
 
         // then
         assert_eq!(&result, "/tags/h%C3%B6gr");
+    }
+
+    #[test]
+    fn test_category_path() {
+        // given
+        let mut metadata = create_category_metadata();
+        metadata.filename = Path::new("somewhere").to_owned();
+
+        // when
+        let result = category_path(&metadata);
+
+        // then
+        assert_eq!(result, "/categories/somewhere");
     }
 }

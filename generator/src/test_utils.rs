@@ -1,5 +1,6 @@
 use crate::blogposts::Blogpost;
-use crate::input::BlogpostMetadata;
+use crate::input::{BlogpostMetadata, CategoryMetadata};
+use crate::output::categories::Category;
 use chrono::{FixedOffset, TimeZone};
 use std::path::Path;
 
@@ -22,5 +23,20 @@ pub fn create_blogpost() -> Blogpost {
     Blogpost {
         metadata,
         content_html,
+    }
+}
+
+pub fn create_category_metadata() -> CategoryMetadata {
+    CategoryMetadata {
+        title: "Cocoa".to_owned(),
+        filename: Path::new("chocolate").to_owned(),
+    }
+}
+
+pub fn create_category(blogposts: Vec<&Blogpost>) -> Category {
+    Category {
+        metadata: create_category_metadata(),
+        description_html: "<h2>Chocolate!!!111</h2>".to_owned(),
+        blogposts,
     }
 }

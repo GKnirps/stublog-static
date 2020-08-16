@@ -96,7 +96,7 @@ mod tests {
         // then
         assert_eq!(
             &result,
-            "<a class=\"classy\" aria-label=\"click!\" href=\"/blogposts/42\" title=\"click!\">somewhere</a>"
+            "<a class=\"classy\" aria-label=\"click!\" href=\"/archive/42\" title=\"click!\">somewhere</a>"
         );
     }
 
@@ -114,7 +114,7 @@ mod tests {
         // then
         assert_eq!(
             &result,
-            "<a aria-label=\"click!\" href=\"/blogposts/42\" title=\"click!\">somewhere</a>"
+            "<a aria-label=\"click!\" href=\"/archive/42\" title=\"click!\">somewhere</a>"
         );
     }
 
@@ -130,7 +130,7 @@ mod tests {
         // then
         assert_eq!(
             &result,
-            "<a aria-label=\"Seite 43\" href=\"/blogposts/42\" title=\"Seite 43\">43</a>"
+            "<a aria-label=\"Seite 43\" href=\"/archive/42\" title=\"Seite 43\">43</a>"
         );
     }
 
@@ -171,7 +171,7 @@ mod tests {
         let result = prev_link(index).into_string();
 
         // then
-        assert_eq!(&result, "<a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/blogposts/41\" title=\"zurückblättern\">← zurück</a>");
+        assert_eq!(&result, "<a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/archive/41\" title=\"zurückblättern\">← zurück</a>");
     }
 
     #[test]
@@ -197,7 +197,7 @@ mod tests {
         let result = next_link(index, num_pages).into_string();
 
         // then
-        assert_eq!(&result, "<a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/blogposts/43\" title=\"weiterblättern\">vorwärts →</a>");
+        assert_eq!(&result, "<a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/archive/43\" title=\"weiterblättern\">vorwärts →</a>");
     }
 
     #[test]
@@ -224,11 +224,11 @@ mod tests {
 
         // then
         assert_eq!(&result, "<nav class=\"pagination\"><ul>\
-        <li><a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/blogposts/0\" title=\"zurückblättern\">← zurück</a></li>\
-        <li><a aria-label=\"Seite 1\" href=\"/blogposts/0\" title=\"Seite 1\">1</a></li>\
+        <li><a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/archive/0\" title=\"zurückblättern\">← zurück</a></li>\
+        <li><a aria-label=\"Seite 1\" href=\"/archive/0\" title=\"Seite 1\">1</a></li>\
         <li><span class=\"current\" aria-label=\"Seite 2\" title=\"Seite 2\">2</span></li>\
-        <li><a aria-label=\"Seite 3\" href=\"/blogposts/2\" title=\"Seite 3\">3</a></li>\
-        <li><a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/blogposts/2\" title=\"weiterblättern\">vorwärts →</a></li>\
+        <li><a aria-label=\"Seite 3\" href=\"/archive/2\" title=\"Seite 3\">3</a></li>\
+        <li><a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/archive/2\" title=\"weiterblättern\">vorwärts →</a></li>\
         </ul></nav>");
     }
 }

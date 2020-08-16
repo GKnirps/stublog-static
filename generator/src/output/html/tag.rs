@@ -90,8 +90,8 @@ mod tests {
         );
         assert!(
             result.contains(
-                "<ul><li><a href=\"/blogpost/postface\">Posty McPostface</a></li><li>\
-        <a href=\"/blogpost/shaped\">Shaped like itself</a></li></ul>"
+                "<ul><li><a href=\"/blogposts/postface\">Posty McPostface</a></li><li>\
+        <a href=\"/blogposts/shaped\">Shaped like itself</a></li></ul>"
             ),
             "Expected a list of tags"
         )

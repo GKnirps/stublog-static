@@ -1,4 +1,3 @@
-use pulldown_cmark::{html::push_html, Parser};
 use std::fs::create_dir;
 use std::io::Write;
 use std::path::Path;
@@ -7,13 +6,6 @@ use super::file::open_for_write;
 use super::html;
 use crate::input;
 use crate::input::parser;
-
-fn render_cmark(input: &str) -> String {
-    let parser = Parser::new(input);
-    let mut buf = String::with_capacity(input.len() * 2);
-    push_html(&mut buf, parser);
-    buf
-}
 
 pub struct Blogpost {
     pub metadata: input::BlogpostMetadata,
@@ -28,7 +20,7 @@ pub fn parse_blogposts(inputs: &[String]) -> Result<Vec<Blogpost>, parser::Parse
         .map(|parse_result| {
             parse_result.map(|(metadata, content)| Blogpost {
                 metadata,
-                content_html: render_cmark(content),
+                content_html: super::render_cmark(content),
             })
         })
         .collect()

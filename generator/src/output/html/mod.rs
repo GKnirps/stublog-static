@@ -1,9 +1,10 @@
-use crate::paths::{archive_path, TAGLIST_PATH};
+use crate::paths::{archive_path, CATEGORIES_PATH, TAGLIST_PATH};
 use chrono::{DateTime, FixedOffset};
 use maud::{html, Markup, Render, DOCTYPE};
 
 pub mod archive;
 pub mod blogpost;
+pub mod category;
 pub mod home;
 pub mod pager;
 pub mod tag;
@@ -45,7 +46,7 @@ fn header() -> Markup {
             nav.navigation {
                 ul.main-nav {
                     li { a href=(archive_path(0)) {"Archiv"} }
-                    li { a href="#" {"Kategorien"} }
+                    li { a href=(CATEGORIES_PATH) {"Kategorien"} }
                     li { a href=(TAGLIST_PATH) {"Tags"} }
                 }
             }
@@ -83,7 +84,7 @@ mod tests {
             .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
         assert!(result.contains("<title>There will be cake</title>"));
         assert!(
-            result.contains("<a href=\"/blogposts/0\">Archiv</a>"),
+            result.contains("<a href=\"/archive/0\">Archiv</a>"),
             "Expected archive link to be on the page"
         );
         assert!(result.contains(content));

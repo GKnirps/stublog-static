@@ -3,6 +3,7 @@ use std::fmt;
 use std::path::{Path, PathBuf};
 
 pub mod blogpost;
+pub mod category;
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct ParseError {
@@ -72,6 +73,7 @@ fn split_file_content(content: &str) -> Result<(HashMap<&str, &str>, &str), Pars
 
     let content = sections
         .next()
+        .map(str::trim_start)
         .ok_or_else(|| ParseError::from("No content after header"))?;
 
     Ok((header_map, content))
@@ -197,7 +199,7 @@ mod tests {
         // then
         assert_eq!(header.len(), 1);
         assert_eq!(header.get("title"), Some(&"foo"));
-        assert_eq!(content, "\n\ncontent\n");
+        assert_eq!(content, "content\n");
     }
 
     #[test]
