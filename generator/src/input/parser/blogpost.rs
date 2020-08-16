@@ -31,7 +31,7 @@ fn parse_blogpost_metadata(props: HashMap<&str, &str>) -> Result<BlogpostMetadat
     let tags = props
         .get("tags")
         .map(|s| parse_tags(s))
-        .unwrap_or_else(|| vec![]);
+        .unwrap_or_else(Vec::new);
 
     Ok(BlogpostMetadata {
         title,
