@@ -1,6 +1,6 @@
 use crate::blogposts::Blogpost;
-use crate::input::{BlogpostMetadata, CategoryMetadata};
-use crate::output::categories::Category;
+use crate::input::BlogpostMetadata;
+use crate::input::Category;
 use chrono::{FixedOffset, TimeZone};
 use std::path::Path;
 
@@ -13,6 +13,7 @@ pub fn create_blogpost_metadata() -> BlogpostMetadata {
         filename: Path::new("foobar").to_owned(),
         date,
         tags: vec!["foo".to_owned(), "bar".to_owned()],
+        category_id: Some("bananas".to_owned()),
     }
 }
 
@@ -26,17 +27,11 @@ pub fn create_blogpost() -> Blogpost {
     }
 }
 
-pub fn create_category_metadata() -> CategoryMetadata {
-    CategoryMetadata {
+pub fn create_category() -> Category {
+    Category {
         title: "Cocoa".to_owned(),
         filename: Path::new("chocolate").to_owned(),
-    }
-}
-
-pub fn create_category(blogposts: Vec<&Blogpost>) -> Category {
-    Category {
-        metadata: create_category_metadata(),
-        description_html: "<h2>Chocolate!!!111</h2>".to_owned(),
-        blogposts,
+        id: "fesazu".to_owned(),
+        description_markdown: "## Chocolate!!!111".to_owned(),
     }
 }

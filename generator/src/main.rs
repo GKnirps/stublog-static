@@ -12,6 +12,7 @@ mod test_utils;
 
 use crate::input::BlogpostMetadata;
 use input::file;
+use input::parser::category::parse_categories;
 use output::{blogposts, categories, tags};
 use std::collections::{HashMap, HashSet};
 
@@ -25,20 +26,30 @@ fn main() -> Result<(), String> {
         .next()
         .ok_or_else(|| format!("Usage: {} <input dir> <output dir>", prog_name))?;
 
+    let categories_indir: PathBuf = [&indir, "categories"].iter().collect();
+    let raw_categories = file::read_files_sorted(&Path::new(&categories_indir))
+        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+    let categories = parse_categories(&raw_categories)
+        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+
     let blogpost_indir: PathBuf = [&indir, "blogposts"].iter().collect();
     let raw_blogposts = file::read_files_sorted(&blogpost_indir)
         .map_err(|e| format!("Failed to read all blogposts: {}", e))?;
     let blogposts = blogposts::parse_blogposts(&raw_blogposts)
         .map_err(|e| format!("Failed to parse all blogposts: {}", e))?;
     check_duplicate_blogpost_names(&blogposts)?;
+
+    let categorized_blogposts =
+        blogposts::find_categories_for_blogposts(&blogposts, &categories)
+            .map_err(|e| format!("Error while matching blogpost with categories: {}", e))?;
     let blogpost_dir: PathBuf = [&odir, "blogposts"].iter().collect();
-    blogposts::write_blogposts(&blogpost_dir, &blogposts)
+    blogposts::write_blogposts(&blogpost_dir, &categorized_blogposts)
         .map_err(|e| format!("Failed to write all blogposts: {}", e))?;
 
     let archive_dir: PathBuf = [&odir, "archive"].iter().collect();
-    blogposts::write_archive(&archive_dir, &blogposts)
+    blogposts::write_archive(&archive_dir, &categorized_blogposts)
         .map_err(|e| format!("Failed to write archive: {}", e))?;
-    blogposts::write_home(Path::new(&odir), &blogposts)
+    blogposts::write_home(Path::new(&odir), &categorized_blogposts)
         .map_err(|e| format!("Failed to write home page: {}", e))?;
 
     let post_by_tags =
@@ -50,15 +61,11 @@ fn main() -> Result<(), String> {
     tags::write_tag_pages(&tags_dir, &post_by_tags)
         .map_err(|e| format!("Failed to write tag pages: {}", e))?;
 
-    let categories_indir: PathBuf = [&indir, "categories"].iter().collect();
-    let raw_categories = file::read_files_sorted(&Path::new(&categories_indir))
-        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
-    let categories = categories::parse_categories(&raw_categories)
-        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
     let category_dir: PathBuf = [&odir, "categories"].iter().collect();
-    categories::write_category_index(&category_dir, &categories)
+    let categories_with_posts = categories::categories_with_blogposts(&categories, &blogposts);
+    categories::write_category_index(&category_dir, &categories_with_posts)
         .map_err(|e| format!("Failed to write category index page: {}", e))?;
-    categories::write_category_pages(&category_dir, &categories)
+    categories::write_category_pages(&category_dir, &categories_with_posts)
         .map_err(|e| format!("Failed to write all category pages: {}", e))
 }
 

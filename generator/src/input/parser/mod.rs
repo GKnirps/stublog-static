@@ -11,11 +11,11 @@ pub struct ParseError {
 }
 
 impl ParseError {
-    fn new(msg: String) -> ParseError {
+    pub fn new(msg: String) -> ParseError {
         ParseError { msg }
     }
 
-    fn from(msg: &str) -> ParseError {
+    pub fn from(msg: &str) -> ParseError {
         ParseError {
             msg: msg.to_owned(),
         }

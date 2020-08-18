@@ -2,17 +2,18 @@ use maud::{html, Markup};
 
 use super::super::blogposts::Blogpost;
 use super::blogpost::render_blogpost;
+use crate::input::Category;
 
-pub fn render_home(blogposts: &[Blogpost]) -> Markup {
+pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)]) -> Markup {
     let html_content = html! {
         div.blogposts {
-            @for post in blogposts.iter().rev() {
-                (render_blogpost(post))
+            @for (post, cat) in blogposts.iter().rev() {
+                (render_blogpost(post, *cat))
             }
         }
     };
 
-    super::base("Strangert Than Usual", html_content)
+    super::base("Stranger Than Usual", html_content)
 }
 
 #[cfg(test)]
@@ -30,7 +31,7 @@ mod tests {
         post2.content_html = "Post2".to_owned();
 
         // when
-        let result = render_home(&[post1, post2]).into_string();
+        let result = render_home(&[(&post1, None), (&post2, None)]).into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);

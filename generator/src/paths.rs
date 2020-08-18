@@ -1,4 +1,4 @@
-use crate::input::{BlogpostMetadata, CategoryMetadata};
+use crate::input::{BlogpostMetadata, Category};
 use percent_encoding::{percent_encode, PATH_SEGMENT_ENCODE_SET};
 
 pub fn blogpost_path(metadata: &BlogpostMetadata) -> String {
@@ -27,12 +27,12 @@ pub fn tag_path(tag: &str) -> String {
 
 pub static CATEGORIES_PATH: &str = "/categories";
 
-pub fn category_path(metadata: &CategoryMetadata) -> String {
+pub fn category_path(category: &Category) -> String {
     format!(
         "{}/{}",
         CATEGORIES_PATH,
         percent_encode(
-            metadata.filename.to_string_lossy().as_bytes(),
+            category.filename.to_string_lossy().as_bytes(),
             PATH_SEGMENT_ENCODE_SET
         )
     )
@@ -41,22 +41,14 @@ pub fn category_path(metadata: &CategoryMetadata) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::create_category_metadata;
-    use chrono::{FixedOffset, TimeZone};
+    use crate::test_utils::{create_blogpost_metadata, create_category};
     use std::path::Path;
 
     #[test]
     fn test_blogpost_path() {
         // given
-        let date = FixedOffset::east(3600 * 2)
-            .ymd(2020, 5, 11)
-            .and_hms(12, 13, 14);
-        let metadata = BlogpostMetadata {
-            title: "Nevermind".to_owned(),
-            filename: Path::new("foö/bar").to_owned(),
-            date,
-            tags: vec![],
-        };
+        let mut metadata = create_blogpost_metadata();
+        metadata.filename = Path::new("foö/bar").to_owned();
 
         // when
         let result = blogpost_path(&metadata);
@@ -92,13 +84,14 @@ mod tests {
     #[test]
     fn test_category_path() {
         // given
-        let mut metadata = create_category_metadata();
-        metadata.filename = Path::new("somewhere").to_owned();
+        let mut category = create_category();
+        category.filename = Path::new("sömewhere").to_owned();
+        category.id = "notthis".to_owned();
 
         // when
-        let result = category_path(&metadata);
+        let result = category_path(&category);
 
         // then
-        assert_eq!(result, "/categories/somewhere");
+        assert_eq!(result, "/categories/s%C3%B6mewhere");
     }
 }

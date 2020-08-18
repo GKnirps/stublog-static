@@ -32,12 +32,14 @@ fn parse_blogpost_metadata(props: HashMap<&str, &str>) -> Result<BlogpostMetadat
         .get("tags")
         .map(|s| parse_tags(s))
         .unwrap_or_else(Vec::new);
+    let category_id = props.get("category").map(|s| s.to_string());
 
     Ok(BlogpostMetadata {
         title,
         filename,
         date,
         tags,
+        category_id,
     })
 }
 
@@ -75,6 +77,7 @@ mod tests {
         );
         // missing tags are allowed, tag vector is empty in that case
         assert!(result.tags.is_empty(), "Expected no tags");
+        assert_eq!(result.category_id, None);
     }
 
     #[test]
@@ -85,6 +88,7 @@ mod tests {
         input.insert("filename", "lipsum");
         input.insert("date", "2020-05-11T12:13:14+02:00");
         input.insert("tags", "foo,bar");
+        input.insert("category", "bananas");
 
         // when
         let result = parse_blogpost_metadata(input).expect("Expected valid result");
@@ -103,6 +107,7 @@ mod tests {
             &["foo".to_owned(), "bar".to_owned()],
             "Unexpected tags"
         );
+        assert_eq!(result.category_id, Some("bananas".to_owned()));
     }
 
     #[test]

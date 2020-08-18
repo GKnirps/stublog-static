@@ -10,10 +10,13 @@ pub struct BlogpostMetadata {
     pub filename: PathBuf,
     pub date: DateTime<FixedOffset>,
     pub tags: Vec<String>,
+    pub category_id: Option<String>,
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
-pub struct CategoryMetadata {
+pub struct Category {
     pub title: String,
+    pub id: String,
     pub filename: PathBuf,
+    pub description_markdown: String,
 }

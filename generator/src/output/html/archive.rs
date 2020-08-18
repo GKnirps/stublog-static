@@ -3,8 +3,13 @@ use maud::{html, Markup};
 use super::super::blogposts::Blogpost;
 use super::blogpost::render_blogpost;
 use super::pager::pager;
+use crate::input::Category;
 
-pub fn render_archive(blogposts: &[Blogpost], current_page: usize, num_pages: usize) -> Markup {
+pub fn render_archive(
+    blogposts: &[(&Blogpost, Option<&Category>)],
+    current_page: usize,
+    num_pages: usize,
+) -> Markup {
     let html_pager = pager(current_page, num_pages);
     let html_content = html! {
         h2.section-heading {
@@ -12,8 +17,8 @@ pub fn render_archive(blogposts: &[Blogpost], current_page: usize, num_pages: us
         }
         div.blogposts {
             (html_pager)
-                @for post in blogposts {
-                    (render_blogpost(post))
+                @for (post, cat) in blogposts {
+                    (render_blogpost(post, *cat))
                 }
             (html_pager)
         }
@@ -39,7 +44,12 @@ mod tests {
         let num_pages = 10;
 
         // when
-        let result = render_archive(&[blogpost1, blogpost2], current_page, num_pages).into_string();
+        let result = render_archive(
+            &[(&blogpost1, None), (&blogpost2, None)],
+            current_page,
+            num_pages,
+        )
+        .into_string();
 
         // then
         println!("Checking html: {}", result);
