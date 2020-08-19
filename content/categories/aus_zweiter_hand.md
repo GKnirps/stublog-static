@@ -4,6 +4,4 @@ title: Aus zweiter Hand
 old-id: 2
 ---
 
-<p>Neuigkeiten, auch "News" genannt - aber nicht von mir, sondern aus irgendwelchen anderen Quellen. Ich kann nicht einmal dafür garantieren, dass sie nicht aus dritter, vierter oder wasweißichwievielter Hand sind.</p>
-
-
+Neuigkeiten, auch „News“ genannt - aber nicht von mir, sondern aus irgendwelchen anderen Quellen. Ich kann nicht einmal dafür garantieren, dass sie nicht aus dritter, vierter oder wasweißichwievielter Hand sind.

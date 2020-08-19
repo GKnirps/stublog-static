@@ -4,6 +4,4 @@ title: Ganz Normaler Wahnsinn
 old-id: 9
 ---
 
-<p>Sachen die halt so passieren.</p>
-
-
+Sachen die halt so passieren.

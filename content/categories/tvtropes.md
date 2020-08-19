@@ -4,8 +4,6 @@ title: TVtropes
 old-id: 3
 ---
 
-<p><a href="http://tvtropes.org/pmwiki/pmwiki.php/Main/TropesAreTools">Tropes are just tools</a>, but <a href="http://tvtropes.org/pmwiki/pmwiki.php/Main/TVTropesWillRuinYourLife">TVtrops will ruin your life</a>.</p>
+[Tropes are just tools](https://tvtropes.org/pmwiki/pmwiki.php/Main/TropesAreTools), but [TVtropes will ruin your life](https://tvtropes.org/pmwiki/pmwiki.php/Main/TVTropesWillRuinYourLife).
 
-<p><a href="http://tvtropes.org/pmwiki/pmwiki.php/Main/InAWorld">In a Land</a>, where <a href="http://tvtropes.org/pmwiki/pmwiki.php/Main/ThereIsNoSuchThingAsNotability">there is no such thing as notability</a>, everybody is <a href="http://tvtropes.org/pmwiki/pmwiki.php/Main/DoomyDoomsOfDoom">doomed</a> to go on a <a href="http://tvtropes.org/pmwiki/pmwiki.php/Main/WikiWalk">Wiki Walk</a>.</p>
-
-
+[In a land](https://tvtropes.org/pmwiki/pmwiki.php/Main/InAWorld), where [there is no such thing as notability](https://tvtropes.org/pmwiki/pmwiki.php/Main/ThereIsNoSuchThingAsNotability), everybody is [doomed](https://tvtropes.org/pmwiki/pmwiki.php/Main/DoomyDoomsOfDoom) to go on a [Wiki Walk](https://tvtropes.org/pmwiki/pmwiki.php/Main/WikiWalk).
