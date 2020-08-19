@@ -10,7 +10,7 @@ mod paths;
 #[cfg(test)]
 mod test_utils;
 
-use crate::input::BlogpostMetadata;
+use crate::input::{BlogpostMetadata, Category};
 use input::file;
 use input::parser::category::parse_categories;
 use output::{blogposts, categories, tags};
@@ -31,6 +31,7 @@ fn main() -> Result<(), String> {
         .map_err(|e| format!("Failed to parse all categories: {}", e))?;
     let categories = parse_categories(&raw_categories)
         .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+    check_duplicate_categories(&categories)?;
 
     let blogpost_indir: PathBuf = [&indir, "blogposts"].iter().collect();
     let raw_blogposts = file::read_files_sorted(&blogpost_indir)
@@ -89,7 +90,7 @@ fn check_duplicate_blogpost_names(posts: &[blogposts::Blogpost]) -> Result<(), S
 fn check_index_tag(post_by_tags: &HashMap<&str, Vec<&BlogpostMetadata>>) -> Result<(), String> {
     if post_by_tags.contains_key("index") {
         Err(
-            "Index must not be a tag name. If you need index as a tag name, find another \
+            "'index' must not be a tag name. If you need index as a tag name, find another \
         file name for the tag index"
                 .to_owned(),
         )
@@ -98,10 +99,29 @@ fn check_index_tag(post_by_tags: &HashMap<&str, Vec<&BlogpostMetadata>>) -> Resu
     }
 }
 
+fn check_duplicate_categories(categories: &[Category]) -> Result<(), String> {
+    let mut seen: HashSet<&Path> = HashSet::with_capacity(categories.len());
+    for cat in categories {
+        if seen.contains(&cat.filename.as_path()) {
+            return Err(format!(
+                "Category filename {} is a duplicate!",
+                cat.filename.to_string_lossy()
+            ));
+        }
+        seen.insert(&cat.filename.as_path());
+    }
+
+    if seen.contains(&Path::new("index")) {
+        return Err("'index' must not be a category path name.".to_owned());
+    }
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_blogpost, create_blogpost_metadata};
+    use crate::test_utils::{create_blogpost, create_blogpost_metadata, create_category};
 
     #[test]
     fn check_duplicate_blogposts_names_returns_ok_for_no_duplicates() {
@@ -142,6 +162,7 @@ mod tests {
 
     #[test]
     fn check_index_tag_returns_ok_if_index_is_no_tag() {
+        // given
         let dummy_post = create_blogpost_metadata();
         let mut tags: HashMap<&str, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
         tags.insert("foobar", vec![&dummy_post]);
@@ -156,6 +177,7 @@ mod tests {
 
     #[test]
     fn check_index_tag_returns_err_if_index_is_tag() {
+        // given
         let dummy_post = create_blogpost_metadata();
         let mut tags: HashMap<&str, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
         tags.insert("foobar", vec![&dummy_post]);
@@ -166,5 +188,54 @@ mod tests {
 
         // then
         assert!(result.is_err());
+    }
+
+    #[test]
+    fn check_duplicate_categories_returns_err_if_index_is_filename() {
+        // given
+        let mut cat = create_category();
+        cat.filename = Path::new("index").to_path_buf();
+
+        // when
+        let result = check_duplicate_categories(&[cat]);
+
+        // then
+        assert_eq!(
+            result,
+            Err("'index' must not be a category path name.".to_owned())
+        );
+    }
+
+    #[test]
+    fn check_duplicate_categories_returns_err_if_filename_is_duplicate() {
+        // given
+        let mut cat1 = create_category();
+        cat1.filename = Path::new("cat1").to_path_buf();
+        let mut cat2 = create_category();
+        cat2.filename = Path::new("cat1").to_path_buf();
+
+        // when
+        let result = check_duplicate_categories(&[cat1, cat2]);
+
+        // then
+        assert_eq!(
+            result,
+            Err("Category filename cat1 is a duplicate!".to_owned())
+        );
+    }
+
+    #[test]
+    fn check_duplicate_categories_returns_ok_if_no_filename_collisions_occur() {
+        // given
+        let mut cat1 = create_category();
+        cat1.filename = Path::new("cat1").to_path_buf();
+        let mut cat2 = create_category();
+        cat2.filename = Path::new("cat2").to_path_buf();
+
+        // when
+        let result = check_duplicate_categories(&[cat1, cat2]);
+
+        // then
+        assert_eq!(result, Ok(()));
     }
 }
