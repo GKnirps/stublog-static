@@ -23,7 +23,7 @@ pub fn render_categories_index_page(categories: &[(&Category, Vec<&Blogpost>)]) 
 pub fn render_category_page(category: &Category, blogposts: &[&Blogpost]) -> Markup {
     let content = html! {
         h2.section-heading { "Kategorie: " (category.title) }
-        (PreEscaped(crate::output::render_cmark(&category.description_markdown)))
+        (PreEscaped(crate::output::cmark::render_cmark(&category.description_markdown, false)))
 
         h3 { "Diese Kategorie hat " (blogposts.len()) " Einträge" }
         ul {
@@ -83,7 +83,7 @@ mod tests {
 
         let mut category = create_category();
         category.title = "Supervillainy".to_owned();
-        category.description_markdown = "**Good business!**".to_owned();
+        category.description_markdown = "**Good business!**<div>foo</div>".to_owned();
 
         // when
         let result = render_category_page(&category, &[&post1, &post2]).into_string();
@@ -91,7 +91,7 @@ mod tests {
         // then
         println!("Checking rendered html:\n{}", result);
         assert!(result.contains("<h2 class=\"section-heading\">Kategorie: Supervillainy</h2>"));
-        assert!(result.contains("<strong>Good business!</strong>"));
+        assert!(result.contains("<strong>Good business!</strong>&lt;div&gt;foo&lt;/div&gt;"));
         assert!(result.contains("<h3>Diese Kategorie hat 2 Einträge</h3>"));
         assert!(result.contains("<ul><li><a href=\"/blogposts/sprvlln\">How to be a supervillain</a></li><li><a href=\"/blogposts/caught\">How not to get caught</a></li></ul>"))
     }

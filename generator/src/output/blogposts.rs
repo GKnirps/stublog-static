@@ -20,9 +20,13 @@ pub fn parse_blogposts(inputs: &[String]) -> Result<Vec<Blogpost>, parser::Parse
         .iter()
         .map(|input| parser::blogpost::parse_blogpost(&input))
         .map(|parse_result| {
-            parse_result.map(|(metadata, content)| Blogpost {
-                metadata,
-                content_html: super::render_cmark(content),
+            parse_result.map(|(metadata, content)| {
+                let allow_html = metadata.allow_html;
+                Blogpost {
+                    metadata,
+                    // FIXME(GK): test allow_html
+                    content_html: super::cmark::render_cmark(content, allow_html),
+                }
             })
         })
         .collect()

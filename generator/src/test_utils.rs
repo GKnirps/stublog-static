@@ -14,6 +14,7 @@ pub fn create_blogpost_metadata() -> BlogpostMetadata {
         date,
         tags: vec!["foo".to_owned(), "bar".to_owned()],
         category_id: Some("bananas".to_owned()),
+        allow_html: false,
     }
 }
 

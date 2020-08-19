@@ -11,6 +11,7 @@ pub struct BlogpostMetadata {
     pub date: DateTime<FixedOffset>,
     pub tags: Vec<String>,
     pub category_id: Option<String>,
+    pub allow_html: bool,
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
