@@ -10,7 +10,7 @@ mod paths;
 #[cfg(test)]
 mod test_utils;
 
-use crate::input::{BlogpostMetadata, Category};
+use crate::input::{BlogpostMetadata, Category, Tag};
 use input::file;
 use input::parser::category::parse_categories;
 use output::{blogposts, categories, tags};
@@ -87,8 +87,8 @@ fn check_duplicate_blogpost_names(posts: &[blogposts::Blogpost]) -> Result<(), S
 // right now, a tag named "index" would not be supported, as we use index.html for the list of all tags
 // we may need a different way to handle this some time, but for now this is just an illegal case
 // that must be caught
-fn check_index_tag(post_by_tags: &HashMap<&str, Vec<&BlogpostMetadata>>) -> Result<(), String> {
-    if post_by_tags.contains_key("index") {
+fn check_index_tag(post_by_tags: &HashMap<&Tag, Vec<&BlogpostMetadata>>) -> Result<(), String> {
+    if post_by_tags.contains_key(&Tag::new("index")) {
         Err(
             "'index' must not be a tag name. If you need index as a tag name, find another \
         file name for the tag index"
@@ -164,9 +164,11 @@ mod tests {
     fn check_index_tag_returns_ok_if_index_is_no_tag() {
         // given
         let dummy_post = create_blogpost_metadata();
-        let mut tags: HashMap<&str, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
-        tags.insert("foobar", vec![&dummy_post]);
-        tags.insert("barfoo", vec![&dummy_post]);
+        let footag = Tag::new("foobar");
+        let bartag = Tag::new("barfoo");
+        let mut tags: HashMap<&Tag, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
+        tags.insert(&footag, vec![&dummy_post]);
+        tags.insert(&bartag, vec![&dummy_post]);
 
         // when
         let result = check_index_tag(&tags);
@@ -179,9 +181,11 @@ mod tests {
     fn check_index_tag_returns_err_if_index_is_tag() {
         // given
         let dummy_post = create_blogpost_metadata();
-        let mut tags: HashMap<&str, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
-        tags.insert("foobar", vec![&dummy_post]);
-        tags.insert("index", vec![&dummy_post]);
+        let mut tags: HashMap<&Tag, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
+        let footag = Tag::new("foobar");
+        let indextag = Tag::new("index");
+        tags.insert(&footag, vec![&dummy_post]);
+        tags.insert(&indextag, vec![&dummy_post]);
 
         // when
         let result = check_index_tag(&tags);

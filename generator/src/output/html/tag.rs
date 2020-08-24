@@ -1,15 +1,15 @@
-use crate::input::BlogpostMetadata;
+use crate::input::{BlogpostMetadata, Tag};
 use crate::paths::{blogpost_path, tag_path};
 use maud::{html, Markup};
 
-pub fn render_tag_list(tags: &[(&str, usize)]) -> Markup {
+pub fn render_tag_list(tags: &[(&Tag, usize)]) -> Markup {
     let content = html! {
         h2.section-heading { "Alle Tags" }
         ul {
-            @for (name, num) in tags {
+            @for (tag, num) in tags {
                 li {
-                    a href=(tag_path(name)) {
-                        (name) " (" (num) ")"
+                    a href=(tag_path(tag)) {
+                        (tag.name) " (" (num) ")"
                     }
                 }
             }
@@ -19,11 +19,11 @@ pub fn render_tag_list(tags: &[(&str, usize)]) -> Markup {
     super::base("Stranger Than Usual — Tags", content)
 }
 
-pub fn render_tag_page(tag_name: &str, posts: &[&BlogpostMetadata]) -> Markup {
-    let title = format!("Stranger Than Usual — Tag: {}", tag_name);
+pub fn render_tag_page(tag: &Tag, posts: &[&BlogpostMetadata]) -> Markup {
+    let title = format!("Stranger Than Usual — Tag: {}", tag.name);
     let content = html! {
         h2.section-heading {
-            "Es gibt " (posts.len()) " Einträge mit dem Tag „" (tag_name) "“"
+            "Es gibt " (posts.len()) " Einträge mit dem Tag „" (tag.name) "“"
         }
         ul {
             @for post in posts {
@@ -47,7 +47,7 @@ mod tests {
     #[test]
     fn render_tag_list_renders_list_of_tags() {
         // given
-        let tags = &[("foo", 2), ("bar", 42)];
+        let tags = &[(&Tag::new("foo"), 2), (&Tag::new("bar"), 42)];
 
         // when
         let result = render_tag_list(tags).into_string();
@@ -71,10 +71,10 @@ mod tests {
         post2.title = "Shaped like itself".to_owned();
         post2.filename = PathBuf::from("shaped");
 
-        let tag_name = "stuff";
+        let tag = Tag::new("stuff");
 
         // when
-        let result = render_tag_page(tag_name, &[&post1, &post2]).into_string();
+        let result = render_tag_page(&tag, &[&post1, &post2]).into_string();
 
         // then
         println!("Checking html:\n{}", result);

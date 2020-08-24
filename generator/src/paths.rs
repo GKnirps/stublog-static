@@ -1,4 +1,4 @@
-use crate::input::{BlogpostMetadata, Category};
+use crate::input::{BlogpostMetadata, Category, Tag};
 use percent_encoding::{percent_encode, PATH_SEGMENT_ENCODE_SET};
 
 pub fn blogpost_path(metadata: &BlogpostMetadata) -> String {
@@ -17,11 +17,11 @@ pub fn archive_path(page: usize) -> String {
 
 pub static TAGLIST_PATH: &str = "/tags";
 
-pub fn tag_path(tag: &str) -> String {
+pub fn tag_path(tag: &Tag) -> String {
     format!(
         "{}/{}",
         TAGLIST_PATH,
-        percent_encode(tag.as_bytes(), PATH_SEGMENT_ENCODE_SET)
+        percent_encode(tag.normalized_name.as_bytes(), PATH_SEGMENT_ENCODE_SET)
     )
 }
 
@@ -72,10 +72,10 @@ mod tests {
     #[test]
     fn test_tag_path() {
         // given
-        let tag = "högr";
+        let tag = Tag::new("högr");
 
         // when
-        let result = tag_path(tag);
+        let result = tag_path(&tag);
 
         // then
         assert_eq!(&result, "/tags/h%C3%B6gr");

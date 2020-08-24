@@ -24,7 +24,7 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
                         "Tags: "
                         @for (i, tag) in metadata.tags.iter().enumerate() {
                             a href=(tag_path(tag)) {
-                                (tag)
+                                (tag.name)
                             }
                             @if i + 1 < metadata.tags.len() { ", " }
                         }

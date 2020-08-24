@@ -1,14 +1,16 @@
 use super::super::BlogpostMetadata;
+use super::super::Tag;
 use super::{get_secure_filename, split_file_content, ParseError};
 use chrono::DateTime;
 use std::collections::HashMap;
 
-fn parse_tags(tagstring: &str) -> Vec<String> {
+fn parse_tags(tagstring: &str) -> Vec<Tag> {
     tagstring
         .split(',')
         .map(|s| s.trim())
         .filter(|s| !s.is_empty())
-        .map(|s| s.to_lowercase())
+        .map(Tag::new)
+        .filter(|t| !t.normalized_name.is_empty())
         .collect()
 }
 
@@ -111,7 +113,7 @@ mod tests {
         );
         assert_eq!(
             &result.tags,
-            &["foo".to_owned(), "bar".to_owned()],
+            &[Tag::new("foo"), Tag::new("bar")],
             "Unexpected tags"
         );
         assert_eq!(result.category_id, Some("bananas".to_owned()));
@@ -183,7 +185,7 @@ mod tests {
     #[test]
     fn parse_tags_should_split_and_trim_and_lowercase_tags() {
         // given
-        let tagstring = " foO, Bar, ,fÖbär ";
+        let tagstring = " foO, Bar, ,fÖbär , '\"";
 
         // when
         let result = parse_tags(tagstring);
@@ -191,7 +193,7 @@ mod tests {
         // then
         assert_eq!(
             &result,
-            &["foo".to_owned(), "bar".to_owned(), "föbär".to_owned()]
+            &[Tag::new("foo"), Tag::new("bar"), Tag::new("föbär")]
         );
     }
 }
