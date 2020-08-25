@@ -5,6 +5,7 @@ use std::path::Path;
 use super::file::open_for_write;
 use super::html;
 use crate::input;
+use crate::input::file::FileData;
 use crate::input::parser;
 use crate::input::Category;
 
@@ -14,8 +15,8 @@ pub struct Blogpost {
     pub content_html: String,
 }
 
-pub fn parse_blogposts(inputs: &[String]) -> Result<Vec<Blogpost>, parser::ParseError> {
-    // TODO: it would be more helpful if we knew which blogpost failed to parse
+// TODO: test this
+pub fn parse_blogposts(inputs: &[FileData]) -> Result<Vec<Blogpost>, parser::ParseError> {
     inputs
         .iter()
         .map(|input| parser::blogpost::parse_blogpost(&input))
@@ -24,7 +25,6 @@ pub fn parse_blogposts(inputs: &[String]) -> Result<Vec<Blogpost>, parser::Parse
                 let allow_html = metadata.allow_html;
                 Blogpost {
                     metadata,
-                    // FIXME(GK): test allow_html
                     content_html: super::cmark::render_cmark(content, allow_html),
                 }
             })

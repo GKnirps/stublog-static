@@ -1,7 +1,9 @@
 use crate::blogposts::Blogpost;
+use crate::input::file::FileData;
 use crate::input::{BlogpostMetadata, Category, Tag};
 use chrono::{FixedOffset, TimeZone};
 use std::path::Path;
+use std::time::SystemTime;
 
 pub fn create_blogpost_metadata() -> BlogpostMetadata {
     let date = FixedOffset::east(3600 * 2)
@@ -14,6 +16,7 @@ pub fn create_blogpost_metadata() -> BlogpostMetadata {
         tags: vec![Tag::new("foo"), Tag::new("bar")],
         category_id: Some("bananas".to_owned()),
         allow_html: false,
+        modified_at: SystemTime::now(),
     }
 }
 
@@ -33,5 +36,14 @@ pub fn create_category() -> Category {
         filename: Path::new("chocolate").to_owned(),
         id: "fesazu".to_owned(),
         description_markdown: "## Chocolate!!!111".to_owned(),
+        modified_at: SystemTime::now(),
+    }
+}
+
+pub fn create_file_data() -> FileData {
+    FileData {
+        content: "---\nfoo: bar\n---\n\nSomething".to_owned(),
+        filename: Path::new("foo/bar.md").to_path_buf(),
+        modified_at: SystemTime::now(),
     }
 }

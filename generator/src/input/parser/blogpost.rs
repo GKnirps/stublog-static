@@ -1,8 +1,11 @@
 use super::super::BlogpostMetadata;
 use super::super::Tag;
 use super::{get_secure_filename, split_file_content, ParseError};
+use crate::input::file::FileData;
 use chrono::DateTime;
 use std::collections::HashMap;
+use std::path::Path;
+use std::time::SystemTime;
 
 fn parse_tags(tagstring: &str) -> Vec<Tag> {
     tagstring
@@ -14,22 +17,44 @@ fn parse_tags(tagstring: &str) -> Vec<Tag> {
         .collect()
 }
 
-fn parse_blogpost_metadata(props: HashMap<&str, &str>) -> Result<BlogpostMetadata, ParseError> {
+fn parse_blogpost_metadata(
+    props: HashMap<&str, &str>,
+    modified_at: SystemTime,
+    original_path: &Path,
+) -> Result<BlogpostMetadata, ParseError> {
     let title = props
         .get("title")
         .copied()
-        .ok_or_else(|| ParseError::from("Missing title"))?
+        .ok_or_else(|| {
+            ParseError::new(format!(
+                "Missing title for blogpost: {}",
+                original_path.to_string_lossy()
+            ))
+        })?
         .to_owned();
     let filename = get_secure_filename(
-        props
-            .get("filename")
-            .ok_or_else(|| ParseError::from("Missing filename"))?,
+        props.get("filename").ok_or_else(|| {
+            ParseError::new(format!(
+                "Missing output filename for blogpost {}",
+                original_path.to_string_lossy()
+            ))
+        })?,
+        original_path,
     )?;
-    let date_string = props
-        .get("date")
-        .ok_or_else(|| ParseError::from("Missing date"))?;
-    let date = DateTime::parse_from_rfc3339(date_string)
-        .map_err(|e| ParseError::new(format!("Invalid date '{}': {}", date_string, e)))?;
+    let date_string = props.get("date").ok_or_else(|| {
+        ParseError::new(format!(
+            "Missing date for blogpost {}",
+            original_path.to_string_lossy()
+        ))
+    })?;
+    let date = DateTime::parse_from_rfc3339(date_string).map_err(|e| {
+        ParseError::new(format!(
+            "Invalid date '{}': {} (blogpost {})",
+            date_string,
+            e,
+            original_path.to_string_lossy()
+        ))
+    })?;
     let tags = props
         .get("tags")
         .map(|s| parse_tags(s))
@@ -47,12 +72,13 @@ fn parse_blogpost_metadata(props: HashMap<&str, &str>) -> Result<BlogpostMetadat
         tags,
         category_id,
         allow_html,
+        modified_at,
     })
 }
 
-pub fn parse_blogpost(content: &str) -> Result<(BlogpostMetadata, &str), ParseError> {
-    let (header_map, content) = split_file_content(content)?;
-    let metadata = parse_blogpost_metadata(header_map)?;
+pub fn parse_blogpost(file_data: &FileData) -> Result<(BlogpostMetadata, &str), ParseError> {
+    let (header_map, content) = split_file_content(&file_data)?;
+    let metadata = parse_blogpost_metadata(header_map, file_data.modified_at, &file_data.filename)?;
     Ok((metadata, content))
 }
 
@@ -70,8 +96,12 @@ mod tests {
         input.insert("filename", "lipsum");
         input.insert("date", "2020-05-11T12:13:14+02:00");
 
+        let modified_at = SystemTime::now();
+        let path = Path::new("mad/eye");
+
         // when
-        let result = parse_blogpost_metadata(input).expect("Expected valid result");
+        let result =
+            parse_blogpost_metadata(input, modified_at, path).expect("Expected valid result");
 
         // then
         assert_eq!(result.title, "Lorem ipsum");
@@ -86,6 +116,7 @@ mod tests {
         assert!(result.tags.is_empty(), "Expected no tags");
         assert_eq!(result.category_id, None);
         assert!(!result.allow_html);
+        assert_eq!(result.modified_at, modified_at);
     }
 
     #[test]
@@ -99,8 +130,12 @@ mod tests {
         input.insert("category", "bananas");
         input.insert("allow-html", "true");
 
+        let modified_at = SystemTime::now();
+        let path = Path::new("mad/eye");
+
         // when
-        let result = parse_blogpost_metadata(input).expect("Expected valid result");
+        let result =
+            parse_blogpost_metadata(input, modified_at, path).expect("Expected valid result");
 
         // then
         assert_eq!(result.title, "Lorem ipsum");
@@ -118,6 +153,7 @@ mod tests {
         );
         assert_eq!(result.category_id, Some("bananas".to_owned()));
         assert!(result.allow_html);
+        assert_eq!(result.modified_at, modified_at);
     }
 
     #[test]
@@ -127,11 +163,16 @@ mod tests {
         input.insert("filename", "lipsum");
         input.insert("date", "2020-05-11T12:13:14+02:00");
 
+        let path = Path::new("mad/eye");
+
         // when
-        let result = parse_blogpost_metadata(input);
+        let result = parse_blogpost_metadata(input, SystemTime::now(), path);
 
         // then
-        assert_eq!(result, Err(ParseError::from("Missing title")));
+        assert_eq!(
+            result,
+            Err(ParseError::from("Missing title for blogpost: mad/eye"))
+        );
     }
 
     #[test]
@@ -141,11 +182,18 @@ mod tests {
         input.insert("title", "Lorem ipsum");
         input.insert("date", "2020-05-11T12:13:14+02:00");
 
+        let path = Path::new("mad/eye");
+
         // when
-        let result = parse_blogpost_metadata(input);
+        let result = parse_blogpost_metadata(input, SystemTime::now(), path);
 
         // then
-        assert_eq!(result, Err(ParseError::from("Missing filename")));
+        assert_eq!(
+            result,
+            Err(ParseError::from(
+                "Missing output filename for blogpost mad/eye"
+            ))
+        );
     }
 
     #[test]
@@ -156,14 +204,16 @@ mod tests {
         input.insert("filename", "lipsum");
         input.insert("date", "2020-05-11+02:00");
 
+        let path = Path::new("mad/eye");
+
         // when
-        let result = parse_blogpost_metadata(input);
+        let result = parse_blogpost_metadata(input, SystemTime::now(), path);
 
         // then
         assert_eq!(
             result,
             Err(ParseError::from(
-                "Invalid date \'2020-05-11+02:00\': input contains invalid characters"
+                "Invalid date \'2020-05-11+02:00\': input contains invalid characters (blogpost mad/eye)"
             ))
         );
     }
@@ -175,11 +225,16 @@ mod tests {
         input.insert("title", "Lorem ipsum");
         input.insert("filename", "lipsum");
 
+        let path = Path::new("mad/eye");
+
         // when
-        let result = parse_blogpost_metadata(input);
+        let result = parse_blogpost_metadata(input, SystemTime::now(), path);
 
         // then
-        assert_eq!(result, Err(ParseError::from("Missing date")));
+        assert_eq!(
+            result,
+            Err(ParseError::from("Missing date for blogpost mad/eye"))
+        );
     }
 
     #[test]
