@@ -1,4 +1,4 @@
-use crate::input::{BlogpostMetadata, Category, Tag};
+use crate::input::{tag::Tag, BlogpostMetadata, Category};
 use percent_encoding::{percent_encode, PATH_SEGMENT_ENCODE_SET};
 
 pub fn blogpost_path(metadata: &BlogpostMetadata) -> String {

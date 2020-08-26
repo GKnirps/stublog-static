@@ -1,7 +1,7 @@
 use super::super::BlogpostMetadata;
-use super::super::Tag;
 use super::{get_secure_filename, split_file_content, ParseError};
 use crate::input::file::FileData;
+use crate::input::tag::Tag;
 use chrono::DateTime;
 use std::collections::HashMap;
 use std::path::Path;

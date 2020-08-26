@@ -1,4 +1,4 @@
-use crate::input::{BlogpostMetadata, Tag};
+use crate::input::{tag::Tag, BlogpostMetadata};
 use crate::paths::{blogpost_path, tag_path};
 use maud::{html, Markup};
 

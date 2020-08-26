@@ -1,6 +1,6 @@
 use crate::blogposts::Blogpost;
 use crate::input::file::FileData;
-use crate::input::{BlogpostMetadata, Category, Tag};
+use crate::input::{tag::Tag, BlogpostMetadata, Category};
 use chrono::{FixedOffset, TimeZone};
 use std::path::Path;
 use std::time::SystemTime;

@@ -10,7 +10,7 @@ mod paths;
 #[cfg(test)]
 mod test_utils;
 
-use crate::input::{BlogpostMetadata, Category, Tag};
+use crate::input::{tag::Tag, BlogpostMetadata, Category};
 use input::file;
 use input::parser::category::parse_categories;
 use output::{blogposts, categories, tags};
@@ -121,6 +121,7 @@ fn check_duplicate_categories(categories: &[Category]) -> Result<(), String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::input::tag::Tag;
     use crate::test_utils::{create_blogpost, create_blogpost_metadata, create_category};
 
     #[test]
