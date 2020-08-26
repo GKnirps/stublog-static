@@ -1,3 +1,4 @@
+use std::cmp::max;
 use std::fs::create_dir;
 use std::io::Write;
 use std::path::Path;
@@ -8,6 +9,7 @@ use crate::input;
 use crate::input::file::FileData;
 use crate::input::parser;
 use crate::input::Category;
+use crate::output::needs_update;
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct Blogpost {
@@ -80,12 +82,33 @@ fn write_blogpost(
     let mut filename = dir.to_path_buf();
     filename.push(&blogpost.metadata.filename);
     filename.set_extension("html");
+    if !needs_update(&filename, blogpost.metadata.modified_at) {
+        // target file is newer, no update needed
+        return Ok(());
+    }
     let mut writer = open_for_write(&filename)?;
     write!(
         writer,
         "{}",
         html::blogpost::render_blogpost_page(blogpost, category).into_string()
     )
+}
+
+fn blogposts_with_categories_need_update(
+    target_file: &Path,
+    posts: &[(&Blogpost, Option<&Category>)],
+) -> bool {
+    // get the newest modification date of all blogposts and categories here, only update if the
+    // target file is older
+    posts
+        .iter()
+        .map(|(post, cat)| {
+            cat.map(|c| max(c.modified_at, post.metadata.modified_at))
+                .unwrap_or(post.metadata.modified_at)
+        })
+        .max()
+        .map(|modified_at| needs_update(target_file, modified_at))
+        .unwrap_or(true)
 }
 
 pub fn write_home(dir: &Path, all_posts: &[(&Blogpost, Option<&Category>)]) -> std::io::Result<()> {
@@ -100,6 +123,10 @@ pub fn write_home(dir: &Path, all_posts: &[(&Blogpost, Option<&Category>)]) -> s
     } else {
         &all_posts[all_posts.len() - 10..]
     };
+
+    if !blogposts_with_categories_need_update(&filename, posts) {
+        return Ok(());
+    }
 
     let mut writer = open_for_write(&filename)?;
     write!(writer, "{}", html::home::render_home(posts).into_string())
@@ -138,6 +165,10 @@ fn write_archive_page(
     let mut filename = dir.to_path_buf();
     filename.push(format!("{}", page_index));
     filename.set_extension("html");
+
+    if !blogposts_with_categories_need_update(&filename, posts) {
+        return Ok(());
+    }
 
     let mut writer = open_for_write(&filename)?;
 

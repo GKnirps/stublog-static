@@ -1,6 +1,7 @@
 use super::file::open_for_write;
 use super::html;
 use crate::input::{BlogpostMetadata, Tag};
+use crate::output::needs_update;
 use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
@@ -39,6 +40,19 @@ fn sort_tags<'a>(posts_by_tag: &HashMap<&'a Tag, Vec<&BlogpostMetadata>>) -> Vec
     tags
 }
 
+fn tag_index_needs_update(
+    filename: &Path,
+    posts_by_tag: &HashMap<&Tag, Vec<&BlogpostMetadata>>,
+) -> bool {
+    posts_by_tag
+        .iter()
+        .flat_map(|(_, posts)| posts.iter())
+        .map(|p| p.modified_at)
+        .max()
+        .map(|t| needs_update(&filename, t))
+        .unwrap_or(true)
+}
+
 pub fn write_tag_index(
     dir: &Path,
     posts_by_tag: &HashMap<&Tag, Vec<&BlogpostMetadata>>,
@@ -48,6 +62,10 @@ pub fn write_tag_index(
     }
     let mut filename = dir.to_path_buf();
     filename.push("index.html");
+
+    if !tag_index_needs_update(&filename, posts_by_tag) {
+        return Ok(());
+    }
 
     let tags = sort_tags(posts_by_tag);
     let mut writer = open_for_write(&filename)?;
@@ -74,10 +92,23 @@ pub fn write_tag_pages(
     Ok(())
 }
 
+fn tag_needs_update(filename: &Path, blogposts_with_tag: &[&BlogpostMetadata]) -> bool {
+    blogposts_with_tag
+        .iter()
+        .map(|p| p.modified_at)
+        .max()
+        .map(|t| needs_update(filename, t))
+        .unwrap_or(true)
+}
+
 fn write_tag_page(dir: &Path, tag: &Tag, posts: &[&BlogpostMetadata]) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push(&tag.normalized_name);
     filename.set_extension("html");
+
+    if !(tag_needs_update(&filename, posts)) {
+        return Ok(());
+    }
 
     let mut writer = open_for_write(&filename)?;
     write!(

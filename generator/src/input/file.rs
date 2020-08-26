@@ -12,7 +12,7 @@ pub struct FileData {
 
 pub fn read_files_sorted(dir_path: &Path) -> std::io::Result<Vec<FileData>> {
     let file_paths = read_sorted_dir(dir_path)?;
-    file_paths.into_iter().map(|path| read_file(path)).collect()
+    file_paths.into_iter().map(read_file).collect()
 }
 
 fn read_sorted_dir(path: &Path) -> std::io::Result<Vec<PathBuf>> {

@@ -1,3 +1,4 @@
+use std::cmp::max;
 use std::fs::create_dir;
 use std::io::Write;
 use std::path::Path;
@@ -6,6 +7,8 @@ use super::blogposts::Blogpost;
 use super::file::open_for_write;
 use super::html;
 use crate::input::Category;
+use crate::output::needs_update;
+use std::time::SystemTime;
 
 pub fn categories_with_blogposts<'a>(
     categories: &'a [Category],
@@ -25,6 +28,25 @@ pub fn categories_with_blogposts<'a>(
         .collect()
 }
 
+fn newest_modification(category: &Category, posts: &[&Blogpost]) -> SystemTime {
+    let newest_post = posts.iter().map(|post| post.metadata.modified_at).max();
+    newest_post
+        .map(|t| max(t, category.modified_at))
+        .unwrap_or(category.modified_at)
+}
+
+fn category_index_needs_update(
+    filename: &Path,
+    categories: &[(&Category, Vec<&Blogpost>)],
+) -> bool {
+    categories
+        .iter()
+        .map(|(cat, posts)| newest_modification(cat, posts))
+        .max()
+        .map(|t| needs_update(filename, t))
+        .unwrap_or(true)
+}
+
 pub fn write_category_index(
     dir: &Path,
     categories: &[(&Category, Vec<&Blogpost>)],
@@ -36,12 +58,24 @@ pub fn write_category_index(
     let mut filename = dir.to_path_buf();
     filename.push("index.html");
 
+    if !category_index_needs_update(&filename, categories) {
+        return Ok(());
+    }
+
     let mut writer = open_for_write(&filename)?;
     write!(
         writer,
         "{}",
         html::category::render_categories_index_page(categories).into_string()
     )
+}
+
+fn blogpost_or_category_needs_update(
+    filename: &Path,
+    category: &Category,
+    posts: &[&Blogpost],
+) -> bool {
+    needs_update(filename, newest_modification(category, posts))
 }
 
 pub fn write_category_pages(
@@ -66,6 +100,10 @@ fn write_category_page(
     let mut filename = dir.to_path_buf();
     filename.push(&category.filename);
     filename.set_extension("html");
+
+    if !blogpost_or_category_needs_update(&filename, category, blogposts) {
+        return Ok(());
+    }
 
     let mut writer = open_for_write(&filename)?;
     write!(
