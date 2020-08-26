@@ -1,24 +1,22 @@
 .PHONY: all
-all: compress
+all: directories compress
 
-dist:
-	mkdir dist
+.PHONY: directories
+directories:
+	mkdir -p dist/assets
 
 .PHONY: generate-html
-generate-html: dist
+generate-html:
 	cd generator && cargo run --release ../content ../dist
 
 ### Assets
 .PHONY: assets
 assets: dist/assets/favicon.png dist/assets/style.css
 
-dist/assets: dist
-	mkdir dist/assets
-
-dist/assets/favicon.png: dist/assets assets/favicon.png
+dist/assets/favicon.png: assets/favicon.png
 	cp assets/favicon.png dist/assets/favicon.png
 
-dist/assets/style.css: $(wildcard dist/assets assets/stylesheets/*.scss)
+dist/assets/style.css: $(wildcard assets/stylesheets/*.scss)
 	sassc -t compressed assets/stylesheets/style.css.scss dist/assets/style.css
 
 ### end assets
