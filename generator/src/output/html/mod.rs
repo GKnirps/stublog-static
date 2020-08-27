@@ -5,6 +5,7 @@ use maud::{html, Markup, Render, DOCTYPE};
 pub mod archive;
 pub mod blogpost;
 pub mod category;
+pub mod error_pages;
 pub mod home;
 pub mod pager;
 pub mod tag;

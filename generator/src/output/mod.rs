@@ -5,6 +5,7 @@ use std::time::SystemTime;
 pub mod blogposts;
 pub mod categories;
 mod cmark;
+pub mod error_pages;
 mod file;
 mod html;
 pub mod tags;

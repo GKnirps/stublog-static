@@ -11,6 +11,7 @@ mod paths;
 mod test_utils;
 
 use crate::input::{tag::Tag, BlogpostMetadata, Category};
+use crate::output::error_pages::write_404;
 use input::file;
 use input::parser::category::parse_categories;
 use output::{blogposts, categories, tags};
@@ -25,6 +26,8 @@ fn main() -> Result<(), String> {
     let odir = arg
         .next()
         .ok_or_else(|| format!("Usage: {} <input dir> <output dir>", prog_name))?;
+
+    write_404(Path::new(&odir)).map_err(|e| format!("Failed to write 404 error: {}", e))?;
 
     let categories_indir: PathBuf = [&indir, "categories"].iter().collect();
     let raw_categories = file::read_files_sorted(&Path::new(&categories_indir))
