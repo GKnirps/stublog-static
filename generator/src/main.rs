@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 mod input;
 mod output;
 mod paths;
+mod urls;
 
 #[cfg(test)]
 mod test_utils;
@@ -14,7 +15,7 @@ use crate::input::{tag::Tag, BlogpostMetadata, Category};
 use crate::output::error_pages::write_404;
 use input::file;
 use input::parser::category::parse_categories;
-use output::{blogposts, categories, tags};
+use output::{blogposts, categories, feed, tags};
 use std::collections::{HashMap, HashSet};
 
 fn main() -> Result<(), String> {
@@ -55,6 +56,8 @@ fn main() -> Result<(), String> {
         .map_err(|e| format!("Failed to write archive: {}", e))?;
     blogposts::write_home(Path::new(&odir), &categorized_blogposts)
         .map_err(|e| format!("Failed to write home page: {}", e))?;
+
+    feed::write_atom_feed(&Path::new(&odir), &blogposts)?;
 
     let post_by_tags =
         tags::blogpost_metadata_by_tag(blogposts.iter().map(|blogpost| &blogpost.metadata));

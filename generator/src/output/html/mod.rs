@@ -21,6 +21,7 @@ fn base<T: Render>(title: &str, content: T) -> Markup {
                 // TODO: add cache-hash to the favicon and style filenames
                 link rel="stylesheet" media="screen" href="/assets/style.css";
                 link rel="icon" type="image/png" href="/assets/favicon.png";
+                link rel="alternate" type="application/feed+atom" title="ATOM" href="/feed.atom";
             }
             body {
                 div.wrap-all {

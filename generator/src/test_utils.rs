@@ -9,10 +9,14 @@ pub fn create_blogpost_metadata() -> BlogpostMetadata {
     let date = FixedOffset::east(3600 * 2)
         .ymd(2020, 5, 11)
         .and_hms(12, 13, 14);
+    let update_date = FixedOffset::east(3600 * 2)
+        .ymd(2020, 5, 25)
+        .and_hms(12, 13, 14);
     BlogpostMetadata {
         title: "Nevermind".to_owned(),
         filename: Path::new("foobar").to_owned(),
         date,
+        update_date: Some(update_date),
         tags: vec![Tag::new("foo"), Tag::new("bar")],
         category_id: Some("bananas".to_owned()),
         allow_html: false,

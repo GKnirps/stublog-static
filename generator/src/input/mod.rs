@@ -12,9 +12,12 @@ pub struct BlogpostMetadata {
     pub title: String,
     pub filename: PathBuf,
     pub date: DateTime<FixedOffset>,
+    /// this is the official update date
+    pub update_date: Option<DateTime<FixedOffset>>,
     pub tags: Vec<Tag>,
     pub category_id: Option<String>,
     pub allow_html: bool,
+    /// this is the last time the source file was touched
     pub modified_at: SystemTime,
 }
 

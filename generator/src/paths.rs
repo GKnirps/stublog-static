@@ -38,6 +38,8 @@ pub fn category_path(category: &Category) -> String {
     )
 }
 
+pub static ATOM_FEED_PATH: &str = "/feed.atom";
+
 #[cfg(test)]
 mod tests {
     use super::*;
