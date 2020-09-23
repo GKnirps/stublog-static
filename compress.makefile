@@ -1,4 +1,4 @@
-GZ = gzip --keep --best --force
+GZ = zopfli --gzip
 BR = brotli --keep --best --force --no-copy-stat
 
 .PHONY: compress
