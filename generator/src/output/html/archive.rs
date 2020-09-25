@@ -12,9 +12,6 @@ pub fn render_archive(
 ) -> Markup {
     let html_pager = pager(current_page, num_pages);
     let html_content = html! {
-        h2.section-heading {
-            "Blogpost-Archiv"
-        }
         div.blogposts {
             (html_pager)
                 @for (post, cat) in blogposts {

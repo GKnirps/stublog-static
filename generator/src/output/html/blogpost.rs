@@ -8,6 +8,11 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
     let permalink = blogpost_path(metadata);
     html! {
         article.blogpost {
+            h2.posttitle {
+                a href=(permalink) {
+                    (blogpost.metadata.title)
+                }
+            }
             div.entry { (PreEscaped(&blogpost.content_html)) }
             footer {
                 span.post-time {
@@ -28,13 +33,6 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
                             }
                             @if i + 1 < metadata.tags.len() { ", " }
                         }
-                    }
-                }
-                span.permalink {
-                    // TODO: is there a way to make permalinks nicer (e.g. use the headline of the
-                    // article as link)?
-                    a href=(permalink) {
-                        "Permalink"
                     }
                 }
             }
@@ -65,6 +63,8 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{}", result);
+        assert!(result
+            .contains("<h2 class=\"posttitle\"><a href=\"/blogposts/foobar\">Nevermind</a></h2>"));
         assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p></div>"));
         assert!(result.contains("11.05.2020 12:13"));
         assert!(result.contains("<a href=\"/categories/chocolate\">Cocoa</a>"));
