@@ -11,13 +11,16 @@ generate-html:
 
 ### Assets
 .PHONY: assets
-assets: dist/assets/favicon.png dist/assets/style.css
+assets: dist/assets/favicon.png dist/assets/style.css dist/robots.txt
 
 dist/assets/favicon.png: assets/favicon.png
 	cp assets/favicon.png dist/assets/favicon.png
 
 dist/assets/style.css: $(wildcard assets/stylesheets/*.scss)
 	sassc -t compressed assets/stylesheets/style.css.scss dist/assets/style.css
+
+dist/robots.txt: assets/robots.txt
+	cp assets/robots.txt dist/robots.txt
 
 ### end assets
 
