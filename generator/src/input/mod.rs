@@ -29,3 +29,13 @@ pub struct Category {
     pub description_markdown: String,
     pub modified_at: SystemTime,
 }
+
+/// Metadata for a blog content file (e.g. an image) (not the generated html files
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+pub struct HostedFile {
+    pub old_id: Option<String>,
+    pub path: String,
+    pub mime_type: String,
+    pub description: String,
+    pub modified_at: SystemTime,
+}
