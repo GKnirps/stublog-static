@@ -1,13 +1,23 @@
 .PHONY: all
-all: directories compress
+all: directories copy-hosted-files compress
 
 .PHONY: directories
 directories:
 	mkdir -p dist/assets
+	mkdir -p dist/file
 
 .PHONY: generate-html
 generate-html:
 	cd generator && cargo run --release ../content ../dist
+
+### content files (such as images used in posts)
+
+.PHONY: copy-hosted-files
+copy-hosted-files: $(patsubst content/file/%, dist/file/%, $(wildcard content/file/*))
+
+dist/file/%: content/file/%
+	cp $< $@
+###
 
 ### Assets
 .PHONY: assets
