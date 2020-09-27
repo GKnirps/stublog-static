@@ -6,7 +6,7 @@ pub fn parse_categories(inputs: &[FileData]) -> Result<Vec<Category>, ParseError
     inputs.iter().map(|input| parse_category(&input)).collect()
 }
 
-pub fn parse_category(file_data: &FileData) -> Result<Category, ParseError> {
+fn parse_category(file_data: &FileData) -> Result<Category, ParseError> {
     let path = &file_data.filename;
     let (header_map, description) = split_file_content(file_data)?;
 
@@ -26,7 +26,7 @@ pub fn parse_category(file_data: &FileData) -> Result<Category, ParseError> {
         .ok_or_else(|| {
             ParseError::new(format!(
                 "Missing target file name for category {}",
-                file_data.filename.to_string_lossy()
+                path.to_string_lossy()
             ))
         })?
         .to_string();
