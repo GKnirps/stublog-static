@@ -1,4 +1,4 @@
-use crate::input::{tag::Tag, BlogpostMetadata, Category};
+use crate::input::{tag::Tag, BlogpostMetadata, Category, HostedFile};
 use percent_encoding::{percent_encode, PATH_SEGMENT_ENCODE_SET};
 
 pub fn blogpost_path(metadata: &BlogpostMetadata) -> String {
@@ -40,10 +40,17 @@ pub fn category_path(category: &Category) -> String {
 
 pub static ATOM_FEED_PATH: &str = "/feed.atom";
 
+pub fn hosted_file_path(hosted_file: &HostedFile) -> String {
+    format!(
+        "/file/{}",
+        percent_encode(hosted_file.path.as_bytes(), PATH_SEGMENT_ENCODE_SET)
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_blogpost_metadata, create_category};
+    use crate::test_utils::{create_blogpost_metadata, create_category, create_hosted_file};
     use std::path::Path;
 
     #[test]
@@ -95,5 +102,19 @@ mod tests {
 
         // then
         assert_eq!(result, "/categories/s%C3%B6mewhere");
+    }
+
+    #[test]
+    fn test_hosted_file_path() {
+        // given
+        let mut hosted_file = create_hosted_file();
+        hosted_file.old_id = Some("notthis".to_owned());
+        hosted_file.path = "äh".to_owned();
+
+        // when
+        let result = hosted_file_path(&hosted_file);
+
+        // then
+        assert_eq!(result, "/file/%C3%A4h");
     }
 }

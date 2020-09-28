@@ -1,6 +1,6 @@
 use crate::blogposts::Blogpost;
 use crate::input::file::FileData;
-use crate::input::{tag::Tag, BlogpostMetadata, Category};
+use crate::input::{tag::Tag, BlogpostMetadata, Category, HostedFile};
 use chrono::{FixedOffset, TimeZone};
 use std::path::Path;
 use std::time::SystemTime;
@@ -40,6 +40,16 @@ pub fn create_category() -> Category {
         filename: Path::new("chocolate").to_owned(),
         id: "fesazu".to_owned(),
         description_markdown: "## Chocolate!!!111".to_owned(),
+        modified_at: SystemTime::now(),
+    }
+}
+
+pub fn create_hosted_file() -> HostedFile {
+    HostedFile {
+        old_id: None,
+        path: "answer.txt".to_owned(),
+        mime_type: "text/plain".to_owned(),
+        description: "You're really not going to like it.".to_owned(),
         modified_at: SystemTime::now(),
     }
 }

@@ -1,6 +1,5 @@
 #![feature(proc_macro_hygiene)]
 
-use std::env::args;
 use std::path::{Path, PathBuf};
 
 mod input;
@@ -14,30 +13,56 @@ mod test_utils;
 use crate::input::{tag::Tag, BlogpostMetadata, Category};
 use crate::output::error_pages::write_404;
 use input::file;
-use input::parser::category::parse_categories;
-use output::{blogposts, categories, feed, tags};
+use input::parser::{category::parse_categories, files_index::parse_all_file_metadata};
+use output::{blogposts, categories, feed, ngingx_cfg, tags};
 use std::collections::{HashMap, HashSet};
 
 fn main() -> Result<(), String> {
-    let mut arg = args();
-    let prog_name = arg.next().expect("Expected at least one argument");
-    let indir = arg
-        .next()
-        .ok_or_else(|| format!("Usage: {} <input dir> <output dir>", prog_name))?;
-    let odir = arg
-        .next()
-        .ok_or_else(|| format!("Usage: {} <input dir> <output dir>", prog_name))?;
+    let matches = clap::App::new("stu generator")
+        .version("0.1")
+        .about("generates html and stuff for the Stranger Than Usual blog")
+        .arg(clap::Arg::with_name("generate-cfg").long("generate-cfg").help("Generate nginx configuration to map old paths to new paths (ONLY USE WITH TRUSTED INPUT)").required(false).takes_value(false))
+        .arg(clap::Arg::with_name("INPUT_DIR").required(true).help("Input directory for blog content").index(1))
+        .arg(clap::Arg::with_name("OUTPUT_DIR").required(true).help("Output directory for rendered html").index(2))
+        .get_matches();
 
-    write_404(Path::new(&odir)).map_err(|e| format!("Failed to write 404 error: {}", e))?;
+    let indir = matches
+        .value_of("INPUT_DIR")
+        .ok_or_else(|| "Missing input dir param".to_owned())?;
+    let odir = matches
+        .value_of("OUTPUT_DIR")
+        .ok_or_else(|| "Missing output dir param".to_owned())?;
+    let generate_cfg = matches.is_present("generate-cfg");
 
-    let categories_indir: PathBuf = [&indir, "categories"].iter().collect();
-    let raw_categories = file::read_files_sorted(&Path::new(&categories_indir))
+    if generate_cfg {
+        generate_config(indir, odir)
+    } else {
+        generate_blog(indir, odir)
+    }
+}
+
+fn generate_config(indir: &str, odir: &str) -> Result<(), String> {
+    let hosted_files_indir: PathBuf = [indir, "files_index"].iter().collect();
+    let raw_hosted_files = file::read_files_sorted(&hosted_files_indir)
+        .map_err(|e| format!("Failed to read all hosted files: {}", e))?;
+    let hosted_files = parse_all_file_metadata(&raw_hosted_files)
+        .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
+
+    ngingx_cfg::write_config_file(&Path::new(odir), &hosted_files)
+        .map_err(|e| format!("Unable to write nginx config: {}", e))
+}
+
+fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
+    write_404(Path::new(odir)).map_err(|e| format!("Failed to write 404 error: {}", e))?;
+
+    let categories_indir: PathBuf = [indir, "categories"].iter().collect();
+    let raw_categories = file::read_files_sorted(&categories_indir)
         .map_err(|e| format!("Failed to parse all categories: {}", e))?;
     let categories = parse_categories(&raw_categories)
         .map_err(|e| format!("Failed to parse all categories: {}", e))?;
     check_duplicate_categories(&categories)?;
 
-    let blogpost_indir: PathBuf = [&indir, "blogposts"].iter().collect();
+    let blogpost_indir: PathBuf = [indir, "blogposts"].iter().collect();
     let raw_blogposts = file::read_files_sorted(&blogpost_indir)
         .map_err(|e| format!("Failed to read all blogposts: {}", e))?;
     let blogposts = blogposts::parse_blogposts(&raw_blogposts)
@@ -47,28 +72,28 @@ fn main() -> Result<(), String> {
     let categorized_blogposts =
         blogposts::find_categories_for_blogposts(&blogposts, &categories)
             .map_err(|e| format!("Error while matching blogpost with categories: {}", e))?;
-    let blogpost_dir: PathBuf = [&odir, "blogposts"].iter().collect();
+    let blogpost_dir: PathBuf = [odir, "blogposts"].iter().collect();
     blogposts::write_blogposts(&blogpost_dir, &categorized_blogposts)
         .map_err(|e| format!("Failed to write all blogposts: {}", e))?;
 
-    let archive_dir: PathBuf = [&odir, "archive"].iter().collect();
+    let archive_dir: PathBuf = [odir, "archive"].iter().collect();
     blogposts::write_archive(&archive_dir, &categorized_blogposts)
         .map_err(|e| format!("Failed to write archive: {}", e))?;
-    blogposts::write_home(Path::new(&odir), &categorized_blogposts)
+    blogposts::write_home(Path::new(odir), &categorized_blogposts)
         .map_err(|e| format!("Failed to write home page: {}", e))?;
 
-    feed::write_atom_feed(&Path::new(&odir), &blogposts)?;
+    feed::write_atom_feed(&Path::new(odir), &blogposts)?;
 
     let post_by_tags =
         tags::blogpost_metadata_by_tag(blogposts.iter().map(|blogpost| &blogpost.metadata));
     check_index_tag(&post_by_tags)?;
-    let tags_dir: PathBuf = [&odir, "tags"].iter().collect();
+    let tags_dir: PathBuf = [odir, "tags"].iter().collect();
     tags::write_tag_index(&tags_dir, &post_by_tags)
         .map_err(|e| format!("Failed to write tag index page: {}", e))?;
     tags::write_tag_pages(&tags_dir, &post_by_tags)
         .map_err(|e| format!("Failed to write tag pages: {}", e))?;
 
-    let category_dir: PathBuf = [&odir, "categories"].iter().collect();
+    let category_dir: PathBuf = [odir, "categories"].iter().collect();
     let categories_with_posts = categories::categories_with_blogposts(&categories, &blogposts);
     categories::write_category_index(&category_dir, &categories_with_posts)
         .map_err(|e| format!("Failed to write category index page: {}", e))?;
