@@ -42,13 +42,19 @@ fn main() -> Result<(), String> {
 }
 
 fn generate_config(indir: &str, odir: &str) -> Result<(), String> {
+    let categories_indir: PathBuf = [indir, "categories"].iter().collect();
+    let raw_categories = file::read_files_sorted(&categories_indir)
+        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+    let categories = parse_categories(&raw_categories)
+        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+
     let hosted_files_indir: PathBuf = [indir, "files_index"].iter().collect();
     let raw_hosted_files = file::read_files_sorted(&hosted_files_indir)
         .map_err(|e| format!("Failed to read all hosted files: {}", e))?;
     let hosted_files = parse_all_file_metadata(&raw_hosted_files)
         .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
 
-    ngingx_cfg::write_config_file(&Path::new(odir), &hosted_files)
+    ngingx_cfg::write_config_file(&Path::new(odir), &categories, &hosted_files)
         .map_err(|e| format!("Unable to write nginx config: {}", e))
 }
 

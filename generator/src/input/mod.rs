@@ -28,6 +28,7 @@ pub struct Category {
     pub filename: PathBuf,
     pub description_markdown: String,
     pub modified_at: SystemTime,
+    pub old_id: Option<String>,
 }
 
 /// Metadata for a blog content file (e.g. an image) (not the generated html files

@@ -1,6 +1,6 @@
 use super::file::open_for_write;
-use crate::input::HostedFile;
-use crate::paths::hosted_file_path;
+use crate::input::{Category, HostedFile};
+use crate::paths;
 use std::io::Write;
 use std::path::Path;
 
@@ -8,7 +8,7 @@ use std::path::Path;
 /// accessible under the same URL as before
 fn write_hosted_file_rewrite(w: &mut dyn Write, hosted_file: &HostedFile) -> std::io::Result<()> {
     if let Some(ref old_id) = hosted_file.old_id {
-        let new_path = hosted_file_path(hosted_file);
+        let new_path = paths::hosted_file_path(hosted_file);
         // TODO: we assume the id and the new path do not contain any dangerous stuff.
         //  maybe we need to change that. On the other hand, this config generator is only supposed
         //  to be run to create the config for imported data from the old blog, this is not supposed
@@ -21,9 +21,10 @@ fn write_hosted_file_rewrite(w: &mut dyn Write, hosted_file: &HostedFile) -> std
             w,
             "rewrite ^/hosted_files/{}/download$ {};",
             old_id, new_path
-        )?;
+        )
+    } else {
+        Ok(())
     }
-    Ok(())
 }
 
 fn write_hosted_files_rewrites(
@@ -37,11 +38,46 @@ fn write_hosted_files_rewrites(
     Ok(())
 }
 
-pub fn write_config_file(dir: &Path, hosted_files: &[HostedFile]) -> std::io::Result<()> {
+/// write an ngingx rule to make a blog category that was imported from the old blog accessible via
+/// its old URL
+fn write_category_rewrite(w: &mut dyn Write, category: &Category) -> std::io::Result<()> {
+    if let Some(ref old_id) = category.old_id {
+        let new_path = paths::category_path(category);
+        // TODO: we assume the id and the new path do not contain any dangerous stuff.
+        //  maybe we need to change that. On the other hand, this config generator is only supposed
+        //  to be run to create the config for imported data from the old blog, this is not supposed
+        //  to be done after the start of this blog. Until then, the generated config files need to
+        //  be checked manually
+
+        // we make an internal rewrite, so the file is available via two different URLs.
+        // this way, users who access old blogposts will not get a redirect for each and every image
+        writeln!(w, "rewrite ^/categories/{}$ {};", old_id, new_path)
+    } else {
+        Ok(())
+    }
+}
+
+fn write_categories_rewrites(w: &mut dyn Write, categories: &[Category]) -> std::io::Result<()> {
+    writeln!(w, "## old paths for categories")?;
+    for category in categories {
+        write_category_rewrite(w, category)?;
+    }
+    Ok(())
+}
+
+pub fn write_config_file(
+    dir: &Path,
+    categories: &[Category],
+    hosted_files: &[HostedFile],
+) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push("old_paths_rewrites.conf");
 
     let mut writer = open_for_write(&filename)?;
+
+    write_categories_rewrites(&mut writer, categories)?;
+
+    writeln!(writer, "")?;
 
     write_hosted_files_rewrites(&mut writer, hosted_files)
 }
@@ -49,7 +85,7 @@ pub fn write_config_file(dir: &Path, hosted_files: &[HostedFile]) -> std::io::Re
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::create_hosted_file;
+    use crate::test_utils::{create_category, create_hosted_file};
 
     #[test]
     fn write_hosted_file_rewrite_writes_valid_rewrite_for_old_id() {
@@ -112,6 +148,67 @@ mod tests {
             "## old paths for hosted files\n\
             rewrite ^/hosted_files/11/download$ /file/spinal.tap;\n\
             rewrite ^/hosted_files/9001/download$ /file/its.over;\n"
+        );
+    }
+
+    #[test]
+    fn write_category_rewrite_writes_valid_rewrite_for_old_id() {
+        // given
+        let mut cat = create_category();
+        cat.old_id = Some("11".to_owned());
+        cat.filename = Path::new("spinal").to_path_buf();
+
+        // when
+        let mut buffer: Vec<u8> = Vec::with_capacity(100);
+        write_category_rewrite(&mut buffer, &cat).expect("Expected successful write");
+        let result = String::from_utf8(buffer).expect("Expected valid utf-8 in output");
+
+        // then
+        assert_eq!(result, "rewrite ^/categories/11$ /categories/spinal;\n");
+    }
+
+    #[test]
+    fn write_category_rewrite_writes_nothing() {
+        // given
+        let mut cat = create_category();
+        cat.old_id = None;
+
+        // when
+        let mut buffer: Vec<u8> = Vec::with_capacity(100);
+        write_category_rewrite(&mut buffer, &cat).expect("Expected successful write");
+        let result = String::from_utf8(buffer).expect("Expected valid utf-8 in output");
+
+        // then
+        assert_eq!(result, "");
+    }
+
+    #[test]
+    fn write_categories_rewrites_writes_list_of_rules() {
+        // given
+        let mut cat1 = create_category();
+        cat1.old_id = Some("11".to_owned());
+        cat1.filename = Path::new("spinal").to_path_buf();
+
+        let mut cat2 = create_category();
+        cat2.old_id = None;
+
+        let mut cat3 = create_category();
+        cat3.old_id = Some("42".to_owned());
+        cat3.filename = Path::new("answers").to_path_buf();
+
+        let cats = &[cat1, cat2, cat3];
+
+        // when
+        let mut buffer: Vec<u8> = Vec::with_capacity(100);
+        write_categories_rewrites(&mut buffer, cats).expect("Expected successful write");
+        let result = String::from_utf8(buffer).expect("Expected valid utf-8 in output");
+
+        // then
+        assert_eq!(
+            result,
+            "## old paths for categories\n\
+            rewrite ^/categories/11$ /categories/spinal;\n\
+            rewrite ^/categories/42$ /categories/answers;\n"
         );
     }
 }

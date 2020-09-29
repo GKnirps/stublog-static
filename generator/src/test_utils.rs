@@ -41,6 +41,7 @@ pub fn create_category() -> Category {
         id: "fesazu".to_owned(),
         description_markdown: "## Chocolate!!!111".to_owned(),
         modified_at: SystemTime::now(),
+        old_id: None,
     }
 }
 
