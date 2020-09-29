@@ -1,6 +1,7 @@
 use crate::input::Category;
 use crate::output::blogposts::Blogpost;
 use crate::paths::{blogpost_path, category_path};
+use crate::urls::{categories_url, category_url};
 use maud::{html, Markup, PreEscaped};
 
 pub fn render_categories_index_page(categories: &[(&Category, Vec<&Blogpost>)]) -> Markup {
@@ -17,7 +18,11 @@ pub fn render_categories_index_page(categories: &[(&Category, Vec<&Blogpost>)]) 
             }
         }
     };
-    super::base("Stranger Than Usual — Kategorien", content)
+    super::base(
+        "Stranger Than Usual — Kategorien",
+        content,
+        Some(&categories_url()),
+    )
 }
 
 pub fn render_category_page(category: &Category, blogposts: &[&Blogpost]) -> Markup {
@@ -39,6 +44,7 @@ pub fn render_category_page(category: &Category, blogposts: &[&Blogpost]) -> Mar
     super::base(
         &format!("Stranger Than Usual — {}", &category.title),
         content,
+        Some(&category_url(&category)),
     )
 }
 

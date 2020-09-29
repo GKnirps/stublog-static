@@ -10,7 +10,7 @@ pub fn render_404() -> Markup {
         }
     };
 
-    super::base("Stranger Than Usual — Seite nicht gefunden", content)
+    super::base("Stranger Than Usual — Seite nicht gefunden", content, None)
 }
 
 #[cfg(test)]

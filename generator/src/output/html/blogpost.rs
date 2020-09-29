@@ -1,6 +1,7 @@
 use super::super::blogposts::Blogpost;
 use crate::input::Category;
 use crate::paths::{blogpost_path, category_path, tag_path};
+use crate::urls::blogpost_url;
 use maud::{html, Markup, PreEscaped};
 
 pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Markup {
@@ -44,6 +45,7 @@ pub fn render_blogpost_page(blogpost: &Blogpost, category: Option<&Category>) ->
     super::base(
         &blogpost.metadata.title,
         render_blogpost(blogpost, category),
+        Some(&blogpost_url(&blogpost.metadata)),
     )
 }
 

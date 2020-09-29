@@ -10,7 +10,7 @@ pub mod home;
 pub mod pager;
 pub mod tag;
 
-fn base<T: Render>(title: &str, content: T) -> Markup {
+fn base<T: Render>(title: &str, content: T, canonical_url: Option<&str>) -> Markup {
     html! {
         (DOCTYPE)
         html lang="de" {
@@ -22,6 +22,9 @@ fn base<T: Render>(title: &str, content: T) -> Markup {
                 link rel="stylesheet" media="screen" href="/assets/style.css";
                 link rel="icon" type="image/png" href="/assets/favicon.png";
                 link rel="alternate" type="application/feed+atom" title="ATOM" href="/feed.atom";
+                @if let Some(url) = canonical_url {
+                    link rel="canonical" href={(url)};
+                }
             }
             body {
                 div.wrap-all {
@@ -75,21 +78,37 @@ mod tests {
         // given
         let title = "There will be cake";
         let content = "The cake is a lie";
+        let canonical_url = Some("https://example.com/foo");
 
         // when
-        let result = base(title, content).into_string();
+        let result = base(title, content, canonical_url).into_string();
 
         // then
         println!("Checking headers of {}", result);
         assert!(result.contains("<meta charset=\"utf-8\">"));
         assert!(result
             .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
+        assert!(result.contains("<link rel=\"canonical\" href=\"https://example.com/foo\">"));
         assert!(result.contains("<title>There will be cake</title>"));
         assert!(
             result.contains("<a href=\"/archive/0\">Archiv</a>"),
             "Expected archive link to be on the page"
         );
         assert!(result.contains(content));
+    }
+
+    #[test]
+    fn base_should_not_render_canonical_url_if_not_present() {
+        // given
+        let title = "There will be cake";
+        let content = "The cake is a lie";
+        let canonical_url = None;
+
+        // when
+        let result = base(title, content, canonical_url).into_string();
+
+        // then
+        assert!(!result.contains("rel=\"canonical\""));
     }
 
     #[test]

@@ -3,6 +3,7 @@ use maud::{html, Markup};
 use super::super::blogposts::Blogpost;
 use super::blogpost::render_blogpost;
 use crate::input::Category;
+use crate::urls::CANONICAL_BASE_URL;
 
 pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)]) -> Markup {
     let html_content = html! {
@@ -13,7 +14,11 @@ pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)]) -> Markup {
         }
     };
 
-    super::base("Stranger Than Usual", html_content)
+    super::base(
+        "Stranger Than Usual",
+        html_content,
+        Some(CANONICAL_BASE_URL),
+    )
 }
 
 #[cfg(test)]

@@ -4,6 +4,7 @@ use super::super::blogposts::Blogpost;
 use super::blogpost::render_blogpost;
 use super::pager::pager;
 use crate::input::Category;
+use crate::urls::archive_url;
 
 pub fn render_archive(
     blogposts: &[(&Blogpost, Option<&Category>)],
@@ -21,7 +22,11 @@ pub fn render_archive(
         }
     };
 
-    super::base("Stranger Than Usual — Archiv", html_content)
+    super::base(
+        "Stranger Than Usual — Archiv",
+        html_content,
+        Some(&archive_url(current_page)),
+    )
 }
 
 #[cfg(test)]
