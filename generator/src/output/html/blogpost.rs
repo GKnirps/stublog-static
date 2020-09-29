@@ -10,7 +10,7 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
     html! {
         article.blogpost {
             h2.posttitle {
-                a href=(permalink) {
+                a href=(permalink) rel="bookmark" {
                     (blogpost.metadata.title)
                 }
             }
@@ -66,7 +66,7 @@ mod tests {
         // then
         println!("Checking rendered html:\n{}", result);
         assert!(result
-            .contains("<h2 class=\"posttitle\"><a href=\"/blogposts/foobar\">Nevermind</a></h2>"));
+            .contains("<h2 class=\"posttitle\"><a href=\"/blogposts/foobar\" rel=\"bookmark\">Nevermind</a></h2>"));
         assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p></div>"));
         assert!(result.contains("11.05.2020 12:13"));
         assert!(result.contains("<a href=\"/categories/chocolate\">Cocoa</a>"));
