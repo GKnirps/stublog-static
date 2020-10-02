@@ -77,7 +77,7 @@ pub fn write_config_file(
 
     write_categories_rewrites(&mut writer, categories)?;
 
-    writeln!(writer, "")?;
+    writeln!(writer)?;
 
     write_hosted_files_rewrites(&mut writer, hosted_files)
 }
