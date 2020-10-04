@@ -21,7 +21,7 @@ use std::collections::{HashMap, HashSet};
 
 fn main() -> Result<(), String> {
     let matches = clap::App::new("stu generator")
-        .version("0.1")
+        .version(env!("CARGO_PKG_VERSION"))
         .about("generates html and stuff for the Stranger Than Usual blog")
         .arg(clap::Arg::with_name("generate-cfg").long("generate-cfg").help("Generate nginx configuration to map old paths to new paths (ONLY USE WITH TRUSTED INPUT)").required(false).takes_value(false))
         .arg(clap::Arg::with_name("INPUT_DIR").required(true).help("Input directory for blog content").index(1))

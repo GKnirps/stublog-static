@@ -2,9 +2,9 @@ Stranger Than Usual blog generator
 ==================================
 
 This is a static HTML generator for my blog „[Stranger Than Usual](https://blog.strangerthanusual.de/)“.
-Right now (2020-09-25) Stranger Than Usual is still dynamically created via ruby on rails.
+Before 2020-10-03 Stranger Than Usual was dynamically created via ruby on rails.
 
-There are several reasons why I don't want to use rails anymore. The most important ones are:
+There are several reasons why I don't use rails anymore. The most important ones are:
 - I have to keep updating ruby on rails, which is time consuming and may break stuff. If I do not update, security holes will stay unfixed.
 - I don't really need a dynamically generated website, static HTML will do just as well, is more secure and probably faster.
 
