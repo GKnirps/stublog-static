@@ -1,8 +1,15 @@
-use crate::paths::archive_path;
 use maud::{html, Markup, Render};
 
-fn page_link<T: Render>(index: usize, content: T, label: &str, class: Option<&str>) -> Markup {
-    let path = archive_path(index);
+type PathGenerator = dyn Fn(usize) -> String;
+
+fn page_link<T: Render>(
+    index: usize,
+    content: T,
+    label: &str,
+    class: Option<&str>,
+    generate_path: &PathGenerator,
+) -> Markup {
+    let path = generate_path(index);
     // sigh… right now there does not seem to be a good way to completely omit an attribute… in
     // maud.
     match class {
@@ -15,7 +22,7 @@ fn page_link<T: Render>(index: usize, content: T, label: &str, class: Option<&st
     }
 }
 
-fn numbered_page_link(index: usize, current_page: usize) -> Markup {
+fn numbered_page_link(index: usize, current_page: usize, generate_path: &PathGenerator) -> Markup {
     let disp_index = index + 1;
     let label = format!("Seite {}", disp_index);
 
@@ -26,11 +33,11 @@ fn numbered_page_link(index: usize, current_page: usize) -> Markup {
             }
         }
     } else {
-        page_link(index, disp_index, &label, None)
+        page_link(index, disp_index, &label, None, generate_path)
     }
 }
 
-fn prev_link(current_page: usize) -> Markup {
+fn prev_link(current_page: usize, generate_path: &PathGenerator) -> Markup {
     let content = "← zurück";
     let class = "previous-page";
     if current_page == 0 {
@@ -38,11 +45,17 @@ fn prev_link(current_page: usize) -> Markup {
             span class=(class) {(content)}
         }
     } else {
-        page_link(current_page - 1, content, "zurückblättern", Some(class))
+        page_link(
+            current_page - 1,
+            content,
+            "zurückblättern",
+            Some(class),
+            generate_path,
+        )
     }
 }
 
-fn next_link(current_page: usize, num_pages: usize) -> Markup {
+fn next_link(current_page: usize, num_pages: usize, generate_path: &PathGenerator) -> Markup {
     let content = "vorwärts →";
     let class = "next-page";
     if current_page + 1 == num_pages {
@@ -50,11 +63,17 @@ fn next_link(current_page: usize, num_pages: usize) -> Markup {
             span class="next-page" {(content)}
         }
     } else {
-        page_link(current_page + 1, content, "weiterblättern", Some(class))
+        page_link(
+            current_page + 1,
+            content,
+            "weiterblättern",
+            Some(class),
+            generate_path,
+        )
     }
 }
 
-pub fn pager(page_index: usize, num_pages: usize) -> Markup {
+pub fn pager(page_index: usize, num_pages: usize, generate_path: &PathGenerator) -> Markup {
     if num_pages < 2 {
         return html! {};
     }
@@ -68,11 +87,11 @@ pub fn pager(page_index: usize, num_pages: usize) -> Markup {
     html! {
         nav.pagination {
             ul {
-                li { (prev_link(page_index)) }
+                li { (prev_link(page_index, generate_path)) }
                 @for i in 0..num_pages {
-                    li { (numbered_page_link(i, page_index)) }
+                    li { (numbered_page_link(i, page_index, generate_path)) }
                 }
-                li { (next_link(page_index, num_pages)) }
+                li { (next_link(page_index, num_pages, generate_path)) }
             }
         }
     }
@@ -81,6 +100,10 @@ pub fn pager(page_index: usize, num_pages: usize) -> Markup {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn dummy_path(i: usize) -> String {
+        format!("/dummy/{}", i)
+    }
 
     #[test]
     fn page_link_renders_valid_link_with_class() {
@@ -91,12 +114,12 @@ mod tests {
         let class = Some("classy");
 
         // when
-        let result = page_link(index, content, label, class).into_string();
+        let result = page_link(index, content, label, class, &dummy_path).into_string();
 
         // then
         assert_eq!(
             &result,
-            "<a class=\"classy\" aria-label=\"click!\" href=\"/archive/42\" title=\"click!\">somewhere</a>"
+            "<a class=\"classy\" aria-label=\"click!\" href=\"/dummy/42\" title=\"click!\">somewhere</a>"
         );
     }
 
@@ -109,12 +132,12 @@ mod tests {
         let class = None;
 
         // when
-        let result = page_link(index, content, label, class).into_string();
+        let result = page_link(index, content, label, class, &dummy_path).into_string();
 
         // then
         assert_eq!(
             &result,
-            "<a aria-label=\"click!\" href=\"/archive/42\" title=\"click!\">somewhere</a>"
+            "<a aria-label=\"click!\" href=\"/dummy/42\" title=\"click!\">somewhere</a>"
         );
     }
 
@@ -125,12 +148,12 @@ mod tests {
         let current_page = 0;
 
         // when
-        let result = numbered_page_link(index, current_page).into_string();
+        let result = numbered_page_link(index, current_page, &dummy_path).into_string();
 
         // then
         assert_eq!(
             &result,
-            "<a aria-label=\"Seite 43\" href=\"/archive/42\" title=\"Seite 43\">43</a>"
+            "<a aria-label=\"Seite 43\" href=\"/dummy/42\" title=\"Seite 43\">43</a>"
         );
     }
 
@@ -141,7 +164,7 @@ mod tests {
         let current_page = 42;
 
         // when
-        let result = numbered_page_link(index, current_page).into_string();
+        let result = numbered_page_link(index, current_page, &dummy_path).into_string();
 
         // then
         assert_eq!(
@@ -156,7 +179,7 @@ mod tests {
         let index = 0;
 
         // when
-        let result = prev_link(index).into_string();
+        let result = prev_link(index, &dummy_path).into_string();
 
         // then
         assert_eq!(&result, "<span class=\"previous-page\">← zurück</span>");
@@ -168,10 +191,10 @@ mod tests {
         let index = 42;
 
         // when
-        let result = prev_link(index).into_string();
+        let result = prev_link(index, &dummy_path).into_string();
 
         // then
-        assert_eq!(&result, "<a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/archive/41\" title=\"zurückblättern\">← zurück</a>");
+        assert_eq!(&result, "<a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/dummy/41\" title=\"zurückblättern\">← zurück</a>");
     }
 
     #[test]
@@ -181,7 +204,7 @@ mod tests {
         let num_pages = 43;
 
         // when
-        let result = next_link(index, num_pages).into_string();
+        let result = next_link(index, num_pages, &dummy_path).into_string();
 
         // then
         assert_eq!(&result, "<span class=\"next-page\">vorwärts →</span>");
@@ -194,10 +217,10 @@ mod tests {
         let num_pages = 9001;
 
         // when
-        let result = next_link(index, num_pages).into_string();
+        let result = next_link(index, num_pages, &dummy_path).into_string();
 
         // then
-        assert_eq!(&result, "<a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/archive/43\" title=\"weiterblättern\">vorwärts →</a>");
+        assert_eq!(&result, "<a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/dummy/43\" title=\"weiterblättern\">vorwärts →</a>");
     }
 
     #[test]
@@ -207,7 +230,7 @@ mod tests {
         let num_pages = 1;
 
         // when
-        let result = pager(page_index, num_pages).into_string();
+        let result = pager(page_index, num_pages, &dummy_path).into_string();
 
         // then
         assert_eq!(&result, "");
@@ -220,15 +243,15 @@ mod tests {
         let num_pages = 3;
 
         // when
-        let result = pager(page_index, num_pages).into_string();
+        let result = pager(page_index, num_pages, &dummy_path).into_string();
 
         // then
         assert_eq!(&result, "<nav class=\"pagination\"><ul>\
-        <li><a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/archive/0\" title=\"zurückblättern\">← zurück</a></li>\
-        <li><a aria-label=\"Seite 1\" href=\"/archive/0\" title=\"Seite 1\">1</a></li>\
+        <li><a class=\"previous-page\" aria-label=\"zurückblättern\" href=\"/dummy/0\" title=\"zurückblättern\">← zurück</a></li>\
+        <li><a aria-label=\"Seite 1\" href=\"/dummy/0\" title=\"Seite 1\">1</a></li>\
         <li><span class=\"current\" aria-label=\"Seite 2\" title=\"Seite 2\">2</span></li>\
-        <li><a aria-label=\"Seite 3\" href=\"/archive/2\" title=\"Seite 3\">3</a></li>\
-        <li><a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/archive/2\" title=\"weiterblättern\">vorwärts →</a></li>\
+        <li><a aria-label=\"Seite 3\" href=\"/dummy/2\" title=\"Seite 3\">3</a></li>\
+        <li><a class=\"next-page\" aria-label=\"weiterblättern\" href=\"/dummy/2\" title=\"weiterblättern\">vorwärts →</a></li>\
         </ul></nav>");
     }
 }

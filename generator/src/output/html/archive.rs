@@ -4,6 +4,7 @@ use super::super::blogposts::Blogpost;
 use super::blogpost::render_blogpost;
 use super::pager::pager;
 use crate::input::Category;
+use crate::paths::archive_path;
 use crate::urls::archive_url;
 
 pub fn render_archive(
@@ -11,7 +12,7 @@ pub fn render_archive(
     current_page: usize,
     num_pages: usize,
 ) -> Markup {
-    let html_pager = pager(current_page, num_pages);
+    let html_pager = pager(current_page, num_pages, &archive_path);
     let html_content = html! {
         div.blogposts {
             (html_pager)
