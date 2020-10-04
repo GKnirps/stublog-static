@@ -1,5 +1,7 @@
+use super::pager::pager;
 use crate::input::Quote;
 use crate::output::cmark::render_cmark;
+use crate::paths::quote_list_path;
 use crate::urls;
 use maud::{html, Markup, PreEscaped};
 
@@ -58,11 +60,14 @@ pub fn render_quote_page(quote: &Quote) -> Markup {
 }
 
 pub fn render_quote_list_page(quotes: &[Quote], current_page: usize, num_pages: usize) -> Markup {
+    let html_pager = pager(current_page, num_pages, &quote_list_path);
     let content = html! {
         div.quotes {
+            (html_pager)
             @for quote in quotes {
                 (render_quote(quote))
             }
+            (html_pager)
         }
     };
 
@@ -221,6 +226,10 @@ mod tests {
         assert!(result.starts_with("<!DOCTYPE html><html lang=\"de\">"));
         assert!(result.contains("<p>IM IN UR QUOTE</p>"));
         assert!(result.contains("<p>SAYIN DUMB STUFF</p>"));
-        todo!("Put a pager on the page and test it")
+        assert!(result.contains("<nav class=\"pagination\">"));
+        assert!(result.contains("<nav class=\"pagination\">"));
+        assert!(result.contains(
+            "<li><a aria-label=\"Seite 13\" href=\"/quotes/12\" title=\"Seite 13\">13</a></li>"
+        ));
     }
 }
