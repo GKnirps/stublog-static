@@ -13,7 +13,9 @@ mod test_utils;
 use crate::input::{tag::Tag, BlogpostMetadata, Category};
 use crate::output::error_pages::write_404;
 use input::file;
-use input::parser::{category::parse_categories, files_index::parse_all_file_metadata};
+use input::parser::{
+    category::parse_categories, files_index::parse_all_file_metadata, quote::parse_quotes,
+};
 use output::{blogposts, categories, feed, ngingx_cfg, tags};
 use std::collections::{HashMap, HashSet};
 
@@ -75,6 +77,12 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         .map_err(|e| format!("Failed to parse all blogposts: {}", e))?;
     check_duplicate_blogpost_names(&blogposts)?;
 
+    let quotes_indir: PathBuf = [indir, "quotes"].iter().collect();
+    let raw_quotes = file::read_files_sorted(&quotes_indir)
+        .map_err(|e| format!("failed to read all quotes: {}", e))?;
+    let quotes =
+        parse_quotes(&raw_quotes).map_err(|e| format!("failed parse all quotes: {}", e))?;
+
     let categorized_blogposts =
         blogposts::find_categories_for_blogposts(&blogposts, &categories)
             .map_err(|e| format!("Error while matching blogpost with categories: {}", e))?;
@@ -85,7 +93,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     let archive_dir: PathBuf = [odir, "archive"].iter().collect();
     blogposts::write_archive(&archive_dir, &categorized_blogposts)
         .map_err(|e| format!("Failed to write archive: {}", e))?;
-    blogposts::write_home(Path::new(odir), &categorized_blogposts)
+    blogposts::write_home(Path::new(odir), &categorized_blogposts, quotes.last())
         .map_err(|e| format!("Failed to write home page: {}", e))?;
 
     feed::write_atom_feed(&Path::new(odir), &blogposts)?;

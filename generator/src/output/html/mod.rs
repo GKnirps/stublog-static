@@ -8,6 +8,7 @@ pub mod category;
 pub mod error_pages;
 pub mod home;
 pub mod pager;
+pub mod quote;
 pub mod tag;
 
 fn base<T: Render>(title: &str, content: T, canonical_url: Option<&str>) -> Markup {

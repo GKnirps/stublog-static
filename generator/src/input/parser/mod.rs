@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 pub mod blogpost;
 pub mod category;
 pub mod files_index;
+pub mod quote;
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct ParseError {

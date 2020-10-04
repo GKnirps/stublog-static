@@ -31,12 +31,22 @@ pub struct Category {
     pub old_id: Option<String>,
 }
 
-/// Metadata for a blog content file (e.g. an image) (not the generated html files
+/// Metadata for a blog content file (e.g. an image) (not the generated html files)
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct HostedFile {
     pub old_id: Option<String>,
     pub path: String,
     pub mime_type: String,
     pub description: String,
+    pub modified_at: SystemTime,
+}
+
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+pub struct Quote {
+    pub filename: PathBuf,
+    pub source_name: Option<String>,
+    pub source_url: Option<String>,
+    pub published: bool,
+    pub content_markdown: String,
     pub modified_at: SystemTime,
 }

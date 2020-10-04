@@ -1,6 +1,6 @@
 use crate::blogposts::Blogpost;
 use crate::input::file::FileData;
-use crate::input::{tag::Tag, BlogpostMetadata, Category, HostedFile};
+use crate::input::{tag::Tag, BlogpostMetadata, Category, HostedFile, Quote};
 use chrono::{FixedOffset, TimeZone};
 use std::path::Path;
 use std::time::SystemTime;
@@ -51,6 +51,17 @@ pub fn create_hosted_file() -> HostedFile {
         path: "answer.txt".to_owned(),
         mime_type: "text/plain".to_owned(),
         description: "You're really not going to like it.".to_owned(),
+        modified_at: SystemTime::now(),
+    }
+}
+
+pub fn create_quote() -> Quote {
+    Quote {
+        filename: Path::new("penguin").to_owned(),
+        source_name: Some("Arthur Dent".to_owned()),
+        source_url: Some("https://example.com/adent".to_owned()),
+        published: true,
+        content_markdown: "Ford… you're turning into a penguin. Stop it.".to_owned(),
         modified_at: SystemTime::now(),
     }
 }

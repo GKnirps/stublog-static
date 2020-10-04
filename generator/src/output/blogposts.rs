@@ -7,8 +7,8 @@ use super::file::open_for_write;
 use super::html;
 use crate::input;
 use crate::input::file::FileData;
-use crate::input::parser;
 use crate::input::Category;
+use crate::input::{parser, Quote};
 use crate::output::needs_update;
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
@@ -97,6 +97,7 @@ fn write_blogpost(
 fn blogposts_with_categories_need_update(
     target_file: &Path,
     posts: &[(&Blogpost, Option<&Category>)],
+    quote: Option<&Quote>,
 ) -> bool {
     // get the newest modification date of all blogposts and categories here, only update if the
     // target file is older
@@ -106,12 +107,17 @@ fn blogposts_with_categories_need_update(
             cat.map(|c| max(c.modified_at, post.metadata.modified_at))
                 .unwrap_or(post.metadata.modified_at)
         })
+        .chain(quote.map(|q| q.modified_at))
         .max()
         .map(|modified_at| needs_update(target_file, modified_at))
         .unwrap_or(true)
 }
 
-pub fn write_home(dir: &Path, all_posts: &[(&Blogpost, Option<&Category>)]) -> std::io::Result<()> {
+pub fn write_home(
+    dir: &Path,
+    all_posts: &[(&Blogpost, Option<&Category>)],
+    qotd: Option<&Quote>,
+) -> std::io::Result<()> {
     if !dir.is_dir() {
         create_dir(dir)?;
     }
@@ -124,12 +130,16 @@ pub fn write_home(dir: &Path, all_posts: &[(&Blogpost, Option<&Category>)]) -> s
         &all_posts[all_posts.len() - 10..]
     };
 
-    if !blogposts_with_categories_need_update(&filename, posts) {
+    if !blogposts_with_categories_need_update(&filename, posts, qotd) {
         return Ok(());
     }
 
     let mut writer = open_for_write(&filename)?;
-    write!(writer, "{}", html::home::render_home(posts).into_string())
+    write!(
+        writer,
+        "{}",
+        html::home::render_home(posts, qotd).into_string()
+    )
 }
 
 pub fn write_archive(
@@ -166,7 +176,7 @@ fn write_archive_page(
     filename.push(format!("{}", page_index));
     filename.set_extension("html");
 
-    if !blogposts_with_categories_need_update(&filename, posts) {
+    if !blogposts_with_categories_need_update(&filename, posts, None) {
         return Ok(());
     }
 
