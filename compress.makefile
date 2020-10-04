@@ -22,6 +22,12 @@ dist/blogposts/%.html.gz: dist/blogposts/%.html
 dist/blogposts/%.html.br: dist/blogposts/%.html
 	$(BR) $<
 
+dist/quote/%.html.gz: dist/quote/%.html
+	$(GZ) $<
+
+dist/quote/%.html.br: dist/quote/%.html
+	$(BR) $<
+
 dist/categories/%.html.gz: dist/categories/%.html
 	$(GZ) $<
 

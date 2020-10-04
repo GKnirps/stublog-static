@@ -1,4 +1,4 @@
-use crate::input::{tag::Tag, BlogpostMetadata, Category, HostedFile};
+use crate::input::{tag::Tag, BlogpostMetadata, Category, HostedFile, Quote};
 use percent_encoding::{percent_encode, AsciiSet, CONTROLS};
 
 const ESCAPE_SET: &AsciiSet = &CONTROLS
@@ -52,10 +52,19 @@ pub fn hosted_file_path(hosted_file: &HostedFile) -> String {
     )
 }
 
+pub fn quote_path(quote: &Quote) -> String {
+    format!(
+        "/quote/{}",
+        percent_encode(quote.filename.to_string_lossy().as_bytes(), ESCAPE_SET)
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_blogpost_metadata, create_category, create_hosted_file};
+    use crate::test_utils::{
+        create_blogpost_metadata, create_category, create_hosted_file, create_quote,
+    };
     use std::path::Path;
 
     #[test]
@@ -121,5 +130,18 @@ mod tests {
 
         // then
         assert_eq!(result, "/file/%C3%A4h%3F");
+    }
+
+    #[test]
+    fn test_quote_path() {
+        // given
+        let mut quote = create_quote();
+        quote.filename = Path::new("wtf?").to_owned();
+
+        // when
+        let result = quote_path(&quote);
+
+        // then
+        assert_eq!(result, "/quote/wtf%3F");
     }
 }

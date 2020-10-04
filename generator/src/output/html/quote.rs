@@ -1,5 +1,6 @@
 use crate::input::Quote;
 use crate::output::cmark::render_cmark;
+use crate::urls::quote_url;
 use maud::{html, Markup, PreEscaped};
 
 fn render_quote_source(quote: &Quote) -> Markup {
@@ -7,12 +8,14 @@ fn render_quote_source(quote: &Quote) -> Markup {
         @if let Some(source_url) = &quote.source_url {
             @if let Some(source_name) = &quote.source_name {
                 span.quote-source {
+                    "— "
                     a href=(source_url) {
                         (source_name)
                     }
                 }
             } @else {
                 span.quote-source {
+                    "— "
                     a href=(source_url) {
                         "Quelle"
                     }
@@ -20,6 +23,7 @@ fn render_quote_source(quote: &Quote) -> Markup {
             }
         } @else if let Some(source_name) = &quote.source_name {
             span.quote-source {
+                "— "
                 (source_name)
             }
         }
@@ -43,6 +47,16 @@ pub fn render_quote(quote: &Quote) -> Markup {
     }
 }
 
+pub fn render_quote_page(quote: &Quote) -> Markup {
+    let content = render_quote(quote);
+
+    super::base(
+        "Stranger Than Usual — Zitat",
+        content,
+        Some(&quote_url(&quote)),
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -60,7 +74,7 @@ mod tests {
         assert_eq!(
             result,
             "<span class=\"quote-source\">\
-        <a href=\"https://example.com/adent\">Arthur Dent</a>\
+        — <a href=\"https://example.com/adent\">Arthur Dent</a>\
         </span>"
         )
     }
@@ -75,7 +89,7 @@ mod tests {
         let result = render_quote_source(&quote).into_string();
 
         // then
-        assert_eq!(result, "<span class=\"quote-source\">Arthur Dent</span>")
+        assert_eq!(result, "<span class=\"quote-source\">— Arthur Dent</span>")
     }
 
     #[test]
@@ -91,7 +105,7 @@ mod tests {
         assert_eq!(
             result,
             "<span class=\"quote-source\">\
-        <a href=\"https://example.com/adent\">Quelle</a>\
+        — <a href=\"https://example.com/adent\">Quelle</a>\
         </span>"
         )
     }
@@ -127,7 +141,7 @@ mod tests {
         ));
         assert!(result.contains(
             "<span class=\"quote-source\">\
-        <a href=\"https://example.com/adent\">Arthur Dent</a>\
+        — <a href=\"https://example.com/adent\">Arthur Dent</a>\
         </span>"
         ));
     }
@@ -148,5 +162,22 @@ mod tests {
         Ford… you're turning into a penguin. Stop it.\
         </p>\n</blockquote>"
         ));
+    }
+
+    #[test]
+    fn render_quote_page_renders_full_html_with_quote() {
+        // given
+        let quote = create_quote();
+
+        // when
+        let result = render_quote_page(&quote).into_string();
+
+        // then
+        println!("Checking generated html:\n{}", result);
+        assert!(result.starts_with("<!DOCTYPE html><html lang=\"de\">"));
+        assert!(result.contains(
+            "<link rel=\"canonical\" href=\"https://blog.strangerthanusual.de/quote/penguin\">"
+        ));
+        assert!(result.contains("<blockquote"));
     }
 }

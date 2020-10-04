@@ -10,6 +10,7 @@ pub mod feed;
 mod file;
 mod html;
 pub mod ngingx_cfg;
+pub mod quotes;
 pub mod tags;
 
 /// Return true if the file referenced by filename has an older modification date than modified_at.

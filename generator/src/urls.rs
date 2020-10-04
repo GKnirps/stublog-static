@@ -1,5 +1,5 @@
 use crate::input::tag::Tag;
-use crate::input::{BlogpostMetadata, Category};
+use crate::input::{BlogpostMetadata, Category, Quote};
 use crate::paths;
 
 pub static CANONICAL_BASE_URL: &str = "https://blog.strangerthanusual.de";
@@ -32,10 +32,14 @@ pub fn atom_feed_url() -> String {
     [CANONICAL_BASE_URL, paths::ATOM_FEED_PATH].concat()
 }
 
+pub fn quote_url(quote: &Quote) -> String {
+    format!("{}{}", CANONICAL_BASE_URL, paths::quote_path(quote))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_blogpost_metadata, create_category};
+    use crate::test_utils::{create_blogpost_metadata, create_category, create_quote};
     use std::path::Path;
 
     #[test]
@@ -74,5 +78,18 @@ mod tests {
 
         // then
         assert_eq!(url, "https://blog.strangerthanusual.de/categories/foobar");
+    }
+
+    #[test]
+    fn quote_url_renders_correct_url() {
+        // given
+        let mut quote = create_quote();
+        quote.filename = Path::new("marks").to_owned();
+
+        // when
+        let url = quote_url(&quote);
+
+        // then
+        assert_eq!(url, "https://blog.strangerthanusual.de/quote/marks");
     }
 }
