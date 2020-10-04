@@ -36,6 +36,10 @@ pub fn quote_url(quote: &Quote) -> String {
     format!("{}{}", CANONICAL_BASE_URL, paths::quote_path(quote))
 }
 
+pub fn quote_list_url(page: usize) -> String {
+    format!("{}{}", CANONICAL_BASE_URL, paths::quote_list_path(page))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -91,5 +95,17 @@ mod tests {
 
         // then
         assert_eq!(url, "https://blog.strangerthanusual.de/quote/marks");
+    }
+
+    #[test]
+    fn quote_list_url_renders_correct_url() {
+        // given
+        let index = 42;
+
+        // when
+        let url = quote_list_url(index);
+
+        // then
+        assert_eq!(url, "https://blog.strangerthanusual.de/quotes/42");
     }
 }

@@ -1,6 +1,6 @@
 use crate::input::Quote;
 use crate::output::cmark::render_cmark;
-use crate::urls::quote_url;
+use crate::urls;
 use maud::{html, Markup, PreEscaped};
 
 fn render_quote_source(quote: &Quote) -> Markup {
@@ -53,7 +53,27 @@ pub fn render_quote_page(quote: &Quote) -> Markup {
     super::base(
         "Stranger Than Usual — Zitat",
         content,
-        Some(&quote_url(&quote)),
+        Some(&urls::quote_url(&quote)),
+    )
+}
+
+pub fn render_quote_list_page(quotes: &[Quote], current_page: usize, num_pages: usize) -> Markup {
+    let content = html! {
+        div.quotes {
+            @for quote in quotes {
+                (render_quote(quote))
+            }
+        }
+    };
+
+    super::base(
+        &format!(
+            "Stranger Than Usual: Zitate Seite {} von {}",
+            current_page + 1,
+            num_pages
+        ),
+        content,
+        Some(&urls::quote_list_url(current_page)),
     )
 }
 
@@ -179,5 +199,28 @@ mod tests {
             "<link rel=\"canonical\" href=\"https://blog.strangerthanusual.de/quote/penguin\">"
         ));
         assert!(result.contains("<blockquote"));
+    }
+
+    #[test]
+    fn render_quote_list_page_renders_all_quotes_with_pager() {
+        // given
+        let mut quote1 = create_quote();
+        quote1.content_markdown = "IM IN UR QUOTE".to_owned();
+        let mut quote2 = create_quote();
+        quote2.content_markdown = "SAYIN DUMB STUFF".to_owned();
+
+        let current_page = 11;
+        let num_pages = 42;
+
+        // when
+        let result =
+            render_quote_list_page(&[quote1, quote2], current_page, num_pages).into_string();
+
+        // then
+        println!("Checking generated html:\n{}", result);
+        assert!(result.starts_with("<!DOCTYPE html><html lang=\"de\">"));
+        assert!(result.contains("<p>IM IN UR QUOTE</p>"));
+        assert!(result.contains("<p>SAYIN DUMB STUFF</p>"));
+        todo!("Put a pager on the page and test it")
     }
 }

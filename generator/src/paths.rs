@@ -59,6 +59,10 @@ pub fn quote_path(quote: &Quote) -> String {
     )
 }
 
+pub fn quote_list_path(page: usize) -> String {
+    format!("/quotes/{}", page)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -143,5 +147,17 @@ mod tests {
 
         // then
         assert_eq!(result, "/quote/wtf%3F");
+    }
+
+    #[test]
+    fn test_quote_list_path() {
+        // given
+        let index = 11;
+
+        // when
+        let result = quote_list_path(index);
+
+        // then
+        assert_eq!(result, "/quotes/11");
     }
 }

@@ -53,6 +53,11 @@ $link-hover-color: #44bb11;
         margin: 1.25em 1.875em 1.25em 1.875em;
     }
 
+    .quotes > :not(:last-child) {
+        padding-bottom: 1em;
+        border-bottom: solid 1px $main-foreground-color;
+    }
+
 /******************************   G L O B A L E R   W R A P P E R   ******************************/
 
     .wrap-all {

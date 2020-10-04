@@ -28,6 +28,12 @@ dist/quote/%.html.gz: dist/quote/%.html
 dist/quote/%.html.br: dist/quote/%.html
 	$(BR) $<
 
+dist/quotes/%.html.gz: dist/quotes/%.html
+	$(GZ) $<
+
+dist/quotes/%.html.br: dist/quotes/%.html
+	$(BR) $<
+
 dist/categories/%.html.gz: dist/categories/%.html
 	$(GZ) $<
 
