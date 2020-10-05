@@ -108,6 +108,8 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     let quote_list_dir: PathBuf = [odir, "quotes"].iter().collect();
     quotes::write_quote_list_pages(&quote_list_dir, &published_quotes)
         .map_err(|e| format!("Unable to write all quote lists: {}", e))?;
+    quotes::write_quote_fortune_file(&quote_list_dir, &published_quotes)
+        .map_err(|e| format!("Unable to write quote fortune file: {}", e))?;
 
     let post_by_tags =
         tags::blogpost_metadata_by_tag(blogposts.iter().map(|blogpost| &blogpost.metadata));

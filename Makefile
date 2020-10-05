@@ -1,5 +1,5 @@
 .PHONY: all
-all: directories copy-hosted-files compress
+all: directories copy-hosted-files compress dist/quotes/strangerthanusual.tar.bz2
 
 .PHONY: directories
 directories:
@@ -18,6 +18,21 @@ copy-hosted-files: $(patsubst content/file/%, dist/file/%, $(wildcard content/fi
 dist/file/%: content/file/%
 	cp $< $@
 ###
+
+### fortune cookies
+
+# TODO: since generate-html is a phony target, the dat file will be generated on each run.
+#       this is not an easy problem to solve, but I have no clue how to fix this other than
+#       create another sub-makefile (such as I did for compression). For compression, this
+#       was necessary due to the long time the compression takes. In this case it is fast enough
+#       so I will fix this some time in the future.
+dist/quotes/strangerthanusual.dat: generate-html dist/quotes/strangerthanusual
+	strfile -s dist/quotes/strangerthanusual
+
+dist/quotes/strangerthanusual.tar.bz2: dist/quotes/strangerthanusual.dat dist/quotes/strangerthanusual
+	tar -cjf dist/quotes/strangerthanusual.tar.bz2 dist/quotes/strangerthanusual dist/quotes/strangerthanusual.dat
+
+### end fortune cookies
 
 ### Assets
 .PHONY: assets
@@ -45,7 +60,7 @@ compress: generate-html assets
 
 ### cleanup
 
-.PHONY: clean clean_dist
+.PHONY: clean clean-dist
 clean: clean-dist
 	-rm -r generator/target
 

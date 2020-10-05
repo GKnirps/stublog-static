@@ -63,6 +63,8 @@ pub fn quote_list_path(page: usize) -> String {
     format!("/quotes/{}", page)
 }
 
+pub static QUOTE_FORTUNE_PATH: &str = "/quotes/strangerthanusual.tar.bz2";
+
 #[cfg(test)]
 mod tests {
     use super::*;

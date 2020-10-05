@@ -1,7 +1,7 @@
 use super::pager::pager;
 use crate::input::Quote;
 use crate::output::cmark::render_cmark;
-use crate::paths::quote_list_path;
+use crate::paths::{quote_list_path, QUOTE_FORTUNE_PATH};
 use crate::urls;
 use maud::{html, Markup, PreEscaped};
 
@@ -62,6 +62,10 @@ pub fn render_quote_page(quote: &Quote) -> Markup {
 pub fn render_quote_list_page(quotes: &[Quote], current_page: usize, num_pages: usize) -> Markup {
     let html_pager = pager(current_page, num_pages, &quote_list_path);
     let content = html! {
+        h2 { "Nicht alles hier ist ein Zitat" }
+        a href=(QUOTE_FORTUNE_PATH) download="strangerthanusual-fortune.tar.bz2" {
+            "Zitate als fortune-Datenbank herunterladen"
+        }
         div.quotes {
             (html_pager)
             @for quote in quotes {

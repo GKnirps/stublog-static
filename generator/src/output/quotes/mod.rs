@@ -8,6 +8,8 @@ use std::fs::create_dir;
 use std::io::Write;
 use std::path::Path;
 
+mod fortune;
+
 fn write_quote_page(dir: &Path, quote: &Quote) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push(&quote.filename);
@@ -66,4 +68,21 @@ pub fn write_quote_list_pages(dir: &Path, quotes: &[Quote]) -> std::io::Result<(
     }
 
     Ok(())
+}
+
+pub fn write_quote_fortune_file(dir: &Path, quotes: &[Quote]) -> std::io::Result<()> {
+    if !dir.is_dir() {
+        // TODO: check if the error message here is confusing
+        create_dir(dir)?;
+    }
+
+    let mut filename = dir.to_path_buf();
+    filename.push("strangerthanusual");
+    if !needs_any_update(&filename, quotes.iter().map(|q| q.modified_at)) {
+        return Ok(());
+    }
+
+    let mut writer = open_for_write(&filename)?;
+
+    fortune::write_fortune_quotes(&mut writer, quotes)
 }
