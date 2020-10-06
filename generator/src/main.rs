@@ -10,7 +10,7 @@ mod urls;
 #[cfg(test)]
 mod test_utils;
 
-use crate::input::{tag::Tag, BlogpostMetadata, Category};
+use crate::input::{tag::Tag, BlogpostMetadata, Category, Quote};
 use crate::output::error_pages::write_404;
 use input::file;
 use input::parser::{
@@ -82,6 +82,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         .map_err(|e| format!("failed to read all quotes: {}", e))?;
     let published_quotes =
         parse_quotes(&raw_quotes).map_err(|e| format!("failed parse all quotes: {}", e))?;
+    check_duplicate_quote_names(&published_quotes)?;
 
     let categorized_blogposts =
         blogposts::find_categories_for_blogposts(&blogposts, &categories)
@@ -176,11 +177,27 @@ fn check_duplicate_categories(categories: &[Category]) -> Result<(), String> {
     Ok(())
 }
 
+fn check_duplicate_quote_names(quotes: &[Quote]) -> Result<(), String> {
+    let mut seen: HashSet<&Path> = HashSet::with_capacity(quotes.len());
+    for quote in quotes {
+        if seen.contains(&quote.filename.as_path()) {
+            return Err(format!(
+                "Quote name {} is a duplicate!",
+                quote.filename.to_string_lossy()
+            ));
+        }
+        seen.insert(&quote.filename);
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::input::tag::Tag;
-    use crate::test_utils::{create_blogpost, create_blogpost_metadata, create_category};
+    use crate::test_utils::{
+        create_blogpost, create_blogpost_metadata, create_category, create_quote,
+    };
 
     #[test]
     fn check_duplicate_blogposts_names_returns_ok_for_no_duplicates() {
@@ -300,5 +317,39 @@ mod tests {
 
         // then
         assert_eq!(result, Ok(()));
+    }
+
+    #[test]
+    fn check_duplicate_quote_names_returns_ok_for_no_duplicates() {
+        // given
+        let mut quote1 = create_quote();
+        quote1.filename = PathBuf::from("foobar");
+        let mut quote2 = create_quote();
+        quote2.filename = PathBuf::from("foo");
+        let mut quote3 = create_quote();
+        quote3.filename = PathBuf::from("bar");
+
+        // when
+        let result = check_duplicate_quote_names(&[quote1, quote2, quote3]);
+
+        // then
+        assert_eq!(result, Ok(()));
+    }
+
+    #[test]
+    fn check_duplicate_quote_names_returns_error_for_duplicates() {
+        // given
+        let mut quote1 = create_quote();
+        quote1.filename = PathBuf::from("foobar");
+        let mut quote2 = create_quote();
+        quote2.filename = PathBuf::from("foo");
+        let mut quote3 = create_quote();
+        quote3.filename = PathBuf::from("foobar");
+
+        // when
+        let result = check_duplicate_quote_names(&[quote1, quote2, quote3]);
+
+        // then
+        assert_eq!(result, Err("Quote name foobar is a duplicate!".to_owned()));
     }
 }
