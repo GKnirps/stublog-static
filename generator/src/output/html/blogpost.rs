@@ -1,23 +1,22 @@
-use super::super::blogposts::Blogpost;
-use crate::input::Category;
+use super::super::cmark::render_blogpost_content;
+use crate::input::{Blogpost, Category};
 use crate::paths::{blogpost_path, category_path, tag_path};
 use crate::urls::blogpost_url;
 use maud::{html, Markup, PreEscaped};
 
 pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Markup {
-    let metadata = &blogpost.metadata;
-    let permalink = blogpost_path(metadata);
+    let permalink = blogpost_path(blogpost);
     html! {
         article.blogpost {
             h2.posttitle {
                 a href=(permalink) rel="bookmark" {
-                    (blogpost.metadata.title)
+                    (blogpost.title)
                 }
             }
-            div.entry { (PreEscaped(&blogpost.content_html)) }
+            div.entry { (PreEscaped(render_blogpost_content(&blogpost))) }
             footer {
                 span.post-time {
-                    (super::time(&metadata.date))
+                    (super::time(&blogpost.date))
                 }
                 @if let Some(cat) = &category {
                     span.category {
@@ -25,14 +24,14 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
                         a href=(category_path(cat)) { (cat.title) }
                     }
                 }
-                @if !metadata.tags.is_empty() {
+                @if !blogpost.tags.is_empty() {
                     span.tags {
                         "Tags: "
-                        @for (i, tag) in metadata.tags.iter().enumerate() {
+                        @for (i, tag) in blogpost.tags.iter().enumerate() {
                             a href=(tag_path(tag)) {
                                 (tag.name)
                             }
-                            @if i + 1 < metadata.tags.len() { ", " }
+                            @if i + 1 < blogpost.tags.len() { ", " }
                         }
                     }
                 }
@@ -43,9 +42,9 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
 
 pub fn render_blogpost_page(blogpost: &Blogpost, category: Option<&Category>) -> Markup {
     super::base(
-        &blogpost.metadata.title,
+        &blogpost.title,
         render_blogpost(blogpost, category),
-        Some(&blogpost_url(&blogpost.metadata)),
+        Some(&blogpost_url(&blogpost)),
     )
 }
 
@@ -67,7 +66,7 @@ mod tests {
         println!("Checking rendered html:\n{}", result);
         assert!(result
             .contains("<h2 class=\"posttitle\"><a href=\"/blogposts/foobar\" rel=\"bookmark\">Nevermind</a></h2>"));
-        assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p></div>"));
+        assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p>\n</div>"));
         assert!(result.contains("11.05.2020 12:13"));
         assert!(result.contains("<a href=\"/categories/chocolate\">Cocoa</a>"));
     }
@@ -96,7 +95,7 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{}", result);
-        assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p></div>"));
+        assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p>\n</div>"));
         assert!(result.contains("<title>Nevermind</title>"));
         assert!(result.contains("11.05.2020 12:13"));
         assert!(result.contains("<a href=\"/categories/chocolate\">Cocoa</a>"));

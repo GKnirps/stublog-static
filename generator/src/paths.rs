@@ -1,4 +1,4 @@
-use crate::input::{tag::Tag, BlogpostMetadata, Category, HostedFile, Quote};
+use crate::input::{tag::Tag, Blogpost, Category, HostedFile, Quote};
 use percent_encoding::{percent_encode, AsciiSet, CONTROLS};
 
 const ESCAPE_SET: &AsciiSet = &CONTROLS
@@ -12,10 +12,10 @@ const ESCAPE_SET: &AsciiSet = &CONTROLS
     .add(b'}')
     .add(b'#');
 
-pub fn blogpost_path(metadata: &BlogpostMetadata) -> String {
+pub fn blogpost_path(blogpost: &Blogpost) -> String {
     format!(
         "/blogposts/{}",
-        percent_encode(metadata.filename.to_string_lossy().as_bytes(), ESCAPE_SET)
+        percent_encode(blogpost.filename.to_string_lossy().as_bytes(), ESCAPE_SET)
     )
 }
 
@@ -68,19 +68,17 @@ pub static QUOTE_FORTUNE_PATH: &str = "/quotes/strangerthanusual.tar.bz2";
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{
-        create_blogpost_metadata, create_category, create_hosted_file, create_quote,
-    };
+    use crate::test_utils::{create_blogpost, create_category, create_hosted_file, create_quote};
     use std::path::Path;
 
     #[test]
     fn test_blogpost_path() {
         // given
-        let mut metadata = create_blogpost_metadata();
-        metadata.filename = Path::new("foö-bar").to_owned();
+        let mut blogpost = create_blogpost();
+        blogpost.filename = Path::new("foö-bar").to_owned();
 
         // when
-        let result = blogpost_path(&metadata);
+        let result = blogpost_path(&blogpost);
 
         // then
         assert_eq!(&result, "/blogposts/fo%C3%B6-bar");

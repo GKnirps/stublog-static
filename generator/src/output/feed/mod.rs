@@ -1,5 +1,5 @@
-use super::blogposts::Blogpost;
 use super::file::open_for_write;
+use crate::input::Blogpost;
 use crate::output::needs_any_update;
 use quick_xml::Writer;
 use std::path::Path;
@@ -7,7 +7,7 @@ use std::path::Path;
 mod atom;
 
 pub fn feed_needs_update(filename: &Path, blogposts: &[Blogpost]) -> bool {
-    let times = blogposts.iter().map(|p| p.metadata.modified_at);
+    let times = blogposts.iter().map(|p| p.modified_at);
     needs_any_update(filename, times)
 }
 

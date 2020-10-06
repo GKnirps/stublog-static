@@ -5,34 +5,9 @@ use std::path::Path;
 
 use super::file::open_for_write;
 use super::html;
-use crate::input;
-use crate::input::file::FileData;
-use crate::input::Category;
 use crate::input::{parser, Quote};
+use crate::input::{Blogpost, Category};
 use crate::output::needs_update;
-
-#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
-pub struct Blogpost {
-    pub metadata: input::BlogpostMetadata,
-    pub content_html: String,
-}
-
-// TODO: test this
-pub fn parse_blogposts(inputs: &[FileData]) -> Result<Vec<Blogpost>, parser::ParseError> {
-    inputs
-        .iter()
-        .map(|input| parser::blogpost::parse_blogpost(&input))
-        .map(|parse_result| {
-            parse_result.map(|(metadata, content)| {
-                let allow_html = metadata.allow_html;
-                Blogpost {
-                    metadata,
-                    content_html: super::cmark::render_cmark(content, allow_html),
-                }
-            })
-        })
-        .collect()
-}
 
 // find categories for all blogposts with a category id. If the ID is present but matches no
 // known category, return an error
@@ -42,7 +17,7 @@ pub fn find_categories_for_blogposts<'a>(
 ) -> Result<Vec<(&'a Blogpost, Option<&'a Category>)>, parser::ParseError> {
     blogposts
         .iter()
-        .map(|post| match &post.metadata.category_id {
+        .map(|post| match &post.category_id {
             Some(id) => categories
                 .iter()
                 // there should be only a small amount of categories, so we may search through all of them
@@ -51,7 +26,7 @@ pub fn find_categories_for_blogposts<'a>(
                 .ok_or_else(|| {
                     parser::ParseError::new(format!(
                         "Unable to find category '{}' for blogpost '{}'",
-                        id, post.metadata.title
+                        id, post.title
                     ))
                 }),
             None => Ok((post, None)),
@@ -80,9 +55,9 @@ fn write_blogpost(
     category: Option<&Category>,
 ) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
-    filename.push(&blogpost.metadata.filename);
+    filename.push(&blogpost.filename);
     filename.set_extension("html");
-    if !needs_update(&filename, blogpost.metadata.modified_at) {
+    if !needs_update(&filename, blogpost.modified_at) {
         // target file is newer, no update needed
         return Ok(());
     }
@@ -104,8 +79,8 @@ fn blogposts_with_categories_need_update(
     posts
         .iter()
         .map(|(post, cat)| {
-            cat.map(|c| max(c.modified_at, post.metadata.modified_at))
-                .unwrap_or(post.metadata.modified_at)
+            cat.map(|c| max(c.modified_at, post.modified_at))
+                .unwrap_or(post.modified_at)
         })
         .chain(quote.map(|q| q.modified_at))
         .max()
@@ -198,7 +173,7 @@ mod tests {
     fn find_categories_for_blogposts_should_return_no_category_for_blogposts_without_category() {
         // given
         let mut post = create_blogpost();
-        post.metadata.category_id = None;
+        post.category_id = None;
         let posts = &[post];
 
         let cat = create_category();
@@ -216,9 +191,9 @@ mod tests {
     fn find_categories_for_blogposts_should_return_correct_categories_for_posts() {
         // given
         let mut post1 = create_blogpost();
-        post1.metadata.category_id = Some("cat2".to_owned());
+        post1.category_id = Some("cat2".to_owned());
         let mut post2 = create_blogpost();
-        post2.metadata.category_id = Some("cat1".to_owned());
+        post2.category_id = Some("cat1".to_owned());
         let posts = &[post1, post2];
 
         let mut cat1 = create_category();
@@ -241,8 +216,8 @@ mod tests {
     fn find_categories_for_blogposts_should_fail_if_category_does_not_exist() {
         // given
         let mut post = create_blogpost();
-        post.metadata.category_id = Some("cat2".to_owned());
-        post.metadata.title = "post".to_owned();
+        post.category_id = Some("cat2".to_owned());
+        post.title = "post".to_owned();
         let posts = &[post];
 
         let mut cat = create_category();

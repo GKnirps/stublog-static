@@ -1,5 +1,4 @@
-use crate::input::Category;
-use crate::output::blogposts::Blogpost;
+use crate::input::{Blogpost, Category};
 use crate::paths::{blogpost_path, category_path};
 use crate::urls::{categories_url, category_url};
 use maud::{html, Markup, PreEscaped};
@@ -34,8 +33,8 @@ pub fn render_category_page(category: &Category, blogposts: &[&Blogpost]) -> Mar
         ul {
             @for post in blogposts {
                 li {
-                    a href=(blogpost_path(&post.metadata)){
-                        (post.metadata.title)
+                    a href=(blogpost_path(&post)){
+                        (post.title)
                     }
                 }
             }
@@ -81,11 +80,11 @@ mod tests {
     fn render_category_page_renders_correctly() {
         // given
         let mut post1 = create_blogpost();
-        post1.metadata.title = "How to be a supervillain".to_owned();
-        post1.metadata.filename = Path::new("sprvlln").to_owned();
+        post1.title = "How to be a supervillain".to_owned();
+        post1.filename = Path::new("sprvlln").to_owned();
         let mut post2 = create_blogpost();
-        post2.metadata.title = "How not to get caught".to_owned();
-        post2.metadata.filename = Path::new("caught").to_owned();
+        post2.title = "How not to get caught".to_owned();
+        post2.filename = Path::new("caught").to_owned();
 
         let mut category = create_category();
         category.title = "Supervillainy".to_owned();

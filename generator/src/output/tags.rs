@@ -1,6 +1,6 @@
 use super::file::open_for_write;
 use super::html;
-use crate::input::{tag::Tag, BlogpostMetadata};
+use crate::input::{tag::Tag, Blogpost};
 use crate::output::needs_update;
 use std::collections::HashMap;
 use std::fs::create_dir;
@@ -8,11 +8,11 @@ use std::io::Write;
 use std::iter::IntoIterator;
 use std::path::Path;
 
-pub fn blogpost_metadata_by_tag<'a, T>(posts: T) -> HashMap<&'a Tag, Vec<&'a BlogpostMetadata>>
+pub fn blogpost_by_tag<'a, T>(posts: T) -> HashMap<&'a Tag, Vec<&'a Blogpost>>
 where
-    T: IntoIterator<Item = &'a BlogpostMetadata>,
+    T: IntoIterator<Item = &'a Blogpost>,
 {
-    let mut result: HashMap<&'a Tag, Vec<&'a BlogpostMetadata>> = HashMap::with_capacity(1024);
+    let mut result: HashMap<&'a Tag, Vec<&'a Blogpost>> = HashMap::with_capacity(1024);
 
     for post in posts {
         for tag in &post.tags {
@@ -24,7 +24,7 @@ where
     result
 }
 
-fn sort_tags<'a>(posts_by_tag: &HashMap<&'a Tag, Vec<&BlogpostMetadata>>) -> Vec<(&'a Tag, usize)> {
+fn sort_tags<'a>(posts_by_tag: &HashMap<&'a Tag, Vec<&Blogpost>>) -> Vec<(&'a Tag, usize)> {
     let mut tags: Vec<(&Tag, usize)> = posts_by_tag
         .iter()
         .map(|(tag, posts)| (*tag, posts.len()))
@@ -40,10 +40,7 @@ fn sort_tags<'a>(posts_by_tag: &HashMap<&'a Tag, Vec<&BlogpostMetadata>>) -> Vec
     tags
 }
 
-fn tag_index_needs_update(
-    filename: &Path,
-    posts_by_tag: &HashMap<&Tag, Vec<&BlogpostMetadata>>,
-) -> bool {
+fn tag_index_needs_update(filename: &Path, posts_by_tag: &HashMap<&Tag, Vec<&Blogpost>>) -> bool {
     posts_by_tag
         .iter()
         .flat_map(|(_, posts)| posts.iter())
@@ -55,7 +52,7 @@ fn tag_index_needs_update(
 
 pub fn write_tag_index(
     dir: &Path,
-    posts_by_tag: &HashMap<&Tag, Vec<&BlogpostMetadata>>,
+    posts_by_tag: &HashMap<&Tag, Vec<&Blogpost>>,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {
         create_dir(dir)?;
@@ -78,7 +75,7 @@ pub fn write_tag_index(
 
 pub fn write_tag_pages(
     dir: &Path,
-    posts_by_tag: &HashMap<&Tag, Vec<&BlogpostMetadata>>,
+    posts_by_tag: &HashMap<&Tag, Vec<&Blogpost>>,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
@@ -92,7 +89,7 @@ pub fn write_tag_pages(
     Ok(())
 }
 
-fn tag_needs_update(filename: &Path, blogposts_with_tag: &[&BlogpostMetadata]) -> bool {
+fn tag_needs_update(filename: &Path, blogposts_with_tag: &[&Blogpost]) -> bool {
     blogposts_with_tag
         .iter()
         .map(|p| p.modified_at)
@@ -101,7 +98,7 @@ fn tag_needs_update(filename: &Path, blogposts_with_tag: &[&BlogpostMetadata]) -
         .unwrap_or(true)
 }
 
-fn write_tag_page(dir: &Path, tag: &Tag, posts: &[&BlogpostMetadata]) -> std::io::Result<()> {
+fn write_tag_page(dir: &Path, tag: &Tag, posts: &[&Blogpost]) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push(&tag.normalized_name);
     filename.set_extension("html");
@@ -121,24 +118,24 @@ fn write_tag_page(dir: &Path, tag: &Tag, posts: &[&BlogpostMetadata]) -> std::io
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::create_blogpost_metadata;
+    use crate::test_utils::create_blogpost;
 
     #[test]
     fn blogpost_metadata_by_tag_should_aggregate_posts() {
         // given
-        let mut post1 = create_blogpost_metadata();
+        let mut post1 = create_blogpost();
         post1.tags = vec![Tag::new("foo"), Tag::new("bar")];
 
-        let mut post2 = create_blogpost_metadata();
+        let mut post2 = create_blogpost();
         post2.tags = vec![Tag::new("foo"), Tag::new("blub")];
 
-        let mut post3 = create_blogpost_metadata();
+        let mut post3 = create_blogpost();
         post3.tags = vec![];
 
         let posts = vec![post1.clone(), post2.clone(), post3];
 
         // when
-        let result = blogpost_metadata_by_tag(&posts);
+        let result = blogpost_by_tag(&posts);
 
         // then
         assert_eq!(result.len(), 3, "Expected 3 distinct tags");
@@ -162,9 +159,9 @@ mod tests {
     #[test]
     fn sort_tags_should_sort_tags_by_occurences_and_name() {
         // given
-        let dummy_post = create_blogpost_metadata();
+        let dummy_post = create_blogpost();
 
-        let mut input: HashMap<&Tag, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
+        let mut input: HashMap<&Tag, Vec<&Blogpost>> = HashMap::with_capacity(10);
         let tag_foo = Tag::new("foo");
         let tag_a = Tag::new("a");
         let tag_bar = Tag::new("bar");

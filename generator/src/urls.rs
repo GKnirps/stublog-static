@@ -1,11 +1,11 @@
 use crate::input::tag::Tag;
-use crate::input::{BlogpostMetadata, Category, Quote};
+use crate::input::{Blogpost, Category, Quote};
 use crate::paths;
 
 pub static CANONICAL_BASE_URL: &str = "https://blog.strangerthanusual.de";
 
-pub fn blogpost_url(metadata: &BlogpostMetadata) -> String {
-    format!("{}{}", CANONICAL_BASE_URL, paths::blogpost_path(metadata))
+pub fn blogpost_url(blogpost: &Blogpost) -> String {
+    format!("{}{}", CANONICAL_BASE_URL, paths::blogpost_path(blogpost))
 }
 
 pub fn archive_url(page_index: usize) -> String {
@@ -43,17 +43,17 @@ pub fn quote_list_url(page: usize) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_blogpost_metadata, create_category, create_quote};
+    use crate::test_utils::{create_blogpost, create_category, create_quote};
     use std::path::Path;
 
     #[test]
     fn blogpost_url_renders_correct_url() {
         // given
-        let mut metadata = create_blogpost_metadata();
-        metadata.filename = Path::new("dürk").to_path_buf();
+        let mut blogpost = create_blogpost();
+        blogpost.filename = Path::new("dürk").to_path_buf();
 
         // when
-        let url = blogpost_url(&metadata);
+        let url = blogpost_url(&blogpost);
 
         // then
         assert_eq!(url, "https://blog.strangerthanusual.de/blogposts/d%C3%BCrk");

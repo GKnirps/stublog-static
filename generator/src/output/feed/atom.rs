@@ -1,4 +1,5 @@
-use crate::output::blogposts::Blogpost;
+use super::super::cmark::render_blogpost_content;
+use crate::input::Blogpost;
 use crate::urls::{atom_feed_url, blogpost_url, CANONICAL_BASE_URL};
 use chrono::{FixedOffset, TimeZone};
 use quick_xml::events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event};
@@ -46,21 +47,15 @@ fn write_entry<T: Write>(
         &[],
         &format!(
             "tag:strangerthanusual.de,2005:Blogpost/{}",
-            blogpost.metadata.filename.to_string_lossy()
+            blogpost.filename.to_string_lossy()
         ),
     )?;
-    write_leaf(writer, "title", &[], &blogpost.metadata.title)?;
-    write_leaf(
-        writer,
-        "published",
-        &[],
-        &blogpost.metadata.date.to_rfc3339(),
-    )?;
+    write_leaf(writer, "title", &[], &blogpost.title)?;
+    write_leaf(writer, "published", &[], &blogpost.date.to_rfc3339())?;
     let updated = blogpost
-        .metadata
         .update_date
         .as_ref()
-        .unwrap_or(&blogpost.metadata.date)
+        .unwrap_or(&blogpost.date)
         .to_rfc3339();
     write_leaf(writer, "updated", &[], &updated)?;
 
@@ -72,15 +67,10 @@ fn write_entry<T: Write>(
         writer,
         "content",
         &[("type", "html")],
-        &blogpost.content_html,
+        &render_blogpost_content(&blogpost),
     )?;
 
-    write_link(
-        writer,
-        &blogpost_url(&blogpost.metadata),
-        "alternate",
-        "text/html",
-    )?;
+    write_link(writer, &blogpost_url(&blogpost), "alternate", "text/html")?;
 
     writer.write_event(Event::End(BytesEnd::borrowed(b"entry")))?;
     Ok(())
@@ -92,12 +82,7 @@ pub fn write_feed<T: Write>(
 ) -> Result<(), quick_xml::Error> {
     let updated = blogposts
         .iter()
-        .map(|post| {
-            post.metadata
-                .update_date
-                .as_ref()
-                .unwrap_or(&post.metadata.date)
-        })
+        .map(|post| post.update_date.as_ref().unwrap_or(&post.date))
         .max()
         .cloned()
         // if no blogposts exist, just pick some random fixed date in the past (before any
@@ -194,7 +179,7 @@ mod tests {
         <published>2020-05-11T12:13:14+02:00</published>\
         <updated>2020-05-25T12:13:14+02:00</updated>\
         <author><name>Knirps</name></author>\
-        <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;</content>\
+        <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
         </entry>");
     }
@@ -203,7 +188,7 @@ mod tests {
     fn write_entry_uses_creation_date_if_update_date_is_missing() {
         // given
         let mut post = create_blogpost();
-        post.metadata.update_date = None;
+        post.update_date = None;
         let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
 
         // when
@@ -221,16 +206,16 @@ mod tests {
     fn write_feed_writes_valid_feed() {
         // given
         let mut post1 = create_blogpost();
-        post1.metadata.title = "p1".to_owned();
+        post1.title = "p1".to_owned();
         // make sure the update date is used (and not the date) if possible,
         // by making the update date earlier than the creation date (which is not a realistic scenario)
-        let latest_update = post1.metadata.date - Duration::seconds(42);
-        post1.metadata.update_date = Some(latest_update.clone());
+        let latest_update = post1.date - Duration::seconds(42);
+        post1.update_date = Some(latest_update.clone());
         // the other post ist earlier than the first one
         let mut post2 = create_blogpost();
-        post2.metadata.title = "p2".to_owned();
-        post2.metadata.update_date = None;
-        post2.metadata.date = post1.metadata.date - Duration::seconds(100);
+        post2.title = "p2".to_owned();
+        post2.update_date = None;
+        post2.date = post1.date - Duration::seconds(100);
 
         let posts = &[post1, post2];
 
@@ -256,7 +241,7 @@ mod tests {
         <published>2020-05-11T12:11:34+02:00</published>\
         <updated>2020-05-11T12:11:34+02:00</updated>\
         <author><name>Knirps</name></author>\
-        <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;</content>\
+        <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
         </entry><entry>\
         <id>tag:strangerthanusual.de,2005:Blogpost/foobar</id>\
@@ -264,7 +249,7 @@ mod tests {
         <published>2020-05-11T12:13:14+02:00</published>\
         <updated>2020-05-11T12:12:32+02:00</updated>\
         <author><name>Knirps</name></author>\
-        <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;</content>\
+        <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
         </entry>\
         </feed>");

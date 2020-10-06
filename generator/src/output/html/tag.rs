@@ -1,4 +1,4 @@
-use crate::input::{tag::Tag, BlogpostMetadata};
+use crate::input::{tag::Tag, Blogpost};
 use crate::paths::{blogpost_path, tag_path};
 use crate::urls;
 use maud::{html, Markup};
@@ -24,7 +24,7 @@ pub fn render_tag_list(tags: &[(&Tag, usize)]) -> Markup {
     )
 }
 
-pub fn render_tag_page(tag: &Tag, posts: &[&BlogpostMetadata]) -> Markup {
+pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost]) -> Markup {
     let title = format!("Stranger Than Usual — Tag: {}", tag.name);
     let content = html! {
         h2.section-heading {
@@ -46,7 +46,7 @@ pub fn render_tag_page(tag: &Tag, posts: &[&BlogpostMetadata]) -> Markup {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::create_blogpost_metadata;
+    use crate::test_utils::create_blogpost;
     use std::path::PathBuf;
 
     #[test]
@@ -68,11 +68,11 @@ mod tests {
     #[test]
     fn render_tag_page_renders_all_entries() {
         // given
-        let mut post1 = create_blogpost_metadata();
+        let mut post1 = create_blogpost();
         post1.title = "Posty McPostface".to_owned();
         post1.filename = PathBuf::from("postface");
 
-        let mut post2 = create_blogpost_metadata();
+        let mut post2 = create_blogpost();
         post2.title = "Shaped like itself".to_owned();
         post2.filename = PathBuf::from("shaped");
 

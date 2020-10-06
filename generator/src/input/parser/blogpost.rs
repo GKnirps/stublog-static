@@ -1,11 +1,9 @@
-use super::super::BlogpostMetadata;
+use super::super::Blogpost;
 use super::{get_secure_filename, split_file_content, ParseError};
 use crate::input::file::FileData;
+use crate::input::parser;
 use crate::input::tag::Tag;
 use chrono::DateTime;
-use std::collections::HashMap;
-use std::path::Path;
-use std::time::SystemTime;
 
 fn parse_tags(tagstring: &str) -> Vec<Tag> {
     tagstring
@@ -17,11 +15,14 @@ fn parse_tags(tagstring: &str) -> Vec<Tag> {
         .collect()
 }
 
-fn parse_blogpost_metadata(
-    props: HashMap<&str, &str>,
-    modified_at: SystemTime,
-    original_path: &Path,
-) -> Result<BlogpostMetadata, ParseError> {
+pub fn parse_blogposts(inputs: &[FileData]) -> Result<Vec<Blogpost>, parser::ParseError> {
+    inputs.iter().map(|input| parse_blogpost(&input)).collect()
+}
+
+fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
+    let (props, content) = split_file_content(&file_data)?;
+    let original_path = &file_data.filename;
+
     let title = props
         .get("title")
         .copied()
@@ -78,7 +79,7 @@ fn parse_blogpost_metadata(
         .map(|v| *v == "true")
         .unwrap_or(false);
 
-    Ok(BlogpostMetadata {
+    Ok(Blogpost {
         title,
         filename,
         date,
@@ -86,36 +87,41 @@ fn parse_blogpost_metadata(
         tags,
         category_id,
         allow_html,
-        modified_at,
+        modified_at: file_data.modified_at,
+        content_markdown: content.to_owned(),
     })
-}
-
-pub fn parse_blogpost(file_data: &FileData) -> Result<(BlogpostMetadata, &str), ParseError> {
-    let (header_map, content) = split_file_content(&file_data)?;
-    let metadata = parse_blogpost_metadata(header_map, file_data.modified_at, &file_data.filename)?;
-    Ok((metadata, content))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test_utils::create_file_data;
     use chrono::{FixedOffset, TimeZone};
     use std::path::Path;
+    use std::time::SystemTime;
 
     #[test]
     fn parse_blogpost_metadata_should_parse_minimal_metadata() {
         // given
-        let mut input = HashMap::with_capacity(3);
-        input.insert("title", "Lorem ipsum");
-        input.insert("filename", "lipsum");
-        input.insert("date", "2020-05-11T12:13:14+02:00");
+        let content = "---\n\
+        title: Lorem ipsum\n\
+        filename: lipsum\n\
+        date: 2020-05-11T12:13:14+02:00\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
 
         let modified_at = SystemTime::now();
-        let path = Path::new("mad/eye");
+        let filename = Path::new("mad/eye").to_path_buf();
+
+        let input = FileData {
+            content,
+            filename,
+            modified_at,
+        };
 
         // when
-        let result =
-            parse_blogpost_metadata(input, modified_at, path).expect("Expected valid result");
+        let result = parse_blogpost(&input).expect("Expected valid result");
 
         // then
         let expected_date = FixedOffset::east(3600 * 2)
@@ -130,26 +136,35 @@ mod tests {
         assert_eq!(result.category_id, None);
         assert!(!result.allow_html);
         assert_eq!(result.modified_at, modified_at);
+        assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
     }
 
     #[test]
     fn parse_blogpost_metadata_should_parse_full_metadata() {
         // given
-        let mut input = HashMap::with_capacity(3);
-        input.insert("title", "Lorem ipsum");
-        input.insert("filename", "lipsum");
-        input.insert("date", "2020-05-11T12:13:14+02:00");
-        input.insert("update-date", "2020-05-25T11:12:13+02:00");
-        input.insert("tags", "foo,bar");
-        input.insert("category", "bananas");
-        input.insert("allow-html", "true");
+        let content = "---\n\
+        title: Lorem ipsum\n\
+        filename: lipsum\n\
+        date: 2020-05-11T12:13:14+02:00\n\
+        update-date: 2020-05-25T11:12:13+02:00\n\
+        tags: foo,bar\n\
+        category: bananas\n\
+        allow-html: true\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
 
         let modified_at = SystemTime::now();
-        let path = Path::new("mad/eye");
+        let filename = Path::new("mad/eye").to_path_buf();
+
+        let input = FileData {
+            content,
+            filename,
+            modified_at,
+        };
 
         // when
-        let result =
-            parse_blogpost_metadata(input, modified_at, path).expect("Expected valid result");
+        let result = parse_blogpost(&input).expect("Expected valid result");
 
         // then
         assert_eq!(result.title, "Lorem ipsum");
@@ -176,19 +191,27 @@ mod tests {
         assert_eq!(result.category_id, Some("bananas".to_owned()));
         assert!(result.allow_html);
         assert_eq!(result.modified_at, modified_at);
+        assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
     }
 
     #[test]
     fn parse_blogpost_metadata_should_fail_for_missing_title() {
         // given
-        let mut input = HashMap::with_capacity(3);
-        input.insert("filename", "lipsum");
-        input.insert("date", "2020-05-11T12:13:14+02:00");
+        let content = "---\n\
+        filename: lipsum\n\
+        date: 2020-05-11T12:13:14+02:00\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
 
-        let path = Path::new("mad/eye");
+        let path = Path::new("mad/eye").to_path_buf();
+
+        let mut input = create_file_data();
+        input.filename = path;
+        input.content = content;
 
         // when
-        let result = parse_blogpost_metadata(input, SystemTime::now(), path);
+        let result = parse_blogpost(&input);
 
         // then
         assert_eq!(
@@ -200,14 +223,21 @@ mod tests {
     #[test]
     fn parse_blogpost_metadata_should_fail_for_missing_filename() {
         // given
-        let mut input = HashMap::with_capacity(3);
-        input.insert("title", "Lorem ipsum");
-        input.insert("date", "2020-05-11T12:13:14+02:00");
+        let content = "---\n\
+        title: Lorem ipsum\n\
+        date: 2020-05-11T12:13:14+02:00\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
 
-        let path = Path::new("mad/eye");
+        let path = Path::new("mad/eye").to_path_buf();
+
+        let mut input = create_file_data();
+        input.filename = path;
+        input.content = content;
 
         // when
-        let result = parse_blogpost_metadata(input, SystemTime::now(), path);
+        let result = parse_blogpost(&input);
 
         // then
         assert_eq!(
@@ -221,15 +251,22 @@ mod tests {
     #[test]
     fn parse_blogpost_metadata_should_fail_for_bad_date() {
         // given
-        let mut input = HashMap::with_capacity(3);
-        input.insert("title", "Lorem ipsum");
-        input.insert("filename", "lipsum");
-        input.insert("date", "2020-05-11+02:00");
+        let content = "---\n\
+        title: Lorem ipsum\n\
+        filename: lipsum\n\
+        date: 2020-05-11+02:00\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
 
-        let path = Path::new("mad/eye");
+        let path = Path::new("mad/eye").to_path_buf();
+
+        let mut input = create_file_data();
+        input.filename = path;
+        input.content = content;
 
         // when
-        let result = parse_blogpost_metadata(input, SystemTime::now(), path);
+        let result = parse_blogpost(&input);
 
         // then
         assert_eq!(
@@ -243,14 +280,21 @@ mod tests {
     #[test]
     fn parse_blogpost_metadata_should_fail_for_missing_date() {
         // given
-        let mut input = HashMap::with_capacity(3);
-        input.insert("title", "Lorem ipsum");
-        input.insert("filename", "lipsum");
+        let content = "---\n\
+        title: Lorem ipsum\n\
+        filename: lipsum\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
 
-        let path = Path::new("mad/eye");
+        let path = Path::new("mad/eye").to_path_buf();
+
+        let mut input = create_file_data();
+        input.filename = path;
+        input.content = content;
 
         // when
-        let result = parse_blogpost_metadata(input, SystemTime::now(), path);
+        let result = parse_blogpost(&input);
 
         // then
         assert_eq!(

@@ -1,9 +1,8 @@
 use maud::{html, Markup};
 
-use super::super::blogposts::Blogpost;
 use super::blogpost::render_blogpost;
 use super::pager::pager;
-use crate::input::Category;
+use crate::input::{Blogpost, Category};
 use crate::paths::archive_path;
 use crate::urls::archive_url;
 
@@ -39,9 +38,9 @@ mod tests {
     fn render_archive_renders_blogpost_and_pager() {
         // given
         let mut blogpost1 = create_blogpost();
-        blogpost1.content_html = "<p>hello</p>".to_owned();
+        blogpost1.content_markdown = "hello".to_owned();
         let mut blogpost2 = create_blogpost();
-        blogpost2.content_html = "<p>world</p>".to_owned();
+        blogpost2.content_markdown = "world".to_owned();
 
         let current_page = 3;
         let num_pages = 10;
@@ -57,11 +56,11 @@ mod tests {
         // then
         println!("Checking html: {}", result);
         assert!(
-            result.contains("<div class=\"entry\"><p>hello</p></div>"),
+            result.contains("<div class=\"entry\"><p>hello</p>\n</div>"),
             "Expected first article on page."
         );
         assert!(
-            result.contains("<div class=\"entry\"><p>world</p></div>"),
+            result.contains("<div class=\"entry\"><p>world</p>\n</div>"),
             "Expected second article on page."
         );
         assert!(

@@ -10,11 +10,11 @@ mod urls;
 #[cfg(test)]
 mod test_utils;
 
-use crate::input::{tag::Tag, BlogpostMetadata, Category, Quote};
+use crate::input::{tag::Tag, Blogpost, Category, Quote};
 use crate::output::error_pages::write_404;
 use input::file;
 use input::parser::{
-    category::parse_categories, files_index::parse_all_file_metadata, quote::parse_quotes,
+    blogpost, category::parse_categories, files_index::parse_all_file_metadata, quote::parse_quotes,
 };
 use output::{blogposts, categories, feed, ngingx_cfg, quotes, tags};
 use std::collections::{HashMap, HashSet};
@@ -73,7 +73,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     let blogpost_indir: PathBuf = [indir, "blogposts"].iter().collect();
     let raw_blogposts = file::read_files_sorted(&blogpost_indir)
         .map_err(|e| format!("Failed to read all blogposts: {}", e))?;
-    let blogposts = blogposts::parse_blogposts(&raw_blogposts)
+    let blogposts = blogpost::parse_blogposts(&raw_blogposts)
         .map_err(|e| format!("Failed to parse all blogposts: {}", e))?;
     check_duplicate_blogpost_names(&blogposts)?;
 
@@ -112,8 +112,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     quotes::write_quote_fortune_file(&quote_list_dir, &published_quotes)
         .map_err(|e| format!("Unable to write quote fortune file: {}", e))?;
 
-    let post_by_tags =
-        tags::blogpost_metadata_by_tag(blogposts.iter().map(|blogpost| &blogpost.metadata));
+    let post_by_tags = tags::blogpost_by_tag(&blogposts);
     check_index_tag(&post_by_tags)?;
     let tags_dir: PathBuf = [odir, "tags"].iter().collect();
     tags::write_tag_index(&tags_dir, &post_by_tags)
@@ -129,16 +128,16 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         .map_err(|e| format!("Failed to write all category pages: {}", e))
 }
 
-fn check_duplicate_blogpost_names(posts: &[blogposts::Blogpost]) -> Result<(), String> {
+fn check_duplicate_blogpost_names(posts: &[Blogpost]) -> Result<(), String> {
     let mut seen: HashSet<&Path> = HashSet::with_capacity(posts.len());
     for post in posts {
-        if seen.contains(&post.metadata.filename.as_path()) {
+        if seen.contains(&post.filename.as_path()) {
             return Err(format!(
                 "Blogpost name {} is a duplicate!",
-                post.metadata.filename.to_string_lossy()
+                post.filename.to_string_lossy()
             ));
         }
-        seen.insert(&post.metadata.filename);
+        seen.insert(&post.filename);
     }
     Ok(())
 }
@@ -146,7 +145,7 @@ fn check_duplicate_blogpost_names(posts: &[blogposts::Blogpost]) -> Result<(), S
 // right now, a tag named "index" would not be supported, as we use index.html for the list of all tags
 // we may need a different way to handle this some time, but for now this is just an illegal case
 // that must be caught
-fn check_index_tag(post_by_tags: &HashMap<&Tag, Vec<&BlogpostMetadata>>) -> Result<(), String> {
+fn check_index_tag(post_by_tags: &HashMap<&Tag, Vec<&Blogpost>>) -> Result<(), String> {
     if post_by_tags.contains_key(&Tag::new("index")) {
         Err(
             "'index' must not be a tag name. If you need index as a tag name, find another \
@@ -195,19 +194,17 @@ fn check_duplicate_quote_names(quotes: &[Quote]) -> Result<(), String> {
 mod tests {
     use super::*;
     use crate::input::tag::Tag;
-    use crate::test_utils::{
-        create_blogpost, create_blogpost_metadata, create_category, create_quote,
-    };
+    use crate::test_utils::{create_blogpost, create_category, create_quote};
 
     #[test]
     fn check_duplicate_blogposts_names_returns_ok_for_no_duplicates() {
         // given
         let mut post1 = create_blogpost();
-        post1.metadata.filename = PathBuf::from("foobar");
+        post1.filename = PathBuf::from("foobar");
         let mut post2 = create_blogpost();
-        post2.metadata.filename = PathBuf::from("foo");
+        post2.filename = PathBuf::from("foo");
         let mut post3 = create_blogpost();
-        post3.metadata.filename = PathBuf::from("bar");
+        post3.filename = PathBuf::from("bar");
 
         // when
         let result = check_duplicate_blogpost_names(&[post1, post2, post3]);
@@ -220,11 +217,11 @@ mod tests {
     fn check_duplicate_blogposts_names_returns_error_for_duplicates() {
         // given
         let mut post1 = create_blogpost();
-        post1.metadata.filename = PathBuf::from("foobar");
+        post1.filename = PathBuf::from("foobar");
         let mut post2 = create_blogpost();
-        post2.metadata.filename = PathBuf::from("foo");
+        post2.filename = PathBuf::from("foo");
         let mut post3 = create_blogpost();
-        post3.metadata.filename = PathBuf::from("foobar");
+        post3.filename = PathBuf::from("foobar");
 
         // when
         let result = check_duplicate_blogpost_names(&[post1, post2, post3]);
@@ -239,10 +236,10 @@ mod tests {
     #[test]
     fn check_index_tag_returns_ok_if_index_is_no_tag() {
         // given
-        let dummy_post = create_blogpost_metadata();
+        let dummy_post = create_blogpost();
         let footag = Tag::new("foobar");
         let bartag = Tag::new("barfoo");
-        let mut tags: HashMap<&Tag, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
+        let mut tags: HashMap<&Tag, Vec<&Blogpost>> = HashMap::with_capacity(10);
         tags.insert(&footag, vec![&dummy_post]);
         tags.insert(&bartag, vec![&dummy_post]);
 
@@ -256,8 +253,8 @@ mod tests {
     #[test]
     fn check_index_tag_returns_err_if_index_is_tag() {
         // given
-        let dummy_post = create_blogpost_metadata();
-        let mut tags: HashMap<&Tag, Vec<&BlogpostMetadata>> = HashMap::with_capacity(10);
+        let dummy_post = create_blogpost();
+        let mut tags: HashMap<&Tag, Vec<&Blogpost>> = HashMap::with_capacity(10);
         let footag = Tag::new("foobar");
         let indextag = Tag::new("index");
         tags.insert(&footag, vec![&dummy_post]);

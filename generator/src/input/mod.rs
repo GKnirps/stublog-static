@@ -8,7 +8,7 @@ pub mod parser;
 pub mod tag;
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
-pub struct BlogpostMetadata {
+pub struct Blogpost {
     pub title: String,
     pub filename: PathBuf,
     pub date: DateTime<FixedOffset>,
@@ -19,6 +19,7 @@ pub struct BlogpostMetadata {
     pub allow_html: bool,
     /// this is the last time the source file was touched
     pub modified_at: SystemTime,
+    pub content_markdown: String,
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]

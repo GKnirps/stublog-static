@@ -1,9 +1,8 @@
 use maud::{html, Markup};
 
-use super::super::blogposts::Blogpost;
 use super::blogpost::render_blogpost;
 use super::quote::render_quote;
-use crate::input::{Category, Quote};
+use crate::input::{Blogpost, Category, Quote};
 use crate::urls::CANONICAL_BASE_URL;
 
 pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Quote>) -> Markup {
@@ -34,10 +33,10 @@ mod tests {
     fn render_home_should_render_all_given_blogposts() {
         // given
         let mut post1 = create_blogpost();
-        post1.content_html = "Post1".to_owned();
+        post1.content_markdown = "Post1".to_owned();
 
         let mut post2 = create_blogpost();
-        post2.content_html = "Post2".to_owned();
+        post2.content_markdown = "Post2".to_owned();
 
         // when
         let result = render_home(&[(&post1, None), (&post2, None)], None).into_string();
@@ -45,8 +44,12 @@ mod tests {
         // then
         println!("Checking rendered html:\n{}", result);
         assert!(result.contains("<div class=\"blogposts\">"));
-        let post1_pos = result.find("Post1").expect("Expected to find post 1");
-        let post2_pos = result.find("Post2").expect("Expected to find post 2");
+        let post1_pos = result
+            .find("<p>Post1</p>")
+            .expect("Expected to find post 1");
+        let post2_pos = result
+            .find("<p>Post2</p>")
+            .expect("Expected to find post 2");
         assert!(
             post1_pos > post2_pos,
             "Expected posts to be in reverse order"

@@ -1,18 +1,17 @@
-use crate::blogposts::Blogpost;
 use crate::input::file::FileData;
-use crate::input::{tag::Tag, BlogpostMetadata, Category, HostedFile, Quote};
+use crate::input::{tag::Tag, Blogpost, Category, HostedFile, Quote};
 use chrono::{FixedOffset, TimeZone};
 use std::path::Path;
 use std::time::SystemTime;
 
-pub fn create_blogpost_metadata() -> BlogpostMetadata {
+pub fn create_blogpost() -> Blogpost {
     let date = FixedOffset::east(3600 * 2)
         .ymd(2020, 5, 11)
         .and_hms(12, 13, 14);
     let update_date = FixedOffset::east(3600 * 2)
         .ymd(2020, 5, 25)
         .and_hms(12, 13, 14);
-    BlogpostMetadata {
+    Blogpost {
         title: "Nevermind".to_owned(),
         filename: Path::new("foobar").to_owned(),
         date,
@@ -21,16 +20,7 @@ pub fn create_blogpost_metadata() -> BlogpostMetadata {
         category_id: Some("bananas".to_owned()),
         allow_html: false,
         modified_at: SystemTime::now(),
-    }
-}
-
-pub fn create_blogpost() -> Blogpost {
-    let metadata = create_blogpost_metadata();
-    let content_html = "<p><em>foo</em>bar</p>".to_owned();
-
-    Blogpost {
-        metadata,
-        content_html,
+        content_markdown: "*foo*bar".to_owned(),
     }
 }
 

@@ -3,10 +3,9 @@ use std::fs::create_dir;
 use std::io::Write;
 use std::path::Path;
 
-use super::blogposts::Blogpost;
 use super::file::open_for_write;
 use super::html;
-use crate::input::Category;
+use crate::input::{Blogpost, Category};
 use crate::output::needs_update;
 use std::time::SystemTime;
 
@@ -21,7 +20,7 @@ pub fn categories_with_blogposts<'a>(
                 cat,
                 blogposts
                     .iter()
-                    .filter(|post| post.metadata.category_id.as_ref() == Some(&cat.id))
+                    .filter(|post| post.category_id.as_ref() == Some(&cat.id))
                     .collect(),
             )
         })
@@ -29,7 +28,7 @@ pub fn categories_with_blogposts<'a>(
 }
 
 fn newest_modification(category: &Category, posts: &[&Blogpost]) -> SystemTime {
-    let newest_post = posts.iter().map(|post| post.metadata.modified_at).max();
+    let newest_post = posts.iter().map(|post| post.modified_at).max();
     newest_post
         .map(|t| max(t, category.modified_at))
         .unwrap_or(category.modified_at)
@@ -128,17 +127,17 @@ mod tests {
         let cats = &[cat1, cat2];
 
         let mut post1 = create_blogpost();
-        post1.metadata.category_id = Some("one".to_owned());
-        post1.metadata.title = "p1".to_owned();
+        post1.category_id = Some("one".to_owned());
+        post1.title = "p1".to_owned();
         let mut post2 = create_blogpost();
-        post2.metadata.category_id = Some("one".to_owned());
-        post2.metadata.title = "p2".to_owned();
+        post2.category_id = Some("one".to_owned());
+        post2.title = "p2".to_owned();
         let mut post3 = create_blogpost();
-        post3.metadata.category_id = Some("noone".to_owned());
-        post3.metadata.title = "p3".to_owned();
+        post3.category_id = Some("noone".to_owned());
+        post3.title = "p3".to_owned();
         let mut post4 = create_blogpost();
-        post4.metadata.category_id = None;
-        post4.metadata.title = "p4".to_owned();
+        post4.category_id = None;
+        post4.title = "p4".to_owned();
 
         let posts = &[post1, post2, post3, post4];
 
