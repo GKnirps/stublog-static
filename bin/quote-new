@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -eu
+
+BASE_DIR=$(dirname $0)/..
+
+DATE_MINUTES=$(date +%Y-%m-%dT%H:%M)
+FILENAME="$BASE_DIR/content/quotes/$DATE_MINUTES""__$1.md"
+
+CREATED_AT=$(date +%Y-%m-%dT%H:%M:%S%:z)
+
+TEMPLATE=$BASE_DIR/templates/quote
+
+echo "Creating new quote from template '$TEMPLATE' as '$FILENAME', creation date: $CREATED_AT"
+
+sed -e "s/<TIMESTAMP>/$CREATED_AT/g" $TEMPLATE > $FILENAME
+
+vim $FILENAME
