@@ -1,4 +1,5 @@
 use crate::input::{tag::Tag, Blogpost};
+use crate::output::html::HeadData;
 use crate::paths::{blogpost_path, tag_path};
 use crate::urls;
 use maud::{html, Markup};
@@ -18,9 +19,8 @@ pub fn render_tag_list(tags: &[(&Tag, usize)]) -> Markup {
     };
 
     super::base(
-        "Stranger Than Usual — Tags",
+        &HeadData::new("tranger Than Usual — Tags").with_canonical_url(&urls::tags_url()),
         content,
-        Some(&urls::tags_url()),
     )
 }
 
@@ -40,7 +40,10 @@ pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost]) -> Markup {
             }
         }
     };
-    super::base(&title, content, Some(&urls::tag_url(tag)))
+    super::base(
+        &HeadData::new(&title).with_canonical_url(&urls::tag_url(tag)),
+        content,
+    )
 }
 
 #[cfg(test)]

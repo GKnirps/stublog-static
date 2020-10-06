@@ -1,3 +1,4 @@
+use crate::output::html::HeadData;
 use maud::{html, Markup};
 
 pub fn render_404() -> Markup {
@@ -10,7 +11,10 @@ pub fn render_404() -> Markup {
         }
     };
 
-    super::base("Stranger Than Usual — Seite nicht gefunden", content, None)
+    super::base(
+        &HeadData::new("Stranger Than Usual — Seite nicht gefunden"),
+        content,
+    )
 }
 
 #[cfg(test)]

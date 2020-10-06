@@ -1,5 +1,6 @@
 use super::super::cmark::render_blogpost_content;
 use crate::input::{Blogpost, Category};
+use crate::output::html::HeadData;
 use crate::paths::{blogpost_path, category_path, tag_path};
 use crate::urls::blogpost_url;
 use maud::{html, Markup, PreEscaped};
@@ -42,9 +43,8 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
 
 pub fn render_blogpost_page(blogpost: &Blogpost, category: Option<&Category>) -> Markup {
     super::base(
-        &blogpost.title,
+        &HeadData::new(&blogpost.title).with_canonical_url(&blogpost_url(&blogpost)),
         render_blogpost(blogpost, category),
-        Some(&blogpost_url(&blogpost)),
     )
 }
 

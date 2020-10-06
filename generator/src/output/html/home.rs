@@ -3,6 +3,7 @@ use maud::{html, Markup};
 use super::blogpost::render_blogpost;
 use super::quote::render_quote;
 use crate::input::{Blogpost, Category, Quote};
+use crate::output::html::HeadData;
 use crate::urls::CANONICAL_BASE_URL;
 
 pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Quote>) -> Markup {
@@ -18,9 +19,8 @@ pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Q
     };
 
     super::base(
-        "Stranger Than Usual",
+        &HeadData::new("Stranger Than Usual").with_canonical_url(CANONICAL_BASE_URL),
         html_content,
-        Some(CANONICAL_BASE_URL),
     )
 }
 

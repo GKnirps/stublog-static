@@ -3,6 +3,7 @@ use maud::{html, Markup};
 use super::blogpost::render_blogpost;
 use super::pager::pager;
 use crate::input::{Blogpost, Category};
+use crate::output::html::HeadData;
 use crate::paths::archive_path;
 use crate::urls::archive_url;
 
@@ -23,9 +24,9 @@ pub fn render_archive(
     };
 
     super::base(
-        "Stranger Than Usual — Archiv",
+        &HeadData::new("Stranger Than Usual — Archiv")
+            .with_canonical_url(&archive_url(current_page)),
         html_content,
-        Some(&archive_url(current_page)),
     )
 }
 

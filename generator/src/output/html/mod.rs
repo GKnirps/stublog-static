@@ -11,22 +11,47 @@ pub mod pager;
 pub mod quote;
 pub mod tag;
 
-fn base<T: Render>(title: &str, content: T, canonical_url: Option<&str>) -> Markup {
+struct HeadData<'a> {
+    title: &'a str,
+    canonical_url: Option<&'a str>,
+}
+
+impl<'a> HeadData<'a> {
+    const fn new(title: &str) -> HeadData {
+        HeadData {
+            title,
+            canonical_url: None,
+        }
+    }
+
+    const fn with_canonical_url(mut self, canonical_url: &'a str) -> HeadData<'a> {
+        self.canonical_url = Some(canonical_url);
+        self
+    }
+}
+
+fn head(data: &HeadData) -> Markup {
+    html! {
+        head {
+            meta charset="utf-8";
+            meta name="viewport" content="width=device-width, initial-scale=1";
+            title {(data.title)};
+            // TODO: add cache-hash to the favicon and style filenames
+            link rel="stylesheet" media="screen" href="/assets/style.css";
+            link rel="icon" type="image/png" href="/assets/favicon.png";
+            link rel="alternate" type="application/feed+atom" title="ATOM" href="/feed.atom";
+            @if let Some(url) = data.canonical_url {
+                link rel="canonical" href={(url)};
+            }
+        }
+    }
+}
+
+fn base<T: Render>(head_data: &HeadData, content: T) -> Markup {
     html! {
         (DOCTYPE)
         html lang="de" {
-            head {
-                meta charset="utf-8";
-                meta name="viewport" content="width=device-width, initial-scale=1";
-                title {(title)};
-                // TODO: add cache-hash to the favicon and style filenames
-                link rel="stylesheet" media="screen" href="/assets/style.css";
-                link rel="icon" type="image/png" href="/assets/favicon.png";
-                link rel="alternate" type="application/feed+atom" title="ATOM" href="/feed.atom";
-                @if let Some(url) = canonical_url {
-                    link rel="canonical" href={(url)};
-                }
-            }
+            (head(head_data))
             body {
                 div.wrap-all {
                     div.wrapper {
@@ -75,14 +100,69 @@ mod tests {
     use chrono::TimeZone;
 
     #[test]
-    fn base_should_render_header_fields_and_content() {
+    fn head_should_render_everything_given() {
         // given
-        let title = "There will be cake";
-        let content = "The cake is a lie";
-        let canonical_url = Some("https://example.com/foo");
+        let head_data =
+            HeadData::new("IM IN UR TITLE").with_canonical_url("https::/example.com/canon");
 
         // when
-        let result = base(title, content, canonical_url).into_string();
+        let result = head(&head_data).into_string();
+
+        // then
+        println!("Checking html:\n{}", result);
+
+        // fields that depend on head_data
+        assert!(result.contains("<title>IM IN UR TITLE</title>"));
+        assert!(result.contains("<link rel=\"canonical\" href=\"https::/example.com/canon\">"));
+
+        // static fields
+        assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
+        assert!(result
+            .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
+        assert!(result
+            .contains("<link rel=\"stylesheet\" media=\"screen\" href=\"/assets/style.css\">"));
+        assert!(
+            result.contains("<link rel=\"icon\" type=\"image/png\" href=\"/assets/favicon.png\">")
+        );
+        assert!(result.contains("<link rel=\"alternate\" type=\"application/feed+atom\" title=\"ATOM\" href=\"/feed.atom\">"));
+    }
+
+    #[test]
+    fn head_should_render_with_minimal_data() {
+        // given
+        let head_data = HeadData::new("IM IN UR TITLE");
+
+        // when
+        let result = head(&head_data).into_string();
+
+        // then
+        println!("Checking html:\n{}", result);
+
+        // fields that depend on head_data
+        assert!(result.contains("<title>IM IN UR TITLE</title>"));
+        assert!(!result.contains("<link rel=\"canonical\""));
+
+        // static fields
+        assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
+        assert!(result
+            .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
+        assert!(result
+            .contains("<link rel=\"stylesheet\" media=\"screen\" href=\"/assets/style.css\">"));
+        assert!(
+            result.contains("<link rel=\"icon\" type=\"image/png\" href=\"/assets/favicon.png\">")
+        );
+        assert!(result.contains("<link rel=\"alternate\" type=\"application/feed+atom\" title=\"ATOM\" href=\"/feed.atom\">"));
+    }
+
+    #[test]
+    fn base_should_render_header_fields_and_content() {
+        // given
+        let head_data =
+            HeadData::new("There will be cake").with_canonical_url("https://example.com/foo");
+        let content = "The cake is a lie";
+
+        // when
+        let result = base(&head_data, content).into_string();
 
         // then
         println!("Checking headers of {}", result);
@@ -101,12 +181,11 @@ mod tests {
     #[test]
     fn base_should_not_render_canonical_url_if_not_present() {
         // given
-        let title = "There will be cake";
+        let head_data = HeadData::new("There will be cake");
         let content = "The cake is a lie";
-        let canonical_url = None;
 
         // when
-        let result = base(title, content, canonical_url).into_string();
+        let result = base(&head_data, content).into_string();
 
         // then
         assert!(!result.contains("rel=\"canonical\""));

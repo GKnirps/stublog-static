@@ -1,6 +1,7 @@
 use super::pager::pager;
 use crate::input::Quote;
 use crate::output::cmark::render_cmark;
+use crate::output::html::HeadData;
 use crate::paths::{quote_list_path, QUOTE_FORTUNE_PATH};
 use crate::urls;
 use maud::{html, Markup, PreEscaped};
@@ -53,9 +54,8 @@ pub fn render_quote_page(quote: &Quote) -> Markup {
     let content = render_quote(quote);
 
     super::base(
-        "Stranger Than Usual — Zitat",
+        &HeadData::new("Stranger Than Usual — Zitat").with_canonical_url(&urls::quote_url(&quote)),
         content,
-        Some(&urls::quote_url(&quote)),
     )
 }
 
@@ -76,13 +76,13 @@ pub fn render_quote_list_page(quotes: &[Quote], current_page: usize, num_pages: 
     };
 
     super::base(
-        &format!(
+        &HeadData::new(&format!(
             "Stranger Than Usual: Zitate Seite {} von {}",
             current_page + 1,
             num_pages
-        ),
+        ))
+        .with_canonical_url(&urls::quote_list_url(current_page)),
         content,
-        Some(&urls::quote_list_url(current_page)),
     )
 }
 
