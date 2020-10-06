@@ -19,7 +19,11 @@ pub fn render_tag_list(tags: &[(&Tag, usize)]) -> Markup {
     };
 
     super::base(
-        &HeadData::new("tranger Than Usual — Tags").with_canonical_url(&urls::tags_url()),
+        &HeadData::new("tranger Than Usual — Tags")
+            .with_canonical_url(&urls::tags_url())
+            // make bots not keep tags out of the index
+            // friggin' search sites mostly list my tag pages which are not useful in that context
+            .with_noindex(),
         content,
     )
 }
@@ -41,7 +45,11 @@ pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost]) -> Markup {
         }
     };
     super::base(
-        &HeadData::new(&title).with_canonical_url(&urls::tag_url(tag)),
+        &HeadData::new(&title)
+            .with_canonical_url(&urls::tag_url(tag))
+            // make bots not keep tags out of the index
+            // friggin' search sites mostly list my tag pages which are not useful in that context
+            .with_noindex(),
         content,
     )
 }

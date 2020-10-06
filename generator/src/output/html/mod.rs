@@ -14,6 +14,7 @@ pub mod tag;
 struct HeadData<'a> {
     title: &'a str,
     canonical_url: Option<&'a str>,
+    noindex: bool,
 }
 
 impl<'a> HeadData<'a> {
@@ -21,11 +22,17 @@ impl<'a> HeadData<'a> {
         HeadData {
             title,
             canonical_url: None,
+            noindex: false,
         }
     }
 
     const fn with_canonical_url(mut self, canonical_url: &'a str) -> HeadData<'a> {
         self.canonical_url = Some(canonical_url);
+        self
+    }
+
+    const fn with_noindex(mut self) -> HeadData<'a> {
+        self.noindex = true;
         self
     }
 }
@@ -42,6 +49,9 @@ fn head(data: &HeadData) -> Markup {
             link rel="alternate" type="application/feed+atom" title="ATOM" href="/feed.atom";
             @if let Some(url) = data.canonical_url {
                 link rel="canonical" href={(url)};
+            }
+            @if data.noindex {
+                meta rel="robots" content="noindex, follow";
             }
         }
     }
@@ -102,8 +112,9 @@ mod tests {
     #[test]
     fn head_should_render_everything_given() {
         // given
-        let head_data =
-            HeadData::new("IM IN UR TITLE").with_canonical_url("https::/example.com/canon");
+        let head_data = HeadData::new("IM IN UR TITLE")
+            .with_canonical_url("https::/example.com/canon")
+            .with_noindex();
 
         // when
         let result = head(&head_data).into_string();
@@ -114,6 +125,7 @@ mod tests {
         // fields that depend on head_data
         assert!(result.contains("<title>IM IN UR TITLE</title>"));
         assert!(result.contains("<link rel=\"canonical\" href=\"https::/example.com/canon\">"));
+        assert!(result.contains("<meta rel=\"robots\" content=\"noindex, follow\">"));
 
         // static fields
         assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
@@ -141,6 +153,7 @@ mod tests {
         // fields that depend on head_data
         assert!(result.contains("<title>IM IN UR TITLE</title>"));
         assert!(!result.contains("<link rel=\"canonical\""));
+        assert!(!result.contains("<meta rel=\"robots\""));
 
         // static fields
         assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
