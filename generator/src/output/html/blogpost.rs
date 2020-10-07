@@ -42,8 +42,14 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
 }
 
 pub fn render_blogpost_page(blogpost: &Blogpost, category: Option<&Category>) -> Markup {
+    let description: Option<&str> = blogpost.summary.as_ref().map(|s| {
+        let r: &str = s;
+        r
+    });
     super::base(
-        &HeadData::new(&blogpost.title).with_canonical_url(&blogpost_url(&blogpost)),
+        &HeadData::new(&blogpost.title)
+            .with_canonical_url(&blogpost_url(&blogpost))
+            .with_description(description),
         render_blogpost(blogpost, category),
     )
 }
@@ -95,6 +101,7 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{}", result);
+        assert!(result.contains("<meta rel=\"description\" content=\"foo!\">"));
         assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p>\n</div>"));
         assert!(result.contains("<title>Nevermind</title>"));
         assert!(result.contains("11.05.2020 12:13"));

@@ -68,6 +68,7 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
             ))
         })?),
     };
+    let summary = props.get("summary").map(|s| s.to_string());
 
     let tags = props
         .get("tags")
@@ -89,6 +90,7 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
         allow_html,
         modified_at: file_data.modified_at,
         content_markdown: content.to_owned(),
+        summary,
     })
 }
 
@@ -137,6 +139,7 @@ mod tests {
         assert!(!result.allow_html);
         assert_eq!(result.modified_at, modified_at);
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
+        assert_eq!(result.summary, None);
     }
 
     #[test]
@@ -150,6 +153,7 @@ mod tests {
         tags: foo,bar\n\
         category: bananas\n\
         allow-html: true\n\
+        summary: Bogus!\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -192,6 +196,7 @@ mod tests {
         assert!(result.allow_html);
         assert_eq!(result.modified_at, modified_at);
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
+        assert_eq!(result.summary, Some("Bogus!".to_owned()))
     }
 
     #[test]

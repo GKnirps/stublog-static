@@ -63,6 +63,10 @@ fn write_entry<T: Write>(
     write_leaf(writer, "name", &[], "Knirps")?;
     writer.write_event(Event::End(BytesEnd::borrowed(b"author")))?;
 
+    if let Some(ref summary) = blogpost.summary {
+        write_leaf(writer, "summary", &[], summary)?;
+    }
+
     write_leaf(
         writer,
         "content",
@@ -179,6 +183,7 @@ mod tests {
         <published>2020-05-11T12:13:14+02:00</published>\
         <updated>2020-05-25T12:13:14+02:00</updated>\
         <author><name>Knirps</name></author>\
+        <summary>foo!</summary>\
         <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
         </entry>");
@@ -241,6 +246,7 @@ mod tests {
         <published>2020-05-11T12:11:34+02:00</published>\
         <updated>2020-05-11T12:11:34+02:00</updated>\
         <author><name>Knirps</name></author>\
+        <summary>foo!</summary>\
         <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
         </entry><entry>\
@@ -249,6 +255,7 @@ mod tests {
         <published>2020-05-11T12:13:14+02:00</published>\
         <updated>2020-05-11T12:12:32+02:00</updated>\
         <author><name>Knirps</name></author>\
+        <summary>foo!</summary>\
         <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
         </entry>\

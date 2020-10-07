@@ -21,6 +21,7 @@ pub fn create_blogpost() -> Blogpost {
         allow_html: false,
         modified_at: SystemTime::now(),
         content_markdown: "*foo*bar".to_owned(),
+        summary: Some("foo!".to_owned()),
     }
 }
 

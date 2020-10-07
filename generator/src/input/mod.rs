@@ -20,6 +20,7 @@ pub struct Blogpost {
     /// this is the last time the source file was touched
     pub modified_at: SystemTime,
     pub content_markdown: String,
+    pub summary: Option<String>,
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
