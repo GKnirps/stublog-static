@@ -19,7 +19,11 @@ pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Q
     };
 
     super::base(
-        &HeadData::new("Stranger Than Usual").with_canonical_url(CANONICAL_BASE_URL),
+        &HeadData::new("Stranger Than Usual")
+            .with_canonical_url(CANONICAL_BASE_URL)
+            .with_description(Some(
+                "Ein Blog über meine Erlebnisse, Gedanken und Rants. Hauptsächlich Rants.",
+            )),
         html_content,
     )
 }

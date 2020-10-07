@@ -14,6 +14,7 @@ pub mod tag;
 struct HeadData<'a> {
     title: &'a str,
     canonical_url: Option<&'a str>,
+    description: Option<&'a str>,
     noindex: bool,
 }
 
@@ -22,12 +23,18 @@ impl<'a> HeadData<'a> {
         HeadData {
             title,
             canonical_url: None,
+            description: None,
             noindex: false,
         }
     }
 
     const fn with_canonical_url(mut self, canonical_url: &'a str) -> HeadData<'a> {
         self.canonical_url = Some(canonical_url);
+        self
+    }
+
+    const fn with_description(mut self, description: Option<&'a str>) -> HeadData<'a> {
+        self.description = description;
         self
     }
 
@@ -52,6 +59,9 @@ fn head(data: &HeadData) -> Markup {
             }
             @if data.noindex {
                 meta rel="robots" content="noindex, follow";
+            }
+            @if let Some(desc) = data.description {
+                meta rel="description" content=(desc);
             }
         }
     }
@@ -114,6 +124,7 @@ mod tests {
         // given
         let head_data = HeadData::new("IM IN UR TITLE")
             .with_canonical_url("https::/example.com/canon")
+            .with_description(Some("This is a sample page\""))
             .with_noindex();
 
         // when
@@ -124,6 +135,9 @@ mod tests {
 
         // fields that depend on head_data
         assert!(result.contains("<title>IM IN UR TITLE</title>"));
+        assert!(
+            result.contains("<meta rel=\"description\" content=\"This is a sample page&quot;\">")
+        );
         assert!(result.contains("<link rel=\"canonical\" href=\"https::/example.com/canon\">"));
         assert!(result.contains("<meta rel=\"robots\" content=\"noindex, follow\">"));
 
@@ -154,6 +168,7 @@ mod tests {
         assert!(result.contains("<title>IM IN UR TITLE</title>"));
         assert!(!result.contains("<link rel=\"canonical\""));
         assert!(!result.contains("<meta rel=\"robots\""));
+        assert!(!result.contains("<meta rel=\"description\""));
 
         // static fields
         assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
