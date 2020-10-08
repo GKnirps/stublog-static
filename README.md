@@ -53,3 +53,8 @@ Files / directories
 - bin: one or more helpful scripts
 - cfg: configurations files for test and live deployments
 - dist: where all the generated stuff is put (not checked in, can be safely removed after usage)
+
+License
+-------
+
+The generator software, scripts, scss and makefiles are published as stublog-static under the GNU Affero General Public License (see the COPING file). The blog content (everything in the content directory is published under the [Creative Commons BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.
