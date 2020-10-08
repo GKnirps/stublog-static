@@ -133,7 +133,11 @@ fn footer() -> Markup {
                     }"."
             }
             p.license-generator {
-                "Dieses Blog wurde mit [stublog-static](https://github.com/GKnirps/stublog-static) generiert."
+                "Dieses Blog wurde mit "
+                a href="https://github.com/GKnirps/stublog-static" {
+                    "stublog-static"
+                }
+                " generiert."
             }
             p.privacy {
                 "Datenschutz: Diese Website erhebt keine Benutzerdaten. HTTP-Requestdaten (insbes. IP-Adress und user agent) bleiben nur für die Dauer des Requests bestehen."
