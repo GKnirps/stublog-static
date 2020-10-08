@@ -132,6 +132,9 @@ fn footer() -> Markup {
                         "Creative Commons BY-NC-SA 4.0"
                     }"."
             }
+            p.license-generator {
+                "Dieses Blog wurde mit [stublog-static](https://github.com/GKnirps/stublog-static) generiert."
+            }
             p.privacy {
                 "Datenschutz: Diese Website erhebt keine Benutzerdaten. HTTP-Requestdaten (insbes. IP-Adress und user agent) bleiben nur für die Dauer des Requests bestehen."
             }
