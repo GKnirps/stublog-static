@@ -79,6 +79,7 @@ fn base<T: Render>(head_data: &HeadData, content: T) -> Markup {
                         main.content {
                             (content)
                         }
+                        (footer())
                     }
                 }
             }
@@ -100,6 +101,22 @@ fn header() -> Markup {
                     li { a href=(CATEGORIES_PATH) {"Kategorien"} }
                     li { a href=(TAGLIST_PATH) {"Tags"} }
                 }
+            }
+        }
+    }
+}
+
+fn footer() -> Markup {
+    html! {
+        footer.footer-global {
+            p.license {
+                "Die von mir verfassten Inhalte stehen, soweit nicht anders vermerkt, unter der Lizenz "
+                    a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" {
+                        "Creative Commons BY-NC-SA 4.0"
+                    }"."
+            }
+            p.privacy {
+                "Datenschutz: Diese Website erhebt keine Benutzerdaten. HTTP-Requestdaten (insbes. IP-Adress und user agent) bleiben nur für die Dauer des Requests bestehen."
             }
         }
     }
