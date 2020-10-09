@@ -75,10 +75,10 @@ fn head(data: &HeadData) -> Markup {
                 link rel="canonical" href={(url)};
             }
             @if data.noindex {
-                meta rel="robots" content="noindex, follow";
+                meta name="robots" content="noindex, follow";
             }
             @if let Some(desc) = data.description {
-                meta rel="description" content=(desc);
+                meta name="description" content=(desc);
             }
         }
     }
@@ -177,10 +177,10 @@ mod tests {
         // fields that depend on head_data
         assert!(result.contains("<title>IM IN UR TITLE</title>"));
         assert!(
-            result.contains("<meta rel=\"description\" content=\"This is a sample page&quot;\">")
+            result.contains("<meta name=\"description\" content=\"This is a sample page&quot;\">")
         );
         assert!(result.contains("<link rel=\"canonical\" href=\"https::/example.com/canon\">"));
-        assert!(result.contains("<meta rel=\"robots\" content=\"noindex, follow\">"));
+        assert!(result.contains("<meta name=\"robots\" content=\"noindex, follow\">"));
 
         // static fields
         assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
@@ -208,8 +208,8 @@ mod tests {
         // fields that depend on head_data
         assert!(result.contains("<title>IM IN UR TITLE</title>"));
         assert!(!result.contains("<link rel=\"canonical\""));
-        assert!(!result.contains("<meta rel=\"robots\""));
-        assert!(!result.contains("<meta rel=\"description\""));
+        assert!(!result.contains("<meta name=\"robots\""));
+        assert!(!result.contains("<meta name=\"description\""));
 
         // static fields
         assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
