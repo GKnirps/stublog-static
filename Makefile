@@ -75,10 +75,13 @@ compress: generate-html assets
 
 ### cleanup
 
-.PHONY: clean clean-dist
+.PHONY: clean clean-dist clean-html
 clean: clean-dist
 	-rm -r generator/target
 
 clean-dist:
 	-rm -r dist
+
+clean-html:
+	find dist/ -name "*.html" -execdir rm {} +
 ###
