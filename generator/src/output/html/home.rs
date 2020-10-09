@@ -40,7 +40,8 @@ pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Q
             .with_canonical_url(CANONICAL_BASE_URL)
             .with_description(Some(
                 "Ein Blog über meine Erlebnisse, Gedanken und Rants. Hauptsächlich Rants.",
-            )),
+            ))
+            .with_og_type("website"),
         html_content,
     )
 }

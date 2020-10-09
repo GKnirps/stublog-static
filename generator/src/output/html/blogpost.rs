@@ -66,7 +66,8 @@ pub fn render_blogpost_page(blogpost: &Blogpost, category: Option<&Category>) ->
     super::base(
         &HeadData::new(&blogpost.title)
             .with_canonical_url(&blogpost_url(&blogpost))
-            .with_description(description),
+            .with_description(description)
+            .with_og_type("article"),
         render_blogpost(blogpost, category),
     )
 }

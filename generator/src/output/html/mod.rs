@@ -28,11 +28,13 @@ pub mod pager;
 pub mod quote;
 pub mod tag;
 
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 struct HeadData<'a> {
     title: &'a str,
     canonical_url: Option<&'a str>,
     description: Option<&'a str>,
     noindex: bool,
+    og_type: Option<&'a str>,
 }
 
 impl<'a> HeadData<'a> {
@@ -42,6 +44,7 @@ impl<'a> HeadData<'a> {
             canonical_url: None,
             description: None,
             noindex: false,
+            og_type: None,
         }
     }
 
@@ -57,6 +60,11 @@ impl<'a> HeadData<'a> {
 
     const fn with_noindex(mut self) -> HeadData<'a> {
         self.noindex = true;
+        self
+    }
+
+    const fn with_og_type(mut self, og_type: &'a str) -> HeadData<'a> {
+        self.og_type = Some(og_type);
         self
     }
 }
@@ -80,7 +88,27 @@ fn head(data: &HeadData) -> Markup {
             @if let Some(desc) = data.description {
                 meta name="description" content=(desc);
             }
+            (opengraph_tags(data))
         }
+    }
+}
+
+fn opengraph_tag(name: &str, content: Option<&str>) -> Markup {
+    html! {
+        @if let Some(c) = content {
+            meta property=(name) content=(c);
+        }
+    }
+}
+
+fn opengraph_tags(data: &HeadData) -> Markup {
+    html! {
+        (opengraph_tag("og:title", Some(data.title)))
+        (opengraph_tag("og:url", data.canonical_url))
+        (opengraph_tag("og:type", data.og_type))
+        (opengraph_tag("og:description", data.description))
+        (opengraph_tag("og:locale", Some("de_DE")))
+        (opengraph_tag("og:site_name", Some("Stranger Than Usual")))
     }
 }
 
@@ -221,6 +249,49 @@ mod tests {
             result.contains("<link rel=\"icon\" type=\"image/png\" href=\"/assets/favicon.png\">")
         );
         assert!(result.contains("<link rel=\"alternate\" type=\"application/feed+atom\" title=\"ATOM\" href=\"/feed.atom\">"));
+
+        // just a short check if any opengraph tags are rendered
+        assert!(result.contains("<meta property=\"og:site_name\" content=\"Stranger Than Usual\">"));
+    }
+
+    #[test]
+    fn opengraph_tags_should_render_all_tags_if_all_data_is_given() {
+        // given
+        let head_data = HeadData::new("I blew up the moon")
+            .with_og_type("mad-science")
+            .with_description(Some("I wasn't planning it, but it was the best solution."))
+            .with_canonical_url("https://example.com/moon");
+
+        // when
+        let result = opengraph_tags(&head_data).into_string();
+
+        // then
+        assert_eq!(
+            result,
+            "<meta property=\"og:title\" content=\"I blew up the moon\">\
+            <meta property=\"og:url\" content=\"https://example.com/moon\">\
+            <meta property=\"og:type\" content=\"mad-science\">\
+            <meta property=\"og:description\" content=\"I wasn\'t planning it, but it was the best solution.\">\
+            <meta property=\"og:locale\" content=\"de_DE\">\
+            <meta property=\"og:site_name\" content=\"Stranger Than Usual\">"
+        );
+    }
+
+    #[test]
+    fn opengraph_tags_should_render_minimal_tags() {
+        // given
+        let head_data = HeadData::new("I blew up the moon");
+
+        // when
+        let result = opengraph_tags(&head_data).into_string();
+
+        // then
+        assert_eq!(
+            result,
+            "<meta property=\"og:title\" content=\"I blew up the moon\">\
+            <meta property=\"og:locale\" content=\"de_DE\">\
+            <meta property=\"og:site_name\" content=\"Stranger Than Usual\">"
+        );
     }
 
     #[test]
