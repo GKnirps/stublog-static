@@ -85,6 +85,11 @@ fn parse_metadata<'a>(
     head.lines()
         .filter(|line| !line.trim().is_empty())
         .map(|l| parse_metadata_line(l, original_filename))
+        .filter(|p| {
+            p.as_ref()
+                .map(|(_, value)| !value.is_empty())
+                .unwrap_or(true)
+        })
         .collect()
 }
 
@@ -192,7 +197,7 @@ mod tests {
     #[test]
     fn parse_metadata_should_parse_metadata_and_ignore_empty_lines() {
         // given
-        let metadata = "\n \ntitle: Colon Cancer\n\t\ntags:foo,bar\n\n";
+        let metadata = "\n \ntitle: Colon Cancer\n\t\ntags:foo,bar\nempty: \t \n\n";
         let path = Path::new("df_linux/urist");
 
         // when
