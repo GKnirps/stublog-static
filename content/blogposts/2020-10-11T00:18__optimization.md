@@ -30,7 +30,7 @@ Ich habe an einigen Stellen aus Spaß optimiert, an anderen Stellen aber auch Sa
 
 Und selbst wenn die Compileroptimierung abgeschaltet wird, läuft das Ding in einer Viertelsekunde durch:
 
-    time target/debug/generator ../content ../dist
+    $ time target/debug/generator ../content ../dist
 
     real    0m0,244s
     user    0m0,192s
@@ -72,7 +72,7 @@ Make kann nämlich auch parallelisieren. Da Make Abhängigkeiten zwischen target
 
 Ok, vier Minuten. Das ist viel. Das geht doch besser, oder? Probieren wir es mal mit maximal vier parallelen Prozessen (vorher natürlich einmal ein clean):
 
-    $ make -j4
+    $ time make -j4
 
     […]
 
@@ -82,7 +82,7 @@ Ok, vier Minuten. Das ist viel. Das geht doch besser, oder? Probieren wir es mal
 
 Ordentlich. Das ist fast eine vierfache Verbesserung. Probieren wir mal mehr.
 
-    $ make -j8
+    $ time make -j8
 
     […]
 
