@@ -22,7 +22,8 @@ $main-foreground-color: #407733;
 
 $link-hover-color: #44bb11;
 
-$box-color: white;
+$codebox-background-color: #203311;
+$codebox-foreground-color: white;
 
 /******************************************   B O D Y   ******************************************/
 
@@ -179,3 +180,14 @@ $box-color: white;
     article.blogpost img {
         max-width: 100%;
     }
+
+/*******************************   Code-boxen   *******************************/
+pre {
+    background-color: $codebox-background-color;
+    color: $codebox-foreground-color;
+    padding: 0.5em;
+}
+
+pre code {
+    white-space: pre-wrap;
+}
