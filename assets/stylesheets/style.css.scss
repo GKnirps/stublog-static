@@ -22,6 +22,8 @@ $main-foreground-color: #407733;
 
 $link-hover-color: #44bb11;
 
+$box-color: white;
+
 /******************************************   B O D Y   ******************************************/
 
     body {
@@ -176,11 +178,4 @@ $link-hover-color: #44bb11;
 
     article.blogpost img {
         max-width: 100%;
-    }
-
-/******************************   Q U O T E   O F   T H E   D A Y   ******************************/
-
-    .quote-author-links a:link, .quote-author-links a:active, .quote-author-linksn a:visited {
-        color: #000000;
-        text-decoration: none;
     }
