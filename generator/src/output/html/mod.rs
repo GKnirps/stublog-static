@@ -118,15 +118,11 @@ fn base<T: Render>(head_data: &HeadData, content: T) -> Markup {
         html lang="de" {
             (head(head_data))
             body {
-                div.wrap-all {
-                    div.wrapper {
-                        (header())
-                        main.content {
-                            (content)
-                        }
-                        (footer())
-                    }
+                (header())
+                main.content {
+                    (content)
                 }
+                (footer())
             }
         }
     }
@@ -134,7 +130,7 @@ fn base<T: Render>(head_data: &HeadData, content: T) -> Markup {
 
 fn header() -> Markup {
     html! {
-        header {
+        header.header-global {
             div.banner {
                 h1 {
                     a href="/" {"Stranger Than Usual"}

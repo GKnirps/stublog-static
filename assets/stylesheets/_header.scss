@@ -15,13 +15,13 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-    .wrapper header {
+    header.header-global {
         width: inherit;
     }
 
 /****************************************   B A N N E R   ****************************************/
 
-    .wrapper header .banner {
+    header.header-global .banner {
         width: inherit;
     }
 
@@ -43,7 +43,7 @@
 /************************************   N A V I G A T I O N    ***********************************/
 
 
-    .wrapper header .navigation {
+    header.header-global .navigation {
         padding: .0625em .3125em .0625em .3125em; /* Raum um das Set der Navigations-Buttons */
         border-top: solid 1px $main-foreground-color;
         border-bottom: solid 1px $main-foreground-color;
