@@ -78,3 +78,9 @@ dist/feed.atom.gz: dist/feed.atom
 
 dist/feed.atom.br: dist/feed.atom
 	$(BR) $<
+
+dist/files_metadata/%.gz: dist/files_metadata/%
+	$(GZ) $<
+
+dist/files_metadata/%.br: dist/files_metadata/%
+	$(BR) $<

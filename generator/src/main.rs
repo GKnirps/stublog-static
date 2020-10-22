@@ -33,7 +33,7 @@ use input::file;
 use input::parser::{
     blogpost, category::parse_categories, files_index::parse_all_file_metadata, quote::parse_quotes,
 };
-use output::{blogposts, categories, feed, ngingx_cfg, quotes, tags};
+use output::{blogposts, categories, feed, hosted_files, ngingx_cfg, quotes, tags};
 use std::collections::{HashMap, HashSet};
 
 fn main() -> Result<(), String> {
@@ -142,7 +142,16 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     categories::write_category_index(&category_dir, &categories_with_posts)
         .map_err(|e| format!("Failed to write category index page: {}", e))?;
     categories::write_category_pages(&category_dir, &categories_with_posts)
-        .map_err(|e| format!("Failed to write all category pages: {}", e))
+        .map_err(|e| format!("Failed to write all category pages: {}", e))?;
+
+    let hosted_files_indir: PathBuf = [indir, "files_index"].iter().collect();
+    let raw_hosted_files = file::read_files_sorted(&hosted_files_indir)
+        .map_err(|e| format!("Failed to read all hosted files: {}", e))?;
+    let hosted_files = parse_all_file_metadata(&raw_hosted_files)
+        .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
+    let hosted_files_index_dir: PathBuf = [odir, "files_metadata"].iter().collect();
+    hosted_files::write_hosted_file_index_pages(&hosted_files_index_dir, &hosted_files)
+        .map_err(|e| format!("Unable to write all file metadata pages: {}", e))
 }
 
 fn check_duplicate_blogpost_names(posts: &[Blogpost]) -> Result<(), String> {

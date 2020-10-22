@@ -57,6 +57,14 @@ pub fn quote_list_url(page: usize) -> String {
     format!("{}{}", CANONICAL_BASE_URL, paths::quote_list_path(page))
 }
 
+pub fn files_metadata_index_url(page: usize) -> String {
+    format!(
+        "{}{}",
+        CANONICAL_BASE_URL,
+        paths::files_metadata_index_path(page)
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -124,5 +132,17 @@ mod tests {
 
         // then
         assert_eq!(url, "https://blog.strangerthanusual.de/quotes/42");
+    }
+
+    #[test]
+    fn files_metadata_index_url_renders_correct_url() {
+        // given
+        let index = 99;
+
+        // when
+        let url = files_metadata_index_url(index);
+
+        // then
+        assert_eq!(url, "https://blog.strangerthanusual.de/files_metadata/99");
     }
 }

@@ -24,6 +24,7 @@ pub mod blogpost;
 pub mod category;
 pub mod error_pages;
 pub mod home;
+pub mod hosted_file;
 pub mod pager;
 pub mod quote;
 pub mod tag;

@@ -25,6 +25,7 @@ mod cmark;
 pub mod error_pages;
 pub mod feed;
 mod file;
+pub mod hosted_files;
 mod html;
 pub mod ngingx_cfg;
 pub mod quotes;

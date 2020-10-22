@@ -82,6 +82,12 @@ pub fn quote_list_path(page: usize) -> String {
 
 pub static QUOTE_FORTUNE_PATH: &str = "/quotes/strangerthanusual.tar.bz2";
 
+pub static FILES_METADATA_BASE_PATH: &str = "/files_metadata";
+
+pub fn files_metadata_index_path(page: usize) -> String {
+    format!("{}/{}", FILES_METADATA_BASE_PATH, page)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -176,5 +182,17 @@ mod tests {
 
         // then
         assert_eq!(result, "/quotes/11");
+    }
+
+    #[test]
+    fn test_files_metadata_index_path() {
+        // given
+        let index = 32;
+
+        // when
+        let result = files_metadata_index_path(index);
+
+        // then
+        assert_eq!(result, "/files_metadata/32")
     }
 }
