@@ -83,7 +83,7 @@ pub fn render_quote_list_page(quotes: &[Quote], current_page: usize, num_pages: 
         a href=(QUOTE_FORTUNE_PATH) download="strangerthanusual-fortune.tar.bz2" {
             "Zitate als fortune-Datenbank herunterladen"
         }
-        div.quotes {
+        section.quotes {
             (html_pager)
             @for quote in quotes {
                 (render_quote(quote))
