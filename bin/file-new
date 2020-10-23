@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# This file is part of stublog-static.
+#
+#  stublog-static is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  stublog-static is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
+
+set -eu
+
+BASE_DIR=$(dirname $0)/..
+
+DATE_MINUTES=$(date +%Y-%m-%dT%H:%M)
+
+if [ ! -e $1 ]
+then
+    echo "File $1 does not exist"
+    exit 1
+fi
+
+MIME_TYPE=$(file -b --mime-type $1)
+
+REFERENCED_FILE_BASE=$(basename $1)
+
+FILENAME="$BASE_DIR/content/files_index/$DATE_MINUTES""__$REFERENCED_FILE_BASE.md"
+
+TEMPLATE=$BASE_DIR/templates/file
+
+echo "Creating new file metadata for file '$1' from template '$TEMPLATE' as '$FILENAME'"
+
+sed -e "s/<FILE_PATH>/$REFERENCED_FILE_BASE/g" $TEMPLATE | sed -e "s,<MIME_TYPE>,$MIME_TYPE,g" > $FILENAME
+
+vim $FILENAME
