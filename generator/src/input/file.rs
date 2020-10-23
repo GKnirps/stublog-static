@@ -32,7 +32,7 @@ pub fn read_files_sorted(dir_path: &Path) -> std::io::Result<Vec<FileData>> {
     file_paths.into_iter().map(read_file).collect()
 }
 
-fn read_sorted_dir(path: &Path) -> std::io::Result<Vec<PathBuf>> {
+pub fn read_sorted_dir(path: &Path) -> std::io::Result<Vec<PathBuf>> {
     let mut paths = read_dir(path)?
         .map(|r| r.map(|entry| entry.path()))
         .filter(|r| {

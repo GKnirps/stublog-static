@@ -27,7 +27,8 @@ mod urls;
 #[cfg(test)]
 mod test_utils;
 
-use crate::input::{tag::Tag, Blogpost, Category, Quote};
+use crate::input::file::read_sorted_dir;
+use crate::input::{tag::Tag, Blogpost, Category, HostedFile, Quote};
 use crate::output::error_pages::write_404;
 use input::file;
 use input::parser::{
@@ -149,6 +150,8 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         .map_err(|e| format!("Failed to read all hosted files: {}", e))?;
     let hosted_files = parse_all_file_metadata(&raw_hosted_files)
         .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
+    check_hosted_files(&hosted_files, Path::new(indir))?;
+
     let hosted_files_index_dir: PathBuf = [odir, "files_metadata"].iter().collect();
     hosted_files::write_hosted_file_index_pages(&hosted_files_index_dir, &hosted_files)
         .map_err(|e| format!("Unable to write all file metadata pages: {}", e))
@@ -213,6 +216,53 @@ fn check_duplicate_quote_names(quotes: &[Quote]) -> Result<(), String> {
         }
         seen.insert(&quote.filename);
     }
+    Ok(())
+}
+
+fn check_hosted_files(hosted_files: &[HostedFile], indir: &Path) -> Result<(), String> {
+    let mut seen: HashSet<&str> = HashSet::with_capacity(hosted_files.len());
+    for hosted_file in hosted_files {
+        if seen.contains(&hosted_file.path as &str) {
+            return Err(format!(
+                "There is more than one metadata file for hosted file {}",
+                hosted_file.path
+            ));
+        }
+        seen.insert(&hosted_file.path);
+    }
+    let mut files_path = indir.to_path_buf();
+    files_path.push("file");
+    // we don't actually need the file names sorted (in fact, we want to throw them in a set,
+    // so the sorting is in completely lost), but the overall performance loss is negligible and
+    // this way we don't need more code to read the file list
+    let actual_file_paths = read_sorted_dir(&files_path).map_err(|e| {
+        format!(
+            "Error reading files directory {}: {}",
+            files_path.to_string_lossy(),
+            e
+        )
+    })?;
+    let actual_files: HashSet<&str> = actual_file_paths
+        .iter()
+        .filter_map(|f| f.file_name())
+        .filter_map(|f| f.to_str())
+        .collect();
+
+    let mut diff1 = seen.difference(&actual_files).peekable();
+    if diff1.peek().is_some() {
+        return Err(format!(
+            "The following file(s) are referenced by metadata, but are not present: {}",
+            diff1.copied().collect::<Vec<&str>>().join(", ")
+        ));
+    }
+    let mut diff2 = actual_files.difference(&seen).peekable();
+    if diff2.peek().is_some() {
+        return Err(format!(
+            "The following file(s) are present, but not referenced by metadata: {}",
+            diff2.copied().collect::<Vec<&str>>().join(", ")
+        ));
+    }
+
     Ok(())
 }
 
