@@ -56,7 +56,7 @@ fn read_file(path: PathBuf) -> std::io::Result<FileData> {
     let file = File::open(&path)?;
     let metadata = file.metadata()?;
     let mut reader = BufReader::new(file);
-    let mut content = String::with_capacity(2048);
+    let mut content = String::with_capacity(metadata.len() as usize);
     reader.read_to_string(&mut content)?;
 
     Ok(FileData {
