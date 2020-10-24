@@ -153,7 +153,7 @@ fn footer() -> Markup {
         footer.footer-global {
             p.license {
                 "Die von mir verfassten Inhalte stehen, soweit nicht anders vermerkt, unter der Lizenz "
-                    a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" {
+                    a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license" {
                         "Creative Commons BY-NC-SA 4.0"
                     }"."
             }
