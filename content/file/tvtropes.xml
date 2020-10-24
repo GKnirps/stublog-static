@@ -1,0 +1,17 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>TV tropes</ShortName>
+<Description>Suche in der TV tropes wiki</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16" type="image/x-icon">data:image/x-icon,GIF89a%10%00%0E%00%C4%00%00%00%00%00%EE%EE%EEfff(((%8C%8C%8C%18%18%18%3B%3B%3B%99%99%99zzz%B6%B6%B6JJJ%10%10%10sss%FF%FF%FF333!!!%83%83%83QQQfffAAA%99%99%99YYY%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00!%F9%04%05%14%00%0D%00%2C%00%00%00%00%10%00%0E%00%00%05n%60%236%C38%96%A6%89%8Akz%B2.Y%0Ctm%3Fh!%10%07A%40%40%DF%81Q%109%18%87%05%60%C9%5C%10%10%0E%91b%C7%AC%02%10%02%85%B4%02)X%01%0BFd%22%12%23%BC%D6%02c%22%10!%14%E7%AF%DA%80%10%11%26%10%C7w%C00%10D%09~%0A_%13P%09%80%03%3E%10%08%0C%8D%08%40%03%87%0D%01%0E%05%0F%97%98%98%0E%01%0D!%00%3B</Image>
+<Url type="text/html" method="GET" template="http://www.google.com/cse">
+  <Param name="safe" value="off"/>
+  <Param name="sa" value="Search"/>
+  <Param name="cx" value="partner-pub-6610802604051523:2szln92pqym"/>
+  <Param name="ie" value="UTF-8"/>
+  <Param name="q" value="{searchTerms}"/>
+</Url>
+<Url type="application/x-suggestions+json" template="suggestionURL"/>
+<moz:SearchForm>http://tvtropes.org</moz:SearchForm>
+</OpenSearchDescription>
+
