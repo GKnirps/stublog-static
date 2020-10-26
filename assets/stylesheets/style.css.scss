@@ -186,3 +186,22 @@ pre {
 pre code {
     white-space: pre-wrap;
 }
+
+/******************************  Tables ***************************************/
+
+table {
+    border-collapse: collapse;
+}
+
+tr :not(:last-child) {
+    border-right: solid $main-foreground-color;
+}
+
+th {
+    border-bottom: medium solid $main-foreground-color;
+}
+
+td {
+    padding: 0.2em;
+    border-top: thin solid $main-foreground-color;
+}
