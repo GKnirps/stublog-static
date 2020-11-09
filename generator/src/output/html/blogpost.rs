@@ -37,12 +37,14 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
                     (super::time(&blogpost.date))
                 }
                 @if let Some(cat) = &category {
+                    " "
                     span.category {
                         "Kategorie: "
                         a href=(category_path(cat)) { (cat.title) }
                     }
                 }
                 @if !blogpost.tags.is_empty() {
+                    " "
                     span.tags {
                         "Tags: "
                         @for (i, tag) in blogpost.tags.iter().enumerate() {
