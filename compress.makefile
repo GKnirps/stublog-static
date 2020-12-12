@@ -17,7 +17,7 @@ GZ = zopfli --gzip
 BR = brotli --keep --best --force --no-copy-stat
 
 .PHONY: compress
-compress: dist/home.html.gz dist/home.html.br dist/404.html.gz dist/404.html.br $(patsubst %.html, %.html.gz, $(wildcard dist/*/*.html)) $(patsubst %.html, %.html.br, $(wildcard dist/*/*.html)) dist/assets/style.css.gz dist/assets/style.css.br dist/feed.atom.gz dist/feed.atom.br
+compress: dist/feed.atom.gz dist/feed.atom.br dist/home.html.gz dist/home.html.br dist/404.html.gz dist/404.html.br $(patsubst %.html, %.html.gz, $(wildcard dist/*/*.html)) $(patsubst %.html, %.html.br, $(wildcard dist/*/*.html)) dist/assets/style.css.gz dist/assets/style.css.br
 
 dist/home.html.gz: dist/home.html
 	$(GZ) dist/home.html
