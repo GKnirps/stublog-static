@@ -2,7 +2,7 @@
 title: Wahlcomputer
 filename: wahlcomputer
 date: 2020-12-27T20:47:54+01:00
-update-date:
+update-date: 2020-12-29T20:44:00+01:00
 tags: wahlcomputer, rc3, wahlen, rant
 category: hoellenmaschinen
 summary: Wahlcomputer und warum man sie nicht verwenden sollte
@@ -50,3 +50,7 @@ Die Software selber hat an allen Ecken und Enden Sicherheitslücken, angefangen 
 Der Hersteller hat sich laut den Vortragenden immerhin vorbildlich verhalten, als die Lücken gemeldet wurden. Trotzdem hätte diese Software imho nie eingesetzt werden dürfen, bei so vielen Anfängerfehlern, die damit gemacht werden.
 
 Und das ist nur ein Beispiel warum man einem Softwarehersteller nie trauen darf, wenn er beteuert, Sicherheit sehr ernst zu nehmen.
+
+### Update
+
+Der Link für den [Vortrag „Hacking German Elections“](https://media.ccc.de/v/rc3-11440-hacking_german_elections) ist da.
