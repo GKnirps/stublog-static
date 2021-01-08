@@ -2,7 +2,7 @@
 title: Positivprojekt 01: Webcomics
 filename: positiv_01_webcomics
 date: 2021-01-05T23:03:00+01:00
-update-date:
+update-date: 2021-01-08T07:23:00+01:00
 tags: positivprojekt, webcomics, tvtropes
 category: positiv
 summary: In der ersten Woche meines Positivprojektes stelle ich Webcomics vor, die mir gefallen.
@@ -14,8 +14,7 @@ Angefangen hat es 2007 mit [Userfriendly](http://www.userfriendly.org/), was ich
 
 Aber nun zu den Webcomics, die ich heute noch lese:
 
-xkcd
------
+### xkcd
 
 [xkcd](https://xkcd.com/) von Randall Munroe ist wohl einer der bekanntesten der Webcomics, die ich lese. Die meisten der Webcomics, die ich lese (im Rest des Posts nenne ich sie einfach „meine Webcomics“, das ist kürzer, wenn auch nicht korrekt), haben eine Handlung. xkcd nicht. xkcd hat etwas für Geeks in jeder Lebenslage. Der Comic ist grafisch einfach, i.d.R. kommen nur Strichmännchen vor. Randall Munroe schafft es aber, diesen Figuren unglaublich viel Leben einzuflößen.
 
@@ -23,18 +22,15 @@ Die Themen sind, laut eigener Beschreibung „romance, sarcasm, math, and langua
 
 Ich lese diesen Comic jetzt seit er mir 2008 in meinem ersten Studiensemester von einem Kommilitonen empfohlen wurde. Ich hat mir sehr viel Freude bereitet, ich kann ihn nur weiterempfehlen.
 
-General Protection Fault
-------------------------
+### General Protection Fault
 
 [GPF](https://www.gpf-comics.com/) kommt hauptsächlich auf die Liste, weil ich ihn auch schon sehr lange lese. Eine recht nette Geschichte, beginnt mit den Entwicklern einer kleinen Softwareschmiede, den alltäglichen Problemen im Alltag der Entwickler, wobei nach und nach immer mehr SciFi-Elemente und welterschütternde Ereignisse dazwischen schieben. Wer Zeit hat, ein über einundzwanzigjähriges Archich durchzulesen, sollte das tun.
 
-Piled Higher and Deeper
------------------------
+### Piled Higher and Deeper
 
 [PHD Comics](https://phdcomics.com/comics.php) handelt vom Leben und Leiden ewiger Doktoranden. Wer studiert, wird sich hier vielleicht wiederfinden. Wer promoviert, wird sich hier wahrscheinlich wiederfinden (ich habe nie promoviert, aber mit vielen Doktoranden gesprochen). Unterhaltsam, parodierend, updated leider in letzter Zeit nicht mehr so oft.
 
-Kevin and Kell
---------------
+### Kevin and Kell
 
 [Kevin and Kell](https://www.kevinandkell.com/) ist mit mittlerweile 25 Jahren Laufzeit (und soweit ich erkennen kann nahezu immer täglichen Updates) einer der [älteste](https://tvtropes.org/pmwiki/pmwiki.php/Main/WebcomicsLongRunners) Webcomic, den ich lese (und ich lese ihn auch schon über 11 Jahre lang).
 
@@ -42,8 +38,7 @@ Die Handlung spielt in einer Welt voll mit humanoiden (und auch weniger humanoid
 
 Es ist ein leichtherziger Webcomic mit liebenswürdigen Charaktere, der generell immer eine Fahne für Toleranz hochhält. Trotz der langen Laufzeit gibt es immer wieder Veränderungen in der Welt, es gibt also keinen [Status Quo](https://tvtropes.org/pmwiki/pmwiki.php/Main/StatusQuoIsGod), auf den immer wieder alles zurückfällt, wenn ein Handlungsfaden gelöst ist. Ich kann den Comic nur empfehlen, es lohnt sich auch, das komplette Archiv durchzulesen. Es gibt sogar einen kleinen Crossover mit dem oben genannten [General Protection Fault](https://www.gpf-comics.com/), das ist aber schon eine Weile her.
 
-Dumbing of Age
----------------
+### Dumbing of Age
 
 Mittlerweile auch schon wieder zehn Jahre alt ist [Dumbing of Age](https://www.dumbingofage.com/) der wohl einzige so alte Webcomic, den ich seit Anfang an lese. Grund dafür ist, dass der Autor David Willis vorher auch schon Webcomics geschrieben hat, die ich gelesen habe (dazu weiter unten mehr). Dann hat er einfach die Charaktere aus dem alten Comic genommen, den ganzen Drama- und Science-Fiction-Krams herausgenommen, die Charaktere zusammen auf eine Uni gesteckt und die Lücken mit neuem Drama ausgefüllt.
 
@@ -53,15 +48,13 @@ Die Charaktere stammen, wie schon gesagt, aus Willis' alten Comics: [Roomies!, I
 
 It's Walky wechselt in kürzesten Abständen von humorvoll zu tödlich und wieder zurück. Nicht alle überleben diesen Krieg, und die, die es tun, haben in all den Jahren kein bisschen Psychotherapie bekommen. Der Ausruf „DAMN YOU WILLIS!“ wurde hier geprägt. Ich kann den Comic empfehlen.
 
-Order of the Stick
-------------------
+### Order of the Stick
 
 Ein Strichfigurencomic, der in einer nach [DND 3.5-Regeln](https://tvtropes.org/pmwiki/pmwiki.php/Main/RPGMechanicsVerse) funktionierenden Welt spielt. Die [titelgebende Gruppe](https://www.giantitp.com/comics/oots0001.html) beginnt in einem typischen Dungeon-Crawl, wo sie den bösen Lich Xurkon besiegen (und Schätze sammeln) wollen. Über kurz oder lang entwickelt sich das natürlich zu einer Kampagne, auf der die Welt gerettet werden muss.
 
 Der Autor Rich Burlew schafft es hier, wie auch Randall Munroe bei xkcd, den Strichfiguren Leben einzuhauchen. Die Figuren sind etwas detaillierter als bei xkcd, aber halt immer noch Strichfiguren. Der COmic läuft auch schon ziemlich lange, momentan scheint es aber auf ein Finale hinzulaufen. Auch dieser Comic hat Charactere, mit denen man mitfiebern kann, grandiose Bösewichte, eine spannende Story und natürlich die ständigen Anspielungen auf den Sinn und Unsinn von RPG-Regeln sowie Anspielungen auf diverse Fantasy-Klischees. Lest ihn, wenn ihr gerne Rollenspiele spielt.
 
-Girl Genius
------------
+### Girl Genius
 
 Ein Webcomic mit Drama! Romantik! MAD SCIENCE!
 
@@ -73,8 +66,7 @@ Als Baron Wulfenbach eine unangekündigte Laborinspektion in Beetlesburg, der He
 
 Ich kann diesen Comic nur voll und ganz empfehlen. Eine humorvolle Geschichte, viele interessante Charaktere, und mehr verrückte Wissenschaft (auch verrückte Sozialwissenschaft) als gut für die Meisten ist, sowie einer ordentlichen Portion Drama. Der Zeichenstil ist auch wirklich schön.
 
-El Goonish Shive
-----------------
+### El Goonish Shive
 
 Wie soll ich [diesen Comic](https://www.egscomics.com/) beschreiben? Also erst einmal sollte man sich nicht vom Titel ablenken lassen, der hat überhaupt nichts mit dem Inhalt zu tun und ist nur irgendein Insiderwitz des Autors Dan Shive.
 
@@ -82,8 +74,7 @@ Die Handlung spielt in der amerikanischen Kleinstadt Moperville, Hauptcharaktere
 
 Lasst euch vom Zeichenstil am Anfang nicht abschrecken, wenn man über die ersten paar Seiten weg ist wird es schnell deutlich besser.
 
-Gunnerkrigg Court
------------------
+### Gunnerkrigg Court
 
 [Gunnerkrigg Court](https://www.gunnerkrigg.com/) handelt von der jungen Schülerin Antimony Carver, die nach dem Tod ihrer Mutter auf ein Internat in Gunnerkrigg Court geschickt wird. Antimony hat [ein Talent dafür](https://tvtropes.org/pmwiki/pmwiki.php/Main/WeirdnessMagnet), mythischen Wesen zu begegnen, so beginnt zum Beispiel das erste Kapitel damit, dass sie einen zweiten Schatten bekommen hat.
 
@@ -93,8 +84,7 @@ Die Handlungsstränge handeln teils von den seltsamen Begebenheiten, die Antimon
 
 Der Zeichenstil ist von Anfang an schön und entwickelt sich auch noch weiter. Besonders hat es mir in diesem Comic auch die Entwicklung der Charaktere angetan, die zwar subtil, aber dennoch merklich ständig passiert. Die Handlung ist spannend, voller interessanter Charaktere und Abenteuer.
 
-Questionable Content
---------------------
+### Questionable Content
 
 [QC](https://questionablecontent.net/) ist ein Webcomic, der einen Haufen zwanzig-bis-dreißigjähriger behandelt. Meist geht es um alltägliche Dinge, Job, Beziehungen und andere Alltagssachen der Charaktere. Besonders hier ist allerdings, dass es echte Maschinenintelligenzen gibt, anfangs hauptsächlich in handtaschengroßen „Anthro-PC“s, die Menschen als digitale Gefährten dienen (und teilweise auf gar keinen Fall allein gelassen werden sollten, weil sie sonst irgendwelche Dummheiten anstellen, angefangen damit, Kuchenteig zu essen). Im Laufe der Jahre hat sich die Anzahl von Maschinenintelligenzen immer weiter erhöht, immer häufiger auch in Menschengroßen Chassis.
 
@@ -104,22 +94,19 @@ Questionable Content lebt von seinem Humor und den detailliert ausgearbeiteten C
 
 Besonders erwähnenswert an Questionable Content ist, dass sich der Zeichenstil nicht nur immer in eine Richung verbessert. Jeph Jacques, der Autor, hat mit einem recht einfachen Stil angefangen, sich aber schnell weiterentwickelt. Dann hat er seinen Stil aber nicht immer weiter verfeinert, sondern probiert ständig etwas neues Aus. Der Übergang von Seite zu Seite fällt kaum auf, aber es läppert sich so zusammen. Ein grandioser Comic.
 
-Precocious
-----------
+### Precocious
 
 [Precocious](http://www.precociouscomic.com/) handelt von vier (und mehr) hochbegabten Kindern. Im Prinzip so eine Mischung aus Calvin & Hobbes und den Peanuts… obwohl, das wird dem Comic nicht wirklich gerecht. Meistens handelt es von den Eskapaden dieser Kinder. Hmm… ich weiß nicht genau, wie ich das zusammenfassen soll.
 
 Der Kunststil ist recht konstant, der Inhalt sehr humorvoll. Leider ist der Autor vor einiger Zeit in irgendeine Art persönlicher Krise geraten, deswegen gibt es keine Updates mehr. Dennoch, kein Grund sich diesen Comic nicht durchzulesen.
 
-Saturday morning breakfast cereal
----------------------------------
+### Saturday morning breakfast cereal
 
 [SMBC](https://www.smbc-comics.com/#comic) ist von den Comics hier am ehesten mit xkcd vergleichbar (wobei man damit aber beiden Unrecht tut, beide haben ihren ganz eigenen Charm). Jeder Comic ist in sich geschlossen, manchmal werden gesellschaftliche, manchmal philosophische, technische, politische, psychologische oder soziale Themen behandelt. Häufig wird dabei irgendeine Idee genommen und sie bis in die letzte Konsequenz durchgearbeitet. Das endet dann entweder wieder am Status Quo, oder am Ende sind alle tot.
 
 Es ist eine eigene Art von Humor, aber man kann immer wieder darüber lachen.
 
-Ava's Demon
------------
+### Ava's Demon
 
 In einem anderen Universum oder in einer unspezifizierten Zukunft unseres Universums lebt [Ava](http://www.avasdemon.com/) auf einem Schulplaneten für schwer erziehbare Kinder. Ava hat ein Problem. Ein Dämon oder Geist, den nur sie sehen kann hat sie seit ihrer Geburt besessen und macht alles, um ihr das Leben zur Hölle zu machen. Kurz darauf wird der Schulplanet zerstört, Ava entkommt nur knapp als blinder Passagier auf einem Raumschiff, das kurz darauf abstürzt. Ava liegt im Sterben, aber die Dämonin schlägt ihr einen Pakt vor: Ein neues Leben, in der Leute sie auch mögen, gegen ihre Hilfe, Titan zu stürzen.
 
@@ -129,8 +116,7 @@ Ava's Demon hat einen wirklich aufwändigen und wunderschönen Zeichenstil. Neue
 
 Obwohl Ava's Demon nur langsam voran kommt, kann ich den Comic unbedingt empfehlen. Die Szenerie, die Grafik alleine macht ihn lesenswert, was aber nicht heißen soll, dass die Charaktere und die Handlung nicht gut sind.
 
-Thunderstruck
--------------
+### Thunderstruck
 
 Sharon Curmen sitzt nach einem drive-by-shooting, mit dem sie eigentlich nichts zu tun hatte, im Rohlstuhl und verliert immer mehr die Kontrolle über ihre Muskeln. Bis sie eines Nachts bei einem [einem Gewitter von einem Blitz getroffen wird](http://talesfromthevault.com/thunderstruck/index.html). Danach ist sie wie durch ein Wunder völlig geheilt.
 
@@ -140,8 +126,7 @@ Der Comic besticht durch ein außergewöhnliches, aber schönes Magiesystem, tol
 
 Auch diesen Comic kann ich sofort empfehlen. Man muss halt nur Geduld haben, wenn man wissen will, wie es weitergeht. Aber das ist ja eigentlich bei allen Webcomics der Fall.
 
-Sleepless Domain
-----------------
+### Sleepless Domain
 
 Es ist schwierig, eine kurze Zusammenfassung über [Sleelpess Domain](https://www.sleeplessdomain.com/) zu geben, ohne zu spoilern, da schon im zweiten Kapitel… ok, schon zu viel gesagt.
 
@@ -153,20 +138,17 @@ Die ersten beiden Kapitel hat noch nicht Mary Cagle, die Autorin selber gezeichn
 
 Auch erwähnenswert sind die anderen Comics von Mary Cagle: [Kiwi Blitz](http://www.kiwiblitz.com/), ein älterer Comic an dem man schön die künstlerische Entwicklung von Cagle beobachten kann (leider seit ein paar Monaten aus Zeitgründen auf Eis gelegt) und [Let's speak English](https://www.marycagle.com/), ein autobiographischer Comic aus der Zeit, als die Autorin in Japan Englisch unterrichtet hat.
 
-Scandinavia and the World
--------------------------
+### Scandinavia and the World
 
 [SatW](https://satwcomic.com/) ist ein Comic einer Dänischen Autorin, die mit nationalen Stereotypen aus der Sicht von Skandinaviern/Dänen herumspielt. Jedes Land ist durch eine weibliche und eine männliche Person dargestellt, die mit der Flagge ihres jeweiligen Landes bekleidet sind. Der Humor ergibt sich aus der Interaktion der Länder, häufig auch im Bezug auf aktuelle oder historische Ereignisse (dann auch teilweise mit historischen Staaten). Ein kurzweiliger, humorvoller Comic.
 
-Erma
-----
+### Erma
 
 [Erma](https://tapas.io/episode/896110) ist ein Geistwesen mit unheimlichen Fähigkeiten. Erma ist auch ein kleines Mädchen. Ermas ist in der Schule gut integriert, hat viele Freunde, die ihre Andersheit zwar zur Kenntnis nehmen, sich davon aber nicht abschrecken lassen. Erma ist großherzig, hilft gerne Menschen (aber erschreckt auch gerne Menschen). Ein Kind wie jedes andere.
 
 Dieser Comic ist liebevoll gemacht und sehr humorvoll. Es ist zu einem gewissen Grad eine Utopie, wie Menschen ohne Vorurteile miteinander umgehen können. Man muss ihn gelesen haben, um zu verstehen, was ich meine.
 
-Abschluss
----------
+### Abschluss
 
 Das waren sie. Das sind natürlich nicht alle Webcomics, die ich lese, aber die wichtigsten. Ich habe auch noch einen Haufen auf meiner zu-lesen-Liste, aber teilweise einfach nicht die [Geduld](https://tvtropes.org/pmwiki/pmwiki.php/Main/ArchivePanic) dazu.
 
