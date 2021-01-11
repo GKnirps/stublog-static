@@ -24,8 +24,8 @@ license = "AGPL-3.0-or-later"
 
 [dependencies]
 chrono = "^0.4.19"
-maud = "^0.22.1"
+maud = "^0.22.2"
 pulldown-cmark = "^0.8.0"
 percent-encoding = "^2.1.0"
-quick-xml = "^0.19.0"
+quick-xml = "^0.20.0"
 clap = "^2.33.3"
