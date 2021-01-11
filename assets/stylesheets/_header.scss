@@ -37,8 +37,8 @@
 
     header.header-global .navigation {
         padding: .0625em .3125em .0625em .3125em; /* Raum um das Set der Navigations-Buttons */
-        border-top: solid 1px $main-foreground-color;
-        border-bottom: solid 1px $main-foreground-color;
+        border-top: solid thin $main-foreground-color;
+        border-bottom: solid thin $main-foreground-color;
     }
 
 

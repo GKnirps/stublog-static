@@ -43,13 +43,8 @@ $codebox-foreground-color: white;
             body {
                 padding: 0 .625em 0 .625em; /* Abstand der Rahmen zum Content (Wird zur width hinzugerechnet) */
 
-                border-left-style: solid;
-                border-left-width: 1px;
-                border-left-color: $main-foreground-color;
-
-                border-right-style: solid;
-                border-right-width: 1px;
-                border-right-color: $main-foreground-color;
+                border-left: solid thin $main-foreground-color;
+                border-right: solid thin $main-foreground-color;
             }
         }
         /* smaller screens don't get a border */
@@ -101,7 +96,7 @@ $codebox-foreground-color: white;
 
     .quotes > :not(:last-child) {
         padding-bottom: 1em;
-        border-bottom: solid 1px $main-foreground-color;
+        border-bottom: solid thin $main-foreground-color;
     }
 
 /****************************************   W R A P P E R   **************************************/
