@@ -52,7 +52,7 @@ fn render_quote_source(quote: &Quote) -> Markup {
 
 pub fn render_quote(quote: &Quote) -> Markup {
     html! {
-        div.qotd {
+        article.qotd {
             @if let Some(source_url) = &quote.source_url {
                 blockquote cite=(source_url) {
                     (PreEscaped(render_cmark(&quote.content_markdown, false)))

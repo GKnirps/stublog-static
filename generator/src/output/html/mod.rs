@@ -132,10 +132,8 @@ fn base<T: Render>(head_data: &HeadData, content: T) -> Markup {
 fn header() -> Markup {
     html! {
         header.header-global {
-            div.banner {
-                h1 {
-                    a href="/" {"Stranger Than Usual"}
-                }
+            h1 {
+                a href="/" {"Stranger Than Usual"}
             }
             nav.navigation {
                 ul.main-nav {

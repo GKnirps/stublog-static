@@ -28,7 +28,7 @@ pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Q
         @if let Some(quote) = qotd {
             (render_quote(quote))
         }
-        div.blogposts {
+        section.blogposts {
             @for (post, cat) in blogposts.iter().rev() {
                 (render_blogpost(post, *cat))
             }
