@@ -2,15 +2,17 @@
 title: Positivprojekt 02: Astronomie
 filename: positiv_02_astronomie
 date: 2021-01-16T20:13:15+01:00
-update-date:
+update-date: 2021-01-16T21:56:00+01:00
 tags: weltraum, astronomie, blogs, positivprojekt, podcast, chaos communication congress
 category: positiv
 summary: Im Internet gibt es viele coole Quellen zu astronomischen Themen. Hier sind ein paar.
 ---
 
-Wie schon angedroht kann nicht jeder Eintrag im Positivprojekt so groß sein wie der über [Webcomics](/blogposts/positiv_01_webcomics). Ich bin ja allgemein an Naturwissenschaften interessiert, und Astronimie gehört definitiv dazu. Außerdem ist es ganz schön, gedanklich mal von der Erde wegzukommen.
+Wie schon angedroht kann nicht jeder Eintrag im Positivprojekt so groß sein wie der über [Webcomics](/blogposts/positiv_01_webcomics). Jetzt wird es also kürzer.
 
-Schon der große Philosoph Randall Munroe wusste Philosophie zu nutzen ([CC BY NC 2.5](https://creativecommons.org/licenses/by-nc/2.5/) [Randall Munroe](https://xkcd.com/1746/))
+Ich bin ja allgemein an Naturwissenschaften interessiert, und Astronomie gehört definitiv dazu. Außerdem ist es ganz schön, gedanklich mal von der Erde wegzukommen.
+
+Schon der große Philosoph Randall Munroe wusste Astronomie zu nutzen ([CC BY NC 2.5](https://creativecommons.org/licenses/by-nc/2.5/) [Randall Munroe](https://xkcd.com/1746/))
 
 [![xkcd: Making Friends](/file/xkcd_making_friends.webp "Wenn er das bei mir versuchen würde würde es funktionieren.")](https://xkcd.com/1746/)
 
