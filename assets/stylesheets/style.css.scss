@@ -30,10 +30,7 @@ $codebox-foreground-color: white;
     body {
         vertical-align: top;
         background-color: $main-background-color;
-        height: 100%;
-
-        height: 100%;
-        margin: 0 auto 0 auto;  /* centers website */
+        margin: 0 auto;  /* centers website */
 
         max-width: 51.25em;
     }
