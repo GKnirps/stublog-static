@@ -2,7 +2,7 @@
 title: Positivprojekt 02: Astronomie
 filename: positiv_02_astronomie
 date: 2021-01-16T20:13:15+01:00
-update-date: 2021-01-16T21:56:00+01:00
+update-date: 2021-01-17T09:57:00+01:00
 tags: weltraum, astronomie, blogs, positivprojekt, podcast, chaos communication congress
 category: positiv
 summary: Im Internet gibt es viele coole Quellen zu astronomischen Themen. Hier sind ein paar.
@@ -19,6 +19,7 @@ Schon der große Philosoph Randall Munroe wusste Astronomie zu nutzen ([CC BY NC
 ### Wenn der Mond ein Pixel groß wäre
 
 > Space is big. **Really** big. You just won't believe how vastly, mind-bogglingly huge it is. I mean, you might think it's a long way down the road to the chemist, but that's peanuts to space.
+
 — The Hitchhiker's Guide to the Galaxy
 
 Man macht sich ja in der Regel keine Vorstellungen über die Größe des Universums. Oder auch nur eines sehr kleinen Teils davon, wie dem Sonnensystem. In üblichen Abbildungen der Planeten sieht man sie häufig nebeneinander aufgereiht, wobei die jeweiligen Größen der Planeten zwar maßstabsgerecht wiedergegeben werden, die Abstände zwischen ihnen aber gnadenlos gekürzt werden.
@@ -49,4 +50,4 @@ Auf dem 33c3 gabe es eine ganze Reihe von Vorträgen mit Leuten von der ESA, zum
 
 Methodisch Inkorrekt hat im [Jahresrückblick 2020](https://minkorrekt.de/mi182-jahresrueckblick-2020/) gefühlt überdurchschnittlich viele astronomische Themen auf dem Tablett gehabt. Die beiden sind Physiker, haben zwar selber nichts mit Astronomie gemacht, sind aber Astronomie- und Raumfahrtfans (besonders Nicolas). Auch sonst kommen bei Methodisch Inkorrekt immer wieder astronomische Themen vor.
 
-Dort wurde auch immer wider der Podcast [Auf Distanz](https://aufdistanz.de/) erwähnt, wobei ich hier bisher nie dazu gekommen bin, ihn anzuhören. Deswegen kann ich ihn auch nicht guten Gewissens empfehlen, auch wenn er gut sein soll.
+Dort wurde auch immer wieder der Podcast [Auf Distanz](https://aufdistanz.de/) erwähnt, wobei ich hier bisher nie dazu gekommen bin, ihn anzuhören. Deswegen kann ich ihn auch nicht guten Gewissens empfehlen, auch wenn er gut sein soll.
