@@ -65,7 +65,7 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{}", result);
-        assert!(result.contains("<div class=\"blogposts\">"));
+        assert!(result.contains("<section class=\"blogposts\">"));
         let post1_pos = result
             .find("<p>Post1</p>")
             .expect("Expected to find post 1");
@@ -89,6 +89,6 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{}", result);
-        assert!(result.contains("<div class=\"qotd\"><blockquote"));
+        assert!(result.contains("<article class=\"qotd\"><blockquote"));
     }
 }

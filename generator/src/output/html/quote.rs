@@ -248,8 +248,6 @@ mod tests {
         assert!(result.contains("<p>IM IN UR QUOTE</p>"));
         assert!(result.contains("<p>SAYIN DUMB STUFF</p>"));
         assert!(result.contains("<nav class=\"pagination\">"));
-        assert!(result.contains(
-            "<li><a aria-label=\"Seite 13\" href=\"/quotes/12\" title=\"Seite 13\">13</a></li>"
-        ));
+        assert!(result.contains("<li><a href=\"/quotes/12\" title=\"Seite 13\">13</a></li>"));
     }
 }
