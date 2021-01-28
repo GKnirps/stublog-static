@@ -31,7 +31,7 @@ pub fn render_archive(
 ) -> Markup {
     let html_pager = pager(current_page, num_pages, &archive_path);
     let html_content = html! {
-        section.blogposts {
+        div.blogposts {
             (html_pager)
                 @for (post, cat) in blogposts {
                     (render_blogpost(post, *cat))

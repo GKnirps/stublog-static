@@ -28,7 +28,7 @@ pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Q
         @if let Some(quote) = qotd {
             (render_quote(quote))
         }
-        section.blogposts {
+        div.blogposts {
             @for (post, cat) in blogposts.iter().rev() {
                 (render_blogpost(post, *cat))
             }
@@ -65,7 +65,7 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{}", result);
-        assert!(result.contains("<section class=\"blogposts\">"));
+        assert!(result.contains("<div class=\"blogposts\">"));
         let post1_pos = result
             .find("<p>Post1</p>")
             .expect("Expected to find post 1");
@@ -89,6 +89,6 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{}", result);
-        assert!(result.contains("<article class=\"qotd\"><blockquote"));
+        assert!(result.contains("<div class=\"qotd\"><blockquote"));
     }
 }

@@ -52,7 +52,7 @@ fn render_quote_source(quote: &Quote) -> Markup {
 
 pub fn render_quote(quote: &Quote) -> Markup {
     html! {
-        article.qotd {
+        div.qotd {
             @if let Some(source_url) = &quote.source_url {
                 blockquote cite=(source_url) {
                     (PreEscaped(render_cmark(&quote.content_markdown, false)))
@@ -83,7 +83,7 @@ pub fn render_quote_list_page(quotes: &[Quote], current_page: usize, num_pages: 
         a href=(QUOTE_FORTUNE_PATH) download="strangerthanusual-fortune.tar.bz2" {
             "Zitate als fortune-Datenbank herunterladen"
         }
-        section.quotes {
+        div.quotes {
             (html_pager)
             @for quote in quotes {
                 (render_quote(quote))
