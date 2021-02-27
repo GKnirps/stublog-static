@@ -15,8 +15,6 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#![feature(proc_macro_hygiene)]
-
 use std::path::{Path, PathBuf};
 
 mod input;
