@@ -15,3 +15,9 @@ indent_style = tab
 
 [compress.makefile]
 indent_style = tab
+
+[*.md]
+# trailing whitespaces mark hard line breaks in markdown
+# the same could also be achieved with \, but better make sure
+# editors know this
+trim_trailing_whitespace = false
