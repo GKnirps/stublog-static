@@ -17,6 +17,7 @@
 
 use crate::input::file::FileData;
 use std::collections::HashMap;
+use std::error::Error;
 use std::fmt;
 use std::path::{Path, PathBuf};
 
@@ -43,6 +44,8 @@ impl ParseError {
         }
     }
 }
+
+impl Error for ParseError {}
 
 impl fmt::Display for ParseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
