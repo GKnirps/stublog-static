@@ -18,7 +18,7 @@
 use crate::input::{tag::Tag, Blogpost, Category, HostedFile, Quote};
 use percent_encoding::{percent_encode, AsciiSet, CONTROLS};
 
-const ESCAPE_SET: &AsciiSet = &CONTROLS
+pub const ESCAPE_SET: &AsciiSet = &CONTROLS
     .add(b' ')
     .add(b'"')
     .add(b'<')

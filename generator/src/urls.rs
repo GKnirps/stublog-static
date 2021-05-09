@@ -18,8 +18,17 @@
 use crate::input::tag::Tag;
 use crate::input::{Blogpost, Category, Quote};
 use crate::paths;
+use percent_encoding::percent_encode;
 
 pub static CANONICAL_BASE_URL: &str = "https://blog.strangerthanusual.de";
+
+pub fn url_for_absolute_path(path: &str) -> String {
+    format!(
+        "{}{}",
+        CANONICAL_BASE_URL,
+        percent_encode(path.as_bytes(), paths::ESCAPE_SET)
+    )
+}
 
 pub fn blogpost_url(blogpost: &Blogpost) -> String {
     format!("{}{}", CANONICAL_BASE_URL, paths::blogpost_path(blogpost))
@@ -70,6 +79,21 @@ mod tests {
     use super::*;
     use crate::test_utils::{create_blogpost, create_category, create_quote};
     use std::path::Path;
+
+    #[test]
+    fn url_for_absolute_path_renders_url_for_any_path() {
+        // given
+        let path = "/file/handtücher.png";
+
+        // when
+        let url = url_for_absolute_path(path);
+
+        // then
+        assert_eq!(
+            url,
+            "https://blog.strangerthanusual.de/file/handt%C3%BCcher.png"
+        );
+    }
 
     #[test]
     fn blogpost_url_renders_correct_url() {

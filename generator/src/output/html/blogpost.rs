@@ -19,7 +19,7 @@ use super::super::cmark::render_blogpost_content;
 use crate::input::{Blogpost, Category};
 use crate::output::html::HeadData;
 use crate::paths::{blogpost_path, category_path, tag_path};
-use crate::urls::blogpost_url;
+use crate::urls::{blogpost_url, url_for_absolute_path};
 use maud::{html, Markup, PreEscaped};
 
 pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Markup {
@@ -65,13 +65,20 @@ pub fn render_blogpost_page(blogpost: &Blogpost, category: Option<&Category>) ->
         let r: &str = s;
         r
     });
-    super::base(
-        &HeadData::new(&blogpost.title)
-            .with_canonical_url(&blogpost_url(&blogpost))
-            .with_description(description)
-            .with_og_type("article"),
-        render_blogpost(blogpost, category),
-    )
+    let og_image_url = blogpost
+        .image
+        .as_ref()
+        .map(|path| url_for_absolute_path(path));
+
+    let post_url = blogpost_url(&blogpost);
+    let mut head_data = HeadData::new(&blogpost.title)
+        .with_canonical_url(&post_url)
+        .with_description(description)
+        .with_og_type("article");
+    if let Some(url) = &og_image_url {
+        head_data = head_data.with_og_image_url(url)
+    }
+    super::base(&head_data, render_blogpost(blogpost, category))
 }
 
 #[cfg(test)]

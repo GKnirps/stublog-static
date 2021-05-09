@@ -38,6 +38,7 @@ pub struct Blogpost {
     pub modified_at: SystemTime,
     pub content_markdown: String,
     pub summary: Option<String>,
+    pub image: Option<String>,
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]

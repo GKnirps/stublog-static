@@ -36,6 +36,7 @@ struct HeadData<'a> {
     description: Option<&'a str>,
     noindex: bool,
     og_type: Option<&'a str>,
+    og_image_url: Option<&'a str>,
 }
 
 impl<'a> HeadData<'a> {
@@ -46,6 +47,7 @@ impl<'a> HeadData<'a> {
             description: None,
             noindex: false,
             og_type: None,
+            og_image_url: None,
         }
     }
 
@@ -66,6 +68,11 @@ impl<'a> HeadData<'a> {
 
     const fn with_og_type(mut self, og_type: &'a str) -> HeadData<'a> {
         self.og_type = Some(og_type);
+        self
+    }
+
+    const fn with_og_image_url(mut self, url: &'a str) -> HeadData<'a> {
+        self.og_image_url = Some(url);
         self
     }
 }
@@ -110,6 +117,7 @@ fn opengraph_tags(data: &HeadData) -> Markup {
         (opengraph_tag("og:description", data.description))
         (opengraph_tag("og:locale", Some("de_DE")))
         (opengraph_tag("og:site_name", Some("Stranger Than Usual")))
+        (opengraph_tag("og:image", data.og_image_url))
     }
 }
 
@@ -255,7 +263,8 @@ mod tests {
         let head_data = HeadData::new("I blew up the moon")
             .with_og_type("mad-science")
             .with_description(Some("I wasn't planning it, but it was the best solution."))
-            .with_canonical_url("https://example.com/moon");
+            .with_canonical_url("https://example.com/moon")
+            .with_og_image_url("https://imgs.xkcd.com/comics/recipes.png");
 
         // when
         let result = opengraph_tags(&head_data).into_string();
@@ -268,7 +277,8 @@ mod tests {
             <meta property=\"og:type\" content=\"mad-science\">\
             <meta property=\"og:description\" content=\"I wasn\'t planning it, but it was the best solution.\">\
             <meta property=\"og:locale\" content=\"de_DE\">\
-            <meta property=\"og:site_name\" content=\"Stranger Than Usual\">"
+            <meta property=\"og:site_name\" content=\"Stranger Than Usual\">\
+            <meta property=\"og:image\" content=\"https://imgs.xkcd.com/comics/recipes.png\">"
         );
     }
 
