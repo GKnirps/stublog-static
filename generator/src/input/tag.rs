@@ -60,7 +60,7 @@ impl Tag {
             .to_lowercase()
             .trim()
             .chars()
-            .filter(|c| *c != '\'' && *c != '"' && *c != '/')
+            .filter(|c| *c != '\'' && *c != '"' && *c != '/' && *c != '.')
             .map(|c| if c == ' ' { '-' } else { c })
             .collect();
         Tag {
@@ -78,14 +78,14 @@ mod tests {
     #[test]
     fn tag_new_normalizes_tags_correctly() {
         // given
-        let raw_name = "Fo/o's \"bar\"";
+        let raw_name = "Fo/o's \"bar\".de";
 
         // when
         let tag = Tag::new(raw_name);
 
         // then
-        assert_eq!(tag.name, "fo/o's \"bar\"");
-        assert_eq!(tag.normalized_name, "foos-bar");
+        assert_eq!(tag.name, "fo/o's \"bar\".de");
+        assert_eq!(tag.normalized_name, "foos-barde");
     }
 
     fn hash<T: Hash>(t: &T) -> u64 {
