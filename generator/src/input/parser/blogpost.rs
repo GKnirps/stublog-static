@@ -159,6 +159,7 @@ mod tests {
         assert_eq!(result.modified_at, modified_at);
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
         assert_eq!(result.summary, None);
+        assert_eq!(result.image, None);
     }
 
     #[test]
