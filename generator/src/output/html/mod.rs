@@ -15,6 +15,7 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use crate::input::Assets;
 use crate::paths::{archive_path, CATEGORIES_PATH, TAGLIST_PATH};
 use chrono::{DateTime, FixedOffset};
 use maud::{html, Markup, Render, DOCTYPE};
@@ -37,10 +38,11 @@ struct HeadData<'a> {
     noindex: bool,
     og_type: Option<&'a str>,
     og_image_url: Option<&'a str>,
+    assets: &'a Assets,
 }
 
 impl<'a> HeadData<'a> {
-    const fn new(title: &str) -> HeadData {
+    const fn new(title: &'a str, assets: &'a Assets) -> HeadData<'a> {
         HeadData {
             title,
             canonical_url: None,
@@ -48,6 +50,7 @@ impl<'a> HeadData<'a> {
             noindex: false,
             og_type: None,
             og_image_url: None,
+            assets,
         }
     }
 
@@ -83,9 +86,8 @@ fn head(data: &HeadData) -> Markup {
             meta charset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
             title {(data.title)};
-            // TODO: add cache-hash to the favicon and style filenames
-            link rel="stylesheet" media="screen" href="/assets/style.css";
-            link rel="icon" type="image/png" href="/assets/favicon.png";
+            link rel="stylesheet" media="screen" href=(data.assets.stylesheet.web_path);
+            link rel="icon" type="image/png" href=(data.assets.favicon.web_path);
             link rel="alternate" type="application/feed+atom" title="ATOM" href="/feed.atom";
             @if let Some(url) = data.canonical_url {
                 link rel="canonical" href={(url)};
@@ -189,13 +191,17 @@ fn time(t: &DateTime<FixedOffset>) -> Markup {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test_utils::create_assets;
     use chrono::TimeZone;
 
     #[test]
     fn head_should_render_everything_given() {
         // given
-        let head_data = HeadData::new("IM IN UR TITLE")
-            .with_canonical_url("https::/example.com/canon")
+        let mut assets = create_assets();
+        assets.stylesheet.web_path = "/assets/style.css?cache=deadbeef".to_owned();
+        assets.favicon.web_path = "/assets/favicon.png?cache=cafebabe".to_owned();
+        let head_data = HeadData::new("IM IN UR TITLE", &assets)
+            .with_canonical_url("https://example.com/canon")
             .with_description(Some("This is a sample page\""))
             .with_noindex();
 
@@ -210,25 +216,30 @@ mod tests {
         assert!(
             result.contains("<meta name=\"description\" content=\"This is a sample page&quot;\">")
         );
-        assert!(result.contains("<link rel=\"canonical\" href=\"https::/example.com/canon\">"));
+        assert!(result.contains("<link rel=\"canonical\" href=\"https://example.com/canon\">"));
         assert!(result.contains("<meta name=\"robots\" content=\"noindex, follow\">"));
 
         // static fields
         assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
         assert!(result
             .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
-        assert!(result
-            .contains("<link rel=\"stylesheet\" media=\"screen\" href=\"/assets/style.css\">"));
-        assert!(
-            result.contains("<link rel=\"icon\" type=\"image/png\" href=\"/assets/favicon.png\">")
-        );
+        assert!(result.contains(
+            "<link rel=\"stylesheet\" media=\"screen\" href=\"/assets/style.css?cache=deadbeef\">"
+        ));
+        assert!(result.contains(
+            "<link rel=\"icon\" type=\"image/png\" href=\"/assets/favicon.png?cache=cafebabe\">"
+        ));
         assert!(result.contains("<link rel=\"alternate\" type=\"application/feed+atom\" title=\"ATOM\" href=\"/feed.atom\">"));
     }
 
     #[test]
     fn head_should_render_with_minimal_data() {
         // given
-        let head_data = HeadData::new("IM IN UR TITLE");
+        let mut assets = create_assets();
+        assets.stylesheet.web_path = "/assets/style.css?cache=deadbeef".to_owned();
+        assets.favicon.web_path = "/assets/favicon.png?cache=cafebabe".to_owned();
+
+        let head_data = HeadData::new("IM IN UR TITLE", &assets);
 
         // when
         let result = head(&head_data).into_string();
@@ -246,11 +257,12 @@ mod tests {
         assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
         assert!(result
             .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
-        assert!(result
-            .contains("<link rel=\"stylesheet\" media=\"screen\" href=\"/assets/style.css\">"));
-        assert!(
-            result.contains("<link rel=\"icon\" type=\"image/png\" href=\"/assets/favicon.png\">")
-        );
+        assert!(result.contains(
+            "<link rel=\"stylesheet\" media=\"screen\" href=\"/assets/style.css?cache=deadbeef\">"
+        ));
+        assert!(result.contains(
+            "<link rel=\"icon\" type=\"image/png\" href=\"/assets/favicon.png?cache=cafebabe\">"
+        ));
         assert!(result.contains("<link rel=\"alternate\" type=\"application/feed+atom\" title=\"ATOM\" href=\"/feed.atom\">"));
 
         // just a short check if any opengraph tags are rendered
@@ -260,7 +272,8 @@ mod tests {
     #[test]
     fn opengraph_tags_should_render_all_tags_if_all_data_is_given() {
         // given
-        let head_data = HeadData::new("I blew up the moon")
+        let assets = create_assets();
+        let head_data = HeadData::new("I blew up the moon", &assets)
             .with_og_type("mad-science")
             .with_description(Some("I wasn't planning it, but it was the best solution."))
             .with_canonical_url("https://example.com/moon")
@@ -285,7 +298,8 @@ mod tests {
     #[test]
     fn opengraph_tags_should_render_minimal_tags() {
         // given
-        let head_data = HeadData::new("I blew up the moon");
+        let assets = create_assets();
+        let head_data = HeadData::new("I blew up the moon", &assets);
 
         // when
         let result = opengraph_tags(&head_data).into_string();
@@ -302,8 +316,9 @@ mod tests {
     #[test]
     fn base_should_render_header_fields_and_content() {
         // given
-        let head_data =
-            HeadData::new("There will be cake").with_canonical_url("https://example.com/foo");
+        let assets = create_assets();
+        let head_data = HeadData::new("There will be cake", &assets)
+            .with_canonical_url("https://example.com/foo");
         let content = "The cake is a lie";
 
         // when
@@ -326,7 +341,8 @@ mod tests {
     #[test]
     fn base_should_not_render_canonical_url_if_not_present() {
         // given
-        let head_data = HeadData::new("There will be cake");
+        let assets = create_assets();
+        let head_data = HeadData::new("There will be cake", &assets);
         let content = "The cake is a lie";
 
         // when

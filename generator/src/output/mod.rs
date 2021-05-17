@@ -46,9 +46,10 @@ fn needs_update(filename: &Path, modified_at: SystemTime) -> bool {
 /// If any error occurs (e.g. the file does not exist), return true
 fn needs_any_update<T>(filename: &Path, modification_times: T) -> bool
 where
-    T: Iterator<Item = SystemTime>,
+    T: IntoIterator<Item = SystemTime>,
 {
     modification_times
+        .into_iter()
         .max()
         .map(|t| needs_update(filename, t))
         .unwrap_or(true)

@@ -16,9 +16,9 @@
  */
 
 use crate::input::file::FileData;
-use crate::input::{tag::Tag, Blogpost, Category, HostedFile, Quote};
+use crate::input::{tag::Tag, Asset, Assets, Blogpost, Category, HostedFile, Quote};
 use chrono::{FixedOffset, TimeZone};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 
 pub fn create_blogpost() -> Blogpost {
@@ -80,5 +80,20 @@ pub fn create_file_data() -> FileData {
         content: "---\nfoo: bar\n---\n\nSomething".to_owned(),
         filename: Path::new("foo/bar.md").to_path_buf(),
         modified_at: SystemTime::now(),
+    }
+}
+
+pub fn create_assets() -> Assets {
+    Assets {
+        favicon: Asset {
+            filename: PathBuf::from("../dist/assets/favicon.png"),
+            modified_at: SystemTime::now(),
+            web_path: "/assets/favicon.png".to_owned(),
+        },
+        stylesheet: Asset {
+            filename: PathBuf::from("../dist/assets/style.css"),
+            modified_at: SystemTime::now(),
+            web_path: "/assets/style.css".to_owned(),
+        },
     }
 }

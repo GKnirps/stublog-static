@@ -16,7 +16,7 @@
  */
 
 use super::super::cmark::render_blogpost_content;
-use crate::input::{Blogpost, Category};
+use crate::input::{Assets, Blogpost, Category};
 use crate::output::html::HeadData;
 use crate::paths::{blogpost_path, category_path, tag_path};
 use crate::urls::{blogpost_url, url_for_absolute_path};
@@ -60,7 +60,11 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
     }
 }
 
-pub fn render_blogpost_page(blogpost: &Blogpost, category: Option<&Category>) -> Markup {
+pub fn render_blogpost_page(
+    blogpost: &Blogpost,
+    category: Option<&Category>,
+    assets: &Assets,
+) -> Markup {
     let description: Option<&str> = blogpost.summary.as_ref().map(|s| {
         let r: &str = s;
         r
@@ -71,7 +75,7 @@ pub fn render_blogpost_page(blogpost: &Blogpost, category: Option<&Category>) ->
         .map(|path| url_for_absolute_path(path));
 
     let post_url = blogpost_url(&blogpost);
-    let mut head_data = HeadData::new(&blogpost.title)
+    let mut head_data = HeadData::new(&blogpost.title, assets)
         .with_canonical_url(&post_url)
         .with_description(description)
         .with_og_type("article");
@@ -84,7 +88,7 @@ pub fn render_blogpost_page(blogpost: &Blogpost, category: Option<&Category>) ->
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_blogpost, create_category};
+    use crate::test_utils::{create_assets, create_blogpost, create_category};
 
     #[test]
     fn render_blogpost_should_render_blogpost_with_footer() {
@@ -123,8 +127,10 @@ mod tests {
         let blogpost = create_blogpost();
         let category = create_category();
 
+        let assets = create_assets();
+
         // when
-        let result = render_blogpost_page(&blogpost, Some(&category)).into_string();
+        let result = render_blogpost_page(&blogpost, Some(&category), &assets).into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);

@@ -16,7 +16,7 @@
  */
 
 use super::pager::pager;
-use crate::input::HostedFile;
+use crate::input::{Assets, HostedFile};
 use crate::output::html::HeadData;
 use crate::paths::{files_metadata_index_path, hosted_file_path};
 use crate::urls::files_metadata_index_url;
@@ -48,6 +48,7 @@ pub fn render_file_index_page(
     files: &[HostedFile],
     current_page: usize,
     num_pages: usize,
+    assets: &Assets,
 ) -> Markup {
     let html_pager = pager(current_page, num_pages, &files_metadata_index_path);
     let content = html! {
@@ -62,11 +63,14 @@ pub fn render_file_index_page(
     };
 
     super::base(
-        &HeadData::new(&format!(
-            "Stranger Than Usual — Dateien, Seite {} von {}",
-            current_page + 1,
-            num_pages
-        ))
+        &HeadData::new(
+            &format!(
+                "Stranger Than Usual — Dateien, Seite {} von {}",
+                current_page + 1,
+                num_pages,
+            ),
+            assets,
+        )
         .with_canonical_url(&files_metadata_index_url(current_page))
         .with_description(Some(
             "Eine Liste von Dateien, die hier gehostet und in Blogposts referenziert werden",
@@ -78,7 +82,7 @@ pub fn render_file_index_page(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::create_hosted_file;
+    use crate::test_utils::{create_assets, create_hosted_file};
 
     #[test]
     fn render_file_data_should_render_correctly() {
@@ -116,8 +120,10 @@ mod tests {
         let current_page = 3;
         let num_pages = 5;
 
+        let assets = create_assets();
+
         // when
-        let result = render_file_index_page(files, current_page, num_pages).into_string();
+        let result = render_file_index_page(files, current_page, num_pages, &assets).into_string();
 
         // then
         println!("Checking generated html:\n{}", result);

@@ -21,6 +21,7 @@ use std::error::Error;
 use std::fmt;
 use std::path::{Path, PathBuf};
 
+pub mod asset;
 pub mod blogpost;
 pub mod category;
 pub mod files_index;
@@ -147,7 +148,7 @@ mod tests {
     #[test]
     fn parse_metadata_line_should_return_split_line() {
         // given
-        // implicitely tested here: trimming and colons in the value
+        // implicitly tested here: trimming and colons in the value
         let line = " title : Slaves to Armok: God of blood: Chapter II: Dwarf Fortress ";
         let path = Path::new("df_linux/urist");
 

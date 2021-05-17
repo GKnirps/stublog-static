@@ -15,10 +15,11 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use crate::input::Assets;
 use crate::output::html::HeadData;
 use maud::{html, Markup};
 
-pub fn render_404() -> Markup {
+pub fn render_404(assets: &Assets) -> Markup {
     let content = html! {
         div.error {
             h2 { "404 — nicht gefunden" }
@@ -29,7 +30,7 @@ pub fn render_404() -> Markup {
     };
 
     super::base(
-        &HeadData::new("Stranger Than Usual — Seite nicht gefunden"),
+        &HeadData::new("Stranger Than Usual — Seite nicht gefunden", assets),
         content,
     )
 }
@@ -37,11 +38,15 @@ pub fn render_404() -> Markup {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test_utils::create_assets;
 
     #[test]
     fn render_404_renders_error_page() {
+        // given
+        let assets = create_assets();
+
         // when
-        let result = render_404().into_string();
+        let result = render_404(&assets).into_string();
 
         // then
         println!("Checking HTML: {}\n", result);

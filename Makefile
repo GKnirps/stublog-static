@@ -22,7 +22,7 @@ directories:
 	mkdir -p dist/file
 
 .PHONY: generate-html
-generate-html:
+generate-html: assets
 	cd generator && cargo run --release ../content ../dist
 
 ### content files (such as images used in posts)

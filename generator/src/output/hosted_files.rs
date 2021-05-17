@@ -18,7 +18,7 @@
 use super::file::open_for_write;
 use super::html::hosted_file;
 use super::needs_any_update;
-use crate::input::HostedFile;
+use crate::input::{Assets, HostedFile};
 use std::fs::create_dir;
 use std::io::Write;
 use std::path::Path;
@@ -28,21 +28,32 @@ fn write_hosted_file_index_page(
     files: &[HostedFile],
     current_page: usize,
     num_pages: usize,
+    assets: &Assets,
 ) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push(format!("{}.html", current_page));
-    if !needs_any_update(&filename, files.iter().map(|f| f.modified_at)) {
+    if !needs_any_update(
+        &filename,
+        files
+            .iter()
+            .map(|f| f.modified_at)
+            .chain(assets.modification_dates()),
+    ) {
         return Ok(());
     }
     let mut writer = open_for_write(&filename)?;
     write!(
         writer,
         "{}",
-        hosted_file::render_file_index_page(files, current_page, num_pages).into_string()
+        hosted_file::render_file_index_page(files, current_page, num_pages, assets).into_string()
     )
 }
 
-pub fn write_hosted_file_index_pages(dir: &Path, files: &[HostedFile]) -> std::io::Result<()> {
+pub fn write_hosted_file_index_pages(
+    dir: &Path,
+    files: &[HostedFile],
+    assets: &Assets,
+) -> std::io::Result<()> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
         create_dir(dir)?;
@@ -53,7 +64,7 @@ pub fn write_hosted_file_index_pages(dir: &Path, files: &[HostedFile]) -> std::i
 
     for (index, chunk) in files.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed
-        write_hosted_file_index_page(dir, chunk, index, num_chunks)?;
+        write_hosted_file_index_page(dir, chunk, index, num_chunks, assets)?;
     }
 
     Ok(())

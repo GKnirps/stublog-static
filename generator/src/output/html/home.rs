@@ -19,11 +19,15 @@ use maud::{html, Markup};
 
 use super::blogpost::render_blogpost;
 use super::quote::render_quote;
-use crate::input::{Blogpost, Category, Quote};
+use crate::input::{Assets, Blogpost, Category, Quote};
 use crate::output::html::HeadData;
 use crate::urls::CANONICAL_BASE_URL;
 
-pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Quote>) -> Markup {
+pub fn render_home(
+    blogposts: &[(&Blogpost, Option<&Category>)],
+    qotd: Option<&Quote>,
+    assets: &Assets,
+) -> Markup {
     let html_content = html! {
         @if let Some(quote) = qotd {
             (render_quote(quote))
@@ -36,7 +40,7 @@ pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Q
     };
 
     super::base(
-        &HeadData::new("Stranger Than Usual")
+        &HeadData::new("Stranger Than Usual", assets)
             .with_canonical_url(CANONICAL_BASE_URL)
             .with_description(Some(
                 "Ein Blog über meine Erlebnisse, Gedanken und Rants. Hauptsächlich Rants.",
@@ -49,7 +53,7 @@ pub fn render_home(blogposts: &[(&Blogpost, Option<&Category>)], qotd: Option<&Q
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_blogpost, create_quote};
+    use crate::test_utils::{create_assets, create_blogpost, create_quote};
 
     #[test]
     fn render_home_should_render_all_given_blogposts() {
@@ -60,8 +64,10 @@ mod tests {
         let mut post2 = create_blogpost();
         post2.content_markdown = "Post2".to_owned();
 
+        let assets = create_assets();
+
         // when
-        let result = render_home(&[(&post1, None), (&post2, None)], None).into_string();
+        let result = render_home(&[(&post1, None), (&post2, None)], None, &assets).into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);
@@ -84,8 +90,10 @@ mod tests {
         let post = create_blogpost();
         let quote = create_quote();
 
+        let assets = create_assets();
+
         // when
-        let result = render_home(&[(&post, None)], Some(&quote)).into_string();
+        let result = render_home(&[(&post, None)], Some(&quote), &assets).into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);

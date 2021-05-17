@@ -15,13 +15,16 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::input::{Blogpost, Category};
+use crate::input::{Assets, Blogpost, Category};
 use crate::output::html::HeadData;
 use crate::paths::{blogpost_path, category_path};
 use crate::urls::{categories_url, category_url};
 use maud::{html, Markup, PreEscaped};
 
-pub fn render_categories_index_page(categories: &[(&Category, Vec<&Blogpost>)]) -> Markup {
+pub fn render_categories_index_page(
+    categories: &[(&Category, Vec<&Blogpost>)],
+    assets: &Assets,
+) -> Markup {
     let content = html! {
         h2.section-heading { "Kategorien" }
         ul {
@@ -36,12 +39,17 @@ pub fn render_categories_index_page(categories: &[(&Category, Vec<&Blogpost>)]) 
         }
     };
     super::base(
-        &HeadData::new("Stranger Than Usual — Kategorien").with_canonical_url(&categories_url()),
+        &HeadData::new("Stranger Than Usual — Kategorien", assets)
+            .with_canonical_url(&categories_url()),
         content,
     )
 }
 
-pub fn render_category_page(category: &Category, blogposts: &[&Blogpost]) -> Markup {
+pub fn render_category_page(
+    category: &Category,
+    blogposts: &[&Blogpost],
+    assets: &Assets,
+) -> Markup {
     let content = html! {
         h2.section-heading { "Kategorie: " (category.title) }
         (PreEscaped(crate::output::cmark::render_cmark(&category.description_markdown, false)))
@@ -58,8 +66,11 @@ pub fn render_category_page(category: &Category, blogposts: &[&Blogpost]) -> Mar
         }
     };
     super::base(
-        &HeadData::new(&format!("Stranger Than Usual — {}", &category.title))
-            .with_canonical_url(&category_url(&category)),
+        &HeadData::new(
+            &format!("Stranger Than Usual — {}", &category.title),
+            assets,
+        )
+        .with_canonical_url(&category_url(&category)),
         content,
     )
 }
@@ -67,7 +78,7 @@ pub fn render_category_page(category: &Category, blogposts: &[&Blogpost]) -> Mar
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_blogpost, create_category};
+    use crate::test_utils::{create_assets, create_blogpost, create_category};
     use std::path::Path;
 
     #[test]
@@ -81,11 +92,16 @@ mod tests {
         cat2.title = "Jessica".to_owned();
         cat2.filename = Path::new("jessi").to_owned();
 
+        let assets = create_assets();
+
         // when
-        let result = render_categories_index_page(&[
-            (&cat1, vec![&dummy_blogpost, &dummy_blogpost]),
-            (&cat2, vec![&dummy_blogpost]),
-        ])
+        let result = render_categories_index_page(
+            &[
+                (&cat1, vec![&dummy_blogpost, &dummy_blogpost]),
+                (&cat2, vec![&dummy_blogpost]),
+            ],
+            &assets,
+        )
         .into_string();
 
         // then
@@ -107,8 +123,10 @@ mod tests {
         category.title = "Supervillainy".to_owned();
         category.description_markdown = "**Good business!**<div>foo</div>".to_owned();
 
+        let assets = create_assets();
+
         // when
-        let result = render_category_page(&category, &[&post1, &post2]).into_string();
+        let result = render_category_page(&category, &[&post1, &post2], &assets).into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);

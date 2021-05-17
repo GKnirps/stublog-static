@@ -22,8 +22,8 @@ use std::path::Path;
 
 use super::file::open_for_write;
 use super::html;
-use crate::input::{Blogpost, Category};
-use crate::output::needs_update;
+use crate::input::{Assets, Blogpost, Category};
+use crate::output::needs_any_update;
 use std::time::SystemTime;
 
 pub fn categories_with_blogposts<'a>(
@@ -51,21 +51,10 @@ fn newest_modification(category: &Category, posts: &[&Blogpost]) -> SystemTime {
         .unwrap_or(category.modified_at)
 }
 
-fn category_index_needs_update(
-    filename: &Path,
-    categories: &[(&Category, Vec<&Blogpost>)],
-) -> bool {
-    categories
-        .iter()
-        .map(|(cat, posts)| newest_modification(cat, posts))
-        .max()
-        .map(|t| needs_update(filename, t))
-        .unwrap_or(true)
-}
-
 pub fn write_category_index(
     dir: &Path,
     categories: &[(&Category, Vec<&Blogpost>)],
+    assets: &Assets,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
@@ -74,7 +63,13 @@ pub fn write_category_index(
     let mut filename = dir.to_path_buf();
     filename.push("index.html");
 
-    if !category_index_needs_update(&filename, categories) {
+    if !needs_any_update(
+        &filename,
+        categories
+            .iter()
+            .map(|(cat, posts)| newest_modification(cat, posts))
+            .chain(assets.modification_dates()),
+    ) {
         return Ok(());
     }
 
@@ -82,28 +77,21 @@ pub fn write_category_index(
     write!(
         writer,
         "{}",
-        html::category::render_categories_index_page(categories).into_string()
+        html::category::render_categories_index_page(categories, assets).into_string()
     )
-}
-
-fn blogpost_or_category_needs_update(
-    filename: &Path,
-    category: &Category,
-    posts: &[&Blogpost],
-) -> bool {
-    needs_update(filename, newest_modification(category, posts))
 }
 
 pub fn write_category_pages(
     dir: &Path,
     categories: &[(&Category, Vec<&Blogpost>)],
+    assets: &Assets,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
         create_dir(dir)?;
     }
     for (cat, blogposts) in categories {
-        write_category_page(dir, &cat, blogposts)?;
+        write_category_page(dir, &cat, blogposts, assets)?;
     }
     Ok(())
 }
@@ -112,12 +100,20 @@ fn write_category_page(
     dir: &Path,
     category: &Category,
     blogposts: &[&Blogpost],
+    assets: &Assets,
 ) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push(&category.filename);
     filename.set_extension("html");
 
-    if !blogpost_or_category_needs_update(&filename, category, blogposts) {
+    if !needs_any_update(
+        &filename,
+        assets
+            .modification_dates()
+            .iter()
+            .copied()
+            .chain(Some(newest_modification(category, blogposts))),
+    ) {
         return Ok(());
     }
 
@@ -125,7 +121,7 @@ fn write_category_page(
     write!(
         writer,
         "{}",
-        html::category::render_category_page(category, blogposts).into_string()
+        html::category::render_category_page(category, blogposts, assets).into_string()
     )
 }
 #[cfg(test)]

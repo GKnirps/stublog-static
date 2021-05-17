@@ -2,7 +2,7 @@
  * This file is part of stublog-static.
  *
  *  stublog-static is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as published by
+ *  it under the terms of the GNU   Affero General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
@@ -15,13 +15,13 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::input::{tag::Tag, Blogpost};
+use crate::input::{tag::Tag, Assets, Blogpost};
 use crate::output::html::HeadData;
 use crate::paths::{blogpost_path, tag_path};
 use crate::urls;
 use maud::{html, Markup};
 
-pub fn render_tag_list(tags: &[(&Tag, usize)]) -> Markup {
+pub fn render_tag_list(tags: &[(&Tag, usize)], assets: &Assets) -> Markup {
     let content = html! {
         h2.section-heading { "Alle Tags" }
         ul {
@@ -36,7 +36,7 @@ pub fn render_tag_list(tags: &[(&Tag, usize)]) -> Markup {
     };
 
     super::base(
-        &HeadData::new("tranger Than Usual — Tags")
+        &HeadData::new("Stranger Than Usual — Tags", assets)
             .with_canonical_url(&urls::tags_url())
             // make bots not keep tags out of the index
             // friggin' search sites mostly list my tag pages which are not useful in that context
@@ -45,7 +45,7 @@ pub fn render_tag_list(tags: &[(&Tag, usize)]) -> Markup {
     )
 }
 
-pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost]) -> Markup {
+pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost], assets: &Assets) -> Markup {
     let title = format!("Stranger Than Usual — Tag: {}", tag.name);
     let content = html! {
         h2.section-heading {
@@ -62,7 +62,7 @@ pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost]) -> Markup {
         }
     };
     super::base(
-        &HeadData::new(&title)
+        &HeadData::new(&title, assets)
             .with_canonical_url(&urls::tag_url(tag))
             // make bots not keep tags out of the index
             // friggin' search sites mostly list my tag pages which are not useful in that context
@@ -74,16 +74,17 @@ pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost]) -> Markup {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::create_blogpost;
+    use crate::test_utils::{create_assets, create_blogpost};
     use std::path::PathBuf;
 
     #[test]
     fn render_tag_list_renders_list_of_tags() {
         // given
         let tags = &[(&Tag::new("foo"), 2), (&Tag::new("bar"), 42)];
+        let assets = create_assets();
 
         // when
-        let result = render_tag_list(tags).into_string();
+        let result = render_tag_list(tags, &assets).into_string();
 
         // then
         println!("Checking html:\n{}", result);
@@ -106,8 +107,10 @@ mod tests {
 
         let tag = Tag::new("stuff");
 
+        let assets = create_assets();
+
         // when
-        let result = render_tag_page(&tag, &[&post1, &post2]).into_string();
+        let result = render_tag_page(&tag, &[&post1, &post2], &assets).into_string();
 
         // then
         println!("Checking html:\n{}", result);

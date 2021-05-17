@@ -26,6 +26,7 @@ mod urls;
 mod test_utils;
 
 use crate::input::file::read_sorted_dir;
+use crate::input::parser::asset::read_assets;
 use crate::input::{tag::Tag, Blogpost, Category, HostedFile, Quote};
 use crate::output::error_pages::write_404;
 use input::file;
@@ -77,7 +78,10 @@ fn generate_config(indir: &str, odir: &str) -> Result<(), String> {
 }
 
 fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
-    write_404(Path::new(odir)).map_err(|e| format!("Failed to write 404 error: {}", e))?;
+    let asset_path: PathBuf = [odir, "assets"].iter().collect();
+    let assets = read_assets(&asset_path).map_err(|e| format!("Failed to read assets: {}", e))?;
+
+    write_404(Path::new(odir), &assets).map_err(|e| format!("Failed to write 404 error: {}", e))?;
 
     let categories_indir: PathBuf = [indir, "categories"].iter().collect();
     let raw_categories = file::read_files_sorted(&categories_indir)
@@ -104,26 +108,27 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         blogposts::find_categories_for_blogposts(&blogposts, &categories)
             .map_err(|e| format!("Error while matching blogpost with categories: {}", e))?;
     let blogpost_dir: PathBuf = [odir, "blogposts"].iter().collect();
-    blogposts::write_blogposts(&blogpost_dir, &categorized_blogposts)
+    blogposts::write_blogposts(&blogpost_dir, &categorized_blogposts, &assets)
         .map_err(|e| format!("Failed to write all blogposts: {}", e))?;
 
     let archive_dir: PathBuf = [odir, "archive"].iter().collect();
-    blogposts::write_archive(&archive_dir, &categorized_blogposts)
+    blogposts::write_archive(&archive_dir, &categorized_blogposts, &assets)
         .map_err(|e| format!("Failed to write archive: {}", e))?;
     blogposts::write_home(
         Path::new(odir),
         &categorized_blogposts,
         published_quotes.last(),
+        &assets,
     )
     .map_err(|e| format!("Failed to write home page: {}", e))?;
 
     feed::write_atom_feed(&Path::new(odir), &blogposts)?;
 
     let quote_dir: PathBuf = [odir, "quote"].iter().collect();
-    quotes::write_quote_pages(&quote_dir, &published_quotes)
+    quotes::write_quote_pages(&quote_dir, &published_quotes, &assets)
         .map_err(|e| format!("Unable to write all quote pages: {}", e))?;
     let quote_list_dir: PathBuf = [odir, "quotes"].iter().collect();
-    quotes::write_quote_list_pages(&quote_list_dir, &published_quotes)
+    quotes::write_quote_list_pages(&quote_list_dir, &published_quotes, &assets)
         .map_err(|e| format!("Unable to write all quote lists: {}", e))?;
     quotes::write_quote_fortune_file(&quote_list_dir, &published_quotes)
         .map_err(|e| format!("Unable to write quote fortune file: {}", e))?;
@@ -131,16 +136,16 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     let post_by_tags = tags::blogpost_by_tag(&blogposts);
     check_index_tag(&post_by_tags)?;
     let tags_dir: PathBuf = [odir, "tags"].iter().collect();
-    tags::write_tag_index(&tags_dir, &post_by_tags)
+    tags::write_tag_index(&tags_dir, &post_by_tags, &assets)
         .map_err(|e| format!("Failed to write tag index page: {}", e))?;
-    tags::write_tag_pages(&tags_dir, &post_by_tags)
+    tags::write_tag_pages(&tags_dir, &post_by_tags, &assets)
         .map_err(|e| format!("Failed to write tag pages: {}", e))?;
 
     let category_dir: PathBuf = [odir, "categories"].iter().collect();
     let categories_with_posts = categories::categories_with_blogposts(&categories, &blogposts);
-    categories::write_category_index(&category_dir, &categories_with_posts)
+    categories::write_category_index(&category_dir, &categories_with_posts, &assets)
         .map_err(|e| format!("Failed to write category index page: {}", e))?;
-    categories::write_category_pages(&category_dir, &categories_with_posts)
+    categories::write_category_pages(&category_dir, &categories_with_posts, &assets)
         .map_err(|e| format!("Failed to write all category pages: {}", e))?;
 
     let hosted_files_indir: PathBuf = [indir, "files_index"].iter().collect();
@@ -151,7 +156,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     check_hosted_files(&hosted_files, Path::new(indir))?;
 
     let hosted_files_index_dir: PathBuf = [odir, "files_metadata"].iter().collect();
-    hosted_files::write_hosted_file_index_pages(&hosted_files_index_dir, &hosted_files)
+    hosted_files::write_hosted_file_index_pages(&hosted_files_index_dir, &hosted_files, &assets)
         .map_err(|e| format!("Unable to write all file metadata pages: {}", e))
 }
 

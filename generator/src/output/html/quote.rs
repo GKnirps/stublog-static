@@ -16,7 +16,7 @@
  */
 
 use super::pager::pager;
-use crate::input::Quote;
+use crate::input::{Assets, Quote};
 use crate::output::cmark::render_cmark;
 use crate::output::html::HeadData;
 use crate::paths::{quote_list_path, QUOTE_FORTUNE_PATH};
@@ -67,16 +67,22 @@ pub fn render_quote(quote: &Quote) -> Markup {
     }
 }
 
-pub fn render_quote_page(quote: &Quote) -> Markup {
+pub fn render_quote_page(quote: &Quote, assets: &Assets) -> Markup {
     let content = render_quote(quote);
 
     super::base(
-        &HeadData::new("Stranger Than Usual — Zitat").with_canonical_url(&urls::quote_url(&quote)),
+        &HeadData::new("Stranger Than Usual — Zitat", assets)
+            .with_canonical_url(&urls::quote_url(&quote)),
         content,
     )
 }
 
-pub fn render_quote_list_page(quotes: &[Quote], current_page: usize, num_pages: usize) -> Markup {
+pub fn render_quote_list_page(
+    quotes: &[Quote],
+    current_page: usize,
+    num_pages: usize,
+    assets: &Assets,
+) -> Markup {
     let html_pager = pager(current_page, num_pages, &quote_list_path);
     let content = html! {
         h2 { "Nicht alles hier ist ein Zitat" }
@@ -93,11 +99,14 @@ pub fn render_quote_list_page(quotes: &[Quote], current_page: usize, num_pages: 
     };
 
     super::base(
-        &HeadData::new(&format!(
-            "Stranger Than Usual: Zitate Seite {} von {}",
-            current_page + 1,
-            num_pages
-        ))
+        &HeadData::new(
+            &format!(
+                "Stranger Than Usual: Zitate Seite {} von {}",
+                current_page + 1,
+                num_pages
+            ),
+            assets,
+        )
         .with_canonical_url(&urls::quote_list_url(current_page)),
         content,
     )
@@ -106,7 +115,7 @@ pub fn render_quote_list_page(quotes: &[Quote], current_page: usize, num_pages: 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::create_quote;
+    use crate::test_utils::{create_assets, create_quote};
 
     #[test]
     fn render_quote_source_renders_link_with_name_if_url_and_name_are_given() {
@@ -214,9 +223,10 @@ mod tests {
     fn render_quote_page_renders_full_html_with_quote() {
         // given
         let quote = create_quote();
+        let assets = create_assets();
 
         // when
-        let result = render_quote_page(&quote).into_string();
+        let result = render_quote_page(&quote, &assets).into_string();
 
         // then
         println!("Checking generated html:\n{}", result);
@@ -238,9 +248,11 @@ mod tests {
         let current_page = 11;
         let num_pages = 42;
 
+        let assets = create_assets();
+
         // when
-        let result =
-            render_quote_list_page(&[quote1, quote2], current_page, num_pages).into_string();
+        let result = render_quote_list_page(&[quote1, quote2], current_page, num_pages, &assets)
+            .into_string();
 
         // then
         println!("Checking generated html:\n{}", result);

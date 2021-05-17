@@ -17,8 +17,8 @@
 
 use super::file::open_for_write;
 use super::html;
-use crate::input::{tag::Tag, Blogpost};
-use crate::output::needs_update;
+use crate::input::{tag::Tag, Assets, Blogpost};
+use crate::output::needs_any_update;
 use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
@@ -57,19 +57,10 @@ fn sort_tags<'a>(posts_by_tag: &HashMap<&'a Tag, Vec<&Blogpost>>) -> Vec<(&'a Ta
     tags
 }
 
-fn tag_index_needs_update(filename: &Path, posts_by_tag: &HashMap<&Tag, Vec<&Blogpost>>) -> bool {
-    posts_by_tag
-        .iter()
-        .flat_map(|(_, posts)| posts.iter())
-        .map(|p| p.modified_at)
-        .max()
-        .map(|t| needs_update(&filename, t))
-        .unwrap_or(true)
-}
-
 pub fn write_tag_index(
     dir: &Path,
     posts_by_tag: &HashMap<&Tag, Vec<&Blogpost>>,
+    assets: &Assets,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {
         create_dir(dir)?;
@@ -77,7 +68,14 @@ pub fn write_tag_index(
     let mut filename = dir.to_path_buf();
     filename.push("index.html");
 
-    if !tag_index_needs_update(&filename, posts_by_tag) {
+    if !needs_any_update(
+        &filename,
+        posts_by_tag
+            .iter()
+            .flat_map(|(_, posts)| posts.iter())
+            .map(|p| p.modified_at)
+            .chain(assets.modification_dates()),
+    ) {
         return Ok(());
     }
 
@@ -86,13 +84,14 @@ pub fn write_tag_index(
     write!(
         writer,
         "{}",
-        html::tag::render_tag_list(&tags).into_string()
+        html::tag::render_tag_list(&tags, assets).into_string()
     )
 }
 
 pub fn write_tag_pages(
     dir: &Path,
     posts_by_tag: &HashMap<&Tag, Vec<&Blogpost>>,
+    assets: &Assets,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
@@ -101,26 +100,28 @@ pub fn write_tag_pages(
 
     for (tag, posts) in posts_by_tag {
         // TODO: it would be more helpful if we knew which tag failed
-        write_tag_page(dir, *tag, posts)?;
+        write_tag_page(dir, *tag, posts, assets)?;
     }
     Ok(())
 }
 
-fn tag_needs_update(filename: &Path, blogposts_with_tag: &[&Blogpost]) -> bool {
-    blogposts_with_tag
-        .iter()
-        .map(|p| p.modified_at)
-        .max()
-        .map(|t| needs_update(filename, t))
-        .unwrap_or(true)
-}
-
-fn write_tag_page(dir: &Path, tag: &Tag, posts: &[&Blogpost]) -> std::io::Result<()> {
+fn write_tag_page(
+    dir: &Path,
+    tag: &Tag,
+    posts: &[&Blogpost],
+    assets: &Assets,
+) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push(&tag.normalized_name);
     filename.set_extension("html");
 
-    if !(tag_needs_update(&filename, posts)) {
+    if !needs_any_update(
+        &filename,
+        posts
+            .iter()
+            .map(|p| p.modified_at)
+            .chain(assets.modification_dates()),
+    ) {
         return Ok(());
     }
 
@@ -128,7 +129,7 @@ fn write_tag_page(dir: &Path, tag: &Tag, posts: &[&Blogpost]) -> std::io::Result
     write!(
         writer,
         "{}",
-        html::tag::render_tag_page(tag, posts).into_string()
+        html::tag::render_tag_page(tag, posts, assets).into_string()
     )
 }
 

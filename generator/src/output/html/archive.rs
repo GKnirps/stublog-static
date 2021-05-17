@@ -19,7 +19,7 @@ use maud::{html, Markup};
 
 use super::blogpost::render_blogpost;
 use super::pager::pager;
-use crate::input::{Blogpost, Category};
+use crate::input::{Assets, Blogpost, Category};
 use crate::output::html::HeadData;
 use crate::paths::archive_path;
 use crate::urls::archive_url;
@@ -28,6 +28,7 @@ pub fn render_archive(
     blogposts: &[(&Blogpost, Option<&Category>)],
     current_page: usize,
     num_pages: usize,
+    assets: &Assets,
 ) -> Markup {
     let html_pager = pager(current_page, num_pages, &archive_path);
     let html_content = html! {
@@ -41,7 +42,7 @@ pub fn render_archive(
     };
 
     super::base(
-        &HeadData::new("Stranger Than Usual — Archiv")
+        &HeadData::new("Stranger Than Usual — Archiv", assets)
             .with_canonical_url(&archive_url(current_page)),
         html_content,
     )
@@ -50,7 +51,7 @@ pub fn render_archive(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::create_blogpost;
+    use crate::test_utils::{create_assets, create_blogpost};
 
     #[test]
     fn render_archive_renders_blogpost_and_pager() {
@@ -63,11 +64,14 @@ mod tests {
         let current_page = 3;
         let num_pages = 10;
 
+        let assets = create_assets();
+
         // when
         let result = render_archive(
             &[(&blogpost1, None), (&blogpost2, None)],
             current_page,
             num_pages,
+            &assets,
         )
         .into_string();
 

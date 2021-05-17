@@ -70,3 +70,47 @@ pub struct Quote {
     pub content_markdown: String,
     pub modified_at: SystemTime,
 }
+
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+pub struct Asset {
+    pub filename: PathBuf,
+    pub modified_at: SystemTime,
+    pub web_path: String,
+}
+
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+pub struct Assets {
+    pub favicon: Asset,
+    pub stylesheet: Asset,
+}
+
+impl Assets {
+    pub fn modification_dates(&self) -> [SystemTime; 2] {
+        [self.favicon.modified_at, self.stylesheet.modified_at]
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::test_utils::create_assets;
+    use std::ops::Add;
+    use std::time::Duration;
+
+    #[test]
+    fn assets_modification_dates_returns_dates() {
+        // given
+        let favicon_time = SystemTime::now().add(Duration::new(42, 42));
+        let stylesheet_time = SystemTime::now().add(Duration::new(11, 11));
+
+        let mut assets = create_assets();
+        assets.favicon.modified_at = favicon_time;
+        assets.stylesheet.modified_at = stylesheet_time;
+
+        // when
+        let result = assets.modification_dates();
+
+        // then
+        assert_eq!(result, [favicon_time, stylesheet_time])
+    }
+}

@@ -22,9 +22,9 @@ use std::path::Path;
 
 use super::file::open_for_write;
 use super::html;
-use crate::input::{parser, Quote};
+use crate::input::{parser, Assets, Quote};
 use crate::input::{Blogpost, Category};
-use crate::output::needs_update;
+use crate::output::{needs_any_update, needs_update};
 
 // find categories for all blogposts with a category id. If the ID is present but matches no
 // known category, return an error
@@ -54,6 +54,7 @@ pub fn find_categories_for_blogposts<'a>(
 pub fn write_blogposts(
     dir: &Path,
     posts: &[(&Blogpost, Option<&Category>)],
+    assets: &Assets,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
@@ -61,7 +62,7 @@ pub fn write_blogposts(
     }
     for (blogpost, category) in posts {
         // TODO: it would be more helpful if we knew which blogpost failed
-        write_blogpost(dir, blogpost, *category)?;
+        write_blogpost(dir, blogpost, *category, assets)?;
     }
     Ok(())
 }
@@ -70,11 +71,19 @@ fn write_blogpost(
     dir: &Path,
     blogpost: &Blogpost,
     category: Option<&Category>,
+    assets: &Assets,
 ) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push(&blogpost.filename);
     filename.set_extension("html");
-    if !needs_update(&filename, blogpost.modified_at) {
+    if !needs_any_update(
+        &filename,
+        assets
+            .modification_dates()
+            .iter()
+            .copied()
+            .chain(Some(blogpost.modified_at)),
+    ) {
         // target file is newer, no update needed
         return Ok(());
     }
@@ -82,7 +91,7 @@ fn write_blogpost(
     write!(
         writer,
         "{}",
-        html::blogpost::render_blogpost_page(blogpost, category).into_string()
+        html::blogpost::render_blogpost_page(blogpost, category, assets).into_string()
     )
 }
 
@@ -90,6 +99,7 @@ fn blogposts_with_categories_need_update(
     target_file: &Path,
     posts: &[(&Blogpost, Option<&Category>)],
     quote: Option<&Quote>,
+    assets: &Assets,
 ) -> bool {
     // get the newest modification date of all blogposts and categories here, only update if the
     // target file is older
@@ -100,6 +110,7 @@ fn blogposts_with_categories_need_update(
                 .unwrap_or(post.modified_at)
         })
         .chain(quote.map(|q| q.modified_at))
+        .chain(assets.modification_dates())
         .max()
         .map(|modified_at| needs_update(target_file, modified_at))
         .unwrap_or(true)
@@ -109,6 +120,7 @@ pub fn write_home(
     dir: &Path,
     all_posts: &[(&Blogpost, Option<&Category>)],
     qotd: Option<&Quote>,
+    assets: &Assets,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {
         create_dir(dir)?;
@@ -122,7 +134,7 @@ pub fn write_home(
         &all_posts[all_posts.len() - 10..]
     };
 
-    if !blogposts_with_categories_need_update(&filename, posts, qotd) {
+    if !blogposts_with_categories_need_update(&filename, posts, qotd, assets) {
         return Ok(());
     }
 
@@ -130,13 +142,14 @@ pub fn write_home(
     write!(
         writer,
         "{}",
-        html::home::render_home(posts, qotd).into_string()
+        html::home::render_home(posts, qotd, assets).into_string()
     )
 }
 
 pub fn write_archive(
     dir: &Path,
     all_posts: &[(&Blogpost, Option<&Category>)],
+    assets: &Assets,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {
         create_dir(dir)?;
@@ -152,7 +165,7 @@ pub fn write_archive(
 
     for (index, chunk) in all_posts.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed
-        write_archive_page(dir, chunk, index, num_chunks)?;
+        write_archive_page(dir, chunk, index, num_chunks, assets)?;
     }
 
     Ok(())
@@ -163,12 +176,13 @@ fn write_archive_page(
     posts: &[(&Blogpost, Option<&Category>)],
     page_index: usize,
     num_pages: usize,
+    assets: &Assets,
 ) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push(format!("{}", page_index));
     filename.set_extension("html");
 
-    if !blogposts_with_categories_need_update(&filename, posts, None) {
+    if !blogposts_with_categories_need_update(&filename, posts, None, assets) {
         return Ok(());
     }
 
@@ -177,7 +191,7 @@ fn write_archive_page(
     write!(
         writer,
         "{}",
-        html::archive::render_archive(posts, page_index, num_pages).into_string()
+        html::archive::render_archive(posts, page_index, num_pages, assets).into_string()
     )
 }
 #[cfg(test)]
