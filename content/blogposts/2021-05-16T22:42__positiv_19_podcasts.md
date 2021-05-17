@@ -41,7 +41,7 @@ Seit 2020 haben sie zusätzlich auch mit wechselnder Besetzung (wobei Tommy Krap
 
 ### Geschichten aus der Geschichte
 
-[Geschichten aus der Geschichte](https://www.geschichte.fm/), ehemals „Zeitsprung“, musste aber aus markenrechtlichen Gründen Ende 2020 umbenannt werden) ist ein Podcast der Historiker Richard Hemmer und Daniel Meßner. Sie erzählen sich [abwechselnd jede Woche eine Geschichte aus der Geschichte, und zwar immer so, dass der eine nicht weiß, was ihm der andere erzählen wird](https://tvtropes.org/pmwiki/pmwiki.php/Main/ArcWords).
+[Geschichten aus der Geschichte](https://www.geschichte.fm/) (ehemals „Zeitsprung“, musste aber aus markenrechtlichen Gründen Ende 2020 umbenannt werden) ist ein Podcast der Historiker Richard Hemmer und Daniel Meßner. Sie erzählen sich [abwechselnd jede Woche eine Geschichte aus der Geschichte, und zwar immer so, dass der eine nicht weiß, was ihm der andere erzählen wird](https://tvtropes.org/pmwiki/pmwiki.php/Main/ArcWords).
 
 Die Geschichten sind mal kürzer, mal länger, gehen manchmal nur ein paar Jahrzehnte, manchmal mehrere Jahrtausende zurück, können auf jedem Kontinent spielen (ungleichmäßig verteilt) und sind immer interessant.
 
