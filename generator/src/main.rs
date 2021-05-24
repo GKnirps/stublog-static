@@ -14,6 +14,7 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
+#![forbid(unsafe_code)]
 
 use std::path::{Path, PathBuf};
 
