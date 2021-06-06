@@ -29,7 +29,7 @@ pub fn write_404(base_path: &Path, assets: &Assets) -> std::io::Result<()> {
 
     // Only write this file if it does not exist already.
     // If changes are made to the generation, the existing file needs to be deleted
-    if needs_any_update(&filename, assets.modification_dates()) {
+    if !needs_any_update(&filename, assets.modification_dates()) {
         return Ok(());
     }
 
