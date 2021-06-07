@@ -136,6 +136,7 @@ fn base<T: Render>(head_data: &HeadData, content: T) -> Markup {
                 (footer())
             }
         }
+        "\n"
     }
 }
 
@@ -336,6 +337,7 @@ mod tests {
             "Expected archive link to be on the page"
         );
         assert!(result.contains(content));
+        assert_eq!(result.chars().rev().next(), Some('\n'));
     }
 
     #[test]
