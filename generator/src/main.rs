@@ -36,28 +36,48 @@ use input::parser::{
 };
 use output::{blogposts, categories, feed, hosted_files, ngingx_cfg, quotes, tags};
 use std::collections::{HashMap, HashSet};
+use std::env;
+
+struct CliParams {
+    show_help: bool,
+    generate_cfg: bool,
+    indir: String,
+    odir: String,
+}
+
+fn parse_cli_params() -> Result<CliParams, String> {
+    let raw: Vec<String> = env::args().skip(1).collect();
+    let show_help = raw.iter().any(|p| p == "--help");
+    let generate_cfg = raw.iter().any(|p| p == "--generate-cfg");
+    let mut args = raw.into_iter().filter(|p| !p.starts_with("--"));
+    let indir = args
+        .next()
+        .ok_or_else(|| "Missing input dir param".to_owned())?;
+    let odir = args
+        .next()
+        .ok_or_else(|| "Missing output dir param".to_owned())?;
+    Ok(CliParams {
+        show_help,
+        generate_cfg,
+        indir,
+        odir,
+    })
+}
 
 fn main() -> Result<(), String> {
-    let matches = clap::App::new("stu generator")
-        .version(env!("CARGO_PKG_VERSION"))
-        .about("generates html and stuff for the Stranger Than Usual blog")
-        .arg(clap::Arg::with_name("generate-cfg").long("generate-cfg").help("Generate nginx configuration to map old paths to new paths (ONLY USE WITH TRUSTED INPUT)").required(false).takes_value(false))
-        .arg(clap::Arg::with_name("INPUT_DIR").required(true).help("Input directory for blog content").index(1))
-        .arg(clap::Arg::with_name("OUTPUT_DIR").required(true).help("Output directory for rendered html").index(2))
-        .get_matches();
+    let params = parse_cli_params()?;
 
-    let indir = matches
-        .value_of("INPUT_DIR")
-        .ok_or_else(|| "Missing input dir param".to_owned())?;
-    let odir = matches
-        .value_of("OUTPUT_DIR")
-        .ok_or_else(|| "Missing output dir param".to_owned())?;
-    let generate_cfg = matches.is_present("generate-cfg");
+    if params.show_help {
+        println!("stu generator v{}", env!("CARGO_PKG_VERSION"));
+        println!("generates html and stuff for the Stranger Than Usual blog");
+        println!("usage: generator [--generate-cfg] [--help] INPUT_DIR OUTPUT_DIR");
+        return Ok(());
+    }
 
-    if generate_cfg {
-        generate_config(indir, odir)
+    if params.generate_cfg {
+        generate_config(&params.indir, &params.odir)
     } else {
-        generate_blog(indir, odir)
+        generate_blog(&params.indir, &params.odir)
     }
 }
 
