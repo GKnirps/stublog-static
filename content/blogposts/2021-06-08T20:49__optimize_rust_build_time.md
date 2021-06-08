@@ -2,7 +2,7 @@
 title: Buildzeit des Bloggenerators verkürzen
 filename: optimize_rust_build_time
 date: 2021-06-08T20:49:21+02:00
-update-date:
+update-date: 2021-06-08T22:00:00+02:00
 tags: rust, cargo, chrono, pulldown-cmark, clap, optimierung, meta
 category: meta
 summary: Ich wollte mal die Buildzeit meines Bloggenerators verbessern. Es hat funktioniert.
@@ -54,3 +54,12 @@ Benchmark #1: cargo build --release
 Das sind etwa siebeneinhalb Sekunden. Also etwa 40% weniger Zeit.
 
 Da kann ich jetzt beruhigt eine Bildbibliothek einbauen. Oder auch nicht, je nachdem, was aus dieser Bastelei wird. So oder so sollte auch da vielleicht auch aufpassen, nur Features mitzunehmen, die ich brauche.
+
+### Update: image-crate
+
+Kurze Tests haben ergeben: das oben genannte image-Crate braucht, eingebunden in ein sehr kleines Programm, etwa dreißig Sekunden zum Bauen. Wenn ich nur die Formate einbinde, die ich momentan unterstützen möchte (jpeg, png, gif, webp), geht es auf etwa 15s runter. Immer noch eine ganze Menge. Was kann ich also tun?
+
+- auf die Bastelei verzichten (es läuft ja auch so alles gut)
+- Bildgrößen manuell in die Metadaten schreiben (ugh)
+- höhere Compilezeit in Kauf nehmen (nervig)
+- selber etwas schreiben, was die Bildgröße herausfinden (ich schwanke hier zwischen „cool, habe ich noch nie gemacht“ und „bäh, Dateiformat-Standards entziffern“)
