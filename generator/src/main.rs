@@ -16,8 +16,6 @@
  */
 #![forbid(unsafe_code)]
 
-use std::path::{Path, PathBuf};
-
 mod input;
 mod output;
 mod paths;
@@ -37,6 +35,7 @@ use input::parser::{
 use output::{blogposts, categories, feed, hosted_files, ngingx_cfg, quotes, tags};
 use std::collections::{HashMap, HashSet};
 use std::env;
+use std::path::{Path, PathBuf};
 
 struct CliParams {
     show_help: bool,
