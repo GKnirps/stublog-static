@@ -18,6 +18,7 @@
 use std::cmp::max;
 use std::fs::create_dir;
 use std::io::Write;
+use std::iter::once;
 use std::path::Path;
 
 use super::file::open_for_write;
@@ -82,7 +83,7 @@ fn write_blogpost(
             .modification_dates()
             .iter()
             .copied()
-            .chain(Some(blogpost.modified_at)),
+            .chain(once(blogpost.modified_at)),
     ) {
         // target file is newer, no update needed
         return Ok(());

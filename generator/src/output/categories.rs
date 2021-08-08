@@ -18,6 +18,7 @@
 use std::cmp::max;
 use std::fs::create_dir;
 use std::io::Write;
+use std::iter::once;
 use std::path::Path;
 
 use super::file::open_for_write;
@@ -112,7 +113,7 @@ fn write_category_page(
             .modification_dates()
             .iter()
             .copied()
-            .chain(Some(newest_modification(category, blogposts))),
+            .chain(once(newest_modification(category, blogposts))),
     ) {
         return Ok(());
     }
