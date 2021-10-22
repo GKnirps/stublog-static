@@ -24,7 +24,7 @@ use maud::{html, Markup};
 
 fn render_file_data(hosted_file: &HostedFile) -> Markup {
     html! {
-        div.hosted-file#(hosted_file.path) {
+        div.hosted-file #(hosted_file.path) {
             h3 {
                 "Datei: "
                 (hosted_file.path)
