@@ -3,7 +3,7 @@ title: Den Boten erschießen
 filename: boten-erschiessen
 date: 2021-08-04T18:08:07+02:00
 update-date:
-tags: sicherheitslücke, ccc, cdu, csu
+tags: sicherheitslücke, ccc, cdu, csu, it-sicherheit
 category: ithought
 summary: Warum gibt es so viel unsichere Software? Meine Hypothese: es ist uns nicht wichtig genug.
 ---
