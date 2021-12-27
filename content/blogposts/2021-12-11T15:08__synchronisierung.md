@@ -9,7 +9,7 @@ summary: Tag 11 des Advent of Code 2021 dreht sich um einen zellulären Automate
 image:
 ---
 
-Heute, [Tag 11 des Advent of Code 2021](https://adventofcode.com/2021/day/11), ging es um [Dumbo-Oktopusse], die in regelmäßigen Abständen aufleuchten. Ob es tatsächlich solche Oktopusse gibt, weiß ich nicht, aber das Puzzle bezog sich auf einen zellulären Automaten, der simuliert, wann die Oktopusse leuchten.
+Heute, [Tag 11 des Advent of Code 2021](https://adventofcode.com/2021/day/11), ging es um [Dumbo-Oktopusse](https://de.wikipedia.org/wiki/Dumbo-Oktopusse), die in regelmäßigen Abständen aufleuchten. Ob es tatsächlich solche Oktopusse gibt, weiß ich nicht, aber das Puzzle bezog sich auf einen zellulären Automaten, der simuliert, wann die Oktopusse leuchten.
 
 Dabei beeinflusst jeder Oktopus, der aufleuchtet, andere Oktopusse in der Nachbarschaft. In Teil zwei stellt sich heraus, dass das dazu führt, dass die Oktopusse irgendwann alle synchron aufleuchten.
 
