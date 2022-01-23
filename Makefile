@@ -75,12 +75,14 @@ compress: generate-html assets
 
 ### cleanup
 
-.PHONY: clean clean-dist clean-html
+.PHONY: clean clean-dist
 clean: clean-dist
-	-rm -r generator/target
+# -f to ignore errors if the directory does not exist
+	-rm -rf generator/target
 
 clean-dist:
-	-rm -r dist
+# -f to ignore errors if the directory does not exist
+	-rm -rf dist
 
 clean-html:
 	find dist/ -name "*.html" -execdir rm {} +
