@@ -14,7 +14,7 @@
 #  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
 
 .PHONY: all
-all: directories copy-hosted-files compress dist/quotes/strangerthanusual.tar.bz2
+all: copy-hosted-files compress dist/quotes/strangerthanusual.tar.bz2 | directories
 
 .PHONY: directories
 directories:
@@ -30,7 +30,7 @@ generate-html: assets
 .PHONY: copy-hosted-files
 copy-hosted-files: $(patsubst content/file/%, dist/file/%, $(wildcard content/file/*))
 
-dist/file/%: content/file/%
+dist/file/%: content/file/% | directories
 	cp $< $@
 ###
 
@@ -41,8 +41,10 @@ dist/file/%: content/file/%
 #       create another sub-makefile (such as I did for compression). For compression, this
 #       was necessary due to the long time the compression takes. In this case it is fast enough
 #       so I will fix this some time in the future.
-dist/quotes/strangerthanusual.dat: generate-html dist/quotes/strangerthanusual
+dist/quotes/strangerthanusual.dat: dist/quotes/strangerthanusual
 	strfile -s dist/quotes/strangerthanusual
+
+dist/quotes/strangerthanusual: generate-html
 
 dist/quotes/strangerthanusual.tar.bz2: dist/quotes/strangerthanusual.dat dist/quotes/strangerthanusual
 	tar -cjf dist/quotes/strangerthanusual.tar.bz2 dist/quotes/strangerthanusual dist/quotes/strangerthanusual.dat
