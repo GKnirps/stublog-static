@@ -40,7 +40,7 @@ Requirements
 - [GNU make](https://www.gnu.org/software/make/) (or something compatible, if there still is such a thing) to manage all the generating
 - the [brotli command line tool](https://github.com/google/brotli) for brotli compression
 - the [zopfli command line tool](https://github.com/google/zopfli) for gz compression (or you can just use gz, but then you need to change compression.makefile)
-- [nginx](https://nginx.org/) (and possibly some plugins I implcitely used) to run a local test server
+- [nginx](https://nginx.org/) (and possibly some plugins I implicitly used) to run a local test server
 - [sassc](https://github.com/sass/sassc) for compiling the style sheets
 - maybe some other stuff I forgot to mention
 
