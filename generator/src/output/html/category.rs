@@ -30,7 +30,7 @@ pub fn render_categories_index_page(
         ul {
             @for (cat, blogposts) in categories {
                 li {
-                    a href=(category_path(&cat)) {
+                    a href=(category_path(cat)) {
                         (cat.title)
                     }
                     " (" (blogposts.len()) " Einträge)"
@@ -58,7 +58,7 @@ pub fn render_category_page(
         ul {
             @for post in blogposts {
                 li {
-                    a href=(blogpost_path(&post)){
+                    a href=(blogpost_path(post)){
                         (post.title)
                     }
                 }
@@ -70,7 +70,7 @@ pub fn render_category_page(
             &format!("Stranger Than Usual — {}", &category.title),
             assets,
         )
-        .with_canonical_url(&category_url(&category)),
+        .with_canonical_url(&category_url(category)),
         content,
     )
 }

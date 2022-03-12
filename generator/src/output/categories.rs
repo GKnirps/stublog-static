@@ -92,7 +92,7 @@ pub fn write_category_pages(
         create_dir(dir)?;
     }
     for (cat, blogposts) in categories {
-        write_category_page(dir, &cat, blogposts, assets)?;
+        write_category_page(dir, cat, blogposts, assets)?;
     }
     Ok(())
 }

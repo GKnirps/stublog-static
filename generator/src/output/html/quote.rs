@@ -72,7 +72,7 @@ pub fn render_quote_page(quote: &Quote, assets: &Assets) -> Markup {
 
     super::base(
         &HeadData::new("Stranger Than Usual — Zitat", assets)
-            .with_canonical_url(&urls::quote_url(&quote)),
+            .with_canonical_url(&urls::quote_url(quote)),
         content,
     )
 }

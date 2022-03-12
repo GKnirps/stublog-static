@@ -31,7 +31,7 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
                     (blogpost.title)
                 }
             }
-            div.entry { (PreEscaped(render_blogpost_content(&blogpost))) }
+            div.entry { (PreEscaped(render_blogpost_content(blogpost))) }
             footer {
                 span.post-time {
                     (super::time(&blogpost.date))
@@ -74,7 +74,7 @@ pub fn render_blogpost_page(
         .as_ref()
         .map(|path| url_for_absolute_path(path));
 
-    let post_url = blogpost_url(&blogpost);
+    let post_url = blogpost_url(blogpost);
     let mut head_data = HeadData::new(&blogpost.title, assets)
         .with_canonical_url(&post_url)
         .with_description(description)

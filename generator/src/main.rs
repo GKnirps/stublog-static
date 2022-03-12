@@ -93,7 +93,7 @@ fn generate_config(indir: &str, odir: &str) -> Result<(), String> {
     let hosted_files = parse_all_file_metadata(&raw_hosted_files)
         .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
 
-    ngingx_cfg::write_config_file(&Path::new(odir), &categories, &hosted_files)
+    ngingx_cfg::write_config_file(Path::new(odir), &categories, &hosted_files)
         .map_err(|e| format!("Unable to write nginx config: {}", e))
 }
 
@@ -142,7 +142,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     )
     .map_err(|e| format!("Failed to write home page: {}", e))?;
 
-    feed::write_atom_feed(&Path::new(odir), &blogposts)?;
+    feed::write_atom_feed(Path::new(odir), &blogposts)?;
 
     let quote_dir: PathBuf = [odir, "quote"].iter().collect();
     quotes::write_quote_pages(&quote_dir, &published_quotes, &assets)
@@ -218,7 +218,7 @@ fn check_duplicate_categories(categories: &[Category]) -> Result<(), String> {
                 cat.filename.to_string_lossy()
             ));
         }
-        seen.insert(&cat.filename.as_path());
+        seen.insert(cat.filename.as_path());
     }
 
     if seen.contains(&Path::new("index")) {

@@ -33,11 +33,11 @@ fn parse_tags(tagstring: &str) -> Vec<Tag> {
 }
 
 pub fn parse_blogposts(inputs: &[FileData]) -> Result<Vec<Blogpost>, parser::ParseError> {
-    inputs.iter().map(|input| parse_blogpost(&input)).collect()
+    inputs.iter().map(parse_blogpost).collect()
 }
 
 fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
-    let (props, content) = split_file_content(&file_data)?;
+    let (props, content) = split_file_content(file_data)?;
     let original_path = &file_data.filename;
 
     let title = props

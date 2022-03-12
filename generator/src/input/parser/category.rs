@@ -20,7 +20,7 @@ use crate::input::file::FileData;
 use crate::input::Category;
 
 pub fn parse_categories(inputs: &[FileData]) -> Result<Vec<Category>, ParseError> {
-    inputs.iter().map(|input| parse_category(&input)).collect()
+    inputs.iter().map(parse_category).collect()
 }
 
 fn parse_category(file_data: &FileData) -> Result<Category, ParseError> {

@@ -88,10 +88,10 @@ fn write_entry<T: Write>(
         writer,
         "content",
         &[("type", "html")],
-        &render_blogpost_content(&blogpost),
+        &render_blogpost_content(blogpost),
     )?;
 
-    write_link(writer, &blogpost_url(&blogpost), "alternate", "text/html")?;
+    write_link(writer, &blogpost_url(blogpost), "alternate", "text/html")?;
 
     writer.write_event(Event::End(BytesEnd::borrowed(b"entry")))?;
     Ok(())
