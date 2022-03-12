@@ -93,7 +93,8 @@ fn write_blogpost(
         writer,
         "{}",
         html::blogpost::render_blogpost_page(blogpost, category, assets).into_string()
-    )
+    )?;
+    writer.into_inner()?.sync_all()
 }
 
 fn blogposts_with_categories_need_update(
@@ -144,7 +145,8 @@ pub fn write_home(
         writer,
         "{}",
         html::home::render_home(posts, qotd, assets).into_string()
-    )
+    )?;
+    writer.into_inner()?.sync_all()
 }
 
 pub fn write_archive(
@@ -193,7 +195,8 @@ fn write_archive_page(
         writer,
         "{}",
         html::archive::render_archive(posts, page_index, num_pages, assets).into_string()
-    )
+    )?;
+    writer.into_inner()?.sync_all()
 }
 #[cfg(test)]
 mod tests {

@@ -46,7 +46,8 @@ fn write_hosted_file_index_page(
         writer,
         "{}",
         hosted_file::render_file_index_page(files, current_page, num_pages, assets).into_string()
-    )
+    )?;
+    writer.into_inner()?.sync_all()
 }
 
 pub fn write_hosted_file_index_pages(

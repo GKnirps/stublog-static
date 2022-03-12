@@ -79,7 +79,8 @@ pub fn write_category_index(
         writer,
         "{}",
         html::category::render_categories_index_page(categories, assets).into_string()
-    )
+    )?;
+    writer.into_inner()?.sync_all()
 }
 
 pub fn write_category_pages(
@@ -123,7 +124,8 @@ fn write_category_page(
         writer,
         "{}",
         html::category::render_category_page(category, blogposts, assets).into_string()
-    )
+    )?;
+    writer.into_inner()?.sync_all()
 }
 #[cfg(test)]
 mod tests {

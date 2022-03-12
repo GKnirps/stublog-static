@@ -38,5 +38,6 @@ pub fn write_404(base_path: &Path, assets: &Assets) -> std::io::Result<()> {
         writer,
         "{}",
         html::error_pages::render_404(assets).into_string()
-    )
+    )?;
+    writer.into_inner()?.sync_all()
 }

@@ -96,7 +96,9 @@ pub fn write_config_file(
 
     writeln!(writer)?;
 
-    write_hosted_files_rewrites(&mut writer, hosted_files)
+    write_hosted_files_rewrites(&mut writer, hosted_files)?;
+
+    writer.into_inner()?.sync_all()
 }
 
 #[cfg(test)]

@@ -40,5 +40,12 @@ pub fn write_atom_feed(dir: &Path, blogposts: &[Blogpost]) -> Result<(), String>
     let mut writer = Writer::new(file);
 
     atom::write_feed(&mut writer, blogposts)
+        .map_err(|e| format!("Unable to write atom feed: {}", e))?;
+
+    writer
+        .into_inner()
+        .into_inner()
+        .map_err(|e| format!("Unable to write atom feed: {}", e))?
+        .sync_all()
         .map_err(|e| format!("Unable to write atom feed: {}", e))
 }

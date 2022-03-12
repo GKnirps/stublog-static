@@ -42,7 +42,8 @@ fn write_quote_page(dir: &Path, quote: &Quote, assets: &Assets) -> std::io::Resu
         return Ok(());
     }
     let mut writer = open_for_write(&filename)?;
-    write!(writer, "{}", render_quote_page(quote, assets).into_string())
+    write!(writer, "{}", render_quote_page(quote, assets).into_string())?;
+    writer.into_inner()?.sync_all()
 }
 
 pub fn write_quote_pages(dir: &Path, quotes: &[Quote], assets: &Assets) -> std::io::Result<()> {
@@ -80,7 +81,9 @@ fn write_quote_list_page(
         writer,
         "{}",
         render_quote_list_page(quotes, current_page, num_pages, assets).into_string()
-    )
+    )?;
+
+    writer.into_inner()?.sync_all()
 }
 
 pub fn write_quote_list_pages(
@@ -118,5 +121,7 @@ pub fn write_quote_fortune_file(dir: &Path, quotes: &[Quote]) -> std::io::Result
 
     let mut writer = open_for_write(&filename)?;
 
-    fortune::write_fortune_quotes(&mut writer, quotes)
+    fortune::write_fortune_quotes(&mut writer, quotes)?;
+
+    writer.into_inner()?.sync_all()
 }
