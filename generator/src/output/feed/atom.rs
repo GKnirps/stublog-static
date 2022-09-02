@@ -31,10 +31,10 @@ fn write_leaf<T: Write>(
 ) -> Result<(), quick_xml::Error> {
     let attr_iter = attributes.iter().copied();
     writer.write_event(Event::Start(
-        BytesStart::borrowed_name(name.as_bytes()).with_attributes(attr_iter),
+        BytesStart::new(name).with_attributes(attr_iter),
     ))?;
-    writer.write_event(Event::Text(BytesText::from_plain_str(content)))?;
-    writer.write_event(Event::End(BytesEnd::borrowed(name.as_bytes())))?;
+    writer.write_event(Event::Text(BytesText::new(content)))?;
+    writer.write_event(Event::End(BytesEnd::new(name)))?;
     Ok(())
 }
 
@@ -47,7 +47,7 @@ fn write_link<T: Write>(
     let attributes = &[("href", href), ("rel", rel), ("type", mime_type)];
     let attr_iter = attributes.iter().copied();
     writer.write_event(Event::Empty(
-        BytesStart::borrowed_name(b"link").with_attributes(attr_iter),
+        BytesStart::new("link").with_attributes(attr_iter),
     ))?;
     Ok(())
 }
@@ -56,7 +56,7 @@ fn write_entry<T: Write>(
     writer: &mut Writer<T>,
     blogpost: &Blogpost,
 ) -> Result<(), quick_xml::Error> {
-    writer.write_event(Event::Start(BytesStart::borrowed_name(b"entry")))?;
+    writer.write_event(Event::Start(BytesStart::new("entry")))?;
 
     write_leaf(
         writer,
@@ -76,9 +76,9 @@ fn write_entry<T: Write>(
         .to_rfc3339();
     write_leaf(writer, "updated", &[], &updated)?;
 
-    writer.write_event(Event::Start(BytesStart::borrowed_name(b"author")))?;
+    writer.write_event(Event::Start(BytesStart::new("author")))?;
     write_leaf(writer, "name", &[], "Knirps")?;
-    writer.write_event(Event::End(BytesEnd::borrowed(b"author")))?;
+    writer.write_event(Event::End(BytesEnd::new("author")))?;
 
     if let Some(ref summary) = blogpost.summary {
         write_leaf(writer, "summary", &[], summary)?;
@@ -93,7 +93,7 @@ fn write_entry<T: Write>(
 
     write_link(writer, &blogpost_url(blogpost), "alternate", "text/html")?;
 
-    writer.write_event(Event::End(BytesEnd::borrowed(b"entry")))?;
+    writer.write_event(Event::End(BytesEnd::new("entry")))?;
     Ok(())
 }
 
@@ -114,10 +114,10 @@ pub fn write_feed<T: Write>(
                 .and_hms(00, 00, 00)
         });
 
-    writer.write_event(Event::Decl(BytesDecl::new(b"1.0", Some(b"UTF-8"), None)))?;
+    writer.write_event(Event::Decl(BytesDecl::new("1.0", Some("UTF-8"), None)))?;
     let feed_attr = &[("xml:lang", "de"), ("xmlns", "http://www.w3.org/2005/Atom")];
     writer.write_event(Event::Start(
-        BytesStart::borrowed_name(b"feed").with_attributes(feed_attr.iter().copied()),
+        BytesStart::new("feed").with_attributes(feed_attr.iter().copied()),
     ))?;
 
     write_leaf(writer, "id", &[], "tag:strangerthanusual.de,2005:/feed")?;
@@ -131,7 +131,7 @@ pub fn write_feed<T: Write>(
         write_entry(writer, post)?;
     }
 
-    writer.write_event(Event::End(BytesEnd::borrowed(b"feed")))?;
+    writer.write_event(Event::End(BytesEnd::new("feed")))?;
     Ok(())
 }
 
