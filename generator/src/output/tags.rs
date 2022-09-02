@@ -101,7 +101,7 @@ pub fn write_tag_pages(
 
     for (tag, posts) in posts_by_tag {
         // TODO: it would be more helpful if we knew which tag failed
-        write_tag_page(dir, *tag, posts, assets)?;
+        write_tag_page(dir, tag, posts, assets)?;
     }
     Ok(())
 }
