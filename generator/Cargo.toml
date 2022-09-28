@@ -24,8 +24,8 @@ license = "AGPL-3.0-or-later"
 
 [dependencies]
 chrono = { version = "^0.4.22", default_features = false, features = ["std"] }
-maud = "^0.23.0"
+maud = "^0.24.0"
 pulldown-cmark = { version = "^0.9.2", default_features = false }
-percent-encoding = "^2.1.0"
-quick-xml = "^0.24.0"
-sha2 = "^0.10.5"
+percent-encoding = "^2.2.0"
+quick-xml = "^0.25.0"
+sha2 = "^0.10.6"

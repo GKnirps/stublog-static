@@ -184,7 +184,7 @@ fn time(t: &DateTime<FixedOffset>) -> Markup {
     let iso_time = t.to_rfc3339();
     html! {
         time datetime=(iso_time) {
-            (t.format("%d.%m.%Y %H:%M"))
+            (maud::display(t.format("%d.%m.%Y %H:%M")))
         }
     }
 }
