@@ -16,14 +16,17 @@
  */
 
 use super::file::open_for_write;
-use crate::input::{Category, HostedFile};
+use crate::input::{Category, HostedFileMetadata};
 use crate::paths;
 use std::io::Write;
 use std::path::Path;
 
 /// write an ngingx rule to make a file that has been imported from the old blog
 /// accessible under the same URL as before
-fn write_hosted_file_rewrite(w: &mut dyn Write, hosted_file: &HostedFile) -> std::io::Result<()> {
+fn write_hosted_file_rewrite(
+    w: &mut dyn Write,
+    hosted_file: &HostedFileMetadata,
+) -> std::io::Result<()> {
     if let Some(ref old_id) = hosted_file.old_id {
         let new_path = paths::hosted_file_path(hosted_file);
         // TODO: we assume the id and the new path do not contain any dangerous stuff.
@@ -46,7 +49,7 @@ fn write_hosted_file_rewrite(w: &mut dyn Write, hosted_file: &HostedFile) -> std
 
 fn write_hosted_files_rewrites(
     w: &mut dyn Write,
-    hosted_files: &[HostedFile],
+    hosted_files: &[HostedFileMetadata],
 ) -> std::io::Result<()> {
     writeln!(w, "## old paths for hosted files")?;
     for hosted_file in hosted_files {
@@ -85,7 +88,7 @@ fn write_categories_rewrites(w: &mut dyn Write, categories: &[Category]) -> std:
 pub fn write_config_file(
     dir: &Path,
     categories: &[Category],
-    hosted_files: &[HostedFile],
+    hosted_files: &[HostedFileMetadata],
 ) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
     filename.push("old_paths_rewrites.conf");
@@ -104,12 +107,12 @@ pub fn write_config_file(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_category, create_hosted_file};
+    use crate::test_utils::{create_category, create_hosted_file_metadata};
 
     #[test]
     fn write_hosted_file_rewrite_writes_valid_rewrite_for_old_id() {
         // given
-        let mut hosted_file = create_hosted_file();
+        let mut hosted_file = create_hosted_file_metadata();
         hosted_file.old_id = Some("42".to_owned());
         hosted_file.path = "answer.txt".to_owned();
 
@@ -128,7 +131,7 @@ mod tests {
     #[test]
     fn write_hosted_file_rewrite_writes_nothing_if_no_old_id_is_present() {
         // given
-        let mut hosted_file = create_hosted_file();
+        let mut hosted_file = create_hosted_file_metadata();
         hosted_file.old_id = None;
 
         // when
@@ -143,14 +146,14 @@ mod tests {
     #[test]
     fn write_hosted_files_rewrites_writes_list_of_rules() {
         // given
-        let mut f1 = create_hosted_file();
+        let mut f1 = create_hosted_file_metadata();
         f1.old_id = Some("11".to_owned());
         f1.path = "spinal.tap".to_owned();
 
-        let mut f2 = create_hosted_file();
+        let mut f2 = create_hosted_file_metadata();
         f2.old_id = None;
 
-        let mut f3 = create_hosted_file();
+        let mut f3 = create_hosted_file_metadata();
         f3.old_id = Some("9001".to_owned());
         f3.path = "its.over".to_owned();
 

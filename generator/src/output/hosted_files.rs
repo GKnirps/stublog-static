@@ -18,14 +18,15 @@
 use super::file::open_for_write;
 use super::html::hosted_file;
 use super::needs_any_update;
-use crate::input::{Assets, HostedFile};
+use crate::input::{Assets, HostedFileMetadata};
+use crate::HostedFile;
 use std::fs::create_dir;
 use std::io::Write;
 use std::path::Path;
 
 fn write_hosted_file_index_page(
     dir: &Path,
-    files: &[HostedFile],
+    files: &[(&HostedFileMetadata, &HostedFile)],
     current_page: usize,
     num_pages: usize,
     assets: &Assets,
@@ -36,7 +37,7 @@ fn write_hosted_file_index_page(
         &filename,
         files
             .iter()
-            .map(|f| f.modified_at)
+            .map(|f| f.0.modified_at)
             .chain(assets.modification_dates()),
     ) {
         return Ok(());
@@ -52,7 +53,7 @@ fn write_hosted_file_index_page(
 
 pub fn write_hosted_file_index_pages(
     dir: &Path,
-    files: &[HostedFile],
+    files: &[(&HostedFileMetadata, &HostedFile)],
     assets: &Assets,
 ) -> std::io::Result<()> {
     if !dir.is_dir() {

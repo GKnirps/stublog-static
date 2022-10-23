@@ -21,6 +21,7 @@ use std::time::SystemTime;
 use tag::Tag;
 
 pub mod file;
+pub mod hosted_files;
 pub mod parser;
 pub mod tag;
 
@@ -53,12 +54,27 @@ pub struct Category {
 
 /// Metadata for a blog content file (e.g. an image) (not the generated html files)
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
-pub struct HostedFile {
+pub struct HostedFileMetadata {
     pub old_id: Option<String>,
     pub path: String,
     pub mime_type: String,
     pub description: String,
     pub modified_at: SystemTime,
+}
+
+// Actual data of a hosted file (not read from the metadata)
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+pub struct HostedFile {
+    pub filename: PathBuf,
+    pub file_size: u64,
+    pub image_metadata: Option<ImageMetadata>,
+    pub modified_at: SystemTime,
+}
+
+#[derive(Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+pub struct ImageMetadata {
+    width: u32,
+    height: u32,
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]

@@ -24,9 +24,8 @@ mod urls;
 #[cfg(test)]
 mod test_utils;
 
-use crate::input::file::read_sorted_dir;
 use crate::input::parser::asset::read_assets;
-use crate::input::{tag::Tag, Blogpost, Category, HostedFile, Quote};
+use crate::input::{tag::Tag, Blogpost, Category, HostedFile, HostedFileMetadata, Quote};
 use crate::output::error_pages::write_404;
 use input::file;
 use input::parser::{
@@ -168,16 +167,25 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     categories::write_category_pages(&category_dir, &categories_with_posts, &assets)
         .map_err(|e| format!("Failed to write all category pages: {}", e))?;
 
-    let hosted_files_indir: PathBuf = [indir, "files_index"].iter().collect();
-    let raw_hosted_files = file::read_files_sorted(&hosted_files_indir)
+    let hosted_files_meta_indir: PathBuf = [indir, "files_index"].iter().collect();
+    let raw_hosted_files_meta = file::read_files_sorted(&hosted_files_meta_indir)
         .map_err(|e| format!("Failed to read all hosted files: {}", e))?;
-    let hosted_files = parse_all_file_metadata(&raw_hosted_files)
+    let hosted_files_meta = parse_all_file_metadata(&raw_hosted_files_meta)
         .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
-    check_hosted_files(&hosted_files, Path::new(indir))?;
+
+    let hosted_files_indir: PathBuf = [indir, "file"].iter().collect();
+    let hosted_files = input::hosted_files::list_all_files(&hosted_files_indir)
+        .map_err(|e| format!("Unable to list all hosted files:{e}"))?;
+
+    let hosted_file_pairs = match_hosted_files(&hosted_files_meta, &hosted_files)?;
 
     let hosted_files_index_dir: PathBuf = [odir, "files_metadata"].iter().collect();
-    hosted_files::write_hosted_file_index_pages(&hosted_files_index_dir, &hosted_files, &assets)
-        .map_err(|e| format!("Unable to write all file metadata pages: {}", e))
+    hosted_files::write_hosted_file_index_pages(
+        &hosted_files_index_dir,
+        &hosted_file_pairs,
+        &assets,
+    )
+    .map_err(|e| format!("Unable to write all file metadata pages: {}", e))
 }
 
 fn check_duplicate_blogpost_names(posts: &[Blogpost]) -> Result<(), String> {
@@ -242,9 +250,12 @@ fn check_duplicate_quote_names(quotes: &[Quote]) -> Result<(), String> {
     Ok(())
 }
 
-fn check_hosted_files(hosted_files: &[HostedFile], indir: &Path) -> Result<(), String> {
-    let mut seen: HashSet<&str> = HashSet::with_capacity(hosted_files.len());
-    for hosted_file in hosted_files {
+fn match_hosted_files<'meta, 'file>(
+    hosted_files_meta: &'meta [HostedFileMetadata],
+    hosted_files: &'file [HostedFile],
+) -> Result<Vec<(&'meta HostedFileMetadata, &'file HostedFile)>, String> {
+    let mut seen: HashSet<&str> = HashSet::with_capacity(hosted_files_meta.len());
+    for hosted_file in hosted_files_meta {
         if seen.contains(&hosted_file.path as &str) {
             return Err(format!(
                 "There is more than one metadata file for hosted file {}",
@@ -253,47 +264,57 @@ fn check_hosted_files(hosted_files: &[HostedFile], indir: &Path) -> Result<(), S
         }
         seen.insert(&hosted_file.path);
     }
-    let mut files_path = indir.to_path_buf();
-    files_path.push("file");
-    // we don't actually need the file names sorted (in fact, we want to throw them in a set,
-    // so the sorting is in completely lost), but the overall performance loss is negligible and
-    // this way we don't need more code to read the file list
-    let actual_file_paths = read_sorted_dir(&files_path).map_err(|e| {
-        format!(
-            "Error reading files directory {}: {}",
-            files_path.to_string_lossy(),
-            e
-        )
-    })?;
-    let actual_files: HashSet<&str> = actual_file_paths
+    let files_by_name: HashMap<&str, &HostedFile> = hosted_files
         .iter()
-        .filter_map(|f| f.file_name())
-        .filter_map(|f| f.to_str())
+        .filter_map(|f| Some((f.filename.to_str()?, f)))
         .collect();
 
-    let mut diff1 = seen.difference(&actual_files).peekable();
-    if diff1.peek().is_some() {
-        return Err(format!(
-            "The following file(s) are referenced by metadata, but are not present: {}",
-            diff1.copied().collect::<Vec<&str>>().join(", ")
-        ));
-    }
-    let mut diff2 = actual_files.difference(&seen).peekable();
-    if diff2.peek().is_some() {
+    let mut no_metadata_files = files_by_name
+        .keys()
+        .filter(|f| !seen.contains(*f))
+        .peekable();
+    if no_metadata_files.peek().is_some() {
         return Err(format!(
             "The following file(s) are present, but not referenced by metadata: {}",
-            diff2.copied().collect::<Vec<&str>>().join(", ")
+            no_metadata_files.copied().collect::<Vec<&str>>().join(", ")
         ));
     }
 
-    Ok(())
+    let result: Vec<(&HostedFileMetadata, &HostedFile)> = hosted_files_meta
+        .iter()
+        .map(|fm| {
+            files_by_name
+                .get(&fm.path as &str)
+                .ok_or_else(|| {
+                    format!(
+                        "Found metadata for file '{}' but not the actual file",
+                        fm.path
+                    )
+                })
+                .map(|f| (fm, *f))
+        })
+        .collect::<Result<Vec<(&HostedFileMetadata, &HostedFile)>, String>>()?;
+
+    if hosted_files.len() != hosted_files_meta.len() {
+        return Err(format!(
+            "Number of hosted files does not match number of metadata files ({} vs {})",
+            hosted_files.len(),
+            hosted_files_meta.len()
+        ));
+    }
+
+    Ok(result)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::input::tag::Tag;
-    use crate::test_utils::{create_blogpost, create_category, create_quote};
+    use crate::test_utils::{
+        create_blogpost, create_category, create_hosted_file, create_hosted_file_metadata,
+        create_quote,
+    };
+    use std::os::unix::ffi::OsStrExt;
 
     #[test]
     fn check_duplicate_blogposts_names_returns_ok_for_no_duplicates() {
@@ -447,5 +468,93 @@ mod tests {
 
         // then
         assert_eq!(result, Err("Quote name foobar is a duplicate!".to_owned()));
+    }
+
+    #[test]
+    fn match_hosted_files_matches_files_with_metadata() {
+        // given
+        let mut metadata1 = create_hosted_file_metadata();
+        metadata1.path = "file1".to_string();
+        let mut file1 = create_hosted_file();
+        file1.filename = PathBuf::from("file1");
+
+        let mut metadata2 = create_hosted_file_metadata();
+        metadata2.path = "file2".to_string();
+        let mut file2 = create_hosted_file();
+        file2.filename = PathBuf::from("file2");
+
+        let metadata = &[metadata1, metadata2];
+        let files = &[file2, file1];
+
+        // when
+        let result = match_hosted_files(metadata, files).expect("Expected successful match");
+
+        // then
+        assert_eq!(
+            &result,
+            &[(&metadata[0], &files[1]), (&metadata[1], &files[0])]
+        );
+    }
+
+    #[test]
+    fn match_hosted_files_fails_for_unmatched_metadata() {
+        // given
+        let metadata = &mut [create_hosted_file_metadata(), create_hosted_file_metadata()];
+        metadata[1].path = "file".to_string();
+        metadata[0].path = "unmatched".to_string();
+        let file = &mut [create_hosted_file()];
+        file[0].filename = PathBuf::from("file");
+
+        // when
+        let result = match_hosted_files(metadata, file);
+
+        // then
+        assert_eq!(
+            result,
+            Err("Found metadata for file 'unmatched' but not the actual file".to_string())
+        );
+    }
+
+    #[test]
+    fn match_hosted_files_fails_for_unmatched_file() {
+        // given
+        let metadata = &mut [create_hosted_file_metadata()];
+        metadata[0].path = "file".to_string();
+        let files = &mut [create_hosted_file(), create_hosted_file()];
+        files[1].filename = PathBuf::from("unmatched");
+        files[0].filename = PathBuf::from("file");
+
+        // when
+        let result = match_hosted_files(metadata, files);
+
+        // then
+        assert_eq!(
+            result,
+            Err(
+                "The following file(s) are present, but not referenced by metadata: unmatched"
+                    .to_string()
+            )
+        );
+    }
+
+    #[test]
+    fn match_hosted_files_fails_for_non_unicode_filenames() {
+        // given
+        let metadata = &[];
+        let files = &mut [create_hosted_file()];
+        // non-utf8 byte in the file name
+        files[0].filename = PathBuf::from(std::ffi::OsStr::from_bytes(b"file\xff"));
+
+        // when
+        let result = match_hosted_files(metadata, files);
+
+        // then
+        assert_eq!(
+            result,
+            Err(
+                "Number of hosted files does not match number of metadata files (1 vs 0)"
+                    .to_string()
+            )
+        );
     }
 }

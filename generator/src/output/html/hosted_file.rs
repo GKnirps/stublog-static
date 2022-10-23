@@ -16,27 +16,35 @@
  */
 
 use super::pager::pager;
-use crate::input::{Assets, HostedFile};
+use crate::input::{Assets, HostedFileMetadata};
 use crate::output::html::HeadData;
 use crate::paths::{files_metadata_index_path, hosted_file_path};
 use crate::urls::files_metadata_index_url;
+use crate::HostedFile;
 use maud::{html, Markup};
 
-fn render_file_data(hosted_file: &HostedFile) -> Markup {
+fn render_file_data(metadata: &HostedFileMetadata, hosted_file: &HostedFile) -> Markup {
     html! {
-        div.hosted-file #(hosted_file.path) {
+        div.hosted-file #(metadata.path) {
             h3 {
                 "Datei: "
-                (hosted_file.path)
+                (metadata.path)
             }
             p.file-description {
-                (hosted_file.description)
+                (metadata.description)
             }
             footer {
-                span.mime-type {
-                    (hosted_file.mime_type)
+                table {
+                    tr {
+                        td {"Typ"}
+                        td {(metadata.mime_type)}
+                    }
+                    tr {
+                        td {"Größe"}
+                        td {(hosted_file.file_size)}
+                    }
                 }
-                a.download-link href=(hosted_file_path(hosted_file)) download=(hosted_file.path) type=(hosted_file.mime_type) {
+                a.download-link href=(hosted_file_path(metadata)) download=(metadata.path) type=(metadata.mime_type) {
                     "Herunterladen"
                 }
             }
@@ -45,7 +53,7 @@ fn render_file_data(hosted_file: &HostedFile) -> Markup {
 }
 
 pub fn render_file_index_page(
-    files: &[HostedFile],
+    files: &[(&HostedFileMetadata, &HostedFile)],
     current_page: usize,
     num_pages: usize,
     assets: &Assets,
@@ -55,8 +63,8 @@ pub fn render_file_index_page(
         h2 { "Dateien" }
         (html_pager)
         section {
-            @for hosted_file in files {
-                (render_file_data(hosted_file))
+            @for (metadata, hosted_file) in files {
+                (render_file_data(metadata, hosted_file))
             }
         }
         (html_pager)
@@ -82,15 +90,17 @@ pub fn render_file_index_page(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_assets, create_hosted_file};
+    use crate::test_utils::{create_assets, create_hosted_file, create_hosted_file_metadata};
+    use std::path::PathBuf;
 
     #[test]
     fn render_file_data_should_render_correctly() {
         // given
-        let hosted_file = create_hosted_file();
+        let metadata = create_hosted_file_metadata();
+        let file = create_hosted_file();
 
         // when
-        let result = render_file_data(&hosted_file).into_string();
+        let result = render_file_data(&metadata, &file).into_string();
 
         // then
         assert_eq!(
@@ -99,7 +109,10 @@ mod tests {
         <h3>Datei: answer.txt</h3>\
         <p class=\"file-description\">You\'re really not going to like it.</p>\
         <footer>\
-        <span class=\"mime-type\">text/plain</span>\
+        <table>\
+        <tr><td>Typ</td><td>text/plain</td></tr>\
+        <tr><td>Größe</td><td>42</td></tr>\
+        </table>\
         <a class=\"download-link\" href=\"/file/answer.txt\" download=\"answer.txt\" type=\"text/plain\">\
         Herunterladen\
         </a>\
@@ -111,11 +124,16 @@ mod tests {
     #[test]
     fn render_file_index_page_should_render_important_data() {
         // given
+        let mut meta1 = create_hosted_file_metadata();
+        meta1.path = "first".to_owned();
+        let mut meta2 = create_hosted_file_metadata();
+        meta2.path = "ninjad".to_owned();
         let mut file1 = create_hosted_file();
-        file1.path = "first".to_owned();
-        let mut file2 = create_hosted_file();
-        file2.path = "ninjad".to_owned();
-        let files = &[file1, file2];
+        file1.filename = PathBuf::from("something_different"); // this path should not be used here
+        file1.file_size = 1234;
+        let file2 = create_hosted_file();
+
+        let files = &[(&meta1, &file1), (&meta2, &file2)];
 
         let current_page = 3;
         let num_pages = 5;

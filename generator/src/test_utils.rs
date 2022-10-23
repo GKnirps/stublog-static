@@ -16,7 +16,8 @@
  */
 
 use crate::input::file::FileData;
-use crate::input::{tag::Tag, Asset, Assets, Blogpost, Category, HostedFile, Quote};
+use crate::input::{tag::Tag, Asset, Assets, Blogpost, Category, HostedFileMetadata, Quote};
+use crate::HostedFile;
 use chrono::{FixedOffset, TimeZone};
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
@@ -54,12 +55,21 @@ pub fn create_category() -> Category {
     }
 }
 
-pub fn create_hosted_file() -> HostedFile {
-    HostedFile {
+pub fn create_hosted_file_metadata() -> HostedFileMetadata {
+    HostedFileMetadata {
         old_id: None,
         path: "answer.txt".to_owned(),
         mime_type: "text/plain".to_owned(),
         description: "You're really not going to like it.".to_owned(),
+        modified_at: SystemTime::now(),
+    }
+}
+
+pub fn create_hosted_file() -> HostedFile {
+    HostedFile {
+        filename: PathBuf::from("answer.txt"),
+        file_size: 42,
+        image_metadata: None,
         modified_at: SystemTime::now(),
     }
 }

@@ -17,13 +17,13 @@
 
 use super::{split_file_content, ParseError};
 use crate::input::file::FileData;
-use crate::input::HostedFile;
+use crate::input::HostedFileMetadata;
 
-pub fn parse_all_file_metadata(inputs: &[FileData]) -> Result<Vec<HostedFile>, ParseError> {
+pub fn parse_all_file_metadata(inputs: &[FileData]) -> Result<Vec<HostedFileMetadata>, ParseError> {
     inputs.iter().map(parse_file_metadata).collect()
 }
 
-fn parse_file_metadata(file_data: &FileData) -> Result<HostedFile, ParseError> {
+fn parse_file_metadata(file_data: &FileData) -> Result<HostedFileMetadata, ParseError> {
     let source_path = &file_data.filename;
     let (header_map, description) = split_file_content(file_data)?;
 
@@ -49,7 +49,7 @@ fn parse_file_metadata(file_data: &FileData) -> Result<HostedFile, ParseError> {
         })?
         .to_string();
 
-    Ok(HostedFile {
+    Ok(HostedFileMetadata {
         old_id,
         path,
         mime_type,

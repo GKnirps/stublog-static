@@ -15,7 +15,7 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::input::{tag::Tag, Blogpost, Category, HostedFile, Quote};
+use crate::input::{tag::Tag, Blogpost, Category, HostedFileMetadata, Quote};
 use percent_encoding::{percent_encode, AsciiSet, CONTROLS};
 
 pub const ESCAPE_SET: &AsciiSet = &CONTROLS
@@ -62,7 +62,7 @@ pub fn category_path(category: &Category) -> String {
 
 pub static ATOM_FEED_PATH: &str = "/feed.atom";
 
-pub fn hosted_file_path(hosted_file: &HostedFile) -> String {
+pub fn hosted_file_path(hosted_file: &HostedFileMetadata) -> String {
     format!(
         "/file/{}",
         percent_encode(hosted_file.path.as_bytes(), ESCAPE_SET)
@@ -91,7 +91,9 @@ pub fn files_metadata_index_path(page: usize) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_blogpost, create_category, create_hosted_file, create_quote};
+    use crate::test_utils::{
+        create_blogpost, create_category, create_hosted_file_metadata, create_quote,
+    };
     use std::path::Path;
 
     #[test]
@@ -148,7 +150,7 @@ mod tests {
     #[test]
     fn test_hosted_file_path() {
         // given
-        let mut hosted_file = create_hosted_file();
+        let mut hosted_file = create_hosted_file_metadata();
         hosted_file.old_id = Some("notthis".to_owned());
         hosted_file.path = "äh?".to_owned();
 
