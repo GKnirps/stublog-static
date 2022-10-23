@@ -37,7 +37,7 @@ fn write_hosted_file_index_page(
         &filename,
         files
             .iter()
-            .map(|f| f.0.modified_at)
+            .flat_map(|f| [f.0.modified_at, f.1.modified_at])
             .chain(assets.modification_dates()),
     ) {
         return Ok(());

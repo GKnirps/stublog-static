@@ -17,10 +17,13 @@
 
 use super::super::cmark::render_blogpost_content;
 use crate::input::Blogpost;
+use crate::output::OutputError;
 use crate::urls::{atom_feed_url, blogpost_url, CANONICAL_BASE_URL};
+use crate::HostedFile;
 use chrono::{FixedOffset, TimeZone};
 use quick_xml::events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event};
 use quick_xml::Writer;
+use std::collections::HashMap;
 use std::io::Write;
 
 fn write_leaf<T: Write>(
@@ -55,7 +58,8 @@ fn write_link<T: Write>(
 fn write_entry<T: Write>(
     writer: &mut Writer<T>,
     blogpost: &Blogpost,
-) -> Result<(), quick_xml::Error> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     writer.write_event(Event::Start(BytesStart::new("entry")))?;
 
     write_leaf(
@@ -88,7 +92,7 @@ fn write_entry<T: Write>(
         writer,
         "content",
         &[("type", "html")],
-        &render_blogpost_content(blogpost),
+        &render_blogpost_content(blogpost, hosted_files)?,
     )?;
 
     write_link(writer, &blogpost_url(blogpost), "alternate", "text/html")?;
@@ -100,7 +104,9 @@ fn write_entry<T: Write>(
 pub fn write_feed<T: Write>(
     writer: &mut Writer<T>,
     blogposts: &[Blogpost],
-) -> Result<(), quick_xml::Error> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
+    // FIXME: check if hosted files have been updated in a relevant way
     let updated = blogposts
         .iter()
         .map(|post| post.update_date.as_ref().unwrap_or(&post.date))
@@ -128,7 +134,7 @@ pub fn write_feed<T: Write>(
     write_link(writer, &atom_feed_url(), "self", "application/atom+xml")?;
 
     for post in blogposts.iter().rev() {
-        write_entry(writer, post)?;
+        write_entry(writer, post, hosted_files)?;
     }
 
     writer.write_event(Event::End(BytesEnd::new("feed")))?;
@@ -138,6 +144,7 @@ pub fn write_feed<T: Write>(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::output::RenderError;
     use crate::test_utils::create_blogpost;
     use chrono::Duration;
     use std::io::Cursor;
@@ -186,14 +193,16 @@ mod tests {
         // given
         let post = create_blogpost();
         let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
+        let hosted_files = HashMap::new();
 
         // when
-        write_entry(&mut writer, &post).expect("Expected successful write");
+        write_entry(&mut writer, &post, &hosted_files).expect("Expected successful write");
 
         // then
         let result = writer.into_inner().into_inner();
         let result_str: String = String::from_utf8(result).expect("valid utf-8");
 
+        // then
         assert_eq!(result_str, "<entry>\
         <id>tag:strangerthanusual.de,2005:Blogpost/foobar</id>\
         <title>Nevermind</title>\
@@ -207,14 +216,36 @@ mod tests {
     }
 
     #[test]
+    fn write_entry_propagates_render_error() {
+        // given
+        let mut post = create_blogpost();
+        post.content_markdown = "![foo](/file/foo.png)".to_string();
+        let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
+        let hosted_files = HashMap::new();
+
+        // when
+        let result = write_entry(&mut writer, &post, &hosted_files);
+
+        // then
+        let err = result.expect_err("expected error");
+        match err {
+            OutputError::Render(e) => {
+                assert_eq!(e, RenderError::from("did not find hosted image 'foo.png'"))
+            }
+            _ => panic!("unexpected error type: {:?}", err),
+        }
+    }
+
+    #[test]
     fn write_entry_uses_creation_date_if_update_date_is_missing() {
         // given
         let mut post = create_blogpost();
         post.update_date = None;
         let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
+        let hosted_files = HashMap::new();
 
         // when
-        write_entry(&mut writer, &post).expect("Expected successful write");
+        write_entry(&mut writer, &post, &hosted_files).expect("Expected successful write");
 
         // then
         let result = writer.into_inner().into_inner();
@@ -243,8 +274,10 @@ mod tests {
 
         let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
 
+        let hosted_files = HashMap::new();
+
         // when
-        write_feed(&mut writer, posts).expect("Expected successful write");
+        write_feed(&mut writer, posts, &hosted_files).expect("Expected successful write");
 
         // then
         let result = writer.into_inner().into_inner();
@@ -286,8 +319,10 @@ mod tests {
 
         let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
 
+        let hosted_files = HashMap::new();
+
         // when
-        write_feed(&mut writer, posts).expect("Expected successful write");
+        write_feed(&mut writer, posts, &hosted_files).expect("Expected successful write");
 
         // then
         let result = writer.into_inner().into_inner();

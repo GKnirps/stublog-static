@@ -18,7 +18,9 @@
 use super::file::open_for_write;
 use crate::input::Blogpost;
 use crate::output::needs_any_update;
+use crate::HostedFile;
 use quick_xml::Writer;
+use std::collections::HashMap;
 use std::path::Path;
 
 mod atom;
@@ -28,7 +30,11 @@ pub fn feed_needs_update(filename: &Path, blogposts: &[Blogpost]) -> bool {
     needs_any_update(filename, times)
 }
 
-pub fn write_atom_feed(dir: &Path, blogposts: &[Blogpost]) -> Result<(), String> {
+pub fn write_atom_feed(
+    dir: &Path,
+    blogposts: &[Blogpost],
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), String> {
     let mut filename = dir.to_path_buf();
     filename.push("feed.atom");
     if !feed_needs_update(&filename, blogposts) {
@@ -39,7 +45,7 @@ pub fn write_atom_feed(dir: &Path, blogposts: &[Blogpost]) -> Result<(), String>
         open_for_write(&filename).map_err(|e| format!("Unable to open atom feed file: {}", e))?;
     let mut writer = Writer::new(file);
 
-    atom::write_feed(&mut writer, blogposts)
+    atom::write_feed(&mut writer, blogposts, hosted_files)
         .map_err(|e| format!("Unable to write atom feed: {}", e))?;
 
     writer

@@ -18,20 +18,27 @@
 use super::super::cmark::render_blogpost_content;
 use crate::input::{Assets, Blogpost, Category};
 use crate::output::html::HeadData;
+use crate::output::RenderError;
 use crate::paths::{blogpost_path, category_path, tag_path};
 use crate::urls::{blogpost_url, url_for_absolute_path};
+use crate::HostedFile;
 use maud::{html, Markup, PreEscaped};
+use std::collections::HashMap;
 
-pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Markup {
+pub fn render_blogpost(
+    blogpost: &Blogpost,
+    category: Option<&Category>,
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
     let permalink = blogpost_path(blogpost);
-    html! {
+    Ok(html! {
         article.blogpost {
             h2.posttitle {
                 a href=(permalink) rel="bookmark" {
                     (blogpost.title)
                 }
             }
-            div.entry { (PreEscaped(render_blogpost_content(blogpost))) }
+            div.entry { (PreEscaped(render_blogpost_content(blogpost, hosted_files)?)) }
             footer {
                 span.post-time {
                     (super::time(&blogpost.date))
@@ -57,14 +64,15 @@ pub fn render_blogpost(blogpost: &Blogpost, category: Option<&Category>) -> Mark
                 }
             }
         }
-    }
+    })
 }
 
 pub fn render_blogpost_page(
     blogpost: &Blogpost,
     category: Option<&Category>,
     assets: &Assets,
-) -> Markup {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
     let description: Option<&str> = blogpost.summary.as_ref().map(|s| {
         let r: &str = s;
         r
@@ -82,7 +90,11 @@ pub fn render_blogpost_page(
     if let Some(url) = &og_image_url {
         head_data = head_data.with_og_image_url(url)
     }
-    super::base(&head_data, render_blogpost(blogpost, category))
+
+    Ok(super::base(
+        &head_data,
+        render_blogpost(blogpost, category, hosted_files)?,
+    ))
 }
 
 #[cfg(test)]
@@ -95,9 +107,12 @@ mod tests {
         // given
         let blogpost = create_blogpost();
         let category = create_category();
+        let hosted_files = HashMap::new();
 
         // when
-        let result = render_blogpost(&blogpost, Some(&category)).into_string();
+        let result = render_blogpost(&blogpost, Some(&category), &hosted_files)
+            .expect("expected success")
+            .into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);
@@ -112,9 +127,12 @@ mod tests {
     fn render_blogpost_should_not_render_absent_category() {
         // given
         let blogpost = create_blogpost();
+        let hosted_files = HashMap::new();
 
         // when
-        let result = render_blogpost(&blogpost, None).into_string();
+        let result = render_blogpost(&blogpost, None, &hosted_files)
+            .expect("expected success")
+            .into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);
@@ -129,8 +147,12 @@ mod tests {
 
         let assets = create_assets();
 
+        let hosted_files = HashMap::new();
+
         // when
-        let result = render_blogpost_page(&blogpost, Some(&category), &assets).into_string();
+        let result = render_blogpost_page(&blogpost, Some(&category), &assets, &hosted_files)
+            .expect("expected success")
+            .into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);

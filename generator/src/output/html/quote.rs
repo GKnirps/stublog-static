@@ -19,9 +19,11 @@ use super::pager::pager;
 use crate::input::{Assets, Quote};
 use crate::output::cmark::render_cmark;
 use crate::output::html::HeadData;
+use crate::output::RenderError;
 use crate::paths::{quote_list_path, QUOTE_FORTUNE_PATH};
-use crate::urls;
+use crate::{urls, HostedFile};
 use maud::{html, Markup, PreEscaped};
+use std::collections::HashMap;
 
 fn render_quote_source(quote: &Quote) -> Markup {
     html! {
@@ -50,31 +52,38 @@ fn render_quote_source(quote: &Quote) -> Markup {
     }
 }
 
-pub fn render_quote(quote: &Quote) -> Markup {
-    html! {
+pub fn render_quote(
+    quote: &Quote,
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
+    Ok(html! {
         div.qotd {
             @if let Some(source_url) = &quote.source_url {
                 blockquote cite=(source_url) {
-                    (PreEscaped(render_cmark(&quote.content_markdown, false)))
+                    (PreEscaped(render_cmark(&quote.content_markdown, false, hosted_files)?))
                 }
             } @else {
                 blockquote {
-                    (PreEscaped(render_cmark(&quote.content_markdown, false)))
+                    (PreEscaped(render_cmark(&quote.content_markdown, false, hosted_files)?))
                 }
             }
             (render_quote_source(quote))
         }
-    }
+    })
 }
 
-pub fn render_quote_page(quote: &Quote, assets: &Assets) -> Markup {
-    let content = render_quote(quote);
+pub fn render_quote_page(
+    quote: &Quote,
+    assets: &Assets,
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
+    let content = render_quote(quote, hosted_files)?;
 
-    super::base(
+    Ok(super::base(
         &HeadData::new("Stranger Than Usual — Zitat", assets)
             .with_canonical_url(&urls::quote_url(quote)),
         content,
-    )
+    ))
 }
 
 pub fn render_quote_list_page(
@@ -82,7 +91,8 @@ pub fn render_quote_list_page(
     current_page: usize,
     num_pages: usize,
     assets: &Assets,
-) -> Markup {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
     let html_pager = pager(current_page, num_pages, &quote_list_path);
     let content = html! {
         h2 { "Nicht alles hier ist ein Zitat" }
@@ -92,13 +102,13 @@ pub fn render_quote_list_page(
         div.quotes {
             (html_pager)
             @for quote in quotes {
-                (render_quote(quote))
+                (render_quote(quote, hosted_files)?)
             }
             (html_pager)
         }
     };
 
-    super::base(
+    Ok(super::base(
         &HeadData::new(
             &format!(
                 "Stranger Than Usual: Zitate Seite {} von {}",
@@ -109,7 +119,7 @@ pub fn render_quote_list_page(
         )
         .with_canonical_url(&urls::quote_list_url(current_page)),
         content,
-    )
+    ))
 }
 
 #[cfg(test)]
@@ -183,9 +193,12 @@ mod tests {
     fn render_quote_renders_quote() {
         // given
         let quote = create_quote();
+        let hosted_files = HashMap::new();
 
         // when
-        let result = render_quote(&quote).into_string();
+        let result = render_quote(&quote, &hosted_files)
+            .expect("expected success")
+            .into_string();
 
         // then
         println!("Checking html:\n{}", result);
@@ -202,13 +215,34 @@ mod tests {
     }
 
     #[test]
+    fn render_quote_propagates_render_error() {
+        // given
+        let mut quote = create_quote();
+        quote.content_markdown = "![foo](/file/absent.png)".to_string();
+        let hosted_files = HashMap::new();
+
+        // when
+        let result = render_quote(&quote, &hosted_files);
+
+        // then
+        let err = result.expect_err("expected error");
+        assert_eq!(
+            err,
+            RenderError::from("did not find hosted image 'absent.png'")
+        );
+    }
+
+    #[test]
     fn render_quote_renders_quote_without_cite_url_if_no_source_url_is_given() {
         // given
         let mut quote = create_quote();
         quote.source_url = None;
+        let hosted_files = HashMap::new();
 
         // when
-        let result = render_quote(&quote).into_string();
+        let result = render_quote(&quote, &hosted_files)
+            .expect("expected success")
+            .into_string();
 
         // then
         println!("Checking html:\n{}", result);
@@ -224,9 +258,12 @@ mod tests {
         // given
         let quote = create_quote();
         let assets = create_assets();
+        let hosted_files = HashMap::new();
 
         // when
-        let result = render_quote_page(&quote, &assets).into_string();
+        let result = render_quote_page(&quote, &assets, &hosted_files)
+            .expect("expected success")
+            .into_string();
 
         // then
         println!("Checking generated html:\n{}", result);
@@ -249,10 +286,18 @@ mod tests {
         let num_pages = 42;
 
         let assets = create_assets();
+        let hosted_files = HashMap::new();
 
         // when
-        let result = render_quote_list_page(&[quote1, quote2], current_page, num_pages, &assets)
-            .into_string();
+        let result = render_quote_list_page(
+            &[quote1, quote2],
+            current_page,
+            num_pages,
+            &assets,
+            &hosted_files,
+        )
+        .expect("expected success")
+        .into_string();
 
         // then
         println!("Checking generated html:\n{}", result);

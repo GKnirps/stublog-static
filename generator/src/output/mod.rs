@@ -15,9 +15,11 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use std::error::Error;
 use std::fs::metadata;
 use std::path::Path;
 use std::time::SystemTime;
+use std::{fmt, io};
 
 pub mod blogposts;
 pub mod categories;
@@ -53,4 +55,82 @@ where
         .max()
         .map(|t| needs_update(filename, t))
         .unwrap_or(true)
+}
+
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+pub struct RenderError {
+    pub msg: String,
+}
+
+impl RenderError {
+    pub fn new(msg: String) -> RenderError {
+        RenderError { msg }
+    }
+
+    // only used in tests right now
+    #[cfg(test)]
+    pub fn from(msg: &str) -> RenderError {
+        RenderError {
+            msg: msg.to_owned(),
+        }
+    }
+}
+
+impl Error for RenderError {}
+
+impl fmt::Display for RenderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.msg)
+    }
+}
+
+#[derive(Debug)]
+pub enum OutputError {
+    IO(io::Error),
+    Render(RenderError),
+    Xml(quick_xml::Error),
+}
+
+impl Error for OutputError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        Some(match self {
+            OutputError::IO(e) => e,
+            OutputError::Render(e) => e,
+            OutputError::Xml(e) => e,
+        })
+    }
+}
+
+impl fmt::Display for OutputError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            OutputError::IO(e) => write!(f, "{}", e),
+            OutputError::Render(e) => write!(f, "{}", e),
+            OutputError::Xml(e) => write!(f, "{}", e),
+        }
+    }
+}
+
+impl From<io::Error> for OutputError {
+    fn from(e: io::Error) -> Self {
+        OutputError::IO(e)
+    }
+}
+
+impl From<RenderError> for OutputError {
+    fn from(e: RenderError) -> Self {
+        OutputError::Render(e)
+    }
+}
+
+impl<T> From<io::IntoInnerError<T>> for OutputError {
+    fn from(e: io::IntoInnerError<T>) -> Self {
+        Self::from(io::Error::from(e))
+    }
+}
+
+impl From<quick_xml::Error> for OutputError {
+    fn from(e: quick_xml::Error) -> Self {
+        OutputError::Xml(e)
+    }
 }

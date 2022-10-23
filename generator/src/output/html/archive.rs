@@ -21,31 +21,35 @@ use super::blogpost::render_blogpost;
 use super::pager::pager;
 use crate::input::{Assets, Blogpost, Category};
 use crate::output::html::HeadData;
+use crate::output::RenderError;
 use crate::paths::archive_path;
 use crate::urls::archive_url;
+use crate::HostedFile;
+use std::collections::HashMap;
 
 pub fn render_archive(
     blogposts: &[(&Blogpost, Option<&Category>)],
     current_page: usize,
     num_pages: usize,
     assets: &Assets,
-) -> Markup {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
     let html_pager = pager(current_page, num_pages, &archive_path);
     let html_content = html! {
         div.blogposts {
             (html_pager)
                 @for (post, cat) in blogposts {
-                    (render_blogpost(post, *cat))
+                    (render_blogpost(post, *cat, hosted_files)?)
                 }
             (html_pager)
         }
     };
 
-    super::base(
+    Ok(super::base(
         &HeadData::new("Stranger Than Usual — Archiv", assets)
             .with_canonical_url(&archive_url(current_page)),
         html_content,
-    )
+    ))
 }
 
 #[cfg(test)]
@@ -66,13 +70,17 @@ mod tests {
 
         let assets = create_assets();
 
+        let hosted_files = HashMap::new();
+
         // when
         let result = render_archive(
             &[(&blogpost1, None), (&blogpost2, None)],
             current_page,
             num_pages,
             &assets,
+            &hosted_files,
         )
+        .expect("expected success")
         .into_string();
 
         // then

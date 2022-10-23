@@ -15,31 +15,35 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use crate::HostedFile;
 use maud::{html, Markup};
+use std::collections::HashMap;
 
 use super::blogpost::render_blogpost;
 use super::quote::render_quote;
 use crate::input::{Assets, Blogpost, Category, Quote};
 use crate::output::html::HeadData;
+use crate::output::RenderError;
 use crate::urls::CANONICAL_BASE_URL;
 
 pub fn render_home(
     blogposts: &[(&Blogpost, Option<&Category>)],
     qotd: Option<&Quote>,
     assets: &Assets,
-) -> Markup {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
     let html_content = html! {
         @if let Some(quote) = qotd {
-            (render_quote(quote))
+            (render_quote(quote, hosted_files)?)
         }
         div.blogposts {
             @for (post, cat) in blogposts.iter().rev() {
-                (render_blogpost(post, *cat))
+                (render_blogpost(post, *cat, hosted_files)?)
             }
         }
     };
 
-    super::base(
+    Ok(super::base(
         &HeadData::new("Stranger Than Usual", assets)
             .with_canonical_url(CANONICAL_BASE_URL)
             .with_description(Some(
@@ -47,7 +51,7 @@ pub fn render_home(
             ))
             .with_og_type("website"),
         html_content,
-    )
+    ))
 }
 
 #[cfg(test)]
@@ -66,8 +70,17 @@ mod tests {
 
         let assets = create_assets();
 
+        let hosted_files = HashMap::new();
+
         // when
-        let result = render_home(&[(&post1, None), (&post2, None)], None, &assets).into_string();
+        let result = render_home(
+            &[(&post1, None), (&post2, None)],
+            None,
+            &assets,
+            &hosted_files,
+        )
+        .expect("expeced success")
+        .into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);
@@ -92,8 +105,12 @@ mod tests {
 
         let assets = create_assets();
 
+        let hosted_files = HashMap::new();
+
         // when
-        let result = render_home(&[(&post, None)], Some(&quote), &assets).into_string();
+        let result = render_home(&[(&post, None)], Some(&quote), &assets, &hosted_files)
+            .expect("expected success")
+            .into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);

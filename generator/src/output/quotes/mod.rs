@@ -20,16 +20,25 @@ use super::html::quote::render_quote_page;
 use super::needs_any_update;
 use crate::input::{Assets, Quote};
 use crate::output::html::quote::render_quote_list_page;
+use crate::output::OutputError;
+use crate::HostedFile;
+use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
 use std::path::Path;
 
 mod fortune;
 
-fn write_quote_page(dir: &Path, quote: &Quote, assets: &Assets) -> std::io::Result<()> {
+fn write_quote_page(
+    dir: &Path,
+    quote: &Quote,
+    assets: &Assets,
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     let mut filename = dir.to_path_buf();
     filename.push(&quote.filename);
     filename.set_extension("html");
+    // FIXME: check if hosted files changed
     if !needs_any_update(
         &filename,
         assets
@@ -42,18 +51,31 @@ fn write_quote_page(dir: &Path, quote: &Quote, assets: &Assets) -> std::io::Resu
         return Ok(());
     }
     let mut writer = open_for_write(&filename)?;
-    write!(writer, "{}", render_quote_page(quote, assets).into_string())?;
-    writer.into_inner()?.sync_all()
+    write!(
+        writer,
+        "{}",
+        render_quote_page(quote, assets, hosted_files)?.into_string()
+    )?;
+    writer
+        .into_inner()
+        .map_err(OutputError::from)?
+        .sync_all()
+        .map_err(OutputError::from)
 }
 
-pub fn write_quote_pages(dir: &Path, quotes: &[Quote], assets: &Assets) -> std::io::Result<()> {
+pub fn write_quote_pages(
+    dir: &Path,
+    quotes: &[Quote],
+    assets: &Assets,
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
         create_dir(dir)?;
     }
     for quote in quotes {
         // TODO: it would be more helpful if we knew which quote failed
-        write_quote_page(dir, quote, assets)?;
+        write_quote_page(dir, quote, assets, hosted_files)?;
     }
     Ok(())
 }
@@ -64,9 +86,11 @@ fn write_quote_list_page(
     current_page: usize,
     num_pages: usize,
     assets: &Assets,
-) -> std::io::Result<()> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     let mut filename = dir.to_path_buf();
     filename.push(format!("{}.html", current_page));
+    // FIXME: check if hosted files changed
     if !needs_any_update(
         &filename,
         quotes
@@ -80,17 +104,23 @@ fn write_quote_list_page(
     write!(
         writer,
         "{}",
-        render_quote_list_page(quotes, current_page, num_pages, assets).into_string()
+        render_quote_list_page(quotes, current_page, num_pages, assets, hosted_files)?
+            .into_string()
     )?;
 
-    writer.into_inner()?.sync_all()
+    writer
+        .into_inner()
+        .map_err(OutputError::from)?
+        .sync_all()
+        .map_err(OutputError::from)
 }
 
 pub fn write_quote_list_pages(
     dir: &Path,
     quotes: &[Quote],
     assets: &Assets,
-) -> std::io::Result<()> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
         create_dir(dir)?;
@@ -101,7 +131,7 @@ pub fn write_quote_list_pages(
 
     for (index, chunk) in quotes.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed
-        write_quote_list_page(dir, chunk, index, num_chunks, assets)?;
+        write_quote_list_page(dir, chunk, index, num_chunks, assets, hosted_files)?;
     }
 
     Ok(())

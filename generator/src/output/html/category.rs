@@ -17,9 +17,12 @@
 
 use crate::input::{Assets, Blogpost, Category};
 use crate::output::html::HeadData;
+use crate::output::RenderError;
 use crate::paths::{blogpost_path, category_path};
 use crate::urls::{categories_url, category_url};
+use crate::HostedFile;
 use maud::{html, Markup, PreEscaped};
+use std::collections::HashMap;
 
 pub fn render_categories_index_page(
     categories: &[(&Category, Vec<&Blogpost>)],
@@ -49,10 +52,11 @@ pub fn render_category_page(
     category: &Category,
     blogposts: &[&Blogpost],
     assets: &Assets,
-) -> Markup {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
     let content = html! {
         h2.section-heading { "Kategorie: " (category.title) }
-        (PreEscaped(crate::output::cmark::render_cmark(&category.description_markdown, false)))
+        (PreEscaped(crate::output::cmark::render_cmark(&category.description_markdown, false, hosted_files)?))
 
         h3 { "Diese Kategorie hat " (blogposts.len()) " Einträge" }
         ul {
@@ -65,14 +69,14 @@ pub fn render_category_page(
             }
         }
     };
-    super::base(
+    Ok(super::base(
         &HeadData::new(
             &format!("Stranger Than Usual — {}", &category.title),
             assets,
         )
         .with_canonical_url(&category_url(category)),
         content,
-    )
+    ))
 }
 
 #[cfg(test)]
@@ -125,8 +129,12 @@ mod tests {
 
         let assets = create_assets();
 
+        let hosted_files = HashMap::new();
+
         // when
-        let result = render_category_page(&category, &[&post1, &post2], &assets).into_string();
+        let result = render_category_page(&category, &[&post1, &post2], &assets, &hosted_files)
+            .expect("expected success")
+            .into_string();
 
         // then
         println!("Checking rendered html:\n{}", result);

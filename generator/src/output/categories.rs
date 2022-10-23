@@ -16,6 +16,7 @@
  */
 
 use std::cmp::max;
+use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
 use std::iter::once;
@@ -24,7 +25,8 @@ use std::path::Path;
 use super::file::open_for_write;
 use super::html;
 use crate::input::{Assets, Blogpost, Category};
-use crate::output::needs_any_update;
+use crate::output::{needs_any_update, OutputError};
+use crate::HostedFile;
 use std::time::SystemTime;
 
 pub fn categories_with_blogposts<'a>(
@@ -87,13 +89,14 @@ pub fn write_category_pages(
     dir: &Path,
     categories: &[(&Category, Vec<&Blogpost>)],
     assets: &Assets,
-) -> std::io::Result<()> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
         create_dir(dir)?;
     }
     for (cat, blogposts) in categories {
-        write_category_page(dir, cat, blogposts, assets)?;
+        write_category_page(dir, cat, blogposts, assets, hosted_files)?;
     }
     Ok(())
 }
@@ -103,11 +106,13 @@ fn write_category_page(
     category: &Category,
     blogposts: &[&Blogpost],
     assets: &Assets,
-) -> std::io::Result<()> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     let mut filename = dir.to_path_buf();
     filename.push(&category.filename);
     filename.set_extension("html");
 
+    // FIXME: check if hosted files changed
     if !needs_any_update(
         &filename,
         assets
@@ -123,9 +128,14 @@ fn write_category_page(
     write!(
         writer,
         "{}",
-        html::category::render_category_page(category, blogposts, assets).into_string()
+        html::category::render_category_page(category, blogposts, assets, hosted_files)?
+            .into_string()
     )?;
-    writer.into_inner()?.sync_all()
+    writer
+        .into_inner()
+        .map_err(OutputError::from)?
+        .sync_all()
+        .map_err(OutputError::from)
 }
 #[cfg(test)]
 mod tests {

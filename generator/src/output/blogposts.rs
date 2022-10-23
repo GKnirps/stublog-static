@@ -15,7 +15,9 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use crate::HostedFile;
 use std::cmp::max;
+use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
 use std::iter::once;
@@ -23,16 +25,16 @@ use std::path::Path;
 
 use super::file::open_for_write;
 use super::html;
-use crate::input::{parser, Assets, Quote};
+use crate::input::{Assets, Quote};
 use crate::input::{Blogpost, Category};
-use crate::output::{needs_any_update, needs_update};
+use crate::output::{needs_any_update, needs_update, OutputError, RenderError};
 
 // find categories for all blogposts with a category id. If the ID is present but matches no
 // known category, return an error
 pub fn find_categories_for_blogposts<'a>(
     blogposts: &'a [Blogpost],
     categories: &'a [Category],
-) -> Result<Vec<(&'a Blogpost, Option<&'a Category>)>, parser::ParseError> {
+) -> Result<Vec<(&'a Blogpost, Option<&'a Category>)>, RenderError> {
     blogposts
         .iter()
         .map(|post| match &post.category_id {
@@ -42,7 +44,7 @@ pub fn find_categories_for_blogposts<'a>(
                 .find(|cat| &cat.id == id)
                 .map(|cat| (post, Some(cat)))
                 .ok_or_else(|| {
-                    parser::ParseError::new(format!(
+                    RenderError::new(format!(
                         "Unable to find category '{}' for blogpost '{}'",
                         id, post.title
                     ))
@@ -56,14 +58,15 @@ pub fn write_blogposts(
     dir: &Path,
     posts: &[(&Blogpost, Option<&Category>)],
     assets: &Assets,
-) -> std::io::Result<()> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
         create_dir(dir)?;
     }
     for (blogpost, category) in posts {
         // TODO: it would be more helpful if we knew which blogpost failed
-        write_blogpost(dir, blogpost, *category, assets)?;
+        write_blogpost(dir, blogpost, *category, assets, hosted_files)?;
     }
     Ok(())
 }
@@ -73,10 +76,12 @@ fn write_blogpost(
     blogpost: &Blogpost,
     category: Option<&Category>,
     assets: &Assets,
-) -> std::io::Result<()> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     let mut filename = dir.to_path_buf();
     filename.push(&blogpost.filename);
     filename.set_extension("html");
+    // FIXME: blogposts may need an update if the relevant hosted files changed
     if !needs_any_update(
         &filename,
         assets
@@ -92,9 +97,14 @@ fn write_blogpost(
     write!(
         writer,
         "{}",
-        html::blogpost::render_blogpost_page(blogpost, category, assets).into_string()
+        html::blogpost::render_blogpost_page(blogpost, category, assets, hosted_files)?
+            .into_string()
     )?;
-    writer.into_inner()?.sync_all()
+    writer
+        .into_inner()
+        .map_err(OutputError::from)?
+        .sync_all()
+        .map_err(OutputError::from)
 }
 
 fn blogposts_with_categories_need_update(
@@ -123,7 +133,8 @@ pub fn write_home(
     all_posts: &[(&Blogpost, Option<&Category>)],
     qotd: Option<&Quote>,
     assets: &Assets,
-) -> std::io::Result<()> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     if !dir.is_dir() {
         create_dir(dir)?;
     }
@@ -136,6 +147,7 @@ pub fn write_home(
         &all_posts[all_posts.len() - 10..]
     };
 
+    // FIXME: check if hosted files changed
     if !blogposts_with_categories_need_update(&filename, posts, qotd, assets) {
         return Ok(());
     }
@@ -144,16 +156,21 @@ pub fn write_home(
     write!(
         writer,
         "{}",
-        html::home::render_home(posts, qotd, assets).into_string()
+        html::home::render_home(posts, qotd, assets, hosted_files)?.into_string()
     )?;
-    writer.into_inner()?.sync_all()
+    writer
+        .into_inner()
+        .map_err(OutputError::from)?
+        .sync_all()
+        .map_err(OutputError::from)
 }
 
 pub fn write_archive(
     dir: &Path,
     all_posts: &[(&Blogpost, Option<&Category>)],
     assets: &Assets,
-) -> std::io::Result<()> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     if !dir.is_dir() {
         create_dir(dir)?;
     }
@@ -168,7 +185,7 @@ pub fn write_archive(
 
     for (index, chunk) in all_posts.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed
-        write_archive_page(dir, chunk, index, num_chunks, assets)?;
+        write_archive_page(dir, chunk, index, num_chunks, assets, hosted_files)?;
     }
 
     Ok(())
@@ -180,11 +197,13 @@ fn write_archive_page(
     page_index: usize,
     num_pages: usize,
     assets: &Assets,
-) -> std::io::Result<()> {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     let mut filename = dir.to_path_buf();
     filename.push(format!("{}", page_index));
     filename.set_extension("html");
 
+    // FIXME: blogposts may need an update if the relevant hosted files changed
     if !blogposts_with_categories_need_update(&filename, posts, None, assets) {
         return Ok(());
     }
@@ -194,14 +213,18 @@ fn write_archive_page(
     write!(
         writer,
         "{}",
-        html::archive::render_archive(posts, page_index, num_pages, assets).into_string()
+        html::archive::render_archive(posts, page_index, num_pages, assets, hosted_files)?
+            .into_string()
     )?;
-    writer.into_inner()?.sync_all()
+    writer
+        .into_inner()
+        .map_err(OutputError::from)?
+        .sync_all()
+        .map_err(OutputError::from)
 }
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::input::parser::ParseError;
     use crate::test_utils::{create_blogpost, create_category};
 
     #[test]
@@ -266,7 +289,7 @@ mod tests {
         // then
         assert_eq!(
             result,
-            Err(ParseError::from(
+            Err(RenderError::from(
                 "Unable to find category 'cat2' for blogpost 'post'"
             ))
         );

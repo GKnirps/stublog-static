@@ -102,6 +102,19 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
 
     write_404(Path::new(odir), &assets).map_err(|e| format!("Failed to write 404 error: {}", e))?;
 
+    let hosted_files_meta_indir: PathBuf = [indir, "files_index"].iter().collect();
+    let raw_hosted_files_meta = file::read_files_sorted(&hosted_files_meta_indir)
+        .map_err(|e| format!("Failed to read all hosted files: {}", e))?;
+    let hosted_files_meta = parse_all_file_metadata(&raw_hosted_files_meta)
+        .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
+
+    let hosted_files_indir: PathBuf = [indir, "file"].iter().collect();
+    let hosted_files = input::hosted_files::list_all_files(&hosted_files_indir)
+        .map_err(|e| format!("Unable to list all hosted files:{e}"))?;
+
+    let (hosted_file_pairs, hosted_files_by_name) =
+        match_hosted_files(&hosted_files_meta, &hosted_files)?;
+
     let categories_indir: PathBuf = [indir, "categories"].iter().collect();
     let raw_categories = file::read_files_sorted(&categories_indir)
         .map_err(|e| format!("Failed to parse all categories: {}", e))?;
@@ -127,28 +140,49 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         blogposts::find_categories_for_blogposts(&blogposts, &categories)
             .map_err(|e| format!("Error while matching blogpost with categories: {}", e))?;
     let blogpost_dir: PathBuf = [odir, "blogposts"].iter().collect();
-    blogposts::write_blogposts(&blogpost_dir, &categorized_blogposts, &assets)
-        .map_err(|e| format!("Failed to write all blogposts: {}", e))?;
+    blogposts::write_blogposts(
+        &blogpost_dir,
+        &categorized_blogposts,
+        &assets,
+        &hosted_files_by_name,
+    )
+    .map_err(|e| format!("Failed to write all blogposts: {}", e))?;
 
     let archive_dir: PathBuf = [odir, "archive"].iter().collect();
-    blogposts::write_archive(&archive_dir, &categorized_blogposts, &assets)
-        .map_err(|e| format!("Failed to write archive: {}", e))?;
+    blogposts::write_archive(
+        &archive_dir,
+        &categorized_blogposts,
+        &assets,
+        &hosted_files_by_name,
+    )
+    .map_err(|e| format!("Failed to write archive: {}", e))?;
     blogposts::write_home(
         Path::new(odir),
         &categorized_blogposts,
         published_quotes.last(),
         &assets,
+        &hosted_files_by_name,
     )
     .map_err(|e| format!("Failed to write home page: {}", e))?;
 
-    feed::write_atom_feed(Path::new(odir), &blogposts)?;
+    feed::write_atom_feed(Path::new(odir), &blogposts, &hosted_files_by_name)?;
 
     let quote_dir: PathBuf = [odir, "quote"].iter().collect();
-    quotes::write_quote_pages(&quote_dir, &published_quotes, &assets)
-        .map_err(|e| format!("Unable to write all quote pages: {}", e))?;
+    quotes::write_quote_pages(
+        &quote_dir,
+        &published_quotes,
+        &assets,
+        &hosted_files_by_name,
+    )
+    .map_err(|e| format!("Unable to write all quote pages: {}", e))?;
     let quote_list_dir: PathBuf = [odir, "quotes"].iter().collect();
-    quotes::write_quote_list_pages(&quote_list_dir, &published_quotes, &assets)
-        .map_err(|e| format!("Unable to write all quote lists: {}", e))?;
+    quotes::write_quote_list_pages(
+        &quote_list_dir,
+        &published_quotes,
+        &assets,
+        &hosted_files_by_name,
+    )
+    .map_err(|e| format!("Unable to write all quote lists: {}", e))?;
     quotes::write_quote_fortune_file(&quote_list_dir, &published_quotes)
         .map_err(|e| format!("Unable to write quote fortune file: {}", e))?;
 
@@ -164,20 +198,13 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     let categories_with_posts = categories::categories_with_blogposts(&categories, &blogposts);
     categories::write_category_index(&category_dir, &categories_with_posts, &assets)
         .map_err(|e| format!("Failed to write category index page: {}", e))?;
-    categories::write_category_pages(&category_dir, &categories_with_posts, &assets)
-        .map_err(|e| format!("Failed to write all category pages: {}", e))?;
-
-    let hosted_files_meta_indir: PathBuf = [indir, "files_index"].iter().collect();
-    let raw_hosted_files_meta = file::read_files_sorted(&hosted_files_meta_indir)
-        .map_err(|e| format!("Failed to read all hosted files: {}", e))?;
-    let hosted_files_meta = parse_all_file_metadata(&raw_hosted_files_meta)
-        .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
-
-    let hosted_files_indir: PathBuf = [indir, "file"].iter().collect();
-    let hosted_files = input::hosted_files::list_all_files(&hosted_files_indir)
-        .map_err(|e| format!("Unable to list all hosted files:{e}"))?;
-
-    let hosted_file_pairs = match_hosted_files(&hosted_files_meta, &hosted_files)?;
+    categories::write_category_pages(
+        &category_dir,
+        &categories_with_posts,
+        &assets,
+        &hosted_files_by_name,
+    )
+    .map_err(|e| format!("Failed to write all category pages: {}", e))?;
 
     let hosted_files_index_dir: PathBuf = [odir, "files_metadata"].iter().collect();
     hosted_files::write_hosted_file_index_pages(
@@ -250,10 +277,14 @@ fn check_duplicate_quote_names(quotes: &[Quote]) -> Result<(), String> {
     Ok(())
 }
 
+type MatchedFiles<'meta, 'file> = (
+    Vec<(&'meta HostedFileMetadata, &'file HostedFile)>,
+    HashMap<&'file str, &'file HostedFile>,
+);
 fn match_hosted_files<'meta, 'file>(
     hosted_files_meta: &'meta [HostedFileMetadata],
     hosted_files: &'file [HostedFile],
-) -> Result<Vec<(&'meta HostedFileMetadata, &'file HostedFile)>, String> {
+) -> Result<MatchedFiles<'meta, 'file>, String> {
     let mut seen: HashSet<&str> = HashSet::with_capacity(hosted_files_meta.len());
     for hosted_file in hosted_files_meta {
         if seen.contains(&hosted_file.path as &str) {
@@ -303,7 +334,7 @@ fn match_hosted_files<'meta, 'file>(
         ));
     }
 
-    Ok(result)
+    Ok((result, files_by_name))
 }
 
 #[cfg(test)]
@@ -491,9 +522,15 @@ mod tests {
 
         // then
         assert_eq!(
-            &result,
+            &result.0,
             &[(&metadata[0], &files[1]), (&metadata[1], &files[0])]
         );
+        assert_eq!(
+            result.1,
+            [("file1", &files[1]), ("file2", &files[0])]
+                .into_iter()
+                .collect()
+        )
     }
 
     #[test]
