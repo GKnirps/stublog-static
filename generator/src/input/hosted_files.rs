@@ -16,6 +16,8 @@
  */
 
 use super::HostedFile;
+use crate::input::ImageMetadata;
+use image::io::Reader as ImageReader;
 use std::fs::read_dir;
 use std::path::{Path, PathBuf};
 
@@ -28,16 +30,37 @@ pub fn list_all_files(path: &Path) -> std::io::Result<Vec<HostedFile>> {
             let file_size = metadata.len();
             let modified_at = metadata.modified()?;
             let mut filename = PathBuf::with_capacity(64);
-            filename.set_file_name(entry.path().file_name().ok_or_else(|| {
+            let entry_path = entry.path();
+            filename.set_file_name(entry_path.file_name().ok_or_else(|| {
                 std::io::Error::new(std::io::ErrorKind::Other, "No filename given for dir entry")
             })?);
+            // we take a shortcut here and rely on the file extensions, this makes things a little faster
+            let image_metadata = if entry_path
+                .extension()
+                .and_then(|ext| ext.to_str())
+                .map(|ext| ["png", "gif", "jpg", "jpeg", "webp"].contains(&ext))
+                .unwrap_or(false)
+            {
+                read_image_metadata(&entry_path)
+            } else {
+                None
+            };
             Ok(HostedFile {
                 filename,
                 file_size,
                 modified_at,
-                // TODO: load image metadata if appropriate
-                image_metadata: None,
+                image_metadata,
             })
         })
         .collect()
+}
+
+// read image metadata from a file
+// return None for any error (most importantly if the file is not a supported image format)
+fn read_image_metadata(path: &Path) -> Option<ImageMetadata> {
+    ImageReader::open(path)
+        .ok()?
+        .into_dimensions()
+        .map(|(width, height)| ImageMetadata { width, height })
+        .ok()
 }

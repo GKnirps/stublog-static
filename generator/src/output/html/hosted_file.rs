@@ -61,6 +61,12 @@ fn render_file_data(metadata: &HostedFileMetadata, hosted_file: &HostedFile) -> 
                         td {"Größe"}
                         td {(render_file_size(hosted_file.file_size))}
                     }
+                    @if let Some(image_metadata) = hosted_file.image_metadata {
+                        tr {
+                            td {"Bildgröße"}
+                            td {(image_metadata.width) "×" (image_metadata.height)}
+                        }
+                    }
                 }
                 a.download-link href=(hosted_file_path(metadata)) download=(metadata.path) type=(metadata.mime_type) {
                     "Herunterladen"
@@ -108,6 +114,7 @@ pub fn render_file_index_page(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::input::ImageMetadata;
     use crate::test_utils::{create_assets, create_hosted_file, create_hosted_file_metadata};
     use std::path::PathBuf;
 
@@ -149,6 +156,41 @@ mod tests {
         <tr><td>Größe</td><td>≈ 1 kiB</td></tr>\
         </table>\
         <a class=\"download-link\" href=\"/file/answer.txt\" download=\"answer.txt\" type=\"text/plain\">\
+        Herunterladen\
+        </a>\
+        </footer>\
+        </div>"
+        );
+    }
+
+    #[test]
+    fn render_file_data_should_render_image_size_if_present() {
+        // given
+        let mut metadata = create_hosted_file_metadata();
+        metadata.mime_type = "image/webp".to_owned();
+        let mut file = create_hosted_file();
+        file.file_size = 1024;
+        file.image_metadata = Some(ImageMetadata {
+            width: 42,
+            height: 9001,
+        });
+
+        // when
+        let result = render_file_data(&metadata, &file).into_string();
+
+        // then
+        assert_eq!(
+            result,
+            "<div class=\"hosted-file\" id=\"answer.txt\">\
+        <h3>Datei: answer.txt</h3>\
+        <p class=\"file-description\">You\'re really not going to like it.</p>\
+        <footer>\
+        <table>\
+        <tr><td>Typ</td><td>image/webp</td></tr>\
+        <tr><td>Größe</td><td>≈ 1 kiB</td></tr>\
+        <tr><td>Bildgröße</td><td>42×9001</td></tr>\
+        </table>\
+        <a class=\"download-link\" href=\"/file/answer.txt\" download=\"answer.txt\" type=\"image/webp\">\
         Herunterladen\
         </a>\
         </footer>\
