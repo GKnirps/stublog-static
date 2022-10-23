@@ -23,6 +23,24 @@ use crate::urls::files_metadata_index_url;
 use crate::HostedFile;
 use maud::{html, Markup};
 
+fn render_file_size(size: u64) -> Markup {
+    if size >= 1024 * 1024 {
+        let mb_size = (size as f64 * 10.0 / (1024.0 * 1024.0)).round() / 10.0;
+        html! {
+            "≈ " (mb_size) " MiB"
+        }
+    } else if size >= 1024 {
+        let kb_size = (size as f64 * 10.0 / 1024.0).round() / 10.0;
+        html! {
+           "≈ " (kb_size) " kiB"
+        }
+    } else {
+        html! {
+            (size) " B"
+        }
+    }
+}
+
 fn render_file_data(metadata: &HostedFileMetadata, hosted_file: &HostedFile) -> Markup {
     html! {
         div.hosted-file #(metadata.path) {
@@ -41,7 +59,7 @@ fn render_file_data(metadata: &HostedFileMetadata, hosted_file: &HostedFile) -> 
                     }
                     tr {
                         td {"Größe"}
-                        td {(hosted_file.file_size)}
+                        td {(render_file_size(hosted_file.file_size))}
                     }
                 }
                 a.download-link href=(hosted_file_path(metadata)) download=(metadata.path) type=(metadata.mime_type) {
@@ -94,10 +112,27 @@ mod tests {
     use std::path::PathBuf;
 
     #[test]
+    fn render_file_size_renders_size_appropriately() {
+        // < 1 kiB, render size in bytes
+        assert_eq!(&render_file_size(0).into_string(), "0 B");
+        assert_eq!(&render_file_size(1023).into_string(), "1023 B");
+        // >= 1 kiB but smaller 1 MiB
+        assert_eq!(&render_file_size(1024).into_string(), "≈ 1 kiB");
+        assert_eq!(&render_file_size(1025).into_string(), "≈ 1 kiB");
+        assert_eq!(&render_file_size(1124).into_string(), "≈ 1.1 kiB");
+        assert_eq!(&render_file_size(1536).into_string(), "≈ 1.5 kiB");
+        assert_eq!(&render_file_size(1024 * 1023).into_string(), "≈ 1023 kiB");
+        // >= 1 MiB (we don't render GiB sizes, because we do not intend to host files that large)
+        assert_eq!(&render_file_size(1024 * 1024).into_string(), "≈ 1 MiB");
+        assert_eq!(&render_file_size(1024 * 1124).into_string(), "≈ 1.1 MiB");
+    }
+
+    #[test]
     fn render_file_data_should_render_correctly() {
         // given
         let metadata = create_hosted_file_metadata();
-        let file = create_hosted_file();
+        let mut file = create_hosted_file();
+        file.file_size = 1024;
 
         // when
         let result = render_file_data(&metadata, &file).into_string();
@@ -111,7 +146,7 @@ mod tests {
         <footer>\
         <table>\
         <tr><td>Typ</td><td>text/plain</td></tr>\
-        <tr><td>Größe</td><td>42</td></tr>\
+        <tr><td>Größe</td><td>≈ 1 kiB</td></tr>\
         </table>\
         <a class=\"download-link\" href=\"/file/answer.txt\" download=\"answer.txt\" type=\"text/plain\">\
         Herunterladen\
