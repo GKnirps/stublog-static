@@ -36,25 +36,26 @@ fn handle_images<'ev>(
                     url
                 ))
             })?;
-            // TODO: simplify once we have SVG image sizes (this is a workaround because we do not, right now)
-            let image_metadata = if !filename.ends_with(".svg") {
-                Some(
-                    hosted_files
-                        .get(filename)
-                        .ok_or_else(|| {
-                            RenderError::new(format!("did not find hosted image '{}'", filename))
-                        })?
-                        .image_metadata
-                        .ok_or_else(|| {
-                            RenderError::new(format!(
-                                "hosted image '{}' does not have image metadata",
-                                url
-                            ))
-                        })?,
-                )
-            } else {
-                None
-            };
+
+            let image_metadata = hosted_files
+                .get(filename)
+                .ok_or_else(|| {
+                    RenderError::new(format!("did not find hosted image '{}'", filename))
+                })?
+                .image_metadata;
+
+            // SVG do not necessarily have width and height, so we render them even if this data is
+            // not available
+            // TODO: using the file extension to detect an SVG file is a bit dirty. Find a better way
+            if !filename.ends_with(".svg") {
+                image_metadata.ok_or_else(|| {
+                    RenderError::new(format!(
+                        "hosted image '{}' does not have image metadata",
+                        url
+                    ))
+                })?;
+            }
+
             let mut img_tag = if let Some(image_metadata) = image_metadata {
                 format!(
                     "<img width=\"{}\" height=\"{}\" src=\"",
@@ -262,7 +263,6 @@ mod tests {
         );
     }
 
-    // only temporary, until we have SVG image sizes
     #[test]
     fn render_cmark_should_not_fail_if_svg_file_has_no_image_metadata() {
         // given
@@ -270,13 +270,29 @@ mod tests {
         let mut hosted_file = create_hosted_file();
         hosted_file.image_metadata = None;
         let mut hosted_files = HashMap::with_capacity(1);
-        hosted_files.insert("lolcat.png", &hosted_file);
+        hosted_files.insert("lolcat.svg", &hosted_file);
 
         // when
         let html = render_cmark(markdown, false, &hosted_files).expect("expected success");
 
         // then
         assert_eq!(&html, "<p><img src=\"/file/lolcat.svg\" title=\"icanhasfish? kthxbye\" alt=\"a cat is stealing a fish\"></p>\n");
+    }
+
+    #[test]
+    fn render_cmark_should_fail_if_svg_file_cannot_be_found() {
+        // given
+        let markdown = "![a cat is stealing a fish](/file/lolcat.svg \"icanhasfish? kthxbye\")";
+        let hosted_files = HashMap::new();
+
+        // when
+        let result = render_cmark(markdown, false, &hosted_files);
+
+        // then
+        assert_eq!(
+            result,
+            Err(RenderError::from("did not find hosted image 'lolcat.svg'"))
+        );
     }
 
     #[test]
