@@ -147,20 +147,22 @@ mod tests {
     #[test]
     fn render_cmark_should_add_image_dimension() {
         // given
-        let markdown = "![a cat is stealing a fish](/file/lolcat.png \"icanhasfish? kthxbye\")";
+        let markdown =
+            "![a cat is >stealing< a fish](/file/lolca\"t.png \"icanhasfish? kthxbye&\")";
         let mut hosted_file = create_hosted_file();
         hosted_file.image_metadata = Some(ImageMetadata {
             width: 42,
             height: 9001,
         });
         let mut hosted_files = HashMap::with_capacity(1);
-        hosted_files.insert("lolcat.png", &hosted_file);
+        hosted_files.insert("lolca\"t.png", &hosted_file);
 
         // when
         let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
 
         // then
-        assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? kthxbye\" alt=\"a cat is stealing a fish\"></p>\n");
+        assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolca%22t.png\" title=\"icanhasfish? kthxbye&amp;\
+        \" alt=\"a cat is &gt;stealing&lt; a fish\"></p>\n");
     }
 
     #[test]
