@@ -1,6 +1,6 @@
 ---
 title: Noch ein Fordite-Update
-filename: fordite_update_2.md
+filename: fordite_update_2
 date: 2022-11-06T19:21:39+01:00
 update-date:
 tags: fordite, kunst, digitale kunst, digital art, rust
