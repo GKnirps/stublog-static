@@ -2,9 +2,9 @@
 title: Noch ein Fordite-Update
 filename: fordite_update_2
 date: 2022-11-06T19:21:39+01:00
-update-date:
+update-date: 2022-11-07T20:45:00+01:00
 tags: fordite, kunst, digitale kunst, digital art, rust
-category:
+category: hoellenmaschinen
 summary: Ich habe ein paar kleine Verbesserungen an Fordite vorgenommen und eine neue Animation hochgeladen.
 image: /file/fordite_fire_god_float.webp
 ---
@@ -62,3 +62,7 @@ Ursprünglich wollte ich auch die Höhenkarte verschieben. Das hat aber zu selts
 Dadurch ergibt sich eine Auffälligkeit: in der Bildmitte ist eine Art Fokuspunkt. Ob das jetzt gut ist oder nicht, lasse ich mal dahingestellt.
 
 Für das Script zu dieser Animation gibt es noch eine ganze Menge Stellschrauben, mit denen man herumspielen kann. Wer Lust dazu hat (oder den seltsamen Bildsprüngen bei bewegter Höhenkarte auf den Grund gehen möchte), [findet die Konfiguration hier](https://gitlab.com/GKnirps/fordite-configurations/-/tree/master/fire_god_video).
+
+### Update 2022-11-07:
+
+Nach kurzer Suche bin ich darauf gekommen, was beim Bewegen der Höhenkarte schiefgelaufen ist: Ein Vorzeichenfehler. Den habe ich behoben, daneben noch ein paar andere Tweaks gemacht und ein weiteres [Feuergott-Video](https://www.youtube.com/watch?v=gb2jcQbivro) hochgeladen.
