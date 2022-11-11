@@ -62,7 +62,7 @@ Einen [Eintrag](https//stu.blogger.de/stories/2149890/) habe ich ausgelassen. Di
 
 ### Was habe ich früher so geschrieben?
 
-Was als erstes auffällt ist nicht was, sondern wie viel ich geschrieben habe. In den knapp fünf Jahren vor meiner eigenen Blogsoftware waren es etwa 540 Einträge. In den acht Jahren danach nur 217, wovon alleine 56 auf mein [Kochprojekt 2014](/categories/kochprojekt) fallen. Mehr noch, seit ich nach berufstätig bin hat sich meine Blogaktivität stark gesenkt (83 Einträge in knapp sechs Jahren). Oder ich vegetiere hier in Hamburg einfach nur so vor mich hin und habe nichts interessantes zu berichten.
+Was als erstes auffällt ist nicht was, sondern wie viel ich geschrieben habe. In den knapp fünf Jahren vor meiner eigenen Blogsoftware waren es etwa 540 Einträge. In den acht Jahren danach nur 217, wovon alleine 56 auf mein [Kochprojekt 2014](/categories/kochprojekt) fallen. Mehr noch, seit ich berufstätig bin hat sich meine Blogaktivität stark gesenkt (83 Einträge in knapp sechs Jahren). Oder ich vegetiere hier in Hamburg einfach nur so vor mich hin und habe nichts interessantes zu berichten.
 
 Also, *worüber* habe ich denn nun geschrieben? Häufig über Kleinkrams, den man ohne Kontext nicht versteht. Es ist aber schön, mal wieder Sachen aus der Uni- und der Abi-Zeit zu lesen. Besonders ganz am Anfang kam viel zusammenhangloses Zeug zu meinen gentoo-Linux-Erfahrungen. Ich habe aber auch einige durchaus interessante Dinge geschrieben, sowie einige, bei denen ich heute anderer Ansicht bin.
 
