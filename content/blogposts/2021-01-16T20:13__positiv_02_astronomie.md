@@ -32,7 +32,7 @@ Um es mit den Worten des Autors der Seite zu sagen:
 
 ### Astrodicticum simplex
 
-[Ein Blog über Astronomie und Wissenschaft](https://scienceblogs.de/astrodicticum-simplex/) von Florian Freistätter. Dort werden interessante Themen zur Astronomie behandelt, gelegentlich irreführende Berichterstattung in der Presse kritisiert und Transkripte zu Florians Podcast „Sternengeschichten“ veröffentlicht. Eine gute Quelle, um aktuelle Themen der Astronomie für Laien erklärt zu bekommen. Auf jeden Fall Lesenswert.
+[Ein Blog über Astronomie und Wissenschaft](https://scienceblogs.de/astrodicticum-simplex/) von Florian Freistetter. Dort werden interessante Themen zur Astronomie behandelt, gelegentlich irreführende Berichterstattung in der Presse kritisiert und Transkripte zu Florians Podcast „Sternengeschichten“ veröffentlicht. Eine gute Quelle, um aktuelle Themen der Astronomie für Laien erklärt zu bekommen. Auf jeden Fall Lesenswert.
 
 ### How to survive in spacecraft
 
