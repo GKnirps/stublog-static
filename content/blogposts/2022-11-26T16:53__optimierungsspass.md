@@ -58,7 +58,6 @@ Die Ausgaben mit `-v` sind recht lang, ich habe sie hier immer auf diese Zeilen 
 User time (seconds):
 System time (seconds):
 Maximum resident set size (kbytes):
-Minor (reclaiming a frame) page faults:
 ```
 
 #### Testfall 1: Das python-Script
