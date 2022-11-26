@@ -3,7 +3,7 @@ title: Optimier mich!
 filename: blog-optimization
 date: 2020-10-11T00:18:31+02:00
 update-date:
-tags: optimization, premature optimization, brotli, zopfli, kompression, make
+tags: optimization, optimierung, premature optimization, brotli, zopfli, kompression, make
 category: meta
 summary: Optimierungen in meinem Bloggenerator. Manche aus Spaß, manche aus Notwendigkeit.
 ---
