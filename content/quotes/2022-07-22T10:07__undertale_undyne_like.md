@@ -3,7 +3,7 @@ id: undertale_undyne_like
 source-name: Undyne (Undertale)
 source-url:
 date: 2022-07-22T10:07:57+02:00
-published: false
+published: true
 ---
 
 What I like about you is that you're PASSIONATE! You're ANALYTICAL!!
