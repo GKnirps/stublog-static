@@ -8,4 +8,4 @@ published: false
 
 Once the male finds a hidey-hole with a potential mate, he has to convince the female to come out and party.
 
-Now it might not look like much, but this is sort of like an upside-down version of the balcony scene from Romeo and Juliet, but the both have bongos and Juliet is potentially a pissed-off cannibal.
+Now it might not look like much, but this is sort of like an upside-down version of the balcony scene from Romeo and Juliet, but they both have bongos and Juliet is potentially a pissed-off cannibal.
