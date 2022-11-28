@@ -2,7 +2,7 @@
 title: Optimierungsspaß
 filename: optimierungsspass
 date: 2022-11-26T16:53:13+01:00
-update-date:
+update-date: 2022-11-26T19:45:00+01:00
 tags: rust, python, dga, optimierung, python
 category: hoellenmaschinen
 summary: Ich habe mal wieder nutzlose Optimierungsexperimente angestellt.
@@ -176,7 +176,7 @@ Ok, die Idee mit dem bytearrays war ein Irrweg. Das ändert aber nichts an der S
 - um die Konsonanten zu zählen
 - um die Entropie zu berechnen
 
-Ich lasse die Entropieberechnung mal außen vor, die steckt isoliert in ihrer Funktion und das ist gut so. Die anderen Sachen kann ich aber bequem in einer Schleife erledigen. Das ist vielleicht nicht mehr so funktional, aber vielleicht macht es die Sache ja schneller (Datei `one_char_iterator` im Repo).
+Ich lasse die Entropieberechnung mal außen vor, die steckt isoliert in ihrer Funktion und das ist gut so. Die anderen Sachen kann ich aber bequem in einer Schleife erledigen. Das ist vielleicht nicht mehr so funktional, aber vielleicht macht es die Sache ja schneller (Datei `one_char_iterator.rs` im Repo).
 
 Generierte Domains:
 ```
