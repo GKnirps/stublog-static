@@ -2,7 +2,7 @@
 title: Jungle of Code
 filename: jungle_of_code
 date: 2022-12-01T20:12:33+01:00
-update-date:
+update-date: 2022-12-02T17:34:00+01:00
 tags: advent of code, adventskalender, puzzle, urwald, rentier, twitter
 category: hoellenmaschinen
 summary: Der Advent of Code dieses Jahr ist wieder gestartet. Diese Mal heißt es, Spezialfutter für die Rentiere zu besorgen.
@@ -18,3 +18,7 @@ Nach dem wir in den letzten Jahren [eine Zeitreise unternommen](https://adventof
 Wie üblich fängt Tag 1 mit einem einfachen Puzzle an, aber ich vermute, dass die Schwierigkeit (und damit der Spaß) nach und nach ansteigen wird, wie jedes Jahr.
 
 Auch dieses Jahr scheint [Gary Grady](https://nitter.net/GaryJGrady) wieder Comics zu den Puzzles zu machen, so wie im letzten Jahr. Ist halt auf Twitter, also schaut auch das lieber zeitnah an, wer weiß, wie sich diese Sache entwickelt.
+
+### Update
+
+Natürlich kann man meine Lösungen auch wieder in einem [git-repo](https://github.com/GKnirps/adventofcode-2022) finden. Aufgrund diverser anderer Verpflichtungen war ich nur bis gerade eben nicht dazu gekommen, das auch einzurichten.
