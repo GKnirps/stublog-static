@@ -2,7 +2,7 @@
 title: Jungle of Code
 filename: jungle_of_code
 date: 2022-12-01T20:12:33+01:00
-update-date: 2022-12-02T17:34:00+01:00
+update-date: 2022-12-07T22:00:00+01:00
 tags: advent of code, adventskalender, puzzle, urwald, rentier, twitter
 category: hoellenmaschinen
 summary: Der Advent of Code dieses Jahr ist wieder gestartet. Diese Mal heißt es, Spezialfutter für die Rentiere zu besorgen.
@@ -13,7 +13,7 @@ Der [Advent of Code 2022](https://adventofcode.com/2022) hat begonnen. Ein Adven
 
 Zum Advent of Code habe ich schon [vorher einige Male](/tags/advent-of-code) etwas geschrieben. Bisher hat es immer Spaß gemacht, auch wenn es stressig werden kann. Ich habe mir jedes Mal vorgenommen, auszuhören sobald es zu stressig wird, aber habe das nie eingehalten. Solltet ihr also zu ähnlichem Fehlverhalte neigen… naja, probiert es trotzdem, es macht Spaß.
 
-Nach dem wir in den letzten Jahren [eine Zeitreise unternommen](https://adventofcode.com/2018), [Santa vom Rand des Sonnensystems abgeholt](https://adventofcode.com/2019), [Urlaub gemacht](https://adventofcode.com/2020) haben und die Schlüssel zu Santas Schlitten vom Meeresgrund fischten, geht es nun in den Dschungel um spezielles Rentierfutter zu besorgen.
+Nach dem wir in den letzten Jahren [eine Zeitreise unternommen](https://adventofcode.com/2018), [Santa vom Rand des Sonnensystems abgeholt](https://adventofcode.com/2019), [Urlaub gemacht](https://adventofcode.com/2020) haben und die Schlüssel zu Santas Schlitten [vom Meeresgrund fischten](https://adventofcode.com/2021), geht es nun in den Dschungel um spezielles Rentierfutter zu besorgen.
 
 Wie üblich fängt Tag 1 mit einem einfachen Puzzle an, aber ich vermute, dass die Schwierigkeit (und damit der Spaß) nach und nach ansteigen wird, wie jedes Jahr.
 
