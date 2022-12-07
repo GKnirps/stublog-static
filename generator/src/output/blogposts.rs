@@ -176,12 +176,7 @@ pub fn write_archive(
     }
 
     let chunk_size: usize = 15;
-    let num_chunks = all_posts.len() / chunk_size
-        + if all_posts.len() % chunk_size == 0 {
-            0
-        } else {
-            1
-        };
+    let num_chunks = all_posts.len() / chunk_size + usize::from(all_posts.len() % chunk_size == 0);
 
     for (index, chunk) in all_posts.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed

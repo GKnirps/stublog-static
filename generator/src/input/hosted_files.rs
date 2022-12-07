@@ -70,7 +70,7 @@ fn read_image_metadata(path: &Path) -> Option<ImageMetadata> {
 }
 
 fn read_svg_size(path: &Path) -> Option<ImageMetadata> {
-    let file = File::open(&path).ok()?;
+    let file = File::open(path).ok()?;
     let buf_reader = BufReader::new(file);
     parse_svg_size(buf_reader)
 }
