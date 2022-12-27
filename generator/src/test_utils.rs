@@ -23,12 +23,14 @@ use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 
 pub fn create_blogpost() -> Blogpost {
-    let date = FixedOffset::east(3600 * 2)
-        .ymd(2020, 5, 11)
-        .and_hms(12, 13, 14);
-    let update_date = FixedOffset::east(3600 * 2)
-        .ymd(2020, 5, 25)
-        .and_hms(12, 13, 14);
+    let date = FixedOffset::east_opt(3600 * 2)
+        .unwrap()
+        .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
+        .unwrap();
+    let update_date = FixedOffset::east_opt(3600 * 2)
+        .unwrap()
+        .with_ymd_and_hms(2020, 5, 25, 12, 13, 14)
+        .unwrap();
     Blogpost {
         title: "Nevermind".to_owned(),
         filename: Path::new("foobar").to_owned(),

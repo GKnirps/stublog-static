@@ -18,7 +18,6 @@
 use super::super::Blogpost;
 use super::{get_secure_filename, split_file_content, ParseError};
 use crate::input::file::FileData;
-use crate::input::parser;
 use crate::input::tag::Tag;
 use chrono::DateTime;
 
@@ -32,7 +31,7 @@ fn parse_tags(tagstring: &str) -> Vec<Tag> {
         .collect()
 }
 
-pub fn parse_blogposts(inputs: &[FileData]) -> Result<Vec<Blogpost>, parser::ParseError> {
+pub fn parse_blogposts(inputs: &[FileData]) -> Result<Vec<Blogpost>, ParseError> {
     inputs.iter().map(parse_blogpost).collect()
 }
 
@@ -145,9 +144,10 @@ mod tests {
         let result = parse_blogpost(&input).expect("Expected valid result");
 
         // then
-        let expected_date = FixedOffset::east(3600 * 2)
-            .ymd(2020, 5, 11)
-            .and_hms(12, 13, 14);
+        let expected_date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
+            .unwrap();
         assert_eq!(result.title, "Lorem ipsum");
         assert_eq!(result.filename, Path::new("lipsum"));
         assert_eq!(result.date, expected_date);
@@ -196,16 +196,18 @@ mod tests {
         assert_eq!(result.filename, Path::new("lipsum"));
         assert_eq!(
             result.date,
-            FixedOffset::east(3600 * 2)
-                .ymd(2020, 5, 11)
-                .and_hms(12, 13, 14)
+            FixedOffset::east_opt(3600 * 2)
+                .unwrap()
+                .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
+                .unwrap()
         );
         assert_eq!(
             result.update_date,
             Some(
-                FixedOffset::east(3600 * 2)
-                    .ymd(2020, 5, 25)
-                    .and_hms(11, 12, 13)
+                FixedOffset::east_opt(3600 * 2)
+                    .unwrap()
+                    .with_ymd_and_hms(2020, 5, 25, 11, 12, 13)
+                    .unwrap()
             )
         );
         assert_eq!(

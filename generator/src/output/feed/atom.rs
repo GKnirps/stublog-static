@@ -115,9 +115,11 @@ pub fn write_feed<T: Write>(
         // if no blogposts exist, just pick some random fixed date in the past (before any
         // possible blogpost)
         .unwrap_or_else(|| {
-            FixedOffset::east(3600 * 2)
-                .ymd(1970, 1, 1)
-                .and_hms(00, 00, 00)
+            // unwrap, because I can guarantee that this date exists
+            FixedOffset::east_opt(3600 * 2)
+                .unwrap()
+                .with_ymd_and_hms(1970, 1, 1, 00, 00, 00)
+                .unwrap()
         });
 
     writer.write_event(Event::Decl(BytesDecl::new("1.0", Some("UTF-8"), None)))?;
