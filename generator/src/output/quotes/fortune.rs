@@ -30,13 +30,13 @@ fn write_fortune_quote(writer: &mut dyn Write, quote: &Quote) -> std::io::Result
         .map(|l| l.trim_end_matches('\\'))
     {
         if line != "%" {
-            writeln!(writer, "{}", line)?;
+            writeln!(writer, "{line}")?;
         } else {
             writeln!(writer, "% ")?;
         }
     }
     if let Some(source_name) = quote.source_name.as_ref() {
-        writeln!(writer, "— {}", source_name)
+        writeln!(writer, "— {source_name}")
     } else {
         Ok(())
     }

@@ -115,7 +115,7 @@ mod tests {
             .into_string();
 
         // then
-        println!("Checking rendered html:\n{}", result);
+        println!("Checking rendered html:\n{result}");
         assert!(result
             .contains("<h2 class=\"posttitle\"><a href=\"/blogposts/foobar\" rel=\"bookmark\">Nevermind</a></h2>"));
         assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p>\n</div>"));
@@ -135,7 +135,7 @@ mod tests {
             .into_string();
 
         // then
-        println!("Checking rendered html:\n{}", result);
+        println!("Checking rendered html:\n{result}");
         assert!(!result.contains("<span class=\"category\">"));
     }
 
@@ -155,7 +155,7 @@ mod tests {
             .into_string();
 
         // then
-        println!("Checking rendered html:\n{}", result);
+        println!("Checking rendered html:\n{result}");
         assert!(result.contains("<meta name=\"description\" content=\"foo!\">"));
         assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p>\n</div>"));
         assert!(result.contains("<title>Nevermind</title>"));

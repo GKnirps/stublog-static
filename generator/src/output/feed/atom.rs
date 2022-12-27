@@ -234,7 +234,7 @@ mod tests {
             OutputError::Render(e) => {
                 assert_eq!(e, RenderError::from("did not find hosted image 'foo.png'"))
             }
-            _ => panic!("unexpected error type: {:?}", err),
+            _ => panic!("unexpected error type: {err:?}"),
         }
     }
 
@@ -265,7 +265,7 @@ mod tests {
         // make sure the update date is used (and not the date) if possible,
         // by making the update date earlier than the creation date (which is not a realistic scenario)
         let latest_update = post1.date - Duration::seconds(42);
-        post1.update_date = Some(latest_update.clone());
+        post1.update_date = Some(latest_update);
         // the other post ist earlier than the first one
         let mut post2 = create_blogpost();
         post2.title = "p2".to_owned();

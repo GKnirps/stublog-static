@@ -104,9 +104,9 @@ impl Error for OutputError {
 impl fmt::Display for OutputError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            OutputError::IO(e) => write!(f, "{}", e),
-            OutputError::Render(e) => write!(f, "{}", e),
-            OutputError::Xml(e) => write!(f, "{}", e),
+            OutputError::IO(e) => write!(f, "{e}"),
+            OutputError::Render(e) => write!(f, "{e}"),
+            OutputError::Xml(e) => write!(f, "{e}"),
         }
     }
 }

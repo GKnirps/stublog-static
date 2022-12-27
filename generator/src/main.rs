@@ -82,31 +82,31 @@ fn main() -> Result<(), String> {
 fn generate_config(indir: &str, odir: &str) -> Result<(), String> {
     let categories_indir: PathBuf = [indir, "categories"].iter().collect();
     let raw_categories = file::read_files_sorted(&categories_indir)
-        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+        .map_err(|e| format!("Failed to parse all categories: {e}"))?;
     let categories = parse_categories(&raw_categories)
-        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+        .map_err(|e| format!("Failed to parse all categories: {e}"))?;
 
     let hosted_files_indir: PathBuf = [indir, "files_index"].iter().collect();
     let raw_hosted_files = file::read_files_sorted(&hosted_files_indir)
-        .map_err(|e| format!("Failed to read all hosted files: {}", e))?;
+        .map_err(|e| format!("Failed to read all hosted files: {e}"))?;
     let hosted_files = parse_all_file_metadata(&raw_hosted_files)
-        .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
+        .map_err(|e| format!("Unable to parse all file metadata: {e}"))?;
 
     ngingx_cfg::write_config_file(Path::new(odir), &categories, &hosted_files)
-        .map_err(|e| format!("Unable to write nginx config: {}", e))
+        .map_err(|e| format!("Unable to write nginx config: {e}"))
 }
 
 fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     let asset_path: PathBuf = [odir, "assets"].iter().collect();
-    let assets = read_assets(&asset_path).map_err(|e| format!("Failed to read assets: {}", e))?;
+    let assets = read_assets(&asset_path).map_err(|e| format!("Failed to read assets: {e}"))?;
 
-    write_404(Path::new(odir), &assets).map_err(|e| format!("Failed to write 404 error: {}", e))?;
+    write_404(Path::new(odir), &assets).map_err(|e| format!("Failed to write 404 error: {e}"))?;
 
     let hosted_files_meta_indir: PathBuf = [indir, "files_index"].iter().collect();
     let raw_hosted_files_meta = file::read_files_sorted(&hosted_files_meta_indir)
-        .map_err(|e| format!("Failed to read all hosted files: {}", e))?;
+        .map_err(|e| format!("Failed to read all hosted files: {e}"))?;
     let hosted_files_meta = parse_all_file_metadata(&raw_hosted_files_meta)
-        .map_err(|e| format!("Unable to parse all file metadata: {}", e))?;
+        .map_err(|e| format!("Unable to parse all file metadata: {e}"))?;
 
     let hosted_files_indir: PathBuf = [indir, "file"].iter().collect();
     let hosted_files = input::hosted_files::list_all_files(&hosted_files_indir)
@@ -117,28 +117,28 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
 
     let categories_indir: PathBuf = [indir, "categories"].iter().collect();
     let raw_categories = file::read_files_sorted(&categories_indir)
-        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+        .map_err(|e| format!("Failed to parse all categories: {e}"))?;
     let categories = parse_categories(&raw_categories)
-        .map_err(|e| format!("Failed to parse all categories: {}", e))?;
+        .map_err(|e| format!("Failed to parse all categories: {e}"))?;
     check_duplicate_categories(&categories)?;
 
     let blogpost_indir: PathBuf = [indir, "blogposts"].iter().collect();
     let raw_blogposts = file::read_files_sorted(&blogpost_indir)
-        .map_err(|e| format!("Failed to read all blogposts: {}", e))?;
+        .map_err(|e| format!("Failed to read all blogposts: {e}"))?;
     let blogposts = blogpost::parse_blogposts(&raw_blogposts)
-        .map_err(|e| format!("Failed to parse all blogposts: {}", e))?;
+        .map_err(|e| format!("Failed to parse all blogposts: {e}"))?;
     check_duplicate_blogpost_names(&blogposts)?;
 
     let quotes_indir: PathBuf = [indir, "quotes"].iter().collect();
     let raw_quotes = file::read_files_sorted(&quotes_indir)
-        .map_err(|e| format!("failed to read all quotes: {}", e))?;
+        .map_err(|e| format!("failed to read all quotes: {e}"))?;
     let published_quotes =
-        parse_quotes(&raw_quotes).map_err(|e| format!("failed parse all quotes: {}", e))?;
+        parse_quotes(&raw_quotes).map_err(|e| format!("failed parse all quotes: {e}"))?;
     check_duplicate_quote_names(&published_quotes)?;
 
     let categorized_blogposts =
         blogposts::find_categories_for_blogposts(&blogposts, &categories)
-            .map_err(|e| format!("Error while matching blogpost with categories: {}", e))?;
+            .map_err(|e| format!("Error while matching blogpost with categories: {e}"))?;
     let blogpost_dir: PathBuf = [odir, "blogposts"].iter().collect();
     blogposts::write_blogposts(
         &blogpost_dir,
@@ -146,7 +146,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         &assets,
         &hosted_files_by_name,
     )
-    .map_err(|e| format!("Failed to write all blogposts: {}", e))?;
+    .map_err(|e| format!("Failed to write all blogposts: {e}"))?;
 
     let archive_dir: PathBuf = [odir, "archive"].iter().collect();
     blogposts::write_archive(
@@ -155,7 +155,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         &assets,
         &hosted_files_by_name,
     )
-    .map_err(|e| format!("Failed to write archive: {}", e))?;
+    .map_err(|e| format!("Failed to write archive: {e}"))?;
     blogposts::write_home(
         Path::new(odir),
         &categorized_blogposts,
@@ -163,7 +163,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         &assets,
         &hosted_files_by_name,
     )
-    .map_err(|e| format!("Failed to write home page: {}", e))?;
+    .map_err(|e| format!("Failed to write home page: {e}"))?;
 
     feed::write_atom_feed(Path::new(odir), &blogposts, &hosted_files_by_name)?;
 
@@ -174,7 +174,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         &assets,
         &hosted_files_by_name,
     )
-    .map_err(|e| format!("Unable to write all quote pages: {}", e))?;
+    .map_err(|e| format!("Unable to write all quote pages: {e}"))?;
     let quote_list_dir: PathBuf = [odir, "quotes"].iter().collect();
     quotes::write_quote_list_pages(
         &quote_list_dir,
@@ -182,29 +182,29 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         &assets,
         &hosted_files_by_name,
     )
-    .map_err(|e| format!("Unable to write all quote lists: {}", e))?;
+    .map_err(|e| format!("Unable to write all quote lists: {e}"))?;
     quotes::write_quote_fortune_file(&quote_list_dir, &published_quotes)
-        .map_err(|e| format!("Unable to write quote fortune file: {}", e))?;
+        .map_err(|e| format!("Unable to write quote fortune file: {e}"))?;
 
     let post_by_tags = tags::blogpost_by_tag(&blogposts);
     check_index_tag(&post_by_tags)?;
     let tags_dir: PathBuf = [odir, "tags"].iter().collect();
     tags::write_tag_index(&tags_dir, &post_by_tags, &assets)
-        .map_err(|e| format!("Failed to write tag index page: {}", e))?;
+        .map_err(|e| format!("Failed to write tag index page: {e}"))?;
     tags::write_tag_pages(&tags_dir, &post_by_tags, &assets)
-        .map_err(|e| format!("Failed to write tag pages: {}", e))?;
+        .map_err(|e| format!("Failed to write tag pages: {e}"))?;
 
     let category_dir: PathBuf = [odir, "categories"].iter().collect();
     let categories_with_posts = categories::categories_with_blogposts(&categories, &blogposts);
     categories::write_category_index(&category_dir, &categories_with_posts, &assets)
-        .map_err(|e| format!("Failed to write category index page: {}", e))?;
+        .map_err(|e| format!("Failed to write category index page: {e}"))?;
     categories::write_category_pages(
         &category_dir,
         &categories_with_posts,
         &assets,
         &hosted_files_by_name,
     )
-    .map_err(|e| format!("Failed to write all category pages: {}", e))?;
+    .map_err(|e| format!("Failed to write all category pages: {e}"))?;
 
     let hosted_files_index_dir: PathBuf = [odir, "files_metadata"].iter().collect();
     hosted_files::write_hosted_file_index_pages(
@@ -212,7 +212,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         &hosted_file_pairs,
         &assets,
     )
-    .map_err(|e| format!("Unable to write all file metadata pages: {}", e))
+    .map_err(|e| format!("Unable to write all file metadata pages: {e}"))
 }
 
 fn check_duplicate_blogpost_names(posts: &[Blogpost]) -> Result<(), String> {

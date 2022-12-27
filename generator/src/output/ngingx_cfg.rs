@@ -37,11 +37,7 @@ fn write_hosted_file_rewrite(
 
         // we make an internal rewrite, so the file is available via two different URLs.
         // this way, users who access old blogposts will not get a redirect for each and every image
-        writeln!(
-            w,
-            "rewrite ^/hosted_files/{}/download$ {};",
-            old_id, new_path
-        )
+        writeln!(w, "rewrite ^/hosted_files/{old_id}/download$ {new_path};")
     } else {
         Ok(())
     }
@@ -71,7 +67,7 @@ fn write_category_rewrite(w: &mut dyn Write, category: &Category) -> std::io::Re
 
         // we make an internal rewrite, so the file is available via two different URLs.
         // this way, users who access old blogposts will not get a redirect for each and every image
-        writeln!(w, "rewrite ^/categories/{}$ {};", old_id, new_path)
+        writeln!(w, "rewrite ^/categories/{old_id}$ {new_path};")
     } else {
         Ok(())
     }

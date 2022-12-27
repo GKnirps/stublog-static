@@ -83,7 +83,7 @@ mod tests {
         .into_string();
 
         // then
-        println!("Checking rendered html:\n{}", result);
+        println!("Checking rendered html:\n{result}");
         assert!(result.contains("<div class=\"blogposts\">"));
         let post1_pos = result
             .find("<p>Post1</p>")
@@ -113,7 +113,7 @@ mod tests {
             .into_string();
 
         // then
-        println!("Checking rendered html:\n{}", result);
+        println!("Checking rendered html:\n{result}");
         assert!(result.contains("<div class=\"qotd\"><blockquote"));
     }
 }

@@ -201,7 +201,7 @@ mod tests {
             .into_string();
 
         // then
-        println!("Checking html:\n{}", result);
+        println!("Checking html:\n{result}");
         assert!(result.contains(
             "<blockquote cite=\"https://example.com/adent\"><p>\
         Ford… you're turning into a penguin. Stop it.\
@@ -245,7 +245,7 @@ mod tests {
             .into_string();
 
         // then
-        println!("Checking html:\n{}", result);
+        println!("Checking html:\n{result}");
         assert!(result.contains(
             "<blockquote><p>\
         Ford… you're turning into a penguin. Stop it.\
@@ -266,7 +266,7 @@ mod tests {
             .into_string();
 
         // then
-        println!("Checking generated html:\n{}", result);
+        println!("Checking generated html:\n{result}");
         assert!(result.starts_with("<!DOCTYPE html><html lang=\"de\">"));
         assert!(result.contains(
             "<link rel=\"canonical\" href=\"https://blog.strangerthanusual.de/quote/penguin\">"
@@ -300,7 +300,7 @@ mod tests {
         .into_string();
 
         // then
-        println!("Checking generated html:\n{}", result);
+        println!("Checking generated html:\n{result}");
         assert!(result.starts_with("<!DOCTYPE html><html lang=\"de\">"));
         assert!(result.contains("<p>IM IN UR QUOTE</p>"));
         assert!(result.contains("<p>SAYIN DUMB STUFF</p>"));

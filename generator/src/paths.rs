@@ -37,7 +37,7 @@ pub fn blogpost_path(blogpost: &Blogpost) -> String {
 }
 
 pub fn archive_path(page: usize) -> String {
-    format!("/archive/{}", page)
+    format!("/archive/{page}")
 }
 
 pub static TAGLIST_PATH: &str = "/tags";
@@ -77,7 +77,7 @@ pub fn quote_path(quote: &Quote) -> String {
 }
 
 pub fn quote_list_path(page: usize) -> String {
-    format!("/quotes/{}", page)
+    format!("/quotes/{page}")
 }
 
 pub static QUOTE_FORTUNE_PATH: &str = "/quotes/strangerthanusual.tar.bz2";
@@ -85,7 +85,7 @@ pub static QUOTE_FORTUNE_PATH: &str = "/quotes/strangerthanusual.tar.bz2";
 pub static FILES_METADATA_BASE_PATH: &str = "/files_metadata";
 
 pub fn files_metadata_index_path(page: usize) -> String {
-    format!("{}/{}", FILES_METADATA_BASE_PATH, page)
+    format!("{FILES_METADATA_BASE_PATH}/{page}")
 }
 
 #[cfg(test)]

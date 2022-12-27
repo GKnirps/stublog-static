@@ -221,7 +221,7 @@ mod tests {
         let result = render_file_index_page(files, current_page, num_pages, &assets).into_string();
 
         // then
-        println!("Checking generated html:\n{}", result);
+        println!("Checking generated html:\n{result}");
         assert!(result.starts_with("<!DOCTYPE html><html lang=\"de\">"));
         assert!(result.contains("<h3>Datei: first</h3>"));
         assert!(result.contains("<h3>Datei: ninjad</h3>"));

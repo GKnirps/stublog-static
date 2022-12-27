@@ -109,7 +109,7 @@ mod tests {
         .into_string();
 
         // then
-        println!("Checking rendered html:\n{}", result);
+        println!("Checking rendered html:\n{result}");
         assert!(result.contains("<ul><li><a href=\"/categories/mika\">Mikhail</a> (2 Einträge)</li><li><a href=\"/categories/jessi\">Jessica</a> (1 Einträge)</li></ul>"))
     }
 
@@ -137,7 +137,7 @@ mod tests {
             .into_string();
 
         // then
-        println!("Checking rendered html:\n{}", result);
+        println!("Checking rendered html:\n{result}");
         assert!(result.contains("<h2 class=\"section-heading\">Kategorie: Supervillainy</h2>"));
         assert!(result.contains("<strong>Good business!</strong>&lt;div&gt;foo&lt;/div&gt;"));
         assert!(result.contains("<h3>Diese Kategorie hat 2 Einträge</h3>"));

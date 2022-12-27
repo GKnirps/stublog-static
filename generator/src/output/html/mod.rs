@@ -210,7 +210,7 @@ mod tests {
         let result = head(&head_data).into_string();
 
         // then
-        println!("Checking html:\n{}", result);
+        println!("Checking html:\n{result}");
 
         // fields that depend on head_data
         assert!(result.contains("<title>IM IN UR TITLE</title>"));
@@ -246,7 +246,7 @@ mod tests {
         let result = head(&head_data).into_string();
 
         // then
-        println!("Checking html:\n{}", result);
+        println!("Checking html:\n{result}");
 
         // fields that depend on head_data
         assert!(result.contains("<title>IM IN UR TITLE</title>"));
@@ -326,7 +326,7 @@ mod tests {
         let result = base(&head_data, content).into_string();
 
         // then
-        println!("Checking headers of {}", result);
+        println!("Checking headers of {result}");
         assert!(result.contains("<meta charset=\"utf-8\">"));
         assert!(result
             .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));

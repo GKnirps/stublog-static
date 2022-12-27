@@ -87,7 +87,7 @@ mod tests {
         let result = render_tag_list(tags, &assets).into_string();
 
         // then
-        println!("Checking html:\n{}", result);
+        println!("Checking html:\n{result}");
         assert!(result.contains(
             "<ul><li><a href=\"/tags/foo\">foo (2)</a></li>\
         <li><a href=\"/tags/bar\">bar (42)</a></li></ul>",
@@ -113,7 +113,7 @@ mod tests {
         let result = render_tag_page(&tag, &[&post1, &post2], &assets).into_string();
 
         // then
-        println!("Checking html:\n{}", result);
+        println!("Checking html:\n{result}");
         assert!(
             result.contains("<title>Stranger Than Usual — Tag: stuff</title>"),
             "Expected a title"

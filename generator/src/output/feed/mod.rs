@@ -42,16 +42,16 @@ pub fn write_atom_feed(
     }
 
     let file =
-        open_for_write(&filename).map_err(|e| format!("Unable to open atom feed file: {}", e))?;
+        open_for_write(&filename).map_err(|e| format!("Unable to open atom feed file: {e}"))?;
     let mut writer = Writer::new(file);
 
     atom::write_feed(&mut writer, blogposts, hosted_files)
-        .map_err(|e| format!("Unable to write atom feed: {}", e))?;
+        .map_err(|e| format!("Unable to write atom feed: {e}"))?;
 
     writer
         .into_inner()
         .into_inner()
-        .map_err(|e| format!("Unable to write atom feed: {}", e))?
+        .map_err(|e| format!("Unable to write atom feed: {e}"))?
         .sync_all()
-        .map_err(|e| format!("Unable to write atom feed: {}", e))
+        .map_err(|e| format!("Unable to write atom feed: {e}"))
 }

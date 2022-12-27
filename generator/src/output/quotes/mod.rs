@@ -89,7 +89,7 @@ fn write_quote_list_page(
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<(), OutputError> {
     let mut filename = dir.to_path_buf();
-    filename.push(format!("{}.html", current_page));
+    filename.push(format!("{current_page}.html"));
     // FIXME: check if hosted files changed
     if !needs_any_update(
         &filename,

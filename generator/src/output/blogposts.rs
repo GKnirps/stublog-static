@@ -195,7 +195,7 @@ fn write_archive_page(
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<(), OutputError> {
     let mut filename = dir.to_path_buf();
-    filename.push(format!("{}", page_index));
+    filename.push(format!("{page_index}"));
     filename.set_extension("html");
 
     // FIXME: blogposts may need an update if the relevant hosted files changed

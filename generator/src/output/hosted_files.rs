@@ -32,7 +32,7 @@ fn write_hosted_file_index_page(
     assets: &Assets,
 ) -> std::io::Result<()> {
     let mut filename = dir.to_path_buf();
-    filename.push(format!("{}.html", current_page));
+    filename.push(format!("{current_page}.html"));
     if !needs_any_update(
         &filename,
         files

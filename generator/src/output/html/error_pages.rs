@@ -49,7 +49,7 @@ mod tests {
         let result = render_404(&assets).into_string();
 
         // then
-        println!("Checking HTML: {}\n", result);
+        println!("Checking HTML: {result}\n");
         assert!(result.contains("<div class=\"error\">"));
         assert!(result.starts_with("<!DOCTYPE html>"));
     }

@@ -41,7 +41,7 @@ fn page_link<T: Render>(
 
 fn numbered_page_link(index: usize, current_page: usize, generate_path: &PathGenerator) -> Markup {
     let disp_index = index + 1;
-    let label = format!("Seite {}", disp_index);
+    let label = format!("Seite {disp_index}");
 
     if index == current_page {
         html! {
@@ -119,7 +119,7 @@ mod tests {
     use super::*;
 
     fn dummy_path(i: usize) -> String {
-        format!("/dummy/{}", i)
+        format!("/dummy/{i}")
     }
 
     #[test]

@@ -84,7 +84,7 @@ mod tests {
         .into_string();
 
         // then
-        println!("Checking html: {}", result);
+        println!("Checking html: {result}");
         assert!(
             result.contains("<div class=\"entry\"><p>hello</p>\n</div>"),
             "Expected first article on page."
