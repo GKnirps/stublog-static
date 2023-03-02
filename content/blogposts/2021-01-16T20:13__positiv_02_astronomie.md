@@ -2,7 +2,7 @@
 title: Positivprojekt 02: Astronomie
 filename: positiv_02_astronomie
 date: 2021-01-16T20:13:15+01:00
-update-date: 2021-01-17T09:57:00+01:00
+update-date: 2023-03-02T07:40:00+01:00
 tags: weltraum, astronomie, blogs, positivprojekt, podcast, chaos communication congress
 category: positiv
 summary: Im Internet gibt es viele coole Quellen zu astronomischen Themen. Hier sind ein paar.
@@ -32,7 +32,11 @@ Um es mit den Worten des Autors der Seite zu sagen:
 
 ### Astrodicticum simplex
 
-[Ein Blog über Astronomie und Wissenschaft](https://scienceblogs.de/astrodicticum-simplex/) von Florian Freistetter. Dort werden interessante Themen zur Astronomie behandelt, gelegentlich irreführende Berichterstattung in der Presse kritisiert und Transkripte zu Florians Podcast „Sternengeschichten“ veröffentlicht. Eine gute Quelle, um aktuelle Themen der Astronomie für Laien erklärt zu bekommen. Auf jeden Fall Lesenswert.
+[Ein Blog über Astronomie und Wissenschaft](https://astrodicticum-simplex.at/) von Florian Freistetter. Dort werden interessante Themen zur Astronomie behandelt, gelegentlich irreführende Berichterstattung in der Presse kritisiert und Transkripte zu Florians Podcast „Sternengeschichten“ veröffentlicht. Eine gute Quelle, um aktuelle Themen der Astronomie für Laien erklärt zu bekommen. Auf jeden Fall Lesenswert.
+
+#### Update 2022-03-02
+
+Da Scienceblogs mit der Einstellung droht, hat Florian Freistetter das Blog auf eine neue Adresse umgezogen. Ich habe die URL hier angepasst.
 
 ### How to survive in spacecraft
 
