@@ -62,7 +62,7 @@ pub fn write_hosted_file_index_pages(
     }
 
     let chunk_size: usize = 45;
-    let num_chunks = files.len() / chunk_size + usize::from(files.len() % chunk_size == 0);
+    let num_chunks = files.len() / chunk_size + usize::from(files.len() % chunk_size != 0);
 
     for (index, chunk) in files.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed

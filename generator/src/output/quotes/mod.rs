@@ -127,7 +127,7 @@ pub fn write_quote_list_pages(
     }
 
     let chunk_size: usize = 50;
-    let num_chunks = quotes.len() / chunk_size + usize::from(quotes.len() % chunk_size == 0);
+    let num_chunks = quotes.len() / chunk_size + usize::from(quotes.len() % chunk_size != 0);
 
     for (index, chunk) in quotes.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed
