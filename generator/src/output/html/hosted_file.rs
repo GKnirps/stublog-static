@@ -116,7 +116,7 @@ mod tests {
     use super::*;
     use crate::input::ImageMetadata;
     use crate::test_utils::{create_assets, create_hosted_file, create_hosted_file_metadata};
-    use std::path::PathBuf;
+    use camino::Utf8PathBuf;
 
     #[test]
     fn render_file_size_renders_size_appropriately() {
@@ -206,7 +206,7 @@ mod tests {
         let mut meta2 = create_hosted_file_metadata();
         meta2.path = "ninjad".to_owned();
         let mut file1 = create_hosted_file();
-        file1.filename = PathBuf::from("something_different"); // this path should not be used here
+        file1.filename = Utf8PathBuf::from("something_different"); // this path should not be used here
         file1.file_size = 1234;
         let file2 = create_hosted_file();
 

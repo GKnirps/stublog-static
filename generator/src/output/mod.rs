@@ -15,9 +15,9 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use camino::Utf8Path;
 use std::error::Error;
 use std::fs::metadata;
-use std::path::Path;
 use std::time::SystemTime;
 use std::{fmt, io};
 
@@ -36,7 +36,7 @@ pub mod tags;
 /// Return true if the file referenced by filename has an older modification date than modified_at.
 /// If any error occurs (e.g. the file does not exist), return true.
 /// otherwise return false
-fn needs_update(filename: &Path, modified_at: SystemTime) -> bool {
+fn needs_update(filename: &Utf8Path, modified_at: SystemTime) -> bool {
     metadata(filename)
         .and_then(|m| m.modified())
         .map(|t| t < modified_at)
@@ -46,7 +46,7 @@ fn needs_update(filename: &Path, modified_at: SystemTime) -> bool {
 /// Return true if the file reference by filename has an older modification date than any of
 /// the given SystemTimes.
 /// If any error occurs (e.g. the file does not exist), return true
-fn needs_any_update<T>(filename: &Path, modification_times: T) -> bool
+fn needs_any_update<T>(filename: &Utf8Path, modification_times: T) -> bool
 where
     T: IntoIterator<Item = SystemTime>,
 {

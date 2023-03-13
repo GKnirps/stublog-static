@@ -68,7 +68,7 @@ fn write_entry<T: Write>(
         &[],
         &format!(
             "tag:strangerthanusual.de,2005:Blogpost/{}",
-            blogpost.filename.to_string_lossy()
+            blogpost.filename.as_str()
         ),
     )?;
     write_leaf(writer, "title", &[], &blogpost.title)?;

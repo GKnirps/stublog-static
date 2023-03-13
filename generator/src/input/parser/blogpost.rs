@@ -45,7 +45,7 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
         .ok_or_else(|| {
             ParseError::new(format!(
                 "Missing title for blogpost: {}",
-                original_path.to_string_lossy()
+                original_path.as_str()
             ))
         })?
         .to_owned();
@@ -53,7 +53,7 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
         props.get("filename").ok_or_else(|| {
             ParseError::new(format!(
                 "Missing output filename for blogpost {}",
-                original_path.to_string_lossy()
+                original_path.as_str()
             ))
         })?,
         original_path,
@@ -61,7 +61,7 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
     let date_string = props.get("date").ok_or_else(|| {
         ParseError::new(format!(
             "Missing date for blogpost {}",
-            original_path.to_string_lossy()
+            original_path.as_str()
         ))
     })?;
     let date = DateTime::parse_from_rfc3339(date_string).map_err(|e| {
@@ -69,7 +69,7 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
             "Invalid date '{}': {} (blogpost {})",
             date_string,
             e,
-            original_path.to_string_lossy()
+            original_path.as_str()
         ))
     })?;
     let update_date_string = props.get("update-date");
@@ -80,7 +80,7 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
                 "Invalid update date date '{}': {} (blogpost {})",
                 date_str,
                 e,
-                original_path.to_string_lossy()
+                original_path.as_str()
             ))
         })?),
     };
@@ -116,8 +116,8 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
 mod tests {
     use super::*;
     use crate::test_utils::create_file_data;
+    use camino::Utf8Path;
     use chrono::{FixedOffset, TimeZone};
-    use std::path::Path;
     use std::time::SystemTime;
 
     #[test]
@@ -132,7 +132,7 @@ mod tests {
             .to_owned();
 
         let modified_at = SystemTime::now();
-        let filename = Path::new("mad/eye").to_path_buf();
+        let filename = Utf8Path::new("mad/eye").to_path_buf();
 
         let input = FileData {
             content,
@@ -149,7 +149,7 @@ mod tests {
             .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
             .unwrap();
         assert_eq!(result.title, "Lorem ipsum");
-        assert_eq!(result.filename, Path::new("lipsum"));
+        assert_eq!(result.filename, Utf8Path::new("lipsum"));
         assert_eq!(result.date, expected_date);
         assert!(result.update_date.is_none(), "Expected no date");
         // missing tags are allowed, tag vector is empty in that case
@@ -180,7 +180,7 @@ mod tests {
             .to_owned();
 
         let modified_at = SystemTime::now();
-        let filename = Path::new("mad/eye").to_path_buf();
+        let filename = Utf8Path::new("mad/eye").to_path_buf();
 
         let input = FileData {
             content,
@@ -193,7 +193,7 @@ mod tests {
 
         // then
         assert_eq!(result.title, "Lorem ipsum");
-        assert_eq!(result.filename, Path::new("lipsum"));
+        assert_eq!(result.filename, Utf8Path::new("lipsum"));
         assert_eq!(
             result.date,
             FixedOffset::east_opt(3600 * 2)
@@ -233,7 +233,7 @@ mod tests {
         IM IN UR CONTENT\n"
             .to_owned();
 
-        let path = Path::new("mad/eye").to_path_buf();
+        let path = Utf8Path::new("mad/eye").to_path_buf();
 
         let mut input = create_file_data();
         input.filename = path;
@@ -259,7 +259,7 @@ mod tests {
         IM IN UR CONTENT\n"
             .to_owned();
 
-        let path = Path::new("mad/eye").to_path_buf();
+        let path = Utf8Path::new("mad/eye").to_path_buf();
 
         let mut input = create_file_data();
         input.filename = path;
@@ -288,7 +288,7 @@ mod tests {
         IM IN UR CONTENT\n"
             .to_owned();
 
-        let path = Path::new("mad/eye").to_path_buf();
+        let path = Utf8Path::new("mad/eye").to_path_buf();
 
         let mut input = create_file_data();
         input.filename = path;
@@ -316,7 +316,7 @@ mod tests {
         IM IN UR CONTENT\n"
             .to_owned();
 
-        let path = Path::new("mad/eye").to_path_buf();
+        let path = Utf8Path::new("mad/eye").to_path_buf();
 
         let mut input = create_file_data();
         input.filename = path;

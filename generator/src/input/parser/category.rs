@@ -30,12 +30,7 @@ fn parse_category(file_data: &FileData) -> Result<Category, ParseError> {
     let title = header_map
         .get("title")
         .copied()
-        .ok_or_else(|| {
-            ParseError::new(format!(
-                "Missing title in category {}",
-                path.to_string_lossy()
-            ))
-        })?
+        .ok_or_else(|| ParseError::new(format!("Missing title in category {}", path.as_str())))?
         .to_owned();
 
     let id = header_map
@@ -43,7 +38,7 @@ fn parse_category(file_data: &FileData) -> Result<Category, ParseError> {
         .ok_or_else(|| {
             ParseError::new(format!(
                 "Missing target file name for category {}",
-                path.to_string_lossy()
+                path.as_str()
             ))
         })?
         .to_string();
@@ -65,7 +60,7 @@ fn parse_category(file_data: &FileData) -> Result<Category, ParseError> {
 mod tests {
     use super::*;
     use crate::test_utils::create_file_data;
-    use std::path::Path;
+    use camino::Utf8Path;
     use std::time::SystemTime;
 
     #[test]
@@ -73,7 +68,7 @@ mod tests {
         // given
         let mut input = create_file_data();
         input.content = "---\npath-name: hot/chocolate\ntitle: Cocoa deliciousness\nold-id: 42\n---\nChocolate is important".to_owned();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
         input.modified_at = SystemTime::now();
 
         // when
@@ -81,7 +76,7 @@ mod tests {
 
         // then
         assert_eq!(category.description_markdown, "Chocolate is important");
-        assert_eq!(category.filename, Path::new("chocolate"));
+        assert_eq!(category.filename, Utf8Path::new("chocolate"));
         assert_eq!(category.title, "Cocoa deliciousness");
         assert_eq!(category.id, "hot/chocolate");
         assert_eq!(category.modified_at, input.modified_at);
@@ -93,7 +88,7 @@ mod tests {
         // given
         let mut input = create_file_data();
         input.content = "---\npath-name: hot/chocolate\ntitle: Cocoa deliciousness\n---\nChocolate is important".to_owned();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
         input.modified_at = SystemTime::now();
 
         // when
@@ -108,7 +103,7 @@ mod tests {
         // given
         let mut input = create_file_data();
         input.content = "---\npath-name: foo\n---\n".to_owned();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when
         let result = parse_category(&input);
@@ -125,7 +120,7 @@ mod tests {
         // given
         let mut input = create_file_data();
         input.content = "---\ntitle: foo\n---\n".to_owned();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when
         let result = parse_category(&input);

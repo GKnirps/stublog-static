@@ -32,7 +32,7 @@ pub const ESCAPE_SET: &AsciiSet = &CONTROLS
 pub fn blogpost_path(blogpost: &Blogpost) -> String {
     format!(
         "/blogposts/{}",
-        percent_encode(blogpost.filename.to_string_lossy().as_bytes(), ESCAPE_SET)
+        percent_encode(blogpost.filename.as_str().as_bytes(), ESCAPE_SET)
     )
 }
 
@@ -56,7 +56,7 @@ pub fn category_path(category: &Category) -> String {
     format!(
         "{}/{}",
         CATEGORIES_PATH,
-        percent_encode(category.filename.to_string_lossy().as_bytes(), ESCAPE_SET)
+        percent_encode(category.filename.as_str().as_bytes(), ESCAPE_SET)
     )
 }
 
@@ -72,7 +72,7 @@ pub fn hosted_file_path(hosted_file: &HostedFileMetadata) -> String {
 pub fn quote_path(quote: &Quote) -> String {
     format!(
         "/quote/{}",
-        percent_encode(quote.filename.to_string_lossy().as_bytes(), ESCAPE_SET)
+        percent_encode(quote.filename.as_str().as_bytes(), ESCAPE_SET)
     )
 }
 
@@ -94,13 +94,13 @@ mod tests {
     use crate::test_utils::{
         create_blogpost, create_category, create_hosted_file_metadata, create_quote,
     };
-    use std::path::Path;
+    use camino::Utf8Path;
 
     #[test]
     fn test_blogpost_path() {
         // given
         let mut blogpost = create_blogpost();
-        blogpost.filename = Path::new("foö-bar").to_owned();
+        blogpost.filename = Utf8Path::new("foö-bar").to_owned();
 
         // when
         let result = blogpost_path(&blogpost);
@@ -137,7 +137,7 @@ mod tests {
     fn test_category_path() {
         // given
         let mut category = create_category();
-        category.filename = Path::new("sömewher e").to_owned();
+        category.filename = Utf8Path::new("sömewher e").to_owned();
         category.id = "notthis".to_owned();
 
         // when
@@ -165,7 +165,7 @@ mod tests {
     fn test_quote_path() {
         // given
         let mut quote = create_quote();
-        quote.filename = Path::new("wtf?").to_owned();
+        quote.filename = Utf8Path::new("wtf?").to_owned();
 
         // when
         let result = quote_path(&quote);

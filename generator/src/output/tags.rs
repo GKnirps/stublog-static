@@ -19,11 +19,11 @@ use super::file::open_for_write;
 use super::html;
 use crate::input::{tag::Tag, Assets, Blogpost};
 use crate::output::needs_any_update;
+use camino::Utf8Path;
 use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
 use std::iter::IntoIterator;
-use std::path::Path;
 
 pub fn blogpost_by_tag<'a, T>(posts: T) -> HashMap<&'a Tag, Vec<&'a Blogpost>>
 where
@@ -58,7 +58,7 @@ fn sort_tags<'a>(posts_by_tag: &HashMap<&'a Tag, Vec<&Blogpost>>) -> Vec<(&'a Ta
 }
 
 pub fn write_tag_index(
-    dir: &Path,
+    dir: &Utf8Path,
     posts_by_tag: &HashMap<&Tag, Vec<&Blogpost>>,
     assets: &Assets,
 ) -> std::io::Result<()> {
@@ -90,7 +90,7 @@ pub fn write_tag_index(
 }
 
 pub fn write_tag_pages(
-    dir: &Path,
+    dir: &Utf8Path,
     posts_by_tag: &HashMap<&Tag, Vec<&Blogpost>>,
     assets: &Assets,
 ) -> std::io::Result<()> {
@@ -107,7 +107,7 @@ pub fn write_tag_pages(
 }
 
 fn write_tag_page(
-    dir: &Path,
+    dir: &Utf8Path,
     tag: &Tag,
     posts: &[&Blogpost],
     assets: &Assets,

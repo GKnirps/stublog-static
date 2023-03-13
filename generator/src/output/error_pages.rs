@@ -17,13 +17,13 @@
 
 use super::file::open_for_write;
 use super::html;
-use std::path::Path;
+use camino::Utf8Path;
 
 use crate::input::Assets;
 use crate::output::needs_any_update;
 use std::io::Write;
 
-pub fn write_404(base_path: &Path, assets: &Assets) -> std::io::Result<()> {
+pub fn write_404(base_path: &Utf8Path, assets: &Assets) -> std::io::Result<()> {
     let mut filename = base_path.to_path_buf();
     filename.push("404.html");
 

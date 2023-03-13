@@ -16,12 +16,12 @@
  */
 
 use crate::HostedFile;
+use camino::Utf8Path;
 use std::cmp::max;
 use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
 use std::iter::once;
-use std::path::Path;
 
 use super::file::open_for_write;
 use super::html;
@@ -55,7 +55,7 @@ pub fn find_categories_for_blogposts<'a>(
 }
 
 pub fn write_blogposts(
-    dir: &Path,
+    dir: &Utf8Path,
     posts: &[(&Blogpost, Option<&Category>)],
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
@@ -72,7 +72,7 @@ pub fn write_blogposts(
 }
 
 fn write_blogpost(
-    dir: &Path,
+    dir: &Utf8Path,
     blogpost: &Blogpost,
     category: Option<&Category>,
     assets: &Assets,
@@ -108,7 +108,7 @@ fn write_blogpost(
 }
 
 fn blogposts_with_categories_need_update(
-    target_file: &Path,
+    target_file: &Utf8Path,
     posts: &[(&Blogpost, Option<&Category>)],
     quote: Option<&Quote>,
     assets: &Assets,
@@ -129,7 +129,7 @@ fn blogposts_with_categories_need_update(
 }
 
 pub fn write_home(
-    dir: &Path,
+    dir: &Utf8Path,
     all_posts: &[(&Blogpost, Option<&Category>)],
     qotd: Option<&Quote>,
     assets: &Assets,
@@ -166,7 +166,7 @@ pub fn write_home(
 }
 
 pub fn write_archive(
-    dir: &Path,
+    dir: &Utf8Path,
     all_posts: &[(&Blogpost, Option<&Category>)],
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
@@ -187,7 +187,7 @@ pub fn write_archive(
 }
 
 fn write_archive_page(
-    dir: &Path,
+    dir: &Utf8Path,
     posts: &[(&Blogpost, Option<&Category>)],
     page_index: usize,
     num_pages: usize,

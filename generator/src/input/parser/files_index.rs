@@ -34,7 +34,7 @@ fn parse_file_metadata(file_data: &FileData) -> Result<HostedFileMetadata, Parse
         .ok_or_else(|| {
             ParseError::new(format!(
                 "Missing path in hosted file {}",
-                source_path.to_string_lossy()
+                source_path.as_str()
             ))
         })?
         .to_string();
@@ -44,7 +44,7 @@ fn parse_file_metadata(file_data: &FileData) -> Result<HostedFileMetadata, Parse
         .ok_or_else(|| {
             ParseError::new(format!(
                 "Missing mime type in hosted file {}",
-                source_path.to_string_lossy()
+                source_path.as_str()
             ))
         })?
         .to_string();
@@ -62,7 +62,7 @@ fn parse_file_metadata(file_data: &FileData) -> Result<HostedFileMetadata, Parse
 mod tests {
     use super::*;
     use crate::test_utils::create_file_data;
-    use std::path::Path;
+    use camino::Utf8Path;
 
     #[test]
     fn parse_file_metadata_parses_valid_content() {
@@ -105,7 +105,7 @@ mod tests {
         let mut input = create_file_data();
         input.content =
             "---\nold-id: 42\nmime-type: image/png\n---\n\ndes-des-des-description!".to_string();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when
         let result = parse_file_metadata(&input);
@@ -125,7 +125,7 @@ mod tests {
         let mut input = create_file_data();
         input.content =
             "---\nold-id: 42\npath: foobar.png\n---\n\ndes-des-des-description!".to_string();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when
         let result = parse_file_metadata(&input);

@@ -18,8 +18,8 @@
 use super::file::open_for_write;
 use crate::input::{Category, HostedFileMetadata};
 use crate::paths;
+use camino::Utf8Path;
 use std::io::Write;
-use std::path::Path;
 
 /// write an ngingx rule to make a file that has been imported from the old blog
 /// accessible under the same URL as before
@@ -82,7 +82,7 @@ fn write_categories_rewrites(w: &mut dyn Write, categories: &[Category]) -> std:
 }
 
 pub fn write_config_file(
-    dir: &Path,
+    dir: &Utf8Path,
     categories: &[Category],
     hosted_files: &[HostedFileMetadata],
 ) -> std::io::Result<()> {
@@ -174,7 +174,7 @@ mod tests {
         // given
         let mut cat = create_category();
         cat.old_id = Some("11".to_owned());
-        cat.filename = Path::new("spinal").to_path_buf();
+        cat.filename = Utf8Path::new("spinal").to_path_buf();
 
         // when
         let mut buffer: Vec<u8> = Vec::with_capacity(100);
@@ -205,14 +205,14 @@ mod tests {
         // given
         let mut cat1 = create_category();
         cat1.old_id = Some("11".to_owned());
-        cat1.filename = Path::new("spinal").to_path_buf();
+        cat1.filename = Utf8Path::new("spinal").to_path_buf();
 
         let mut cat2 = create_category();
         cat2.old_id = None;
 
         let mut cat3 = create_category();
         cat3.old_id = Some("42".to_owned());
-        cat3.filename = Path::new("answers").to_path_buf();
+        cat3.filename = Utf8Path::new("answers").to_path_buf();
 
         let cats = &[cat1, cat2, cat3];
 

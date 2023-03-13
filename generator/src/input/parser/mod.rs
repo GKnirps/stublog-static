@@ -16,10 +16,10 @@
  */
 
 use crate::input::file::FileData;
+use camino::{Utf8Path, Utf8PathBuf};
 use std::collections::HashMap;
 use std::error::Error;
 use std::fmt;
-use std::path::{Path, PathBuf};
 
 pub mod asset;
 pub mod blogpost;
@@ -56,7 +56,7 @@ impl fmt::Display for ParseError {
 
 fn parse_metadata_line<'a>(
     line: &'a str,
-    original_filename: &Path,
+    original_filename: &Utf8Path,
 ) -> Result<(&'a str, &'a str), ParseError> {
     let mut split = line.splitn(2, ':');
     let name = split
@@ -65,7 +65,7 @@ fn parse_metadata_line<'a>(
             ParseError::new(format!(
                 "Header line '{}' has no key ({})",
                 line,
-                original_filename.to_string_lossy()
+                original_filename.as_str()
             ))
         })?
         .trim();
@@ -75,7 +75,7 @@ fn parse_metadata_line<'a>(
             ParseError::new(format!(
                 "Header line '{}' has no value ({})",
                 line,
-                original_filename.to_string_lossy()
+                original_filename.as_str()
             ))
         })?
         .trim();
@@ -84,7 +84,7 @@ fn parse_metadata_line<'a>(
 
 fn parse_metadata<'a>(
     head: &'a str,
-    original_filename: &Path,
+    original_filename: &Utf8Path,
 ) -> Result<HashMap<&'a str, &'a str>, ParseError> {
     head.lines()
         .filter(|line| !line.trim().is_empty())
@@ -98,17 +98,17 @@ fn parse_metadata<'a>(
 }
 
 /// get a secure filename from a string (i.e. just a filename, no path, especially no "up" path)
-fn get_secure_filename(path: &str, source_file_path: &Path) -> Result<PathBuf, ParseError> {
-    let unchecked = Path::new(path);
+fn get_secure_filename(path: &str, source_file_path: &Utf8Path) -> Result<Utf8PathBuf, ParseError> {
+    let unchecked = Utf8Path::new(path);
 
     let filename = unchecked.file_name().ok_or_else(|| {
         ParseError::new(format!(
             "Empty filename for source file {}",
-            source_file_path.to_string_lossy()
+            source_file_path.as_str()
         ))
     })?;
 
-    Ok(Path::new(filename).to_path_buf())
+    Ok(Utf8Path::new(filename).to_path_buf())
 }
 
 fn split_file_content(file_data: &FileData) -> Result<(HashMap<&str, &str>, &str), ParseError> {
@@ -118,14 +118,14 @@ fn split_file_content(file_data: &FileData) -> Result<(HashMap<&str, &str>, &str
     if sections.next().map(|s| s.trim().is_empty()) != Some(true) {
         return Err(ParseError::new(format!(
             "Content before header in file {}",
-            original_path.to_string_lossy()
+            original_path.as_str()
         )));
     }
 
     let header_raw = sections.next().ok_or_else(|| {
         ParseError::new(format!(
             "No header found in file {}",
-            original_path.to_string_lossy()
+            original_path.as_str()
         ))
     })?;
     let header_map = parse_metadata(header_raw, original_path)?;
@@ -133,7 +133,7 @@ fn split_file_content(file_data: &FileData) -> Result<(HashMap<&str, &str>, &str
     let content = sections.next().map(str::trim_start).ok_or_else(|| {
         ParseError::new(format!(
             "No content after header in file {}",
-            original_path.to_string_lossy()
+            original_path.as_str()
         ))
     })?;
 
@@ -150,7 +150,7 @@ mod tests {
         // given
         // implicitly tested here: trimming and colons in the value
         let line = " title : Slaves to Armok: God of blood: Chapter II: Dwarf Fortress ";
-        let path = Path::new("df_linux/urist");
+        let path = Utf8Path::new("df_linux/urist");
 
         // when
         let (key, value) = parse_metadata_line(line, path).expect("Expected successful parsing");
@@ -166,7 +166,7 @@ mod tests {
     #[test]
     fn parse_metadata_line_should_fail_for_empty_line() {
         // given
-        let path = Path::new("df_linux/urist");
+        let path = Utf8Path::new("df_linux/urist");
 
         // when
         let result = parse_metadata_line("", path);
@@ -184,7 +184,7 @@ mod tests {
     fn parse_metadata_line_should_fail_for_missing_colon() {
         // given
         let line = "title";
-        let path = Path::new("df_linux/urist");
+        let path = Utf8Path::new("df_linux/urist");
 
         // when
         let result = parse_metadata_line(line, path);
@@ -202,7 +202,7 @@ mod tests {
     fn parse_metadata_should_parse_metadata_and_ignore_empty_lines() {
         // given
         let metadata = "\n \ntitle: Colon Cancer\n\t\ntags:foo,bar\nempty: \t \n\n";
-        let path = Path::new("df_linux/urist");
+        let path = Utf8Path::new("df_linux/urist");
 
         // when
         let result = parse_metadata(metadata, path).expect("Expected valid result");
@@ -217,7 +217,7 @@ mod tests {
     fn parse_metadata_should_fail_on_bad_line() {
         // given
         let metadata = "title: Colon Cancer\nfoobar\ntags: foo,bar";
-        let path = Path::new("df_linux/urist");
+        let path = Utf8Path::new("df_linux/urist");
 
         // when
         let result = parse_metadata(metadata, path);
@@ -235,33 +235,33 @@ mod tests {
     fn get_secure_filename_should_return_filename() {
         // given
         let input = "foo.bar";
-        let path = Path::new("df_linux/urist");
+        let path = Utf8Path::new("df_linux/urist");
 
         // when
         let result = get_secure_filename(input, path).expect("Expected valid result");
 
         // then
-        assert_eq!(result, Path::new("foo.bar"));
+        assert_eq!(result, Utf8Path::new("foo.bar"));
     }
 
     #[test]
     fn get_secure_filename_should_return_only_filename() {
         // given
         let input = "/etc/../var/www/foo.bar";
-        let path = Path::new("df_linux/urist");
+        let path = Utf8Path::new("df_linux/urist");
 
         // when
         let result = get_secure_filename(input, path).expect("Expected valid result");
 
         // then
-        assert_eq!(result, Path::new("foo.bar"));
+        assert_eq!(result, Utf8Path::new("foo.bar"));
     }
 
     #[test]
     fn get_secure_filename_should_fail_for_empty_path() {
         // given
         let input = "";
-        let path = Path::new("df_linux/urist");
+        let path = Utf8Path::new("df_linux/urist");
 
         // when
         let result = get_secure_filename(input, path);
@@ -280,7 +280,7 @@ mod tests {
         // given
         let mut input = create_file_data();
         input.content = " \n  \n---\ntitle: foo\n---\n\ncontent\n".to_owned();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when
         let (header, content) = split_file_content(&input).expect("Expected valid result");
@@ -296,7 +296,7 @@ mod tests {
         // given
         let mut input = create_file_data();
         input.content = "\n".to_owned();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when
         let result = split_file_content(&input);
@@ -313,7 +313,7 @@ mod tests {
         // given
         let mut input = create_file_data();
         input.content = "something\n---\nitle: foo\n---\ncontent\n".to_owned();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when
         let result = split_file_content(&input);
@@ -333,7 +333,7 @@ mod tests {
         let mut input = create_file_data();
         // header never closes => no content (a closing header would be valid: empty content)
         input.content = "---\nitle: foo\n".to_owned();
-        input.filename = Path::new("df_linux/urist").to_path_buf();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when
         let result = split_file_content(&input);

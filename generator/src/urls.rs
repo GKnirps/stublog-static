@@ -78,7 +78,7 @@ pub fn files_metadata_index_url(page: usize) -> String {
 mod tests {
     use super::*;
     use crate::test_utils::{create_blogpost, create_category, create_quote};
-    use std::path::Path;
+    use camino::Utf8Path;
 
     #[test]
     fn url_for_absolute_path_renders_url_for_any_path() {
@@ -99,7 +99,7 @@ mod tests {
     fn blogpost_url_renders_correct_url() {
         // given
         let mut blogpost = create_blogpost();
-        blogpost.filename = Path::new("dürk").to_path_buf();
+        blogpost.filename = Utf8Path::new("dürk").to_path_buf();
 
         // when
         let url = blogpost_url(&blogpost);
@@ -124,7 +124,7 @@ mod tests {
     fn category_url_renders_correct_url() {
         // given
         let mut cat = create_category();
-        cat.filename = Path::new("foobar").to_path_buf();
+        cat.filename = Utf8Path::new("foobar").to_path_buf();
 
         // when
         let url = category_url(&cat);
@@ -137,7 +137,7 @@ mod tests {
     fn quote_url_renders_correct_url() {
         // given
         let mut quote = create_quote();
-        quote.filename = Path::new("marks").to_owned();
+        quote.filename = Utf8Path::new("marks").to_owned();
 
         // when
         let url = quote_url(&quote);

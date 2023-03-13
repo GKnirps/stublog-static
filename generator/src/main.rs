@@ -27,6 +27,7 @@ mod test_utils;
 use crate::input::parser::asset::read_assets;
 use crate::input::{tag::Tag, Blogpost, Category, HostedFile, HostedFileMetadata, Quote};
 use crate::output::error_pages::write_404;
+use camino::{Utf8Path, Utf8PathBuf};
 use input::file;
 use input::parser::{
     blogpost, category::parse_categories, files_index::parse_all_file_metadata, quote::parse_quotes,
@@ -34,7 +35,6 @@ use input::parser::{
 use output::{blogposts, categories, feed, hosted_files, ngingx_cfg, quotes, tags};
 use std::collections::{HashMap, HashSet};
 use std::env;
-use std::path::{Path, PathBuf};
 
 struct CliParams {
     show_help: bool,
@@ -80,56 +80,57 @@ fn main() -> Result<(), String> {
 }
 
 fn generate_config(indir: &str, odir: &str) -> Result<(), String> {
-    let categories_indir: PathBuf = [indir, "categories"].iter().collect();
+    let categories_indir: Utf8PathBuf = [indir, "categories"].iter().collect();
     let raw_categories = file::read_files_sorted(&categories_indir)
         .map_err(|e| format!("Failed to parse all categories: {e}"))?;
     let categories = parse_categories(&raw_categories)
         .map_err(|e| format!("Failed to parse all categories: {e}"))?;
 
-    let hosted_files_indir: PathBuf = [indir, "files_index"].iter().collect();
+    let hosted_files_indir: Utf8PathBuf = [indir, "files_index"].iter().collect();
     let raw_hosted_files = file::read_files_sorted(&hosted_files_indir)
         .map_err(|e| format!("Failed to read all hosted files: {e}"))?;
     let hosted_files = parse_all_file_metadata(&raw_hosted_files)
         .map_err(|e| format!("Unable to parse all file metadata: {e}"))?;
 
-    ngingx_cfg::write_config_file(Path::new(odir), &categories, &hosted_files)
+    ngingx_cfg::write_config_file(Utf8Path::new(odir), &categories, &hosted_files)
         .map_err(|e| format!("Unable to write nginx config: {e}"))
 }
 
 fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
-    let asset_path: PathBuf = [odir, "assets"].iter().collect();
+    let asset_path: Utf8PathBuf = [odir, "assets"].iter().collect();
     let assets = read_assets(&asset_path).map_err(|e| format!("Failed to read assets: {e}"))?;
 
-    write_404(Path::new(odir), &assets).map_err(|e| format!("Failed to write 404 error: {e}"))?;
+    write_404(Utf8Path::new(odir), &assets)
+        .map_err(|e| format!("Failed to write 404 error: {e}"))?;
 
-    let hosted_files_meta_indir: PathBuf = [indir, "files_index"].iter().collect();
+    let hosted_files_meta_indir: Utf8PathBuf = [indir, "files_index"].iter().collect();
     let raw_hosted_files_meta = file::read_files_sorted(&hosted_files_meta_indir)
         .map_err(|e| format!("Failed to read all hosted files: {e}"))?;
     let hosted_files_meta = parse_all_file_metadata(&raw_hosted_files_meta)
         .map_err(|e| format!("Unable to parse all file metadata: {e}"))?;
 
-    let hosted_files_indir: PathBuf = [indir, "file"].iter().collect();
+    let hosted_files_indir: Utf8PathBuf = [indir, "file"].iter().collect();
     let hosted_files = input::hosted_files::list_all_files(&hosted_files_indir)
         .map_err(|e| format!("Unable to list all hosted files:{e}"))?;
 
     let (hosted_file_pairs, hosted_files_by_name) =
         match_hosted_files(&hosted_files_meta, &hosted_files)?;
 
-    let categories_indir: PathBuf = [indir, "categories"].iter().collect();
+    let categories_indir: Utf8PathBuf = [indir, "categories"].iter().collect();
     let raw_categories = file::read_files_sorted(&categories_indir)
         .map_err(|e| format!("Failed to parse all categories: {e}"))?;
     let categories = parse_categories(&raw_categories)
         .map_err(|e| format!("Failed to parse all categories: {e}"))?;
     check_duplicate_categories(&categories)?;
 
-    let blogpost_indir: PathBuf = [indir, "blogposts"].iter().collect();
+    let blogpost_indir: Utf8PathBuf = [indir, "blogposts"].iter().collect();
     let raw_blogposts = file::read_files_sorted(&blogpost_indir)
         .map_err(|e| format!("Failed to read all blogposts: {e}"))?;
     let blogposts = blogpost::parse_blogposts(&raw_blogposts)
         .map_err(|e| format!("Failed to parse all blogposts: {e}"))?;
     check_duplicate_blogpost_names(&blogposts)?;
 
-    let quotes_indir: PathBuf = [indir, "quotes"].iter().collect();
+    let quotes_indir: Utf8PathBuf = [indir, "quotes"].iter().collect();
     let raw_quotes = file::read_files_sorted(&quotes_indir)
         .map_err(|e| format!("failed to read all quotes: {e}"))?;
     let published_quotes =
@@ -139,7 +140,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     let categorized_blogposts =
         blogposts::find_categories_for_blogposts(&blogposts, &categories)
             .map_err(|e| format!("Error while matching blogpost with categories: {e}"))?;
-    let blogpost_dir: PathBuf = [odir, "blogposts"].iter().collect();
+    let blogpost_dir: Utf8PathBuf = [odir, "blogposts"].iter().collect();
     blogposts::write_blogposts(
         &blogpost_dir,
         &categorized_blogposts,
@@ -148,7 +149,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     )
     .map_err(|e| format!("Failed to write all blogposts: {e}"))?;
 
-    let archive_dir: PathBuf = [odir, "archive"].iter().collect();
+    let archive_dir: Utf8PathBuf = [odir, "archive"].iter().collect();
     blogposts::write_archive(
         &archive_dir,
         &categorized_blogposts,
@@ -157,7 +158,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     )
     .map_err(|e| format!("Failed to write archive: {e}"))?;
     blogposts::write_home(
-        Path::new(odir),
+        Utf8Path::new(odir),
         &categorized_blogposts,
         published_quotes.last(),
         &assets,
@@ -165,9 +166,9 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     )
     .map_err(|e| format!("Failed to write home page: {e}"))?;
 
-    feed::write_atom_feed(Path::new(odir), &blogposts, &hosted_files_by_name)?;
+    feed::write_atom_feed(Utf8Path::new(odir), &blogposts, &hosted_files_by_name)?;
 
-    let quote_dir: PathBuf = [odir, "quote"].iter().collect();
+    let quote_dir: Utf8PathBuf = [odir, "quote"].iter().collect();
     quotes::write_quote_pages(
         &quote_dir,
         &published_quotes,
@@ -175,7 +176,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         &hosted_files_by_name,
     )
     .map_err(|e| format!("Unable to write all quote pages: {e}"))?;
-    let quote_list_dir: PathBuf = [odir, "quotes"].iter().collect();
+    let quote_list_dir: Utf8PathBuf = [odir, "quotes"].iter().collect();
     quotes::write_quote_list_pages(
         &quote_list_dir,
         &published_quotes,
@@ -188,13 +189,13 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
 
     let post_by_tags = tags::blogpost_by_tag(&blogposts);
     check_index_tag(&post_by_tags)?;
-    let tags_dir: PathBuf = [odir, "tags"].iter().collect();
+    let tags_dir: Utf8PathBuf = [odir, "tags"].iter().collect();
     tags::write_tag_index(&tags_dir, &post_by_tags, &assets)
         .map_err(|e| format!("Failed to write tag index page: {e}"))?;
     tags::write_tag_pages(&tags_dir, &post_by_tags, &assets)
         .map_err(|e| format!("Failed to write tag pages: {e}"))?;
 
-    let category_dir: PathBuf = [odir, "categories"].iter().collect();
+    let category_dir: Utf8PathBuf = [odir, "categories"].iter().collect();
     let categories_with_posts = categories::categories_with_blogposts(&categories, &blogposts);
     categories::write_category_index(&category_dir, &categories_with_posts, &assets)
         .map_err(|e| format!("Failed to write category index page: {e}"))?;
@@ -206,7 +207,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     )
     .map_err(|e| format!("Failed to write all category pages: {e}"))?;
 
-    let hosted_files_index_dir: PathBuf = [odir, "files_metadata"].iter().collect();
+    let hosted_files_index_dir: Utf8PathBuf = [odir, "files_metadata"].iter().collect();
     hosted_files::write_hosted_file_index_pages(
         &hosted_files_index_dir,
         &hosted_file_pairs,
@@ -216,13 +217,10 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
 }
 
 fn check_duplicate_blogpost_names(posts: &[Blogpost]) -> Result<(), String> {
-    let mut seen: HashSet<&Path> = HashSet::with_capacity(posts.len());
+    let mut seen: HashSet<&Utf8Path> = HashSet::with_capacity(posts.len());
     for post in posts {
         if seen.contains(&post.filename.as_path()) {
-            return Err(format!(
-                "Blogpost name {} is a duplicate!",
-                post.filename.to_string_lossy()
-            ));
+            return Err(format!("Blogpost name {} is a duplicate!", post.filename));
         }
         seen.insert(&post.filename);
     }
@@ -245,18 +243,18 @@ fn check_index_tag(post_by_tags: &HashMap<&Tag, Vec<&Blogpost>>) -> Result<(), S
 }
 
 fn check_duplicate_categories(categories: &[Category]) -> Result<(), String> {
-    let mut seen: HashSet<&Path> = HashSet::with_capacity(categories.len());
+    let mut seen: HashSet<&Utf8Path> = HashSet::with_capacity(categories.len());
     for cat in categories {
         if seen.contains(&cat.filename.as_path()) {
             return Err(format!(
                 "Category filename {} is a duplicate!",
-                cat.filename.to_string_lossy()
+                cat.filename
             ));
         }
         seen.insert(cat.filename.as_path());
     }
 
-    if seen.contains(&Path::new("index")) {
+    if seen.contains(&Utf8Path::new("index")) {
         return Err("'index' must not be a category path name.".to_owned());
     }
 
@@ -264,13 +262,10 @@ fn check_duplicate_categories(categories: &[Category]) -> Result<(), String> {
 }
 
 fn check_duplicate_quote_names(quotes: &[Quote]) -> Result<(), String> {
-    let mut seen: HashSet<&Path> = HashSet::with_capacity(quotes.len());
+    let mut seen: HashSet<&Utf8Path> = HashSet::with_capacity(quotes.len());
     for quote in quotes {
         if seen.contains(&quote.filename.as_path()) {
-            return Err(format!(
-                "Quote name {} is a duplicate!",
-                quote.filename.to_string_lossy()
-            ));
+            return Err(format!("Quote name {} is a duplicate!", quote.filename));
         }
         seen.insert(&quote.filename);
     }
@@ -297,7 +292,7 @@ fn match_hosted_files<'meta, 'file>(
     }
     let files_by_name: HashMap<&str, &HostedFile> = hosted_files
         .iter()
-        .filter_map(|f| Some((f.filename.to_str()?, f)))
+        .map(|f| (f.filename.as_str(), f))
         .collect();
 
     let mut no_metadata_files = files_by_name
@@ -345,17 +340,16 @@ mod tests {
         create_blogpost, create_category, create_hosted_file, create_hosted_file_metadata,
         create_quote,
     };
-    use std::os::unix::ffi::OsStrExt;
 
     #[test]
     fn check_duplicate_blogposts_names_returns_ok_for_no_duplicates() {
         // given
         let mut post1 = create_blogpost();
-        post1.filename = PathBuf::from("foobar");
+        post1.filename = Utf8PathBuf::from("foobar");
         let mut post2 = create_blogpost();
-        post2.filename = PathBuf::from("foo");
+        post2.filename = Utf8PathBuf::from("foo");
         let mut post3 = create_blogpost();
-        post3.filename = PathBuf::from("bar");
+        post3.filename = Utf8PathBuf::from("bar");
 
         // when
         let result = check_duplicate_blogpost_names(&[post1, post2, post3]);
@@ -368,11 +362,11 @@ mod tests {
     fn check_duplicate_blogposts_names_returns_error_for_duplicates() {
         // given
         let mut post1 = create_blogpost();
-        post1.filename = PathBuf::from("foobar");
+        post1.filename = Utf8PathBuf::from("foobar");
         let mut post2 = create_blogpost();
-        post2.filename = PathBuf::from("foo");
+        post2.filename = Utf8PathBuf::from("foo");
         let mut post3 = create_blogpost();
-        post3.filename = PathBuf::from("foobar");
+        post3.filename = Utf8PathBuf::from("foobar");
 
         // when
         let result = check_duplicate_blogpost_names(&[post1, post2, post3]);
@@ -422,7 +416,7 @@ mod tests {
     fn check_duplicate_categories_returns_err_if_index_is_filename() {
         // given
         let mut cat = create_category();
-        cat.filename = Path::new("index").to_path_buf();
+        cat.filename = Utf8Path::new("index").to_path_buf();
 
         // when
         let result = check_duplicate_categories(&[cat]);
@@ -438,9 +432,9 @@ mod tests {
     fn check_duplicate_categories_returns_err_if_filename_is_duplicate() {
         // given
         let mut cat1 = create_category();
-        cat1.filename = Path::new("cat1").to_path_buf();
+        cat1.filename = Utf8Path::new("cat1").to_path_buf();
         let mut cat2 = create_category();
-        cat2.filename = Path::new("cat1").to_path_buf();
+        cat2.filename = Utf8Path::new("cat1").to_path_buf();
 
         // when
         let result = check_duplicate_categories(&[cat1, cat2]);
@@ -456,9 +450,9 @@ mod tests {
     fn check_duplicate_categories_returns_ok_if_no_filename_collisions_occur() {
         // given
         let mut cat1 = create_category();
-        cat1.filename = Path::new("cat1").to_path_buf();
+        cat1.filename = Utf8Path::new("cat1").to_path_buf();
         let mut cat2 = create_category();
-        cat2.filename = Path::new("cat2").to_path_buf();
+        cat2.filename = Utf8Path::new("cat2").to_path_buf();
 
         // when
         let result = check_duplicate_categories(&[cat1, cat2]);
@@ -471,11 +465,11 @@ mod tests {
     fn check_duplicate_quote_names_returns_ok_for_no_duplicates() {
         // given
         let mut quote1 = create_quote();
-        quote1.filename = PathBuf::from("foobar");
+        quote1.filename = Utf8PathBuf::from("foobar");
         let mut quote2 = create_quote();
-        quote2.filename = PathBuf::from("foo");
+        quote2.filename = Utf8PathBuf::from("foo");
         let mut quote3 = create_quote();
-        quote3.filename = PathBuf::from("bar");
+        quote3.filename = Utf8PathBuf::from("bar");
 
         // when
         let result = check_duplicate_quote_names(&[quote1, quote2, quote3]);
@@ -488,11 +482,11 @@ mod tests {
     fn check_duplicate_quote_names_returns_error_for_duplicates() {
         // given
         let mut quote1 = create_quote();
-        quote1.filename = PathBuf::from("foobar");
+        quote1.filename = Utf8PathBuf::from("foobar");
         let mut quote2 = create_quote();
-        quote2.filename = PathBuf::from("foo");
+        quote2.filename = Utf8PathBuf::from("foo");
         let mut quote3 = create_quote();
-        quote3.filename = PathBuf::from("foobar");
+        quote3.filename = Utf8PathBuf::from("foobar");
 
         // when
         let result = check_duplicate_quote_names(&[quote1, quote2, quote3]);
@@ -507,12 +501,12 @@ mod tests {
         let mut metadata1 = create_hosted_file_metadata();
         metadata1.path = "file1".to_string();
         let mut file1 = create_hosted_file();
-        file1.filename = PathBuf::from("file1");
+        file1.filename = Utf8PathBuf::from("file1");
 
         let mut metadata2 = create_hosted_file_metadata();
         metadata2.path = "file2".to_string();
         let mut file2 = create_hosted_file();
-        file2.filename = PathBuf::from("file2");
+        file2.filename = Utf8PathBuf::from("file2");
 
         let metadata = &[metadata1, metadata2];
         let files = &[file2, file1];
@@ -540,7 +534,7 @@ mod tests {
         metadata[1].path = "file".to_string();
         metadata[0].path = "unmatched".to_string();
         let file = &mut [create_hosted_file()];
-        file[0].filename = PathBuf::from("file");
+        file[0].filename = Utf8PathBuf::from("file");
 
         // when
         let result = match_hosted_files(metadata, file);
@@ -558,8 +552,8 @@ mod tests {
         let metadata = &mut [create_hosted_file_metadata()];
         metadata[0].path = "file".to_string();
         let files = &mut [create_hosted_file(), create_hosted_file()];
-        files[1].filename = PathBuf::from("unmatched");
-        files[0].filename = PathBuf::from("file");
+        files[1].filename = Utf8PathBuf::from("unmatched");
+        files[0].filename = Utf8PathBuf::from("file");
 
         // when
         let result = match_hosted_files(metadata, files);
@@ -569,27 +563,6 @@ mod tests {
             result,
             Err(
                 "The following file(s) are present, but not referenced by metadata: unmatched"
-                    .to_string()
-            )
-        );
-    }
-
-    #[test]
-    fn match_hosted_files_fails_for_non_unicode_filenames() {
-        // given
-        let metadata = &[];
-        let files = &mut [create_hosted_file()];
-        // non-utf8 byte in the file name
-        files[0].filename = PathBuf::from(std::ffi::OsStr::from_bytes(b"file\xff"));
-
-        // when
-        let result = match_hosted_files(metadata, files);
-
-        // then
-        assert_eq!(
-            result,
-            Err(
-                "Number of hosted files does not match number of metadata files (1 vs 0)"
                     .to_string()
             )
         );

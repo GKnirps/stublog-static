@@ -33,7 +33,7 @@ fn parse_quote(file_data: &FileData) -> Result<Quote, ParseError> {
 
     let id = header_map
         .get("id")
-        .ok_or_else(|| ParseError::new(format!("Missing id for quote {}", path.to_string_lossy())))?
+        .ok_or_else(|| ParseError::new(format!("Missing id for quote {}", path.as_str())))?
         .to_string();
     let filename = get_secure_filename(&id, path)?;
 
@@ -61,7 +61,7 @@ fn parse_quote(file_data: &FileData) -> Result<Quote, ParseError> {
 mod tests {
     use super::*;
     use crate::test_utils::create_file_data;
-    use std::path::Path;
+    use camino::Utf8Path;
 
     #[test]
     fn parse_quote_parses_quote_when_all_fields_are_set() {
@@ -80,7 +80,7 @@ mod tests {
         let result = parse_quote(&file_data).expect("Expected successful parsing");
 
         // then
-        assert_eq!(result.filename, Path::new("penguin"));
+        assert_eq!(result.filename, Utf8Path::new("penguin"));
         assert_eq!(result.source_name, Some("Arthur Dent".to_owned()));
         assert_eq!(result.source_url, Some("https://example.com".to_owned()));
         assert!(!result.published);
@@ -105,7 +105,7 @@ mod tests {
         let result = parse_quote(&file_data).expect("Expected successful parsing");
 
         // then
-        assert_eq!(result.filename, Path::new("penguin"));
+        assert_eq!(result.filename, Utf8Path::new("penguin"));
         assert_eq!(result.source_name, None);
         assert_eq!(result.source_url, None);
         assert!(result.published);

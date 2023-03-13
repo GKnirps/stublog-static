@@ -83,7 +83,7 @@ pub fn render_category_page(
 mod tests {
     use super::*;
     use crate::test_utils::{create_assets, create_blogpost, create_category};
-    use std::path::Path;
+    use camino::Utf8Path;
 
     #[test]
     fn render_categories_index_page_should_render_all_entries() {
@@ -91,10 +91,10 @@ mod tests {
         let dummy_blogpost = create_blogpost();
         let mut cat1 = create_category();
         cat1.title = "Mikhail".to_owned();
-        cat1.filename = Path::new("mika").to_owned();
+        cat1.filename = Utf8Path::new("mika").to_owned();
         let mut cat2 = create_category();
         cat2.title = "Jessica".to_owned();
-        cat2.filename = Path::new("jessi").to_owned();
+        cat2.filename = Utf8Path::new("jessi").to_owned();
 
         let assets = create_assets();
 
@@ -118,10 +118,10 @@ mod tests {
         // given
         let mut post1 = create_blogpost();
         post1.title = "How to be a supervillain".to_owned();
-        post1.filename = Path::new("sprvlln").to_owned();
+        post1.filename = Utf8Path::new("sprvlln").to_owned();
         let mut post2 = create_blogpost();
         post2.title = "How not to get caught".to_owned();
-        post2.filename = Path::new("caught").to_owned();
+        post2.filename = Utf8Path::new("caught").to_owned();
 
         let mut category = create_category();
         category.title = "Supervillainy".to_owned();

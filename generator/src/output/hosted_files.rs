@@ -20,12 +20,12 @@ use super::html::hosted_file;
 use super::needs_any_update;
 use crate::input::{Assets, HostedFileMetadata};
 use crate::HostedFile;
+use camino::Utf8Path;
 use std::fs::create_dir;
 use std::io::Write;
-use std::path::Path;
 
 fn write_hosted_file_index_page(
-    dir: &Path,
+    dir: &Utf8Path,
     files: &[(&HostedFileMetadata, &HostedFile)],
     current_page: usize,
     num_pages: usize,
@@ -52,7 +52,7 @@ fn write_hosted_file_index_page(
 }
 
 pub fn write_hosted_file_index_pages(
-    dir: &Path,
+    dir: &Utf8Path,
     files: &[(&HostedFileMetadata, &HostedFile)],
     assets: &Assets,
 ) -> std::io::Result<()> {

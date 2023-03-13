@@ -75,7 +75,7 @@ pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost], assets: &Assets) -> Marku
 mod tests {
     use super::*;
     use crate::test_utils::{create_assets, create_blogpost};
-    use std::path::PathBuf;
+    use camino::Utf8PathBuf;
 
     #[test]
     fn render_tag_list_renders_list_of_tags() {
@@ -99,11 +99,11 @@ mod tests {
         // given
         let mut post1 = create_blogpost();
         post1.title = "Posty McPostface".to_owned();
-        post1.filename = PathBuf::from("postface");
+        post1.filename = Utf8PathBuf::from("postface");
 
         let mut post2 = create_blogpost();
         post2.title = "Shaped like itself".to_owned();
-        post2.filename = PathBuf::from("shaped");
+        post2.filename = Utf8PathBuf::from("shaped");
 
         let tag = Tag::new("stuff");
 

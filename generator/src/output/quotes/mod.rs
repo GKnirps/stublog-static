@@ -22,15 +22,15 @@ use crate::input::{Assets, Quote};
 use crate::output::html::quote::render_quote_list_page;
 use crate::output::OutputError;
 use crate::HostedFile;
+use camino::Utf8Path;
 use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
-use std::path::Path;
 
 mod fortune;
 
 fn write_quote_page(
-    dir: &Path,
+    dir: &Utf8Path,
     quote: &Quote,
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
@@ -64,7 +64,7 @@ fn write_quote_page(
 }
 
 pub fn write_quote_pages(
-    dir: &Path,
+    dir: &Utf8Path,
     quotes: &[Quote],
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
@@ -81,7 +81,7 @@ pub fn write_quote_pages(
 }
 
 fn write_quote_list_page(
-    dir: &Path,
+    dir: &Utf8Path,
     quotes: &[Quote],
     current_page: usize,
     num_pages: usize,
@@ -116,7 +116,7 @@ fn write_quote_list_page(
 }
 
 pub fn write_quote_list_pages(
-    dir: &Path,
+    dir: &Utf8Path,
     quotes: &[Quote],
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
@@ -137,7 +137,7 @@ pub fn write_quote_list_pages(
     Ok(())
 }
 
-pub fn write_quote_fortune_file(dir: &Path, quotes: &[Quote]) -> std::io::Result<()> {
+pub fn write_quote_fortune_file(dir: &Utf8Path, quotes: &[Quote]) -> std::io::Result<()> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
         create_dir(dir)?;

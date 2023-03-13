@@ -15,12 +15,12 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use camino::Utf8Path;
 use std::cmp::max;
 use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
 use std::iter::once;
-use std::path::Path;
 
 use super::file::open_for_write;
 use super::html;
@@ -55,7 +55,7 @@ fn newest_modification(category: &Category, posts: &[&Blogpost]) -> SystemTime {
 }
 
 pub fn write_category_index(
-    dir: &Path,
+    dir: &Utf8Path,
     categories: &[(&Category, Vec<&Blogpost>)],
     assets: &Assets,
 ) -> std::io::Result<()> {
@@ -86,7 +86,7 @@ pub fn write_category_index(
 }
 
 pub fn write_category_pages(
-    dir: &Path,
+    dir: &Utf8Path,
     categories: &[(&Category, Vec<&Blogpost>)],
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
@@ -102,7 +102,7 @@ pub fn write_category_pages(
 }
 
 fn write_category_page(
-    dir: &Path,
+    dir: &Utf8Path,
     category: &Category,
     blogposts: &[&Blogpost],
     assets: &Assets,

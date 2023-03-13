@@ -19,19 +19,19 @@ use super::file::open_for_write;
 use crate::input::Blogpost;
 use crate::output::needs_any_update;
 use crate::HostedFile;
+use camino::Utf8Path;
 use quick_xml::Writer;
 use std::collections::HashMap;
-use std::path::Path;
 
 mod atom;
 
-pub fn feed_needs_update(filename: &Path, blogposts: &[Blogpost]) -> bool {
+pub fn feed_needs_update(filename: &Utf8Path, blogposts: &[Blogpost]) -> bool {
     let times = blogposts.iter().map(|p| p.modified_at);
     needs_any_update(filename, times)
 }
 
 pub fn write_atom_feed(
-    dir: &Path,
+    dir: &Utf8Path,
     blogposts: &[Blogpost],
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<(), String> {

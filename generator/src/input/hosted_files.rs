@@ -17,35 +17,35 @@
 
 use super::HostedFile;
 use crate::input::ImageMetadata;
+use camino::{Utf8Path, Utf8PathBuf};
 use image::io::Reader as ImageReader;
 use quick_xml::events::Event;
 use quick_xml::reader::Reader as XmlReader;
-use std::fs::{read_dir, File};
+use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::path::{Path, PathBuf};
 
 // lists all files in the path and gets extra metadata on image files
-pub fn list_all_files(path: &Path) -> std::io::Result<Vec<HostedFile>> {
-    read_dir(path)?
+pub fn list_all_files(path: &Utf8Path) -> std::io::Result<Vec<HostedFile>> {
+    Utf8Path::read_dir_utf8(path)?
         .map(|entry| {
             let entry = entry?;
             let metadata = entry.metadata()?;
             let file_size = metadata.len();
             let modified_at = metadata.modified()?;
-            let mut filename = PathBuf::with_capacity(64);
+            let mut filename = Utf8PathBuf::with_capacity(64);
             let entry_path = entry.path();
             filename.set_file_name(entry_path.file_name().ok_or_else(|| {
                 std::io::Error::new(std::io::ErrorKind::Other, "No filename given for dir entry")
             })?);
-            let file_extension = entry_path.extension().and_then(|ext| ext.to_str());
+            let file_extension = entry_path.extension();
             // we take a shortcut here and rely on the file extensions, this makes things a little faster
             let image_metadata = if file_extension
                 .map(|ext| ["png", "gif", "jpg", "jpeg", "webp"].contains(&ext))
                 .unwrap_or(false)
             {
-                read_image_metadata(&entry_path)
+                read_image_metadata(entry_path)
             } else if file_extension == Some("svg") {
-                read_svg_size(&entry_path)
+                read_svg_size(entry_path)
             } else {
                 None
             };
@@ -61,7 +61,7 @@ pub fn list_all_files(path: &Path) -> std::io::Result<Vec<HostedFile>> {
 
 // read image metadata from a file
 // return None for any error (most importantly if the file is not a supported image format)
-fn read_image_metadata(path: &Path) -> Option<ImageMetadata> {
+fn read_image_metadata(path: &Utf8Path) -> Option<ImageMetadata> {
     ImageReader::open(path)
         .ok()?
         .into_dimensions()
@@ -69,7 +69,7 @@ fn read_image_metadata(path: &Path) -> Option<ImageMetadata> {
         .ok()
 }
 
-fn read_svg_size(path: &Path) -> Option<ImageMetadata> {
+fn read_svg_size(path: &Utf8Path) -> Option<ImageMetadata> {
     let file = File::open(path).ok()?;
     let buf_reader = BufReader::new(file);
     parse_svg_size(buf_reader)

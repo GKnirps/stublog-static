@@ -15,8 +15,8 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use camino::Utf8PathBuf;
 use chrono::{DateTime, FixedOffset};
-use std::path::PathBuf;
 use std::time::SystemTime;
 use tag::Tag;
 
@@ -28,7 +28,7 @@ pub mod tag;
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct Blogpost {
     pub title: String,
-    pub filename: PathBuf,
+    pub filename: Utf8PathBuf,
     pub date: DateTime<FixedOffset>,
     /// this is the official update date
     pub update_date: Option<DateTime<FixedOffset>>,
@@ -46,7 +46,7 @@ pub struct Blogpost {
 pub struct Category {
     pub title: String,
     pub id: String,
-    pub filename: PathBuf,
+    pub filename: Utf8PathBuf,
     pub description_markdown: String,
     pub modified_at: SystemTime,
     pub old_id: Option<String>,
@@ -65,7 +65,7 @@ pub struct HostedFileMetadata {
 // Actual data of a hosted file (not read from the metadata)
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct HostedFile {
-    pub filename: PathBuf,
+    pub filename: Utf8PathBuf,
     pub file_size: u64,
     pub image_metadata: Option<ImageMetadata>,
     pub modified_at: SystemTime,
@@ -79,7 +79,7 @@ pub struct ImageMetadata {
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct Quote {
-    pub filename: PathBuf,
+    pub filename: Utf8PathBuf,
     pub source_name: Option<String>,
     pub source_url: Option<String>,
     pub published: bool,
@@ -89,7 +89,7 @@ pub struct Quote {
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct Asset {
-    pub filename: PathBuf,
+    pub filename: Utf8PathBuf,
     pub modified_at: SystemTime,
     pub web_path: String,
 }

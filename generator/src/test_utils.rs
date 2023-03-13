@@ -18,8 +18,8 @@
 use crate::input::file::FileData;
 use crate::input::{tag::Tag, Asset, Assets, Blogpost, Category, HostedFileMetadata, Quote};
 use crate::HostedFile;
+use camino::{Utf8Path, Utf8PathBuf};
 use chrono::{FixedOffset, TimeZone};
-use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 
 pub fn create_blogpost() -> Blogpost {
@@ -33,7 +33,7 @@ pub fn create_blogpost() -> Blogpost {
         .unwrap();
     Blogpost {
         title: "Nevermind".to_owned(),
-        filename: Path::new("foobar").to_owned(),
+        filename: Utf8Path::new("foobar").to_owned(),
         date,
         update_date: Some(update_date),
         tags: vec![Tag::new("foo"), Tag::new("bar")],
@@ -49,7 +49,7 @@ pub fn create_blogpost() -> Blogpost {
 pub fn create_category() -> Category {
     Category {
         title: "Cocoa".to_owned(),
-        filename: Path::new("chocolate").to_owned(),
+        filename: Utf8Path::new("chocolate").to_owned(),
         id: "fesazu".to_owned(),
         description_markdown: "## Chocolate!!!111".to_owned(),
         modified_at: SystemTime::now(),
@@ -69,7 +69,7 @@ pub fn create_hosted_file_metadata() -> HostedFileMetadata {
 
 pub fn create_hosted_file() -> HostedFile {
     HostedFile {
-        filename: PathBuf::from("answer.txt"),
+        filename: Utf8PathBuf::from("answer.txt"),
         file_size: 42,
         image_metadata: None,
         modified_at: SystemTime::now(),
@@ -78,7 +78,7 @@ pub fn create_hosted_file() -> HostedFile {
 
 pub fn create_quote() -> Quote {
     Quote {
-        filename: Path::new("penguin").to_owned(),
+        filename: Utf8Path::new("penguin").to_owned(),
         source_name: Some("Arthur Dent".to_owned()),
         source_url: Some("https://example.com/adent".to_owned()),
         published: true,
@@ -90,7 +90,7 @@ pub fn create_quote() -> Quote {
 pub fn create_file_data() -> FileData {
     FileData {
         content: "---\nfoo: bar\n---\n\nSomething".to_owned(),
-        filename: Path::new("foo/bar.md").to_path_buf(),
+        filename: Utf8Path::new("foo/bar.md").to_path_buf(),
         modified_at: SystemTime::now(),
     }
 }
@@ -98,12 +98,12 @@ pub fn create_file_data() -> FileData {
 pub fn create_assets() -> Assets {
     Assets {
         favicon: Asset {
-            filename: PathBuf::from("../dist/assets/favicon.png"),
+            filename: Utf8PathBuf::from("../dist/assets/favicon.png"),
             modified_at: SystemTime::now(),
             web_path: "/assets/favicon.png".to_owned(),
         },
         stylesheet: Asset {
-            filename: PathBuf::from("../dist/assets/style.css"),
+            filename: Utf8PathBuf::from("../dist/assets/style.css"),
             modified_at: SystemTime::now(),
             web_path: "/assets/style.css".to_owned(),
         },

@@ -17,23 +17,23 @@
 
 use super::super::{Asset, Assets};
 use crate::input::parser::ParseError;
+use camino::{Utf8Path, Utf8PathBuf};
 use sha2::{digest, Digest, Sha256};
 use std::fs::File;
 use std::io::{BufReader, Read};
-use std::path::{Path, PathBuf};
 
-fn read_asset(path: PathBuf) -> Result<Asset, ParseError> {
+fn read_asset(path: Utf8PathBuf) -> Result<Asset, ParseError> {
     let file = File::open(&path).map_err(|e| {
         ParseError::new(format!(
             "Unable to open asset file {}: {}",
-            path.to_string_lossy(),
+            path.as_str(),
             e
         ))
     })?;
     let metadata = file.metadata().map_err(|e| {
         ParseError::new(format!(
             "Unable get metadata from asset file {}: {}",
-            path.to_string_lossy(),
+            path.as_str(),
             e
         ))
     })?;
@@ -43,7 +43,7 @@ fn read_asset(path: PathBuf) -> Result<Asset, ParseError> {
     reader.read_to_end(&mut content).map_err(|e| {
         ParseError::new(format!(
             "Unable to read asset file {}: {}",
-            path.to_string_lossy(),
+            path.as_str(),
             e
         ))
     })?;
@@ -55,14 +55,14 @@ fn read_asset(path: PathBuf) -> Result<Asset, ParseError> {
     let web_path = format_web_path(&path, &hash).ok_or_else(|| {
         ParseError::new(format!(
             "Unable to create web path for asset {}",
-            path.to_string_lossy()
+            path.as_str()
         ))
     })?;
 
     let modified_at = metadata.modified().map_err(|e| {
         ParseError::new(format!(
             "Unable to get modification time for asset file {}: {}",
-            path.to_string_lossy(),
+            path.as_str(),
             e
         ))
     })?;
@@ -74,16 +74,16 @@ fn read_asset(path: PathBuf) -> Result<Asset, ParseError> {
     })
 }
 
-fn format_web_path(file_path: &Path, hash: &digest::Output<Sha256>) -> Option<String> {
+fn format_web_path(file_path: &Utf8Path, hash: &digest::Output<Sha256>) -> Option<String> {
     Some(format!(
         "/assets/{}?cache={:x}",
-        file_path.file_name()?.to_string_lossy(),
+        file_path.file_name()?,
         hash
     ))
 }
 
 /// read asset files (from the asset output directory to hash them (for caching)
-pub fn read_assets(asset_dir: &Path) -> Result<Assets, ParseError> {
+pub fn read_assets(asset_dir: &Utf8Path) -> Result<Assets, ParseError> {
     let mut favicon_path = asset_dir.to_path_buf();
     favicon_path.push("favicon.png");
     let favicon = read_asset(favicon_path)?;
@@ -105,7 +105,7 @@ mod tests {
     #[test]
     fn format_web_path_formats_correctly() {
         // given
-        let file_path = Path::new("../somewhere/bar/foo.css");
+        let file_path = Utf8Path::new("../somewhere/bar/foo.css");
 
         let mut hasher = Sha256::new();
         hasher.update(b"Look behind you, a three-headed monkey!");
