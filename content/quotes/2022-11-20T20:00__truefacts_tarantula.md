@@ -3,7 +3,7 @@ id: truefacts_tarantula
 source-name: True Facts: Tarantulas
 source-url: https://youtu.be/EhJYtmZuhV4?t=709
 date: 2022-11-20T20:00:15+01:00
-published: false
+published: true
 ---
 
 Once the male finds a hidey-hole with a potential mate, he has to convince the female to come out and party.
