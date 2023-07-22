@@ -9,11 +9,11 @@ summary: Warum zur Hölle schlägt die DB-Website Routen vor, von der sie weiß,
 image:
 ---
 
-Ich habe ein bisschen Urlaub gemacht und will mir gerade Bahntickets für die Rückfahrt buchen. Über einer der Möglichen Routen prangt folgende Warnung:
+Ich habe ein bisschen Urlaub gemacht und will mir gerade Bahntickets für die Rückfahrt buchen. Über einer der möglichen Routen prangt folgende Warnung:
 
 ![Wichtige Informationen in den Verbindungsdetails!](/file/warnung_verbindung.webp)
 
-Ok, was ist denn die Warnung. Mal nachschauen…
+Ok, was ist denn die Warnung? Mal nachschauen…
 
 ![Fahrt fällt aus](/file/zug_faellt_aus.webp)
 
