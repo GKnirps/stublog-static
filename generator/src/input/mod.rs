@@ -17,6 +17,8 @@
 
 use camino::Utf8PathBuf;
 use chrono::{DateTime, FixedOffset};
+use std::fmt;
+use std::fmt::Formatter;
 use std::time::SystemTime;
 use tag::Tag;
 
@@ -24,6 +26,26 @@ pub mod file;
 pub mod hosted_files;
 pub mod parser;
 pub mod tag;
+
+#[derive(Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+pub enum Language {
+    // only a limited set of languages for now
+    De,
+    En,
+}
+
+impl fmt::Display for Language {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Language::De => "de",
+                Language::En => "en",
+            }
+        )
+    }
+}
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct Blogpost {
@@ -40,6 +62,7 @@ pub struct Blogpost {
     pub content_markdown: String,
     pub summary: Option<String>,
     pub image: Option<String>,
+    pub language: Option<Language>,
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
@@ -85,6 +108,7 @@ pub struct Quote {
     pub published: bool,
     pub content_markdown: String,
     pub modified_at: SystemTime,
+    pub language: Option<Language>,
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]

@@ -43,6 +43,7 @@ pub fn create_blogpost() -> Blogpost {
         content_markdown: "*foo*bar".to_owned(),
         summary: Some("foo!".to_owned()),
         image: Some("/recipes.png".to_owned()),
+        language: None,
     }
 }
 
@@ -84,6 +85,7 @@ pub fn create_quote() -> Quote {
         published: true,
         content_markdown: "Ford… you're turning into a penguin. Stop it.".to_owned(),
         modified_at: SystemTime::now(),
+        language: None,
     }
 }
 

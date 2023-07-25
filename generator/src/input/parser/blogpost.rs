@@ -16,7 +16,7 @@
  */
 
 use super::super::Blogpost;
-use super::{get_secure_filename, split_file_content, ParseError};
+use super::{get_secure_filename, parse_language, split_file_content, ParseError};
 use crate::input::file::FileData;
 use crate::input::tag::Tag;
 use chrono::DateTime;
@@ -96,6 +96,10 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
         .get("allow-html")
         .map(|v| *v == "true")
         .unwrap_or(false);
+    let language = props
+        .get("language")
+        .map(|l| parse_language(l))
+        .transpose()?;
 
     Ok(Blogpost {
         title,
@@ -109,12 +113,14 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
         content_markdown: content.to_owned(),
         summary,
         image,
+        language,
     })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::input::Language;
     use crate::test_utils::create_file_data;
     use camino::Utf8Path;
     use chrono::{FixedOffset, TimeZone};
@@ -160,6 +166,7 @@ mod tests {
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
         assert_eq!(result.summary, None);
         assert_eq!(result.image, None);
+        assert_eq!(result.language, None);
     }
 
     #[test]
@@ -175,6 +182,7 @@ mod tests {
         allow-html: true\n\
         summary: Bogus!\n\
         image: /file/foo.png\n\
+        language: de\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -221,6 +229,7 @@ mod tests {
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
         assert_eq!(result.summary, Some("Bogus!".to_owned()));
         assert_eq!(result.image, Some("/file/foo.png".to_owned()));
+        assert_eq!(result.language, Some(Language::De));
     }
 
     #[test]

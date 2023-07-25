@@ -15,7 +15,7 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use super::{get_secure_filename, split_file_content, ParseError};
+use super::{get_secure_filename, parse_language, split_file_content, ParseError};
 use crate::input::file::FileData;
 use crate::input::Quote;
 
@@ -47,6 +47,11 @@ fn parse_quote(file_data: &FileData) -> Result<Quote, ParseError> {
 
     let modified_at = file_data.modified_at;
 
+    let language = header_map
+        .get("language")
+        .map(|l| parse_language(l))
+        .transpose()?;
+
     Ok(Quote {
         filename,
         source_name,
@@ -54,6 +59,7 @@ fn parse_quote(file_data: &FileData) -> Result<Quote, ParseError> {
         published,
         content_markdown: content_markdown.to_string(),
         modified_at,
+        language,
     })
 }
 

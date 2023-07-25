@@ -32,7 +32,7 @@ pub fn render_blogpost(
 ) -> Result<Markup, RenderError> {
     let permalink = blogpost_path(blogpost);
     Ok(html! {
-        article.blogpost {
+        article.blogpost lang=[blogpost.language] {
             h2.posttitle {
                 a href=(permalink) rel="bookmark" {
                     (blogpost.title)
@@ -100,6 +100,7 @@ pub fn render_blogpost_page(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::input::Language;
     use crate::test_utils::{create_assets, create_blogpost, create_category};
 
     #[test]
@@ -116,6 +117,7 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{result}");
+        assert!(result.contains(r#"<article class="blogpost">"#));
         assert!(result
             .contains("<h2 class=\"posttitle\"><a href=\"/blogposts/foobar\" rel=\"bookmark\">Nevermind</a></h2>"));
         assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p>\n</div>"));
@@ -137,6 +139,23 @@ mod tests {
         // then
         println!("Checking rendered html:\n{result}");
         assert!(!result.contains("<span class=\"category\">"));
+    }
+
+    #[test]
+    fn render_blogpost_should_render_language_if_present() {
+        // given
+        let mut blogpost = create_blogpost();
+        blogpost.language = Some(Language::En);
+        let hosted_files = HashMap::new();
+
+        // when
+        let result = render_blogpost(&blogpost, None, &hosted_files)
+            .expect("expected success")
+            .into_string();
+
+        // then
+        println!("Checking rendered html:\n{result}");
+        assert!(result.contains(r#"<article class="blogpost" lang="en">"#));
     }
 
     #[test]

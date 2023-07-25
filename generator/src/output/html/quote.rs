@@ -57,7 +57,7 @@ pub fn render_quote(
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<Markup, RenderError> {
     Ok(html! {
-        div.qotd {
+        div.qotd lang=[quote.language] {
             @if let Some(source_url) = &quote.source_url {
                 blockquote cite=(source_url) {
                     (PreEscaped(render_cmark(&quote.content_markdown, false, hosted_files)?))
@@ -125,6 +125,7 @@ pub fn render_quote_list_page(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::input::Language;
     use crate::test_utils::{create_assets, create_quote};
 
     #[test]
@@ -212,6 +213,23 @@ mod tests {
         — <a href=\"https://example.com/adent\">Arthur Dent</a>\
         </span>"
         ));
+    }
+
+    #[test]
+    fn render_quote_renders_language_if_present() {
+        // given
+        let mut quote = create_quote();
+        quote.language = Some(Language::En);
+        let hosted_files = HashMap::new();
+
+        // when
+        let result = render_quote(&quote, &hosted_files)
+            .expect("expected success")
+            .into_string();
+
+        // then
+        println!("Checking html:\n{result}");
+        assert!(result.contains(r#"<div class="qotd" lang="en">"#));
     }
 
     #[test]

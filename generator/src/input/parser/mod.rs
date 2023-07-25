@@ -15,7 +15,8 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::input::file::FileData;
+use super::file::FileData;
+use super::Language;
 use camino::{Utf8Path, Utf8PathBuf};
 use std::collections::HashMap;
 use std::error::Error;
@@ -95,6 +96,14 @@ fn parse_metadata<'a>(
                 .unwrap_or(true)
         })
         .collect()
+}
+
+pub fn parse_language(input: &str) -> Result<Language, ParseError> {
+    match input.trim() {
+        "de" => Ok(Language::De),
+        "en" => Ok(Language::En),
+        _ => Err(ParseError::new(format!("unknown language: '{input}'"))),
+    }
 }
 
 /// get a secure filename from a string (i.e. just a filename, no path, especially no "up" path)
@@ -344,6 +353,16 @@ mod tests {
             Err(ParseError::from(
                 "No content after header in file df_linux/urist"
             ))
+        );
+    }
+
+    #[test]
+    fn parse_language_works_for_all_inputs() {
+        assert_eq!(parse_language("de"), Ok(Language::De));
+        assert_eq!(parse_language("en"), Ok(Language::En));
+        assert_eq!(
+            parse_language("sindarin"),
+            Err(ParseError::from("unknown language: 'sindarin'"))
         );
     }
 }
