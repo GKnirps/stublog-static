@@ -4,6 +4,7 @@ source-name: Daniel Stenberg
 source-url: https://daniel.haxx.se/blog/2021/11/11/my-first-25-years-of-http/
 date: 2021-11-22T16:01:05+01:00
 published: true
+language: en
 ---
 I have since been working with HTTP pretty much daily. For twenty-five years.
 

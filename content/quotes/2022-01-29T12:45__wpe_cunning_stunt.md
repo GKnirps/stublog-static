@@ -4,6 +4,7 @@ source-name: Worst Premade Ever
 source-url: https://youtu.be/BnROgYnSrOw?t=175
 date: 2022-01-29T12:45:56+01:00
 published: true
+language: en
 ---
 
 Ellis: We are back on the HMS Cunning Stunt!

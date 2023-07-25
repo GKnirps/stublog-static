@@ -4,6 +4,7 @@ source-name: Zach Weinersmith
 source-url: https://twitter.com/ZachWeiner/status/1337157193079152640
 date: 2020-12-15T14:22:14+01:00
 published: true
+language: en
 ---
 Guys, we can't do a civil war even if we wanted to. The median age in the US is 38. I am 38. I am tired and weak and my wife won't let me Civil War except on weekends. Do you really think this generation has enough vacation days for this sort of thing?
 
