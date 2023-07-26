@@ -3,7 +3,7 @@ title: Die Chatkontrolle droht
 filename: chatkontrolle
 date: 2023-07-26T07:37:55+02:00
 update-date:
-tags: rant
+tags: rant, chatkontrolle, netzsperren, netzpolitik, safe harbor, privacy shield
 category: rant
 summary: Die EU-Chatkontrolle droht, trotz alle Warnungen von Juristen. Meine Prognose: Falls sie beschlossen wird, wird sie von Gerichten wieder gekippt werden.
 image:
