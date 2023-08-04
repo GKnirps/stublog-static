@@ -58,7 +58,7 @@ Der größte Block ist der Inhalt. Der enthält zwei Sachen, die ich transformie
 
 Trotz all den automatischen Konvertierungen musste immer noch ein Feinschliff gemacht werden, weil man einige Sachen einfach nicht automatisch entscheiden konnte. Also bin ich noch einmal durch etwa 540 Einträge durchgegangen. Hatte den Vorteil, dass ich mir noch einmal durchlesen konnte, was ich damals eigentlich geschrieben habe. Das ist ja alles acht bis zwölf Jahre her.
 
-Einen [Eintrag](https//stu.blogger.de/stories/2149890/) habe ich ausgelassen. Dieser ist nur ein Verweis auf das neue Blog (also dieses hier).
+Einen [Eintrag](https://stu.blogger.de/stories/2149890/) habe ich ausgelassen. Dieser ist nur ein Verweis auf das neue Blog (also dieses hier).
 
 ### Was habe ich früher so geschrieben?
 
