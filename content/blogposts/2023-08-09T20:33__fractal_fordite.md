@@ -21,7 +21,7 @@ Nun, wie erstellt man zufällige Höhenkarten? Einfach zufällige Werte nehmen, 
 
 Glücklicherweise bin ich nicht der erste, der so ein Problem hat. In der Computerspieleentwicklung gibt es schon seit Jahrzehnten das Konzept von [fractal landscapes](https://en.wikipedia.org/wiki/Fractal_landscape) um halbwegs natürlich aussehende Landschaften zu generieren.
 
-Ich habe mir auf Gutdünken einen Algorithmus herausgegriffen, den [diamond-square-Algorithmus](https://en.wikipedia.org/wiki/Diamond-square_algorithm). Nach einam ganzen Haufen off-by-one-Fehlern hat das auch wunderbar funktioniert:
+Ich habe mir auf Gutdünken einen Algorithmus herausgegriffen, den [diamond-square-Algorithmus](https://en.wikipedia.org/wiki/Diamond-square_algorithm). Nach einem ganzen Haufen off-by-one-Fehlern hat das auch wunderbar funktioniert:
 
 ![Ein schwarz-weiß-Bild. Manche Regionen sind eher dunkel, andere sind hell. Abgesehen davon ist kein Muster erkennbar](/file/fordite_diamond_square_hm.webp)
 
