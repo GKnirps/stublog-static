@@ -86,4 +86,4 @@ Meine Einschätzung: Es gibt schon Unterschiede, aber insgesamt ist es nah genug
 
 Ich hatte die SVG-Datei schon seit Monaten herumliegen, aber jetzt bin ich endlich dazu gekommen, sie zu optimieren. Ihr könnt sie gerne herunterladen und verwenden, aber beachtet, dass der eigentliche Urheber von Napstablook Toby Fox ist. Der sieht Fanart sehr locker, aber im großen Stil verkaufen bzw. Geld damit machen sollte man nicht.
 
-Die SVG-Datei ist übrigens die, die ich auf [dem Chaos Communicatiom Camp für meinen Napstablook-Anstecker verwendet habe](/blogposts/camp_2023).
+Die SVG-Datei ist übrigens die, die ich auf [dem Chaos Communication Camp für meinen Napstablook-Anstecker verwendet habe](/blogposts/camp_2023).
