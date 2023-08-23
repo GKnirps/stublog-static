@@ -17,7 +17,7 @@ Um ehrlich zu sein, ich habe das kein großes Mitleid. Seid Jahrzehnten empfehle
 
 Trotzdem werden diese Cloud-Dienste benutzt. Warum? Weil es einfacher ist, weil es günstiger ist. Zum Beispiel ist es einfacher, Cloud-eigene Dienste zu verwenden anstatt in der Cloud selber Dienste zu deployen, die dasselbe machen und auch auf anderen Cloudplattformen laufen würden. Es ist einfacher, Office 365 zu abonnieren als sich mit Libreoffice und Nextcloud oder so herumschlagen zu müssen.
 
-Wenn jemand in einem Betrieb eine Entscheidung für ein Cloud-Produkt von Microsoft getroffen hat, dann müssen dieser Person die potentiellen Nachteile wie zum Beispiel eine drastische Preiserhöhung bewusst gewesen sein (und wenn sie das nicht waren, dann war das inkompetenz).
+Wenn jemand in einem Betrieb eine Entscheidung für ein Cloud-Produkt von Microsoft getroffen hat, dann müssen dieser Person die potentiellen Nachteile wie zum Beispiel eine drastische Preiserhöhung bewusst gewesen sein (und wenn sie das nicht waren, dann war das Inkompetenz).
 
 Insofern ist es also eine business-Entscheidung: Jetzt Geld sparen, jetzt schneller Ergebnisse bekommen auf die Gefahr hin, dass es später teurer werden kann und Umsteigen auf andere Anbieter noch teurer wird.
 
