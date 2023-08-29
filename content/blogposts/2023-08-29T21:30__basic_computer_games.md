@@ -10,7 +10,7 @@ image:
 language:
 ---
 
-Ende Dezember 2021 hat Jeff Atwood auf seinem Blog „Coding Horror“ einen [Artikel](https://blog.codinghorror.com/updating-the-single-most-influential-book-of-the-basic-era/) zu einem mittlerweile 50 Jahre alten Buch veröffentlicht: [BASIC Computer Games](https://en.wikipedia.org/wiki/BASIC_Computer_Games?ref=blog.codinghorror.com). Der Artikel ist interessant, ich kann empfehlen ihn zu lesen.
+Ende Dezember 2021 hat Jeff Atwood auf seinem Blog „Coding Horror“ einen [Artikel](https://blog.codinghorror.com/updating-the-single-most-influential-book-of-the-basic-era/) zu einem mittlerweile 50 Jahre alten Buch veröffentlicht: [BASIC Computer Games](https://en.wikipedia.org/wiki/BASIC_Computer_Games). Der Artikel ist interessant, ich kann empfehlen ihn zu lesen.
 
 Eine kurze Zusammenfassung: In den Zeiten, als private Computer noch rar waren, das das Internet noch in den Kinderschuhen steckte (vom WWW war noch nicht zu denken) und es noch schwierig war, Software zu verteilen, wurde ein Buch mit 101 Computerspielen veröffentlicht. In BASIC geschrieben, zum selberabtippen.
 
