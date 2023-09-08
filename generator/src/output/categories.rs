@@ -82,7 +82,7 @@ pub fn write_category_index(
         "{}",
         html::category::render_categories_index_page(categories, assets).into_string()
     )?;
-    writer.into_inner()?.sync_all()
+    writer.flush()
 }
 
 pub fn write_category_pages(
@@ -131,11 +131,7 @@ fn write_category_page(
         html::category::render_category_page(category, blogposts, assets, hosted_files)?
             .into_string()
     )?;
-    writer
-        .into_inner()
-        .map_err(OutputError::from)?
-        .sync_all()
-        .map_err(OutputError::from)
+    writer.flush().map_err(OutputError::from)
 }
 #[cfg(test)]
 mod tests {

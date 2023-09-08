@@ -56,11 +56,7 @@ fn write_quote_page(
         "{}",
         render_quote_page(quote, assets, hosted_files)?.into_string()
     )?;
-    writer
-        .into_inner()
-        .map_err(OutputError::from)?
-        .sync_all()
-        .map_err(OutputError::from)
+    writer.flush().map_err(OutputError::from)
 }
 
 pub fn write_quote_pages(
@@ -108,11 +104,7 @@ fn write_quote_list_page(
             .into_string()
     )?;
 
-    writer
-        .into_inner()
-        .map_err(OutputError::from)?
-        .sync_all()
-        .map_err(OutputError::from)
+    writer.flush().map_err(OutputError::from)
 }
 
 pub fn write_quote_list_pages(
@@ -153,5 +145,5 @@ pub fn write_quote_fortune_file(dir: &Utf8Path, quotes: &[Quote]) -> std::io::Re
 
     fortune::write_fortune_quotes(&mut writer, quotes)?;
 
-    writer.into_inner()?.sync_all()
+    writer.flush()
 }

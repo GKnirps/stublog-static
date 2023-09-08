@@ -86,7 +86,7 @@ pub fn write_tag_index(
         "{}",
         html::tag::render_tag_list(&tags, assets).into_string()
     )?;
-    writer.into_inner()?.sync_all()
+    writer.flush()
 }
 
 pub fn write_tag_pages(
@@ -132,7 +132,7 @@ fn write_tag_page(
         "{}",
         html::tag::render_tag_page(tag, posts, assets).into_string()
     )?;
-    writer.into_inner()?.sync_all()
+    writer.flush()
 }
 
 #[cfg(test)]

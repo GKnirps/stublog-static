@@ -100,11 +100,7 @@ fn write_blogpost(
         html::blogpost::render_blogpost_page(blogpost, category, assets, hosted_files)?
             .into_string()
     )?;
-    writer
-        .into_inner()
-        .map_err(OutputError::from)?
-        .sync_all()
-        .map_err(OutputError::from)
+    writer.flush().map_err(OutputError::from)
 }
 
 fn blogposts_with_categories_need_update(
@@ -158,11 +154,7 @@ pub fn write_home(
         "{}",
         html::home::render_home(posts, qotd, assets, hosted_files)?.into_string()
     )?;
-    writer
-        .into_inner()
-        .map_err(OutputError::from)?
-        .sync_all()
-        .map_err(OutputError::from)
+    writer.flush().map_err(OutputError::from)
 }
 
 pub fn write_archive(
@@ -211,11 +203,7 @@ fn write_archive_page(
         html::archive::render_archive(posts, page_index, num_pages, assets, hosted_files)?
             .into_string()
     )?;
-    writer
-        .into_inner()
-        .map_err(OutputError::from)?
-        .sync_all()
-        .map_err(OutputError::from)
+    writer.flush().map_err(OutputError::from)
 }
 #[cfg(test)]
 mod tests {

@@ -22,6 +22,7 @@ use crate::HostedFile;
 use camino::Utf8Path;
 use quick_xml::Writer;
 use std::collections::HashMap;
+use std::io::Write;
 
 mod atom;
 
@@ -50,8 +51,6 @@ pub fn write_atom_feed(
 
     writer
         .into_inner()
-        .into_inner()
-        .map_err(|e| format!("Unable to write atom feed: {e}"))?
-        .sync_all()
+        .flush()
         .map_err(|e| format!("Unable to write atom feed: {e}"))
 }

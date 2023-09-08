@@ -97,7 +97,7 @@ pub fn write_config_file(
 
     write_hosted_files_rewrites(&mut writer, hosted_files)?;
 
-    writer.into_inner()?.sync_all()
+    writer.flush()
 }
 
 #[cfg(test)]
