@@ -22,7 +22,7 @@ Zitat meiner Professorin:
 
 > This is the most ugly plot I have ever seen.
 
-![Ein nutzloser Plot. Links im Koordinatensystem ist eng zusammengequetscht ein Punktplot aus halbtransparenten Kreisen in allen möglichen Farben. Die Kreise überschneiden sich, man kann nichts erkennen. Die rechten drei viertel des Koordinatensystems sind leer, mit Ausnahme der Legende, die aus einem Lila Kreis mit der Beschriftung „for more info look here“ besteht. Die Beschriftungen der Tics an der X-Achse überschneiden sich. Die X-Achse ist mit „Ports“ beschriftet, die Y-Achse mit „Num Packs“.](/file/ugly_plot_1.webp "for mot info look here")
+![Ein nutzloser Plot. Links im Koordinatensystem ist eng zusammengequetscht ein Punktplot aus halbtransparenten Kreisen in allen möglichen Farben. Die Kreise überschneiden sich, man kann nichts erkennen. Die rechten drei viertel des Koordinatensystems sind leer, mit Ausnahme der Legende, die aus einem Lila Kreis mit der Beschriftung „for more info look here“ besteht. Die Beschriftungen der Tics an der X-Achse überschneiden sich. Die X-Achse ist mit „Ports“ beschriftet, die Y-Achse mit „Num Packs“.](/file/ugly_plot_1.webp "for more info look here")
 
 Zitat meiner Professorin:
 
