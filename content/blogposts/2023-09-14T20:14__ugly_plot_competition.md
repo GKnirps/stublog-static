@@ -28,7 +28,7 @@ Zitat meiner Professorin:
 
 > This is the most useless plot I have ever seen.
 
-Mangels Gewinner wurde eine Zweite Runde ausgerufen.
+Mangels Gewinner wurde eine zweite Runde ausgerufen.
 
 ### Fazit
 
