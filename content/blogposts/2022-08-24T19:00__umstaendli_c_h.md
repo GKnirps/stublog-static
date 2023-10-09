@@ -163,7 +163,7 @@ Ein Teil wird also _immer_ ausgeführt, unabhängig von der Bedingung.
 
 Versteht mich bitte nicht falsch. Die Entscheidungen, den Code so zu schreiben ist vernünftig. Vernünftig _unter den Bedingungen, mit denen man arbeiten muss, wenn man C schreibt_.
 
-Es geht hier um Komplexität, die überwunden werden muss, um das zu tun, was man eigentlich machen will. An Stellen wie diesen wünsche ich mir eine gute deutsche Version des englischen Ausrucks „jumping through hoops“.
+Es geht hier um Komplexität, die überwunden werden muss, um das zu tun, was man eigentlich machen will. An Stellen wie diesen wünsche ich mir eine gute deutsche Version des englischen Ausdrucks „jumping through hoops“.
 
 Es gibt beim Programmieren Komplexität, die man nie los wird, weil das Problem, das man lösen will, einfach entsprechend komplex ist. Wenn man eine verkettete Liste haben möchte, braucht man z.B. Vorwärts- und Rückwärtsverweise.
 
