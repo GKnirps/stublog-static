@@ -2,8 +2,8 @@
 title: Deutsche Bahn: Autofahren ist auch Scheiße
 filename: autofahren_auch_scheisse
 date: 2023-10-02T21:22:53+02:00
-update-date:
-tags: deutsche bahn, rant, webdesign, rauch
+update-date: 2023-10-10T18:20:00+02:00
+tags: deutsche bahn, rant, webdesign, rauch, user interface, user experience
 category: rant
 summary: Ich habe mal wieder eine sehr aufreibende Bahnreise hinter mir, aber wirklich fertig gemacht hat mich das Kartenkaufen vorher.
 image:
@@ -60,4 +60,95 @@ Stimmt. Aber vielleicht sollte man den Marketing-Spezis bei der Bahn mal erklär
 
 Der Ticketkauf war ein traumatisches Erlebnis für mich. Die Bahn hat ein neues Frontend für den Kartenkauf und es ist noch schlimmer als vorher.
 
-Eigentlich wollte ich hier einen detaillierten Bericht dazu abgeben, aber einerseits muss ich jetzt ins Bett, andererseits könnte das einen Flashback auslösen, deswegen verschiebe ich das vorerst. Kommt aber noch, versprochen.
+**Update**: Ok, jetzt, eine Woche später als geplant, kommt endlich der Rant über die Fahrplanauskunft. Grund für die Verzögerung war ein kleines Souvenir von der Bahnreise: Eine Covid-19-Infektion (Empfehlung: Tragt FFP2-Masken in Zügen).
+
+Zurück zum Thema: Die Online-Fahrplanauskunft/Ticketshop. Ich habe also mühsam Start-und Zielbahnhof sowie eine Zeit angegeben (und es ist wirklich mühsamer als auf anderen Seiten, weil die Bahn-Website sich alle Mühe gibt, meinen Inputfokus woandershin zu lenken), sehe die Liste der möglichen Verbindungen und denke: „Verdammt, ich wollte noch meine Bahncard angeben“.
+
+Früher war das einfach. Ich konnte ganz am Anfang ein Dropdown öffnen. Das waren zwei Schritte:
+
+1. Dropdown anklicken
+2. richtige Bahncard auswählen
+
+So schnell ging das. Heute ist das komplizierter. Ich habe eine illustierte Anleitung gemacht.
+
+#### Schritt 1: Anfrage ändern
+
+Der erste Schritt ist noch harmlos. Man muss die Stelle ausfindig machen, wo man die Bahncard hinzufügen kann. Oben auf der Seite findet sich unter anderem das hier:
+
+![Screenshot. Ganz links steht „keine Ermäßigung“. Ganz rechts steht „Anfrage ändern“ neben einem Stiftsymbol.](/file/db_ui_1_top.webp)
+
+Prima, dann ändern wir doch mal die Anfrage.
+
+#### Schritt 2: ähh… Anfrage ändern?
+
+Durch einen Klick auf „Anfrage ändern“ öffnet sich dieses Modal:
+
+![Screenshot. Jede Menge Angaben zur Fahrt. Oben links in der Ecke ist ein roter „Ändern“-Button. In der Mitte irgendwo steht „Reisende, Fahrräder, Bahncards > 1 Person, keine Ermäßigung.](/file/db_ui_2_main.webp)
+
+Ok… oben links in der Ecke ist ein „Ändern“-Button. Aber vielleicht hilft es ja, wenn ich einfach auf „Reisende, Fahrräder, Bahncard“ klicke.
+
+#### Schritt 3: Reisende, ähh… Bahncard hinzufügen
+
+Dieser Klick öffnet ein weiteres Modal:
+
+![Screenshot. Liste von Reisenden. 1 Person, keine Ermäßigung. Daneben ein kleiner „ändern“-Link mit einem Stift-Symbol. Darunter, viel größer, ein „Hinzufügen“-Button. Unter„Hinzufügen“ steht auf dem Button noch in Klein „(Reisende, Fahrräder)“. Ganz unten ein „Übernehmen“-Button](/file/db_ui_3_sub1.webp)
+
+Nun sind ja alle Informationen da, aber der typische Benutzer liest ja nicht alles, sondern klickt sich schnell durch. Ich will eine Bahncard hinzufügen, oder? Also klicke ich auf „Hinzufügen“.
+
+#### Schritt 4: Eine Bahncard hinzufügen
+
+Es öffnet sich natürlich noch ein Modal:
+
+![Screenshot. Überschrift: „Reisende hinzufügen“ Darunter eine Radiobutton-Liste von verschiedenen Personengruppen (nach Alter) und die Option „Fahrrad“. Weiter unten die Überschrift „Ermäßigungen“. Ganz unten ein „Übernehmen“-Button.](/file/db_ui_4_sub2.webp)
+
+Äh… wo sind denn jetzt die Bahncards? Warte, da steht „Ermäßigungen“! Scrollen wir doch mal in dem Modal nach unten!
+
+![Screenshot. Selbe Darstellung wie im vorherigen Bild, doch statt der Radiobutton-Liste ist jetzt eine Checkbox-Liste mit Bahncards da.](/file/db_ui_5_sub2_scroll.webp)
+
+Ah, prima, da sind ja die Bahncards!
+
+#### Schritt 5: Eingaben korrigieren
+
+So, einmal auf „Übernehmen“ geklickt und schon… Moment mal, was soll das?
+
+![Screenshot. Die Liste von Reisenden aus Schritt 3, nur stehen dort jetzt zwei Reisende einmal mit- und einmal ohne Bahncard.](/file/db_ui_6_sub1_too_much.webp)
+
+Mist. Ich wollte keine zwei Reisenden. Ich wollte doch nur eine Bahncard hinzufügen? Wie kann man die jetzt wieder löschen? Ah, prima, wenn man auf „Ändern“ klickt, kommt ein Modal sehr ähnlich zu dem aus Schritt 4. Nur dass man hier halt den bestehenden Eintrag ändert.
+
+„Löschen“ gehört auch dazu. Warum man zum Löschen ein Modal öffnen soll, anstatt es einach mit einem Button in der Liste zu machen, ist mir schleierhaft. Aber wenigstens kann ich hier auch Bahncards nach Lust und Laune hinzufügen. Ich muss es nur mit „Übernehmen“ bestätigen.
+
+Damit lande ich wieder in dem Modal aus Schritt 3, nur dieses Mal mit den korrekten Angaben.
+
+#### Schritt 6: Noch einmal „Übernehmen“ klicken
+
+Um dieses Modal zu schließen, muss ich dann noch einmal auf „Übernehmen“ klicken. Ein bisschen zu viel des Guten, aber ok. Damit Bin ich wieder im ersten Modal:
+
+![Screenshot. Wieder das Modul aus Schritt 2. Dieses Mal ist eine Bahncard angegeben. Oben in der Ecke ist nach wie vor ein roter „Ändern“-Button](/file/db_ui_7_main_bahncard.webp)
+
+Prima. Jetzt nur noch dieses Modal schließen. Das geht entweder mit einem Klick auf das X oben in der Ecke (das es nicht auf den Screenshot geschafft hat) oder, indem man einfach neben das Modal klickt.
+
+Aber… Huch!
+
+![Screenshot. Ganz links steht „keine Ermäßigung“. Ganz rechts steht „Anfrage ändern“ neben einem Stiftsymbol.](/file/db_ui_1_top.webp)
+
+Die Bahncard ist noch nicht ausgewählt! Was zum…?
+
+#### Schritt 7: Zurück zu Schritt 1
+
+Ich habe das Ganze mehrmals durchprobiert. Obwohl die Bahncard jedes Mal zwei Mal übernommen habe, wurde sie nie übernommen.
+
+An diesem Punkt war ich wirklich verzweifelt. Eine halbe Stunde und einen blutigen Kampf mit der Website später hatte ich endlich die Lösung: Ich muss in dem ersten Modal noch einmal auf „Ändern“ klicken.
+
+Wider Erwarten öffnet sich dann nämlich nicht noch ein Modal. Stattdessen wird das Modal geschlossen und die Änderungen übernommen.
+
+#### Zusammenfassung
+
+Um eine Bahncard hinzuzufügen, musste man früher ein Dropdown benutzen.
+
+Jetzt muss man nicht ein, nicht zwei, sondern _drei_ Modale in Reihe öffnen und die Eingaben nicht ein, nicht zwei, sondern _drei_ Mal bestätigen. Und um allem die Krone aufzusetzen, sind die buttons nicht konsistent benannt. In der Regel öffnet ein „Ändern“-Button ein Modal und ein „Übernehmen“-Button bestätigt die Eingaben. In einem Fall öffnet der „Ändern“-Button kein Modal sondern übernimmt die Funktion des „Übernehmen“-Buttons.
+
+Und dann ist es viel zu leicht möglich, aus Versehen alle Eingaben zu verwerfen, selbst die, die man bereits zwei Mal übernommen hat.
+
+In Punkto User Interface und User Experience bestenfalls eine 5 (mangelhaft). Ich kenne das ja aus eigener Erfahrung, dass man sein UI gerne aus dem Bauch heraus entwirft, aber das ist _kein guter Ansatz für eine Website, die jeden Tag von unzägligen Reisenden benutzt wird_.
+
+Das Teil braucht dringend eine Überarbeitung.
