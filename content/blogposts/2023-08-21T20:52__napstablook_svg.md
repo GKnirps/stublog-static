@@ -34,7 +34,7 @@ Wie bin ich dahin gekommen? Nun, ich habe mir einfach die Originaldatei geschnap
 
 Das war es eigentlich schon. Warum habe ich dann eine viel zu detaillierte Beschreibung versprochen?
 
-Zuerst einmal, weil die SVG-Datei von inkscape ziemlich überladen ist. 6,2 kiB. Das geht doch kleiner. Also [`svgo`](https://github.com/svg/svgo) zum Optimieren genutzt: 3,0 kiB.
+Zuerst einmal, weil die SVG-Datei von inkscape ziemlich überladen ist. 6,2 KiB. Das geht doch kleiner. Also [`svgo`](https://github.com/svg/svgo) zum Optimieren genutzt: 3,0 KiB.
 
 Besser. Aber schauen wir doch mal in die Datei herein. Da sind Dinge drin wie
 
@@ -42,7 +42,7 @@ Besser. Aber schauen wir doch mal in die Datei herein. Da sind Dinge drin wie
 <path style="fill:#fff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1" d="M44.22 39.117s.073 1.226 0 0z"/>
 ```
 
-Wow. Das ist ne Menge CSS in dem `style`-Attribut. Das meiste davon unnütz. Hier hätte anstelle des `style`-Attributs einfac `fill="white"` nehmen können. Also habe ich das gemacht. Dann noch einmal `svgo` drüberlaufen lassen und… voilà: nur noch etwa 1,9 kiB.
+Wow. Das ist ne Menge CSS in dem `style`-Attribut. Das meiste davon unnütz. Hier hätte anstelle des `style`-Attributs einfach `fill="white"` stehen können. Also habe ich das gemacht. Dann noch einmal `svgo` drüberlaufen lassen und… voilà: nur noch etwa 1,9 KiB.
 
 Notiz am Rande: die Option, dass ein SVG auch `<script>`-Tags oder CSS enthalten kann ist ein [Grund, warum viele Seiten keine SVGs aus user-Uploads oder anderen unvertrauenswürdigen Quellen einbinden](https://research.securitum.com/do-you-allow-to-load-svg-files-you-have-xss/). Schon mal versucht, in Discord oder Slack eine SVG-Datei zu posten? Geht nicht.
 
