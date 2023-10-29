@@ -20,7 +20,7 @@ use super::html::hosted_file;
 use super::needs_any_update;
 use crate::input::{Assets, HostedFileMetadata};
 use crate::HostedFile;
-use camino::Utf8Path;
+use camino::{Utf8Path, Utf8PathBuf};
 use std::fs::create_dir;
 use std::io::Write;
 
@@ -30,16 +30,17 @@ fn write_hosted_file_index_page(
     current_page: usize,
     num_pages: usize,
     assets: &Assets,
+    index_updated: bool,
 ) -> std::io::Result<()> {
-    let mut filename = dir.to_path_buf();
-    filename.push(format!("{current_page}.html"));
+    let filename = index_path(dir, current_page);
     if !needs_any_update(
         &filename,
         files
             .iter()
             .flat_map(|f| [f.0.modified_at, f.1.modified_at])
             .chain(assets.modification_dates()),
-    ) {
+    ) && !index_updated
+    {
         return Ok(());
     }
     let mut writer = open_for_write(&filename)?;
@@ -49,6 +50,13 @@ fn write_hosted_file_index_page(
         hosted_file::render_file_index_page(files, current_page, num_pages, assets).into_string()
     )?;
     writer.flush()
+}
+
+fn index_path(dir: &Utf8Path, page_index: usize) -> Utf8PathBuf {
+    let mut filename = dir.to_path_buf();
+    filename.push(format!("{page_index}"));
+    filename.set_extension("html");
+    filename
 }
 
 pub fn write_hosted_file_index_pages(
@@ -64,9 +72,17 @@ pub fn write_hosted_file_index_pages(
     let chunk_size: usize = 45;
     let num_chunks = files.len() / chunk_size + usize::from(files.len() % chunk_size != 0);
 
+    // we need this because when another page is added, all previous pages need to update because the
+    // pager needs to include the new page
+    let index_updated = if num_chunks > 0 {
+        !index_path(dir, num_chunks - 1).exists()
+    } else {
+        true
+    };
+
     for (index, chunk) in files.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed
-        write_hosted_file_index_page(dir, chunk, index, num_chunks, assets)?;
+        write_hosted_file_index_page(dir, chunk, index, num_chunks, assets, index_updated)?;
     }
 
     Ok(())

@@ -337,7 +337,7 @@ mod tests {
             "Expected archive link to be on the page"
         );
         assert!(result.contains(content));
-        assert_eq!(result.chars().rev().next(), Some('\n'));
+        assert_eq!(result.chars().next_back(), Some('\n'));
     }
 
     #[test]

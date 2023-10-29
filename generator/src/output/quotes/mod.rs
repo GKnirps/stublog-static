@@ -22,7 +22,7 @@ use crate::input::{Assets, Quote};
 use crate::output::html::quote::render_quote_list_page;
 use crate::output::OutputError;
 use crate::HostedFile;
-use camino::Utf8Path;
+use camino::{Utf8Path, Utf8PathBuf};
 use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
@@ -83,9 +83,9 @@ fn write_quote_list_page(
     num_pages: usize,
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
+    index_updated: bool,
 ) -> Result<(), OutputError> {
-    let mut filename = dir.to_path_buf();
-    filename.push(format!("{current_page}.html"));
+    let filename = index_path(dir, current_page);
     // FIXME: check if hosted files changed
     if !needs_any_update(
         &filename,
@@ -93,7 +93,8 @@ fn write_quote_list_page(
             .iter()
             .map(|q| q.modified_at)
             .chain(assets.modification_dates()),
-    ) {
+    ) && !index_updated
+    {
         return Ok(());
     }
     let mut writer = open_for_write(&filename)?;
@@ -105,6 +106,13 @@ fn write_quote_list_page(
     )?;
 
     writer.flush().map_err(OutputError::from)
+}
+
+fn index_path(dir: &Utf8Path, page_index: usize) -> Utf8PathBuf {
+    let mut filename = dir.to_path_buf();
+    filename.push(format!("{page_index}"));
+    filename.set_extension("html");
+    filename
 }
 
 pub fn write_quote_list_pages(
@@ -121,9 +129,25 @@ pub fn write_quote_list_pages(
     let chunk_size: usize = 50;
     let num_chunks = quotes.len() / chunk_size + usize::from(quotes.len() % chunk_size != 0);
 
+    // we need this because when another page is added, all previous pages need to update because the
+    // pager needs to include the new page
+    let index_updated = if num_chunks > 0 {
+        !index_path(dir, num_chunks - 1).exists()
+    } else {
+        true
+    };
+
     for (index, chunk) in quotes.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed
-        write_quote_list_page(dir, chunk, index, num_chunks, assets, hosted_files)?;
+        write_quote_list_page(
+            dir,
+            chunk,
+            index,
+            num_chunks,
+            assets,
+            hosted_files,
+            index_updated,
+        )?;
     }
 
     Ok(())

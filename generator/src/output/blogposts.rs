@@ -16,7 +16,7 @@
  */
 
 use crate::HostedFile;
-use camino::Utf8Path;
+use camino::{Utf8Path, Utf8PathBuf};
 use std::cmp::max;
 use std::collections::HashMap;
 use std::fs::create_dir;
@@ -27,7 +27,7 @@ use super::file::open_for_write;
 use super::html;
 use crate::input::{Assets, Quote};
 use crate::input::{Blogpost, Category};
-use crate::output::{needs_any_update, needs_update, OutputError, RenderError};
+use crate::output::{needs_any_update, OutputError, RenderError};
 
 // find categories for all blogposts with a category id. If the ID is present but matches no
 // known category, return an error
@@ -111,17 +111,17 @@ fn blogposts_with_categories_need_update(
 ) -> bool {
     // get the newest modification date of all blogposts and categories here, only update if the
     // target file is older
-    posts
-        .iter()
-        .map(|(post, cat)| {
-            cat.map(|c| max(c.modified_at, post.modified_at))
-                .unwrap_or(post.modified_at)
-        })
-        .chain(quote.map(|q| q.modified_at))
-        .chain(assets.modification_dates())
-        .max()
-        .map(|modified_at| needs_update(target_file, modified_at))
-        .unwrap_or(true)
+    needs_any_update(
+        target_file,
+        posts
+            .iter()
+            .map(|(post, cat)| {
+                cat.map(|c| max(c.modified_at, post.modified_at))
+                    .unwrap_or(post.modified_at)
+            })
+            .chain(quote.map(|q| q.modified_at))
+            .chain(assets.modification_dates()),
+    )
 }
 
 pub fn write_home(
@@ -170,12 +170,35 @@ pub fn write_archive(
     let chunk_size: usize = 15;
     let num_chunks = all_posts.len() / chunk_size + usize::from(all_posts.len() % chunk_size != 0);
 
+    // we need this because when another page is added, all previous pages need to update because the
+    // pager needs to include the new page
+    let index_updated = if num_chunks > 0 {
+        !index_path(dir, num_chunks - 1).exists()
+    } else {
+        true
+    };
+
     for (index, chunk) in all_posts.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed
-        write_archive_page(dir, chunk, index, num_chunks, assets, hosted_files)?;
+        write_archive_page(
+            dir,
+            chunk,
+            index,
+            num_chunks,
+            assets,
+            hosted_files,
+            index_updated,
+        )?;
     }
 
     Ok(())
+}
+
+fn index_path(dir: &Utf8Path, page_index: usize) -> Utf8PathBuf {
+    let mut filename = dir.to_path_buf();
+    filename.push(format!("{page_index}"));
+    filename.set_extension("html");
+    filename
 }
 
 fn write_archive_page(
@@ -185,13 +208,12 @@ fn write_archive_page(
     num_pages: usize,
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
+    index_updated: bool,
 ) -> Result<(), OutputError> {
-    let mut filename = dir.to_path_buf();
-    filename.push(format!("{page_index}"));
-    filename.set_extension("html");
+    let filename = index_path(dir, page_index);
 
     // FIXME: blogposts may need an update if the relevant hosted files changed
-    if !blogposts_with_categories_need_update(&filename, posts, None, assets) {
+    if !blogposts_with_categories_need_update(&filename, posts, None, assets) && !index_updated {
         return Ok(());
     }
 
