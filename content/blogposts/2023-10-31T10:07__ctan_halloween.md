@@ -4,7 +4,7 @@ filename: ctan_halloween
 date: 2023-10-31T10:07:37+01:00
 update-date:
 tags: halloween, ctan, tex, latex, webdesign, kunst
-category: weite_weite_welt
+category: weiteweitewelt
 summary: Die ctan.org-Website hat ein Halloweenkostüm. Also die Seite selber ist in ein Halloweenkostüm gekleidet
 image: /file/ctan_2023_halloween.webp
 language:
@@ -28,3 +28,5 @@ Dann fiel mir ein: Es ist Halloween. Diese Aufmachung ist das Halloweenkostüm d
 Zum Vergleich: So sieht die Seite [normalerweise](https://web.archive.org/web/20231022175946/https://ctan.org/) aus:
 
 ![Screenshot von ctan.org. Die Seite ist größtenteils Schwarz/Weiß mit nüchternem, funktionalen Design.](/file/ctan_2023_regular.webp)
+
+PS: anscheinend hat die Seite dieses Halloweenkostüm schon in den letzten Jahren immer angezogen. Trotzdem genial.
