@@ -37,7 +37,10 @@ fn write_hosted_file_rewrite(
 
         // we make an internal rewrite, so the file is available via two different URLs.
         // this way, users who access old blogposts will not get a redirect for each and every image
-        writeln!(w, "rewrite ^/hosted_files/{old_id}/download$ {new_path};")
+        writeln!(
+            w,
+            "rewrite ^/hosted_files/{old_id}/download$ {new_path} permanent;"
+        )
     } else {
         Ok(())
     }
@@ -67,7 +70,7 @@ fn write_category_rewrite(w: &mut dyn Write, category: &Category) -> std::io::Re
 
         // we make an internal rewrite, so the file is available via two different URLs.
         // this way, users who access old blogposts will not get a redirect for each and every image
-        writeln!(w, "rewrite ^/categories/{old_id}$ {new_path};")
+        writeln!(w, "rewrite ^/categories/{old_id}$ {new_path} permanent;")
     } else {
         Ok(())
     }
@@ -120,7 +123,7 @@ mod tests {
         // then
         assert_eq!(
             result,
-            "rewrite ^/hosted_files/42/download$ /file/answer.txt;\n"
+            "rewrite ^/hosted_files/42/download$ /file/answer.txt permanent;\n"
         );
     }
 
@@ -164,8 +167,8 @@ mod tests {
         assert_eq!(
             result,
             "## old paths for hosted files\n\
-            rewrite ^/hosted_files/11/download$ /file/spinal.tap;\n\
-            rewrite ^/hosted_files/9001/download$ /file/its.over;\n"
+            rewrite ^/hosted_files/11/download$ /file/spinal.tap permanent;\n\
+            rewrite ^/hosted_files/9001/download$ /file/its.over permanent;\n"
         );
     }
 
@@ -182,7 +185,10 @@ mod tests {
         let result = String::from_utf8(buffer).expect("Expected valid utf-8 in output");
 
         // then
-        assert_eq!(result, "rewrite ^/categories/11$ /categories/spinal;\n");
+        assert_eq!(
+            result,
+            "rewrite ^/categories/11$ /categories/spinal permanent;\n"
+        );
     }
 
     #[test]
@@ -225,8 +231,8 @@ mod tests {
         assert_eq!(
             result,
             "## old paths for categories\n\
-            rewrite ^/categories/11$ /categories/spinal;\n\
-            rewrite ^/categories/42$ /categories/answers;\n"
+            rewrite ^/categories/11$ /categories/spinal permanent;\n\
+            rewrite ^/categories/42$ /categories/answers permanent;\n"
         );
     }
 }
