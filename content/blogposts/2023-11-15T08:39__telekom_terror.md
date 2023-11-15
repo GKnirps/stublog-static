@@ -91,7 +91,7 @@ Ich war mittlerweile seit über zwei Stunden beschäftigt, mir einen Account zu 
 
 Ich habe heute noch einmal versucht, per Chat Support zu bekommen. War nur mäßig erfolgreich bis zu dem Punkt, wo ich zugestimmt habe, den Chatsupporttypen den Vertrag für mich abschließen zu lassen. Der sagt mit dann, dass ich nur 16MBit/s kriegen kann.
 
-Nun habe ich aber inzwischen herausgefunden, warum die Verfügbarkeitsprüfung bei mir nicht ging: Wenn ich statt „Soundsostraße“ nur „Soundsostr.“ eingebe, funktioniert das prima. Und diese Auskunft habe ich dann dem Typen vom Chatsupport mitgeteilt.
+Nun habe ich aber inzwischen herausgefunden, warum die Verfügbarkeitsprüfung bei mir nicht ging: Wenn ich statt „Soundsostraße“ nur „Soundsostr.“ eingebe, funktioniert das prima. Und das Ergebnis ist, dass bei mir 100MBit/s verfügbar sein sollten. Und diese Auskunft habe ich dann dem Typen vom Chatsupport mitgeteilt.
 
 Der meinte, das läge daran, dass ich da wohl wholebuy-Kunde werden würde, was heißt, dass sie die Leitung von einem anderen Anbieter buchen. Er hat auch noch gesagt, ich solle dafür eine Nummer anrufen, die er mir nannte. Bevor ich nachfragen konnte, was ich denen dort erzählen soll, hatte er den Chat schon beendet.
 
