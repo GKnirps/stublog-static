@@ -2,8 +2,8 @@
 title: Telekomterror
 filename: telekom_terror
 date: 2023-11-15T08:39:33+01:00
-update-date:
-tags: rant, telekom, deutsche telekom, email, usability, user experience
+update-date: 2023-11-15T17:55:00+01:00
+tags: rant, telekom, deutsche telekom, email, usability, user experience, adressen
 category: rant
 summary: FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK
 image:
@@ -86,3 +86,25 @@ Wenn ich eine ganze Zeit lang regelmäßig versuche, mich einzuloggen, läuft ir
 ### Hindernis 9: Nervenzusammenbruch
 
 Ich war mittlerweile seit über zwei Stunden beschäftigt, mir einen Account zu erstellen. Es war spät in der Nacht, und piqaerugfböaosuedfbdösaidufbüweiougfhalsidhvdöad.kjbsadfüiou FUCK YOU
+
+### Update
+
+Ich habe heute noch einmal versucht, per Chat Support zu bekommen. War nur mäßig erfolgreich bis zu dem Punkt, wo ich zugestimmt habe, den Chatsupporttypen den Vertrag für mich abschließen zu lassen. Der sagt mit dann, dass ich nur 16MBit/s kriegen kann.
+
+Nun habe ich aber inzwischen herausgefunden, warum die Verfügbarkeitsprüfung bei mir nicht ging: Wenn ich statt „Soundsostraße“ nur „Soundsostr.“ eingebe, funktioniert das prima. Und diese Auskunft habe ich dann dem Typen vom Chatsupport mitgeteilt.
+
+Der meinte, das läge daran, dass ich da wohl wholebuy-Kunde werden würde, was heißt, dass sie die Leitung von einem anderen Anbieter buchen. Er hat auch noch gesagt, ich solle dafür eine Nummer anrufen, die er mir nannte. Bevor ich nachfragen konnte, was ich denen dort erzählen soll, hatte er den Chat schon beendet.
+
+Nun war damit aber der Hauptgrund weggefallen, warum ich überhaupt die Telekom gewählt hätte: Dass Infrastruktur und Internetzugang in derselben Hand liegen.
+
+Also habe ich mir einen anderen Anbieter herausgesucht. Namen nenne ich )noch?) nicht, ich schaue mir erst einmal an, wie das läuft.
+
+Dort musste ich jedenfalls aus mir unerfindlichen Gründen auch meine bisherige Wohnadresse angeben. Dazu gehörte auch ein Feld, in dem ich die Postleitzahl eingeben musste. Das Feld ließ aber nur fünfstellige PLZ zu, die nur aus den dezimalen Ziffern bestanden (also das deutsche Format). In den Niederlanden ist das Format aber anders (vier Ziffern plus zwei Buchstaben). Konnte ich nicht eingeben. Also habe ich einen Dummy-Wert eingegeben und in einer separaten Supportanfrage nachgehakt, warum sie die Adresse überhaupt brauchen, dass die PLZ falsch ist und wenn sie die richtige PLZ haben wollen, sie sich noch einmal bei mir melden sollen.
+
+Fürs Protokoll: Die altbekannten [falsehoods programmers believe about addresses](https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/), den Hinweis, dass das beste Adressformular einfach ein großes Freitextfeld ist, und ein Hinweis auf [die Fallstricke von E-Mail-Adress-Validierungen](https://haacked.com/archive/2007/08/21/i-knew-how-to-validate-an-email-address-until-i.aspx/):
+
+> What I found out was surprising. Nearly 100% of regular expressions on the web purporting to validate an email address are too strict.
+
+Ein Kollege von mir ist übrigens der Meinung, dass, wenn eine kleine Minderheit von Entwicklern unfähig ist, Pluszeichen in E-Mail-Adressformularen zuzulassen, der Standard geändert werden müsse, so dass Pluszeichen überhaupt nicht mehr erlaubt sind.
+
+Ich bin da anderer Ansicht.
