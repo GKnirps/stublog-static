@@ -3,7 +3,7 @@ id: crap_guide_warlock
 source-name: A Crap Guide to D&D [5th Edition] - Warlock
 source-url: https://youtu.be/9mvTgXPHlvo?t=4
 date: 2023-08-14T09:49:32+02:00
-published: false
+published: true
 language: en
 ---
 
