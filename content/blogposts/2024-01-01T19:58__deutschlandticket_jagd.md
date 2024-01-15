@@ -80,7 +80,7 @@ Aber auch hier: Fehlanzeige. Genau wie Verimi wollen die meine E-Mail-Adresse ni
 
 ### Neunter Versuch: Bogestra
 
-Was kenne ich noch? Ach ja, die [Bochum-Gelsenkirchener Straßenbahnen-AG (Bogestra)[https://www.bogestra.de/]. Und siehe da: Hier geht es endlich! Einfach einen Account erstellen, meine Lastschriftdaten angeben und – voilà: ein Deutschlandticket für Januar.
+Was kenne ich noch? Ach ja, die [Bochum-Gelsenkirchener Straßenbahnen-AG (Bogestra)](https://www.bogestra.de/). Und siehe da: Hier geht es endlich! Einfach einen Account erstellen, meine Lastschriftdaten angeben und – voilà: ein Deutschlandticket für Januar.
 
 Die Kündigung war ein bisschen holprig, aber hat auch funktioniert. Warum bin ich erst so spät darauf gekommen? Naja, Bogestra und Ruhrbahn sind Teil des VRR, bei dem es ja schon nicht funktioniert hat. Wie kann ich dann erwarten, dass es bei den Mitgliedern des VRR funktioniert? Es funktioniert aber.
 
