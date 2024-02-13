@@ -174,7 +174,7 @@ fn footer() -> Markup {
                 " generiert."
             }
             p.privacy {
-                "Datenschutz: Diese Website erhebt keine Benutzerdaten. HTTP-Requestdaten (insbes. IP-Adress und user agent) bleiben nur für die Dauer des Requests bestehen."
+                "Datenschutz: Diese Website erhebt keine Benutzerdaten. HTTP-Requestdaten (insbes. IP-Adresse und user agent) bleiben nur für die Dauer des Requests bestehen."
             }
         }
     }
