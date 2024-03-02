@@ -2,7 +2,7 @@
 title: Positivprojekt 01: Webcomics
 filename: positiv_01_webcomics
 date: 2021-01-05T23:03:00+01:00
-update-date: 2021-01-08T07:23:00+01:00
+update-date: 2024-03-02T15:37:00+01:00
 tags: positivprojekt, webcomics, tvtropes
 category: positiv
 summary: In der ersten Woche meines Positivprojektes stelle ich Webcomics vor, die mir gefallen.
@@ -10,7 +10,7 @@ summary: In der ersten Woche meines Positivprojektes stelle ich Webcomics vor, d
 
 Ich bin ja seit langem ein großer Webcomic-Fan. Außerhalb von Webcomics bin ich gar kein so großer Comic-Fan. In meiner Kindheit viel Micky Maus und Asterix (von Asterix bin ich immer noch ein Fan), später kamen dann vereinzelt Sachen wie Scott Pilgrim hinzu.
 
-Angefangen hat es 2007 mit [Userfriendly](http://www.userfriendly.org/), was ich allerdings zugegebenermaßen schon lange nicht mehr lese (irgendwann war die Luft raus, und dann wurden auch noch alte Comics wiederholt). Trotzdem erwähnenswert. Hier habe ich auch das erste Mal einen [Archive Binge](https://tvtropes.org/pmwiki/pmwiki.php/Main/ArchiveBinge) durchgemacht.
+Angefangen hat es 2007 mit [Userfriendly](https://web.archive.org/web/20220228205845/http://www.userfriendly.org/), was ich allerdings zugegebenermaßen schon lange nicht mehr lese (irgendwann war die Luft raus, und dann wurden auch noch alte Comics wiederholt). Trotzdem erwähnenswert. Hier habe ich auch das erste Mal einen [Archive Binge](https://tvtropes.org/pmwiki/pmwiki.php/Main/ArchiveBinge) durchgemacht (**Update 2024**: Userfriendly ist nicht mehr erreichbar. Ich habe den Link durch einen Link auf archive.org ersetzt).
 
 Aber nun zu den Webcomics, die ich heute noch lese:
 
@@ -96,7 +96,7 @@ Besonders erwähnenswert an Questionable Content ist, dass sich der Zeichenstil 
 
 ### Precocious
 
-[Precocious](http://www.precociouscomic.com/) handelt von vier (und mehr) hochbegabten Kindern. Im Prinzip so eine Mischung aus Calvin & Hobbes und den Peanuts… obwohl, das wird dem Comic nicht wirklich gerecht. Meistens handelt es von den Eskapaden dieser Kinder. Hmm… ich weiß nicht genau, wie ich das zusammenfassen soll.
+[Precocious](https://www.precociouscomic.com/) handelt von vier (und mehr) hochbegabten Kindern. Im Prinzip so eine Mischung aus Calvin & Hobbes und den Peanuts… obwohl, das wird dem Comic nicht wirklich gerecht. Meistens handelt es von den Eskapaden dieser Kinder. Hmm… ich weiß nicht genau, wie ich das zusammenfassen soll.
 
 Der Kunststil ist recht konstant, der Inhalt sehr humorvoll. Leider ist der Autor vor einiger Zeit in irgendeine Art persönlicher Krise geraten, deswegen gibt es keine Updates mehr. Dennoch, kein Grund sich diesen Comic nicht durchzulesen.
 
@@ -108,7 +108,7 @@ Es ist eine eigene Art von Humor, aber man kann immer wieder darüber lachen.
 
 ### Ava's Demon
 
-In einem anderen Universum oder in einer unspezifizierten Zukunft unseres Universums lebt [Ava](http://www.avasdemon.com/) auf einem Schulplaneten für schwer erziehbare Kinder. Ava hat ein Problem. Ein Dämon oder Geist, den nur sie sehen kann hat sie seit ihrer Geburt besessen und macht alles, um ihr das Leben zur Hölle zu machen. Kurz darauf wird der Schulplanet zerstört, Ava entkommt nur knapp als blinder Passagier auf einem Raumschiff, das kurz darauf abstürzt. Ava liegt im Sterben, aber die Dämonin schlägt ihr einen Pakt vor: Ein neues Leben, in der Leute sie auch mögen, gegen ihre Hilfe, Titan zu stürzen.
+In einem anderen Universum oder in einer unspezifizierten Zukunft unseres Universums lebt [Ava](https://www.avasdemon.com/) auf einem Schulplaneten für schwer erziehbare Kinder. Ava hat ein Problem. Ein Dämon oder Geist, den nur sie sehen kann hat sie seit ihrer Geburt besessen und macht alles, um ihr das Leben zur Hölle zu machen. Kurz darauf wird der Schulplanet zerstört, Ava entkommt nur knapp als blinder Passagier auf einem Raumschiff, das kurz darauf abstürzt. Ava liegt im Sterben, aber die Dämonin schlägt ihr einen Pakt vor: Ein neues Leben, in der Leute sie auch mögen, gegen ihre Hilfe, Titan zu stürzen.
 
 Titan, ist, wie sich herausstellt, Herrscher über viele Welten und Gottfigur eines autoritären, bürokratischen und kapitalistischen Kultes, der immer mehr Sternensysteme aufkauft. Ava muss jetzt die anderen Streiter finden, ebenfalls Geister, die an andere Personen gebunden sind…
 
@@ -118,7 +118,7 @@ Obwohl Ava's Demon nur langsam voran kommt, kann ich den Comic unbedingt empfehl
 
 ### Thunderstruck
 
-Sharon Curmen sitzt nach einem drive-by-shooting, mit dem sie eigentlich nichts zu tun hatte, im Rohlstuhl und verliert immer mehr die Kontrolle über ihre Muskeln. Bis sie eines Nachts bei einem [einem Gewitter von einem Blitz getroffen wird](http://talesfromthevault.com/thunderstruck/index.html). Danach ist sie wie durch ein Wunder völlig geheilt.
+Sharon Curmen sitzt nach einem drive-by-shooting, mit dem sie eigentlich nichts zu tun hatte, im Rohlstuhl und verliert immer mehr die Kontrolle über ihre Muskeln. Bis sie eines Nachts bei einem [einem Gewitter von einem Blitz getroffen wird](https://talesfromthevault.com/thunderstruck/index.html). Danach ist sie wie durch ein Wunder völlig geheilt.
 
 Die streng wissenschaftlich denkende Sharon Curmon und ihre ihr sehr nahe stehende religiöse Schwester Gail finden nach einiger Suche heraus, dass es landein, landaus noch magische Wesen gibt, von nichtmagischen Wesen meist ignoriert oder schnell wieder vergessen, und sie geraten schnell zwischen die Fronten einer globalen Vereinigung, die Magie kontrolliert und mächtiger magischer Wesen, die die Welt heilen wollen, dazu aber zu allen Mitteln greifen.
 
@@ -136,7 +136,7 @@ Ein gutes Arrangement? Nicht wenn man bedenkt, dass es Nachts draußen _verdammt
 
 Die ersten beiden Kapitel hat noch nicht Mary Cagle, die Autorin selber gezeichnet, ab dem dritten Kapitel hat sie komplett übernommen.
 
-Auch erwähnenswert sind die anderen Comics von Mary Cagle: [Kiwi Blitz](http://www.kiwiblitz.com/), ein älterer Comic an dem man schön die künstlerische Entwicklung von Cagle beobachten kann (leider seit ein paar Monaten aus Zeitgründen auf Eis gelegt) und [Let's speak English](https://www.marycagle.com/), ein autobiographischer Comic aus der Zeit, als die Autorin in Japan Englisch unterrichtet hat.
+Auch erwähnenswert sind die anderen Comics von Mary Cagle: [Kiwi Blitz](https://www.kiwiblitz.com/), ein älterer Comic an dem man schön die künstlerische Entwicklung von Cagle beobachten kann (leider seit ein paar Monaten aus Zeitgründen auf Eis gelegt) und [Let's speak English](https://www.marycagle.com/), ein autobiographischer Comic aus der Zeit, als die Autorin in Japan Englisch unterrichtet hat.
 
 ### Scandinavia and the World
 
