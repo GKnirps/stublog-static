@@ -2,7 +2,7 @@
 title: CSU: Die Verbotspartei
 filename: verbotspartei
 date: 2024-03-19T23:04:44+01:00
-update-date:
+update-date: 2024-03-20T13:30:00+01:00
 tags: csu, sprache, bayern, rant
 category: rant
 summary: Wieso werden eigentlich die Grünen immer als „Verbotspartei“ bezeichnet, wenn es doch die C-Parteien sind, die immer unmögliche Verbote fordern?
@@ -37,3 +37,7 @@ Das klingt ja schon einmal wieder voll nach AfD-Rhetorik. Ist es ja auch. Übers
 Auch wirklich ärgerlich finde ich in diesem Zusammenhang, dass z.B. den Grünen immer vorgeworfen wird eine „Verbotspartei“ zu sein, die immer nue Spielverderber seien und allen ihren Spaß nehmen wollen, und die außerdem viel zu viel Zeit damit verbringen, sich um unwichtige Dinge wie zum Beispiel genderneutrale Sprache zu kümmern. In Wirklichkeit sind aber eher die C-Parteien die Verbotsparteien, die sich so sehr an den angeblich so unwichtigen Dingen wie genderneutraler Sprache festbeißen.
 
 So genug gerantet, ab ins Bett. Gute Nacht an alle Leser_innen.
+
+### Update 2024-03-20:
+
+Der Volksverpetzer hat dazu auch [einen Artikel](https://www.volksverpetzer.de/aktuelles/top-10-verbote-der-verbotspartei-csu/), in dem insbesonders noch einmal schön dargestellt wird, warum die C-Parteien die „Verbotsparteien“ sind.
