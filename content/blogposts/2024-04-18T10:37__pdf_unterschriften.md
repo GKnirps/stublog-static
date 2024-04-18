@@ -11,6 +11,7 @@ language:
 ---
 
 > Die Verwaltung sollte wegkommen von diesem PDF-Fetisch.
+
 — [Casey Kreer](https://netzpolitik.org/2023/barrierefreiheit-verwaltungsdigitalisierung-mit-huerden/)
 
 Für einen aktuellen Antrag an der Uni muss ich eine PDF-Datei „digital unterschreiben“. Und mit „digital unterschreiben“ meinen sie keine [digitale Signatur](https://de.wikipedia.org/wiki/Digitale_Signatur), also eine kryptographisches Verfahren, um sicherzustellen, dass tatsächlich _ich_ es war, der das Dokument bearbeitet/erstellt hat. PDF unterstützt das zwar, aber kaum jemand nutzt es, und es gibt (gab?) damit [auch gewisse Probleme](https://media.ccc.de/v/36c3-10832-how_to_break_pdfs).
@@ -23,7 +24,7 @@ Damit kommen wir zum zweiten Problem: PDF ist kein freier Standard, und ein sehr
 
 Problematisch wird es, wenn man Inhalte hinzufügen will. [`evince`](https://help.gnome.org/users/evince/stable/) zum Beispiel, ein PDF-Reader, der in Gnome standardmäßig verwendet wird, kann Formulare ausfüllen. Mehr oder weniger. In diesem Fall konnte ich die Formulare ausfüllen, aber der Inhalt der Felder wurde mir nicht angezeigt, es sei denn, ich hatte das entsprechende Feld markiert. Beim Einfügen von Bildern (der Unterschrift zum Beispiel) konnte mir `evince` aber nicht weiterhelfen.
 
-Normalerweise nehme ich an dieser Stelle Xournal, ein Annotationsprogramm für PDFs. Das ging hier leider nicht, denn weder wurde das ausgefüllte Formular in Xournal angezeigt, noch wird nach dem Abspeichern der Inhalt des Forumlars behalten. Schlimmer noch, das Formular selbst wird unbrauchbar gemacht, so dass ich es nicht einmal neu ausfüllen kann.
+Normalerweise nehme ich an dieser Stelle [Xournal](https://xournalpp.github.io/), ein Annotationsprogramm für PDFs. Das ging hier leider nicht, denn weder wurde das ausgefüllte Formular in Xournal angezeigt, noch wird nach dem Abspeichern der Inhalt des Forumlars behalten. Schlimmer noch, das Formular selbst wird unbrauchbar gemacht, so dass ich es nicht einmal neu ausfüllen kann.
 
 Ich musste mir am Ende von meiner Professorin helfen lassen, die ein Programm hat, mit dem das geht. Das ist schon ein bisschen peinlich, weil ich ein erfahrener Informatiker bin, aber ich war am Ende echt am Rand eines Nervenzusammenbruchs.
 
