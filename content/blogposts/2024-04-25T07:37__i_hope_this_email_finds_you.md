@@ -10,7 +10,7 @@ image:
 language:
 ---
 
-Hier hat jemand Spaß gehabt, [einen Bot zu schreiben](https://mastodon.social/@waldoj/112295541191820503), der aus einem Textkorpus Sätze heraussucht, die „finds you“ enthalten, den Teil davor durch „I hope this email“ ersetzt, aber den Teil danach behält und das ganze auf [Mastodon posted](https://botsin.space/@thisemailfindsyou). Zwei Mal am Tag.
+Hier hat jemand Spaß gehabt, [einen Bot zu schreiben](https://mastodon.social/@waldoj/112295541191820503), der aus einem Textkorpus Sätze heraussucht, die „finds you“ enthalten, den Teil davor durch „I hope this email“ ersetzt, aber den Teil danach behält und das ganze auf [Mastodon posted](https://mastodon.social/@thisemailfindsyou). Zwei Mal am Tag.
 
 Dabei kommen zum Teil relativ offensichtliche Ergebnisse heraus, wie [zum Beispiel](https://botsin.space/@thisemailfindsyou/112304043020351044):
 
@@ -25,3 +25,7 @@ Dabei kommen zum Teil relativ offensichtliche Ergebnisse heraus, wie [zum Beispi
 > I hope this email finds you no matter where you're hiding.
 
 So oder so, es ist ein netter kleiner Bot und es lohnt sich, den mal anzuschauen. Der Quellcode ist [freie Software](https://github.com/waldoj/finds-you) und recht einfach, da kann man also auch mal reinschauen.
+
+### Update 5.5.2024
+
+Natürlich hat sich innerhalb von kürzester Zeit der Mastodon-Account geändert. Ich habe den Link oben angepasst. Der alte Account ist [hier zu finden](https://botsin.space/@thisemailfindsyou). Wenn man dem alten auf Mastodon gefolgt ist, sollte das aber auch auf den neuen Account übertragen worden sein.
