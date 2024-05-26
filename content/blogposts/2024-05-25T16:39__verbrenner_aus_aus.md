@@ -27,4 +27,4 @@ Bullshit. Ihr habt versucht, mit einer nichtrepräsentativen Umfrage den Eindruc
 
 Eine gute Zusammenfassung des ganzen Bullshits kann man [beim Volksverpetzer finden](https://www.volksverpetzer.de/faktencheck/verbrenner-fake-kampagne-cdu/). Eine weitere [Zusammenfassung gibt es bei der Süddeutschen Zeitung](https://www.sueddeutsche.de/wirtschaft/verbrenner-aus-cdu-abstimmung-ergebnis-1.7342995).
 
-Auf der anderen Seite war es ganz net zu beobachten, wie sich das Ganze entwickelt. Als ich gestern Abend den aktuellen Umfragestand gesehen habe, habe ich mir schon gedacht, dass die CDU behaupten wird, wir seien alle Bots.
+Auf der anderen Seite war es ganz nett zu beobachten, wie sich das Ganze entwickelt. Als ich gestern Abend den aktuellen Umfragestand gesehen habe, habe ich mir schon gedacht, dass die CDU behaupten wird, wir seien alle Bots.
