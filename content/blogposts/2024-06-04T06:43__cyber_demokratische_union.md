@@ -2,7 +2,7 @@
 title: Cyber Demokratische Union
 filename: cyber_demokratische_union
 date: 2024-06-04T06:43:52+02:00
-update-date:
+update-date: 2024-06-04T21:26:00+02:00
 tags: cdu, csu, hackerparagraph, ccc, it-sicherheit, hochwasser
 category: ithought
 summary: Die CDU jammert über einen „Cyberangriff“. Sie selbst haben aber darauf hingearbeitet.
@@ -19,3 +19,7 @@ Am Ende gehen sie (zusammen mit der CSU) dann natürlich so weit, dass sie Siche
 Das ist ungefähr so, als würde man sich gegen Hochwasserschutz stellen und sich dann über massive Hochwasserschäden beschweren. Oh warte, [genau das ist ja passiert](https://www.nordbayern.de/politik/einsparungen-beim-bayerischen-hochwasserschutz-heftige-kritik-an-soder-und-freien-wahlern-1.14287047).
 
 Insofern: Kein Mitleid mit der CDU/CSU.
+
+### Update 2024-06-04
+
+Da ja der CCC keine Sicherheitslücken mehr an die CDU meldet, [muss Heise das machen](https://www.heise.de/news/CDU-Liste-von-Bewerbern-stand-frei-zugaenglich-im-Netz-9747811.html). Dieser Fall hier ist aber kein Angriff irgendeiner Form von außen, sondern einfach nur klassische Inkompetenz.
