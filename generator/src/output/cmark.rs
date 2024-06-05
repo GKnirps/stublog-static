@@ -18,9 +18,9 @@
 use crate::input::Blogpost;
 use crate::output::RenderError;
 use crate::HostedFile;
-use pulldown_cmark::escape::{escape_href, escape_html};
 use pulldown_cmark::{html::push_html, Event, Parser};
-use pulldown_cmark::{CowStr, Tag};
+use pulldown_cmark::{CowStr, Tag, TagEnd};
+use pulldown_cmark_escape::{escape_href, escape_html};
 use std::collections::HashMap;
 
 fn handle_images<'ev>(
@@ -28,7 +28,12 @@ fn handle_images<'ev>(
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<Event<'ev>, RenderError> {
     Ok(match &event {
-        Event::Start(Tag::Image(_, url, title)) => {
+        Event::Start(Tag::Image {
+            link_type: _,
+            dest_url: url,
+            title,
+            id: _,
+        }) => {
             // we only handle image links to /file/, everything else is an error
             let filename = url.strip_prefix("/file/").ok_or_else(|| {
                 RenderError::new(format!("hosted image '{url}' does not start with '/file/'"))
@@ -68,10 +73,11 @@ fn handle_images<'ev>(
             img_tag.push_str("alt=\"");
             Event::Html(CowStr::from(img_tag))
         }
-        Event::End(Tag::Image(_, _, _)) => Event::Html(CowStr::Borrowed("\">")),
+        Event::End(TagEnd::Image) => Event::Html(CowStr::Borrowed("\">")),
         _ => event,
     })
 }
+
 pub fn render_cmark(
     input: &str,
     allow_html: bool,
@@ -87,6 +93,7 @@ pub fn render_cmark(
             // We have to do the HTML escaping _before_ the image stuff because the image stuff uses HTML events to do its thing
             .map(|event| match event {
                 Event::Html(html) => Event::Text(html),
+                Event::InlineHtml(html) => Event::Text(html),
                 _ => event,
             })
             .map(|e| handle_images(e, hosted_files))
@@ -121,7 +128,7 @@ mod tests {
     use crate::test_utils::{create_blogpost, create_hosted_file};
 
     #[test]
-    fn render_cmark_should_escape_html_if_required() {
+    fn render_cmark_should_escape_inline_html_if_required() {
         // given
         let markdown = "<a href=\"https://f.oo\">bar</a>";
         let hosted_files = HashMap::new();
@@ -132,7 +139,7 @@ mod tests {
         // then
         assert_eq!(
             html,
-            "<p>&lt;a href=&quot;https://f.oo&quot;&gt;bar&lt;/a&gt;</p>\n"
+            "<p>&lt;a href=\"https://f.oo\"&gt;bar&lt;/a&gt;</p>\n"
         );
     }
 
