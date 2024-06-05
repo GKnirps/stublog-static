@@ -136,6 +136,35 @@ mod tests {
         );
     }
 
+    // TODO: due to the trick I use to escape HTML, escaped flow elements (such as diff) do not have a <p> around them
+    // whereas escaped phrasing element (such as span, see next test) do. This is not very
+    // consistent and I should change it.
+    #[test]
+    fn render_cmark_should_escape_flow_html_if_required() {
+        // given
+        let markdown = "<div>bar</div>";
+        let hosted_files = HashMap::new();
+
+        // when
+        let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
+
+        // then
+        assert_eq!(html, "&lt;div&gt;bar&lt;/div&gt;");
+    }
+
+    #[test]
+    fn render_cmark_should_escape_phrasing_html_if_required() {
+        // given
+        let markdown = "<span>bar</span>";
+        let hosted_files = HashMap::new();
+
+        // when
+        let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
+
+        // then
+        assert_eq!(html, "<p>&lt;span&gt;bar&lt;/span&gt;</p>\n");
+    }
+
     #[test]
     fn render_cmark_should_add_image_dimension() {
         // given
