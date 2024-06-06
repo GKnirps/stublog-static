@@ -94,7 +94,19 @@ pub fn render_cmark(
             .map(|event| match event {
                 Event::Html(html) => Event::Text(html),
                 Event::InlineHtml(html) => Event::Text(html),
-                _ => event,
+                // the other events are listed explicitly so I can avoid nasty surprises if they
+                // add a new event that contains HTML
+                Event::Start(_)
+                | Event::End(_)
+                | Event::Text(_)
+                | Event::Code(_)
+                | Event::InlineMath(_)
+                | Event::DisplayMath(_)
+                | Event::FootnoteReference(_)
+                | Event::SoftBreak
+                | Event::HardBreak
+                | Event::Rule
+                | Event::TaskListMarker(_) => event,
             })
             .map(|e| handle_images(e, hosted_files))
             .collect::<Result<Vec<Event>, RenderError>>()?;
@@ -170,6 +182,61 @@ mod tests {
 
         // then
         assert_eq!(html, "<p>&lt;span&gt;bar&lt;/span&gt;</p>\n");
+    }
+
+    #[test]
+    fn render_cmark_should_escape_html_around_markdown() {
+        // given
+        let markdown = "<div>First\n\n**second**\n\n ### third\n</div>";
+        let hosted_files = HashMap::new();
+
+        // when
+        let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
+
+        // then
+        assert_eq!(
+            html,
+            "&lt;div&gt;First\n<p><strong>second</strong></p>\n<h3>third</h3>\n&lt;/div&gt;"
+        );
+    }
+
+    #[test]
+    fn render_cmark_should_escape_unknown_html_tags() {
+        // given
+        let markdown = "<rhubarb>foo</rhubarb>";
+        let hosted_files = HashMap::new();
+
+        // when
+        let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
+
+        // then
+        assert_eq!(html, "<p>&lt;rhubarb&gt;foo&lt;/rhubarb&gt;</p>\n");
+    }
+
+    #[test]
+    fn render_cmark_should_escape_html_comments() {
+        // given
+        let markdown = "<!-- foo -->";
+        let hosted_files = HashMap::new();
+
+        // when
+        let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
+
+        // then
+        assert_eq!(html, "&lt;!-- foo --&gt;");
+    }
+
+    #[test]
+    fn render_cmark_should_not_escape_html_escape_sequences() {
+        // given
+        let markdown = "&amp;&";
+        let hosted_files = HashMap::new();
+
+        // when
+        let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
+
+        // then
+        assert_eq!(html, "<p>&amp;&amp;</p>\n");
     }
 
     #[test]
