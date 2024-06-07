@@ -27,7 +27,7 @@ use crate::output::RenderError;
 use crate::urls::CANONICAL_BASE_URL;
 
 pub fn render_home(
-    blogposts: &[(&Blogpost, Option<&Category>)],
+    blogposts: &[(&Blogpost, &Category)],
     qotd: Option<&Quote>,
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
@@ -38,7 +38,7 @@ pub fn render_home(
         }
         div.blogposts {
             @for (post, cat) in blogposts.iter().rev() {
-                (render_blogpost(post, *cat, hosted_files)?)
+                (render_blogpost(post, cat, hosted_files)?)
             }
         }
     };
@@ -57,11 +57,12 @@ pub fn render_home(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_assets, create_blogpost, create_quote};
+    use crate::test_utils::{create_assets, create_blogpost, create_category, create_quote};
 
     #[test]
     fn render_home_should_render_all_given_blogposts() {
         // given
+        let category = create_category();
         let mut post1 = create_blogpost();
         post1.content_markdown = "Post1".to_owned();
 
@@ -74,7 +75,7 @@ mod tests {
 
         // when
         let result = render_home(
-            &[(&post1, None), (&post2, None)],
+            &[(&post1, &category), (&post2, &category)],
             None,
             &assets,
             &hosted_files,
@@ -102,13 +103,14 @@ mod tests {
         // given
         let post = create_blogpost();
         let quote = create_quote();
+        let category = create_category();
 
         let assets = create_assets();
 
         let hosted_files = HashMap::new();
 
         // when
-        let result = render_home(&[(&post, None)], Some(&quote), &assets, &hosted_files)
+        let result = render_home(&[(&post, &category)], Some(&quote), &assets, &hosted_files)
             .expect("expected success")
             .into_string();
 

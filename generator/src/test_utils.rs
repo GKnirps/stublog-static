@@ -37,7 +37,7 @@ pub fn create_blogpost() -> Blogpost {
         date,
         update_date: Some(update_date),
         tags: vec![Tag::new("foo"), Tag::new("bar")],
-        category_id: Some("bananas".to_owned()),
+        category_id: "bananas".to_owned(),
         allow_html: false,
         modified_at: SystemTime::now(),
         content_markdown: "*foo*bar".to_owned(),

@@ -27,7 +27,7 @@ use std::collections::HashMap;
 
 pub fn render_blogpost(
     blogpost: &Blogpost,
-    category: Option<&Category>,
+    category: &Category,
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<Markup, RenderError> {
     let permalink = blogpost_path(blogpost);
@@ -43,12 +43,10 @@ pub fn render_blogpost(
                 span.post-time {
                     (super::time(&blogpost.date))
                 }
-                @if let Some(cat) = &category {
                     " "
-                    span.category {
-                        "Kategorie: "
-                        a href=(category_path(cat)) { (cat.title) }
-                    }
+                span.category {
+                    "Kategorie: "
+                    a href=(category_path(category)) { (category.title) }
                 }
                 @if !blogpost.tags.is_empty() {
                     " "
@@ -69,7 +67,7 @@ pub fn render_blogpost(
 
 pub fn render_blogpost_page(
     blogpost: &Blogpost,
-    category: Option<&Category>,
+    category: &Category,
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<Markup, RenderError> {
@@ -111,7 +109,7 @@ mod tests {
         let hosted_files = HashMap::new();
 
         // when
-        let result = render_blogpost(&blogpost, Some(&category), &hosted_files)
+        let result = render_blogpost(&blogpost, &category, &hosted_files)
             .expect("expected success")
             .into_string();
 
@@ -126,30 +124,15 @@ mod tests {
     }
 
     #[test]
-    fn render_blogpost_should_not_render_absent_category() {
-        // given
-        let blogpost = create_blogpost();
-        let hosted_files = HashMap::new();
-
-        // when
-        let result = render_blogpost(&blogpost, None, &hosted_files)
-            .expect("expected success")
-            .into_string();
-
-        // then
-        println!("Checking rendered html:\n{result}");
-        assert!(!result.contains("<span class=\"category\">"));
-    }
-
-    #[test]
     fn render_blogpost_should_render_language_if_present() {
         // given
+        let category = create_category();
         let mut blogpost = create_blogpost();
         blogpost.language = Some(Language::En);
         let hosted_files = HashMap::new();
 
         // when
-        let result = render_blogpost(&blogpost, None, &hosted_files)
+        let result = render_blogpost(&blogpost, &category, &hosted_files)
             .expect("expected success")
             .into_string();
 
@@ -169,7 +152,7 @@ mod tests {
         let hosted_files = HashMap::new();
 
         // when
-        let result = render_blogpost_page(&blogpost, Some(&category), &assets, &hosted_files)
+        let result = render_blogpost_page(&blogpost, &category, &assets, &hosted_files)
             .expect("expected success")
             .into_string();
 

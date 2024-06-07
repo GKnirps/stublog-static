@@ -28,7 +28,7 @@ use crate::HostedFile;
 use std::collections::HashMap;
 
 pub fn render_archive(
-    blogposts: &[(&Blogpost, Option<&Category>)],
+    blogposts: &[(&Blogpost, &Category)],
     current_page: usize,
     num_pages: usize,
     assets: &Assets,
@@ -39,7 +39,7 @@ pub fn render_archive(
         div.blogposts {
             (html_pager)
                 @for (post, cat) in blogposts {
-                    (render_blogpost(post, *cat, hosted_files)?)
+                    (render_blogpost(post, cat, hosted_files)?)
                 }
             (html_pager)
         }
@@ -55,11 +55,12 @@ pub fn render_archive(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{create_assets, create_blogpost};
+    use crate::test_utils::{create_assets, create_blogpost, create_category};
 
     #[test]
     fn render_archive_renders_blogpost_and_pager() {
         // given
+        let category = create_category();
         let mut blogpost1 = create_blogpost();
         blogpost1.content_markdown = "hello".to_owned();
         let mut blogpost2 = create_blogpost();
@@ -74,7 +75,7 @@ mod tests {
 
         // when
         let result = render_archive(
-            &[(&blogpost1, None), (&blogpost2, None)],
+            &[(&blogpost1, &category), (&blogpost2, &category)],
             current_page,
             num_pages,
             &assets,

@@ -40,7 +40,7 @@ pub fn categories_with_blogposts<'a>(
                 cat,
                 blogposts
                     .iter()
-                    .filter(|post| post.category_id.as_ref() == Some(&cat.id))
+                    .filter(|post| post.category_id == cat.id)
                     .collect(),
             )
         })
@@ -149,19 +149,15 @@ mod tests {
         let cats = &[cat1, cat2];
 
         let mut post1 = create_blogpost();
-        post1.category_id = Some("one".to_owned());
+        post1.category_id = "one".to_owned();
         post1.title = "p1".to_owned();
         let mut post2 = create_blogpost();
-        post2.category_id = Some("one".to_owned());
+        post2.category_id = "one".to_owned();
         post2.title = "p2".to_owned();
         let mut post3 = create_blogpost();
-        post3.category_id = Some("noone".to_owned());
+        post3.category_id = "noone".to_owned();
         post3.title = "p3".to_owned();
-        let mut post4 = create_blogpost();
-        post4.category_id = None;
-        post4.title = "p4".to_owned();
-
-        let posts = &[post1, post2, post3, post4];
+        let posts = &[post1, post2, post3];
 
         // when
         let result = categories_with_blogposts(cats, posts);

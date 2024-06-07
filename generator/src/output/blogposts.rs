@@ -34,29 +34,28 @@ use crate::output::{needs_any_update, OutputError, RenderError};
 pub fn find_categories_for_blogposts<'a>(
     blogposts: &'a [Blogpost],
     categories: &'a [Category],
-) -> Result<Vec<(&'a Blogpost, Option<&'a Category>)>, RenderError> {
+) -> Result<Vec<(&'a Blogpost, &'a Category)>, RenderError> {
     blogposts
         .iter()
-        .map(|post| match &post.category_id {
-            Some(id) => categories
+        .map(|post| {
+            categories
                 .iter()
                 // there should be only a small amount of categories, so we may search through all of them
-                .find(|cat| &cat.id == id)
-                .map(|cat| (post, Some(cat)))
+                .find(|cat| cat.id == post.category_id)
+                .map(|cat| (post, cat))
                 .ok_or_else(|| {
                     RenderError::new(format!(
                         "Unable to find category '{}' for blogpost '{}'",
-                        id, post.title
+                        post.category_id, post.title
                     ))
-                }),
-            None => Ok((post, None)),
+                })
         })
         .collect()
 }
 
 pub fn write_blogposts(
     dir: &Utf8Path,
-    posts: &[(&Blogpost, Option<&Category>)],
+    posts: &[(&Blogpost, &Category)],
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<(), OutputError> {
@@ -66,7 +65,7 @@ pub fn write_blogposts(
     }
     for (blogpost, category) in posts {
         // TODO: it would be more helpful if we knew which blogpost failed
-        write_blogpost(dir, blogpost, *category, assets, hosted_files)?;
+        write_blogpost(dir, blogpost, category, assets, hosted_files)?;
     }
     Ok(())
 }
@@ -74,7 +73,7 @@ pub fn write_blogposts(
 fn write_blogpost(
     dir: &Utf8Path,
     blogpost: &Blogpost,
-    category: Option<&Category>,
+    category: &Category,
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<(), OutputError> {
@@ -105,7 +104,7 @@ fn write_blogpost(
 
 fn blogposts_with_categories_need_update(
     target_file: &Utf8Path,
-    posts: &[(&Blogpost, Option<&Category>)],
+    posts: &[(&Blogpost, &Category)],
     quote: Option<&Quote>,
     assets: &Assets,
 ) -> bool {
@@ -115,10 +114,7 @@ fn blogposts_with_categories_need_update(
         target_file,
         posts
             .iter()
-            .map(|(post, cat)| {
-                cat.map(|c| max(c.modified_at, post.modified_at))
-                    .unwrap_or(post.modified_at)
-            })
+            .map(|(post, cat)| max(cat.modified_at, post.modified_at))
             .chain(quote.map(|q| q.modified_at))
             .chain(assets.modification_dates()),
     )
@@ -126,7 +122,7 @@ fn blogposts_with_categories_need_update(
 
 pub fn write_home(
     dir: &Utf8Path,
-    all_posts: &[(&Blogpost, Option<&Category>)],
+    all_posts: &[(&Blogpost, &Category)],
     qotd: Option<&Quote>,
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
@@ -159,7 +155,7 @@ pub fn write_home(
 
 pub fn write_archive(
     dir: &Utf8Path,
-    all_posts: &[(&Blogpost, Option<&Category>)],
+    all_posts: &[(&Blogpost, &Category)],
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<(), OutputError> {
@@ -203,7 +199,7 @@ fn index_path(dir: &Utf8Path, page_index: usize) -> Utf8PathBuf {
 
 fn write_archive_page(
     dir: &Utf8Path,
-    posts: &[(&Blogpost, Option<&Category>)],
+    posts: &[(&Blogpost, &Category)],
     page_index: usize,
     num_pages: usize,
     assets: &Assets,
@@ -233,30 +229,12 @@ mod tests {
     use crate::test_utils::{create_blogpost, create_category};
 
     #[test]
-    fn find_categories_for_blogposts_should_return_no_category_for_blogposts_without_category() {
-        // given
-        let mut post = create_blogpost();
-        post.category_id = None;
-        let posts = &[post];
-
-        let cat = create_category();
-        let cats = &[cat];
-
-        // when
-        let result = find_categories_for_blogposts(posts, cats).expect("Expected success");
-
-        // then
-        assert_eq!(result.len(), 1);
-        assert!(result[0].1.is_none());
-    }
-
-    #[test]
     fn find_categories_for_blogposts_should_return_correct_categories_for_posts() {
         // given
         let mut post1 = create_blogpost();
-        post1.category_id = Some("cat2".to_owned());
+        post1.category_id = "cat2".to_owned();
         let mut post2 = create_blogpost();
-        post2.category_id = Some("cat1".to_owned());
+        post2.category_id = "cat1".to_owned();
         let posts = &[post1, post2];
 
         let mut cat1 = create_category();
@@ -271,15 +249,15 @@ mod tests {
 
         // then
         assert_eq!(result.len(), 2);
-        assert_eq!(result[0].1.map(|cat| &cat.id), Some(&"cat2".to_owned()));
-        assert_eq!(result[1].1.map(|cat| &cat.id), Some(&"cat1".to_owned()));
+        assert_eq!(result[0].1.id, "cat2");
+        assert_eq!(result[1].1.id, "cat1");
     }
 
     #[test]
     fn find_categories_for_blogposts_should_fail_if_category_does_not_exist() {
         // given
         let mut post = create_blogpost();
-        post.category_id = Some("cat2".to_owned());
+        post.category_id = "cat2".to_owned();
         post.title = "post".to_owned();
         let posts = &[post];
 

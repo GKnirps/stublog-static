@@ -91,7 +91,15 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
         .get("tags")
         .map(|s| parse_tags(s))
         .unwrap_or_else(Vec::new);
-    let category_id = props.get("category").map(|s| s.to_string());
+    let category_id = props
+        .get("category")
+        .map(|s| s.to_string())
+        .ok_or_else(|| {
+            ParseError::new(format!(
+                "Missing category for blogpost: {}",
+                original_path.as_str()
+            ))
+        })?;
     let allow_html = props
         .get("allow-html")
         .map(|v| *v == "true")
@@ -133,6 +141,7 @@ mod tests {
         title: Lorem ipsum\n\
         filename: lipsum\n\
         date: 2020-05-11T12:13:14+02:00\n\
+        category: cat\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -160,7 +169,7 @@ mod tests {
         assert!(result.update_date.is_none(), "Expected no date");
         // missing tags are allowed, tag vector is empty in that case
         assert!(result.tags.is_empty(), "Expected no tags");
-        assert_eq!(result.category_id, None);
+        assert_eq!(result.category_id, "cat");
         assert!(!result.allow_html);
         assert_eq!(result.modified_at, modified_at);
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
@@ -223,7 +232,7 @@ mod tests {
             &[Tag::new("foo"), Tag::new("bar")],
             "Unexpected tags"
         );
-        assert_eq!(result.category_id, Some("bananas".to_owned()));
+        assert_eq!(result.category_id, "bananas");
         assert!(result.allow_html);
         assert_eq!(result.modified_at, modified_at);
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
@@ -238,6 +247,7 @@ mod tests {
         let content = "---\n\
         filename: lipsum\n\
         date: 2020-05-11T12:13:14+02:00\n\
+        category: bananas\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -259,11 +269,39 @@ mod tests {
     }
 
     #[test]
+    fn parse_blogpost_metadata_should_fail_for_missing_category() {
+        // given
+        let content = "---\n\
+        filename: lipsum\n\
+        title: Lorem Ipsum\n\
+        date: 2020-05-11T12:13:14+02:00\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
+
+        let path = Utf8Path::new("mad/eye").to_path_buf();
+
+        let mut input = create_file_data();
+        input.filename = path;
+        input.content = content;
+
+        // when
+        let result = parse_blogpost(&input);
+
+        // then
+        assert_eq!(
+            result,
+            Err(ParseError::from("Missing category for blogpost: mad/eye"))
+        );
+    }
+
+    #[test]
     fn parse_blogpost_metadata_should_fail_for_missing_filename() {
         // given
         let content = "---\n\
         title: Lorem ipsum\n\
         date: 2020-05-11T12:13:14+02:00\n\
+        category: bananas\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -293,6 +331,7 @@ mod tests {
         title: Lorem ipsum\n\
         filename: lipsum\n\
         date: 2020-05-11+02:00\n\
+        category: bananas\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -321,6 +360,7 @@ mod tests {
         let content = "---\n\
         title: Lorem ipsum\n\
         filename: lipsum\n\
+        category: bananas\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
