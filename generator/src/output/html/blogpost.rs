@@ -17,8 +17,8 @@
 
 use super::super::cmark::render_blogpost_content;
 use crate::input::{Assets, Blogpost, Category};
-use crate::output::html::HeadData;
-use crate::output::RenderError;
+use crate::output::html::{HeadData, OgImageData};
+use crate::output::{image_metadata_by_path, RenderError};
 use crate::paths::{blogpost_path, category_path, tag_path};
 use crate::urls::{blogpost_url, url_for_absolute_path};
 use crate::HostedFile;
@@ -75,18 +75,16 @@ pub fn render_blogpost_page(
         let r: &str = s;
         r
     });
-    let og_image_url = blogpost
-        .image
-        .as_ref()
-        .map(|path| url_for_absolute_path(path));
+    // FIXME: blogpost HTML should update when image file changes
+    let og_image = create_og_image_data(blogpost, hosted_files)?;
 
     let post_url = blogpost_url(blogpost);
     let mut head_data = HeadData::new(&blogpost.title, assets)
         .with_canonical_url(&post_url)
         .with_description(description)
         .with_og_type("article");
-    if let Some(url) = &og_image_url {
-        head_data = head_data.with_og_image_url(url)
+    if let Some(image) = og_image {
+        head_data = head_data.with_og_image(image)
     }
 
     Ok(super::base(
@@ -95,11 +93,24 @@ pub fn render_blogpost_page(
     ))
 }
 
+fn create_og_image_data<'a>(
+    blogpost: &Blogpost,
+    hosted_files: &HashMap<&str, &'a HostedFile>,
+) -> Result<Option<OgImageData<'a>>, RenderError> {
+    if let Some(path) = &blogpost.image {
+        let url = url_for_absolute_path(path);
+        let metadata = image_metadata_by_path(path, hosted_files)?;
+        Ok(Some(OgImageData { url, metadata }))
+    } else {
+        Ok(None)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::input::Language;
-    use crate::test_utils::{create_assets, create_blogpost, create_category};
+    use crate::input::{ImageMetadata, Language};
+    use crate::test_utils::{create_assets, create_blogpost, create_category, create_hosted_file};
 
     #[test]
     fn render_blogpost_should_render_blogpost_with_footer() {
@@ -144,7 +155,8 @@ mod tests {
     #[test]
     fn render_blogpost_page_should_render_blogpost() {
         // given
-        let blogpost = create_blogpost();
+        let mut blogpost = create_blogpost();
+        blogpost.image = None;
         let category = create_category();
 
         let assets = create_assets();
@@ -163,5 +175,67 @@ mod tests {
         assert!(result.contains("<title>Nevermind</title>"));
         assert!(result.contains("11.05.2020 12:13"));
         assert!(result.contains("<a href=\"/categories/chocolate\">Cocoa</a>"));
+    }
+
+    #[test]
+    fn create_og_image_data_returns_image_with_all_metadata_if_present() {
+        // given
+        let mut blogpost = create_blogpost();
+        blogpost.image = Some("/file/answer.png".to_owned());
+        let mut hosted_file = create_hosted_file();
+        hosted_file.image_metadata = Some(ImageMetadata {
+            width: 42,
+            height: 9001,
+        });
+        let hosted_files: HashMap<&str, &HostedFile> =
+            HashMap::from([("answer.png", &hosted_file)]);
+
+        // when
+        let result = create_og_image_data(&blogpost, &hosted_files);
+
+        // then
+        let metadata = result.expect("expected success");
+        assert_eq!(
+            metadata,
+            Some(OgImageData {
+                url: "https://blog.strangerthanusual.de/file/answer.png".to_owned(),
+                metadata: Some(&ImageMetadata {
+                    width: 42,
+                    height: 9001
+                })
+            })
+        );
+    }
+
+    #[test]
+    fn create_og_image_data_returns_empty_data_for_absent_image() {
+        // given
+        let mut blogpost = create_blogpost();
+        blogpost.image = None;
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::new();
+
+        // when
+        let result = create_og_image_data(&blogpost, &hosted_files);
+
+        // then
+        let metadata = result.expect("expected success");
+        assert_eq!(metadata, None);
+    }
+
+    #[test]
+    fn create_og_image_data_fails_for_missing_image_file() {
+        // given
+        let mut blogpost = create_blogpost();
+        blogpost.image = Some("/file/answer.png".to_owned());
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::new();
+
+        // when
+        let result = create_og_image_data(&blogpost, &hosted_files);
+
+        // then
+        assert_eq!(
+            result,
+            Err(RenderError::from("did not find hosted image 'answer.png'"))
+        );
     }
 }

@@ -16,7 +16,7 @@
  */
 
 use crate::input::Blogpost;
-use crate::output::RenderError;
+use crate::output::{image_metadata_by_path, RenderError};
 use crate::HostedFile;
 use pulldown_cmark::{html::push_html, Event, Parser};
 use pulldown_cmark::{CowStr, Tag, TagEnd};
@@ -34,24 +34,7 @@ fn handle_images<'ev>(
             title,
             id: _,
         }) => {
-            // we only handle image links to /file/, everything else is an error
-            let filename = url.strip_prefix("/file/").ok_or_else(|| {
-                RenderError::new(format!("hosted image '{url}' does not start with '/file/'"))
-            })?;
-
-            let image_metadata = hosted_files
-                .get(filename)
-                .ok_or_else(|| RenderError::new(format!("did not find hosted image '{filename}'")))?
-                .image_metadata;
-
-            // SVG do not necessarily have width and height, so we render them even if this data is
-            // not available
-            // TODO: using the file extension to detect an SVG file is a bit dirty. Find a better way
-            if !filename.ends_with(".svg") {
-                image_metadata.ok_or_else(|| {
-                    RenderError::new(format!("hosted image '{url}' does not have image metadata",))
-                })?;
-            }
+            let image_metadata = image_metadata_by_path(url, hosted_files)?;
 
             let mut img_tag = if let Some(image_metadata) = image_metadata {
                 format!(

@@ -42,7 +42,7 @@ pub fn create_blogpost() -> Blogpost {
         modified_at: SystemTime::now(),
         content_markdown: "*foo*bar".to_owned(),
         summary: Some("foo!".to_owned()),
-        image: Some("/recipes.png".to_owned()),
+        image: Some("/file/recipes.png".to_owned()),
         language: None,
     }
 }

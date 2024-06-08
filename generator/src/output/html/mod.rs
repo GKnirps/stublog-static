@@ -15,7 +15,7 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::input::Assets;
+use crate::input::{Assets, ImageMetadata};
 use crate::paths::{archive_path, CATEGORIES_PATH, TAGLIST_PATH};
 use chrono::{DateTime, FixedOffset};
 use maud::{html, Markup, Render, DOCTYPE};
@@ -37,7 +37,7 @@ struct HeadData<'a> {
     description: Option<&'a str>,
     noindex: bool,
     og_type: Option<&'a str>,
-    og_image_url: Option<&'a str>,
+    og_image: Option<OgImageData<'a>>,
     assets: &'a Assets,
 }
 
@@ -49,7 +49,7 @@ impl<'a> HeadData<'a> {
             description: None,
             noindex: false,
             og_type: None,
-            og_image_url: None,
+            og_image: None,
             assets,
         }
     }
@@ -74,10 +74,17 @@ impl<'a> HeadData<'a> {
         self
     }
 
-    const fn with_og_image_url(mut self, url: &'a str) -> HeadData<'a> {
-        self.og_image_url = Some(url);
+    fn with_og_image(mut self, image: OgImageData<'a>) -> HeadData<'a> {
+        self.og_image = Some(image);
         self
     }
+}
+
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+struct OgImageData<'a> {
+    url: String,
+    metadata: Option<&'a ImageMetadata>,
+    // TODO: add alt text
 }
 
 fn head(data: &HeadData) -> Markup {
@@ -103,10 +110,10 @@ fn head(data: &HeadData) -> Markup {
     }
 }
 
-fn opengraph_tag(name: &str, content: Option<&str>) -> Markup {
+fn opengraph_tag<C: AsRef<str>>(name: &str, content: Option<C>) -> Markup {
     html! {
         @if let Some(c) = content {
-            meta property=(name) content=(c);
+            meta property=(name) content=(c.as_ref());
         }
     }
 }
@@ -119,7 +126,9 @@ fn opengraph_tags(data: &HeadData) -> Markup {
         (opengraph_tag("og:description", data.description))
         (opengraph_tag("og:locale", Some("de_DE")))
         (opengraph_tag("og:site_name", Some("Stranger Than Usual")))
-        (opengraph_tag("og:image", data.og_image_url))
+        (opengraph_tag("og:image", data.og_image.as_ref().map(|img| img.url.as_str())))
+        (opengraph_tag("og:image:width", data.og_image.as_ref().and_then(|img| img.metadata.map(|meta| meta.width.to_string()))))
+        (opengraph_tag("og:image:height", data.og_image.as_ref().and_then(|img| img.metadata.map(|meta| meta.height.to_string()))))
     }
 }
 
@@ -278,7 +287,13 @@ mod tests {
             .with_og_type("mad-science")
             .with_description(Some("I wasn't planning it, but it was the best solution."))
             .with_canonical_url("https://example.com/moon")
-            .with_og_image_url("https://imgs.xkcd.com/comics/recipes.png");
+            .with_og_image(OgImageData {
+                url: "https://imgs.xkcd.com/comics/recipes.png".to_owned(),
+                metadata: Some(&ImageMetadata {
+                    width: 663,
+                    height: 357,
+                }),
+            });
 
         // when
         let result = opengraph_tags(&head_data).into_string();
@@ -290,6 +305,30 @@ mod tests {
             <meta property=\"og:url\" content=\"https://example.com/moon\">\
             <meta property=\"og:type\" content=\"mad-science\">\
             <meta property=\"og:description\" content=\"I wasn\'t planning it, but it was the best solution.\">\
+            <meta property=\"og:locale\" content=\"de_DE\">\
+            <meta property=\"og:site_name\" content=\"Stranger Than Usual\">\
+            <meta property=\"og:image\" content=\"https://imgs.xkcd.com/comics/recipes.png\">\
+            <meta property=\"og:image:width\" content=\"663\">\
+            <meta property=\"og:image:height\" content=\"357\">"
+        );
+    }
+
+    #[test]
+    fn opengraph_tags_should_render_image_without_dimensions_if_dimensions_are_missing() {
+        // given
+        let assets = create_assets();
+        let head_data = HeadData::new("I blew up the moon", &assets).with_og_image(OgImageData {
+            url: "https://imgs.xkcd.com/comics/recipes.png".to_owned(),
+            metadata: None,
+        });
+
+        // when
+        let result = opengraph_tags(&head_data).into_string();
+
+        // then
+        assert_eq!(
+            result,
+            "<meta property=\"og:title\" content=\"I blew up the moon\">\
             <meta property=\"og:locale\" content=\"de_DE\">\
             <meta property=\"og:site_name\" content=\"Stranger Than Usual\">\
             <meta property=\"og:image\" content=\"https://imgs.xkcd.com/comics/recipes.png\">"

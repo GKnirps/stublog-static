@@ -15,7 +15,9 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use crate::input::{HostedFile, ImageMetadata};
 use camino::Utf8Path;
+use std::collections::HashMap;
 use std::error::Error;
 use std::fs::metadata;
 use std::time::SystemTime;
@@ -132,5 +134,146 @@ impl<T> From<io::IntoInnerError<T>> for OutputError {
 impl From<quick_xml::Error> for OutputError {
     fn from(e: quick_xml::Error) -> Self {
         OutputError::Xml(e)
+    }
+}
+
+pub fn image_metadata_by_path<'a>(
+    path: &str,
+    hosted_files: &HashMap<&str, &'a HostedFile>,
+) -> Result<Option<&'a ImageMetadata>, RenderError> {
+    // we only handle image links to /file/, everything else is an error
+    let filename = path.strip_prefix("/file/").ok_or_else(|| {
+        RenderError::new(format!(
+            "hosted image '{path}' does not start with '/file/'"
+        ))
+    })?;
+
+    let image_metadata = hosted_files
+        .get(filename)
+        .ok_or_else(|| RenderError::new(format!("did not find hosted image '{filename}'")))?
+        .image_metadata
+        .as_ref();
+
+    // SVG do not necessarily have width and height, so we render them even if this data is
+    // not available
+    // TODO: using the file extension to detect an SVG file is a bit dirty. Find a better way
+    if !filename.ends_with(".svg") {
+        image_metadata.ok_or_else(|| {
+            RenderError::new(format!(
+                "hosted image '{path}' does not have image metadata",
+            ))
+        })?;
+    }
+
+    Ok(image_metadata)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::test_utils::create_hosted_file;
+
+    #[test]
+    fn image_metadata_by_path_returns_dimensions_of_image_file() {
+        // given
+        let path = "/file/answer.txt";
+        let mut hosted_file = create_hosted_file();
+        hosted_file.image_metadata = Some(ImageMetadata {
+            width: 42,
+            height: 9001,
+        });
+        let hosted_files: HashMap<&str, &HostedFile> =
+            HashMap::from([("answer.txt", &hosted_file)]);
+
+        // when
+        let result = image_metadata_by_path(path, &hosted_files);
+
+        // then
+        let metadata = result.expect("expected success");
+        assert_eq!(
+            metadata,
+            Some(&ImageMetadata {
+                width: 42,
+                height: 9001
+            })
+        );
+    }
+
+    #[test]
+    fn image_metadata_by_path_fails_for_wrong_prefix() {
+        // given
+        let path = "/unfile/answer.txt";
+        let mut hosted_file = create_hosted_file();
+        hosted_file.image_metadata = Some(ImageMetadata {
+            width: 42,
+            height: 9001,
+        });
+        let hosted_files: HashMap<&str, &HostedFile> =
+            HashMap::from([("answer.txt", &hosted_file)]);
+
+        // when
+        let result = image_metadata_by_path(path, &hosted_files);
+
+        // then
+        assert_eq!(
+            result,
+            Err(RenderError::from(
+                "hosted image '/unfile/answer.txt' does not start with '/file/'"
+            ))
+        );
+    }
+
+    #[test]
+    fn image_metadata_by_path_fails_for_missing_image_file() {
+        // given
+        let path = "/file/answer.svg";
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::new();
+
+        // when
+        let result = image_metadata_by_path(path, &hosted_files);
+
+        // then
+        assert_eq!(
+            result,
+            Err(RenderError::from("did not find hosted image 'answer.svg'"))
+        );
+    }
+
+    #[test]
+    fn image_metadata_by_path_fails_for_missing_dimensions_on_non_svg() {
+        // given
+        let path = "/file/answer.png";
+        let mut hosted_file = create_hosted_file();
+        hosted_file.image_metadata = None;
+        let hosted_files: HashMap<&str, &HostedFile> =
+            HashMap::from([("answer.png", &hosted_file)]);
+
+        // when
+        let result = image_metadata_by_path(path, &hosted_files);
+
+        // then
+        assert_eq!(
+            result,
+            Err(RenderError::from(
+                "hosted image '/file/answer.png' does not have image metadata"
+            ))
+        );
+    }
+
+    #[test]
+    fn image_metadata_by_path_handles_missing_dimensions_on_svg() {
+        // given
+        let path = "/file/answer.svg";
+        let mut hosted_file = create_hosted_file();
+        hosted_file.image_metadata = None;
+        let hosted_files: HashMap<&str, &HostedFile> =
+            HashMap::from([("answer.svg", &hosted_file)]);
+
+        // when
+        let result = image_metadata_by_path(path, &hosted_files);
+
+        // then
+        let metadata = result.expect("expected success");
+        assert_eq!(metadata, None);
     }
 }
