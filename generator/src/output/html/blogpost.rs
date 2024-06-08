@@ -97,9 +97,9 @@ fn create_og_image_data<'a>(
     blogpost: &Blogpost,
     hosted_files: &HashMap<&str, &'a HostedFile>,
 ) -> Result<Option<OgImageData<'a>>, RenderError> {
-    if let Some(path) = &blogpost.image {
-        let url = url_for_absolute_path(path);
-        let metadata = image_metadata_by_path(path, hosted_files)?;
+    if let Some(image) = &blogpost.image {
+        let url = url_for_absolute_path(&image.path);
+        let metadata = image_metadata_by_path(&image.path, hosted_files)?;
         Ok(Some(OgImageData { url, metadata }))
     } else {
         Ok(None)
@@ -109,7 +109,7 @@ fn create_og_image_data<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::input::{ImageMetadata, Language};
+    use crate::input::{ImageMetadata, Language, OgImage};
     use crate::test_utils::{create_assets, create_blogpost, create_category, create_hosted_file};
 
     #[test]
@@ -181,7 +181,10 @@ mod tests {
     fn create_og_image_data_returns_image_with_all_metadata_if_present() {
         // given
         let mut blogpost = create_blogpost();
-        blogpost.image = Some("/file/answer.png".to_owned());
+        blogpost.image = Some(OgImage {
+            path: "/file/answer.png".to_owned(),
+            alt: "fourty-two".to_owned(),
+        });
         let mut hosted_file = create_hosted_file();
         hosted_file.image_metadata = Some(ImageMetadata {
             width: 42,
@@ -226,7 +229,10 @@ mod tests {
     fn create_og_image_data_fails_for_missing_image_file() {
         // given
         let mut blogpost = create_blogpost();
-        blogpost.image = Some("/file/answer.png".to_owned());
+        blogpost.image = Some(OgImage {
+            path: "/file/answer.png".to_owned(),
+            alt: "fourty-two".to_owned(),
+        });
         let hosted_files: HashMap<&str, &HostedFile> = HashMap::new();
 
         // when

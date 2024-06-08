@@ -16,7 +16,9 @@
  */
 
 use crate::input::file::FileData;
-use crate::input::{tag::Tag, Asset, Assets, Blogpost, Category, HostedFileMetadata, Quote};
+use crate::input::{
+    tag::Tag, Asset, Assets, Blogpost, Category, HostedFileMetadata, OgImage, Quote,
+};
 use crate::HostedFile;
 use camino::{Utf8Path, Utf8PathBuf};
 use chrono::{FixedOffset, TimeZone};
@@ -42,7 +44,10 @@ pub fn create_blogpost() -> Blogpost {
         modified_at: SystemTime::now(),
         content_markdown: "*foo*bar".to_owned(),
         summary: Some("foo!".to_owned()),
-        image: Some("/file/recipes.png".to_owned()),
+        image: Some(OgImage {
+            path: "/file/recipes.png".to_owned(),
+            alt: "A stack of recipes.".to_owned(),
+        }),
         language: None,
     }
 }

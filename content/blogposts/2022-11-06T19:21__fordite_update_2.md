@@ -7,6 +7,7 @@ tags: fordite, kunst, digitale kunst, digital art, rust
 category: hoellenmaschinen
 summary: Ich habe ein paar kleine Verbesserungen an Fordite vorgenommen und eine neue Animation hochgeladen.
 image: /file/fordite_fire_god_float.webp
+image-alt: Ein fordite-Bild, das eine abstrakte Darstellung eines Feuergottes sein könnte.
 ---
 
 Ich bin endlich mal wieder dazu gekommen, an [Fordite](/blogposts/fordite) weiterzuarbeiten.

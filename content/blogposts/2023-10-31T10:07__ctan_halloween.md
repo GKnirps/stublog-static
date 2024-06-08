@@ -7,6 +7,7 @@ tags: halloween, ctan, tex, latex, webdesign, kunst
 category: weiteweitewelt
 summary: Die ctan.org-Website hat ein Halloweenkostüm. Also die Seite selber ist in ein Halloweenkostüm gekleidet
 image: /file/ctan_2023_halloween.webp
+image-alt: Screenshot von ctan.org. Vom Design her erinnert sie an übertriebene websites aus den 90ern. Die Seite ist in Rot-/Orange-/Schwarztönen gehalten. Die Schriftart erinnert an Comic Sans (ist aber eigentlich „Schoolbell“). Rechts oben ist das Seitenlogo, projeziert auf eine abgeflachte Kugel. Hintergrundbild für den Text ist eine Textur, die entweder schwarzes Holz oder Marmor darstellen könnte.
 language:
 ---
 

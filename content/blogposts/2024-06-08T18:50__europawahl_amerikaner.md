@@ -7,6 +7,7 @@ tags: europawahl, amerikaner, bäckerei, wahl
 category: ganz_normaler_wahnsinn
 summary: Die Bäckerei bei mir um die Ecke hat zur Wahl passendes Gebäck.
 image: /file/europawahl_amerikaner.webp
+image-alt: Auslage beim Bäcker: Acht Amerikaner mit weißer Glasur. Auf jedem Amerikaner ist mit roter Lebensmittelfarbe ein Kreis gemalt, über den Kreis ein schwarzes Kreuz aus Schokolade. Dadurch sehen die Amerikaner so aus wie ein angekreuzter Stimmzettel.
 language:
 ---
 

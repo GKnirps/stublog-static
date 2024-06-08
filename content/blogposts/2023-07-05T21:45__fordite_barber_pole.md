@@ -7,6 +7,7 @@ tags: fordite, barber's pole, kunst, digitale kunst, rust
 category: hoellenmaschinen
 summary: Ich habe ein neues Farbschichtenmodell zu meinem Fordite-Programm hinzugefügt.
 image: /file/fordite_barber_pole.webp
+image-alt: Fordite-Bild: Orange Verwirbelungen
 ---
 
 Es ist mal wieder soweit, ich habe mich mal wieder ein bisschen an mein [Fordite-Projekt](/blogposts/fordite) gesetzt. Ich hatte neulich die Idee, ein Farbschema basierend auf einem [Barber's Pole](https://de.wikipedia.org/wiki/Barber-Pole) anzuordnen. Als kleine Vorschau, hier ein Beispielbild für das, was am Ende herausgekommen ist:

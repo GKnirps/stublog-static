@@ -61,8 +61,14 @@ pub struct Blogpost {
     pub modified_at: SystemTime,
     pub content_markdown: String,
     pub summary: Option<String>,
-    pub image: Option<String>,
+    pub image: Option<OgImage>,
     pub language: Option<Language>,
+}
+
+#[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+pub struct OgImage {
+    pub path: String,
+    pub alt: String,
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]

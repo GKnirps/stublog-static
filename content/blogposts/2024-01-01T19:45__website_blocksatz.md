@@ -7,6 +7,7 @@ tags: typografie, blocksatz, webdesign
 category: weiteweitewelt
 summary: Ich habe ein schönes Beispiel gefunden, warum man auf websites keinen Blocksatz verwenden sollte.
 image: /file/blocksatz.webp
+image-alt: Screenshot einer Website, bei der der Text im Blocksatz ist. Der Anzeigebereich ist klein, deswegen sind teilweise sehr große Lücken zwischen den Worten. Beispiel: In der ersten Zeile steht „Highlights: Without a“, und die Abstände zwischen den Worten sind jeweils größer als das Wort „Without“.
 language:
 ---
 

@@ -7,6 +7,7 @@ tags: rhabarber, rhabarberstreuselkuchen, backen, rezept, hefeteig, pflaumenstre
 category: positiv
 summary: Es ist wieder Rhabarberzeit! Zur Feier des Tages habe ich einen Rhabarberstreuselkuchen gebacken und teile auch das Rezept.
 image: /file/2021-09-05-rhabarber.webp
+image-alt: Eine große Rhabarberpflanze
 ---
 
 Ich backe ja gelegentlich ganz gerne, und noch lieber esse ich Kuchen. Seit meiner Kindheit gabe es um diese Jahreszeit immer einen Rhabarberstreuselkuchen.

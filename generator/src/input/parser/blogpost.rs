@@ -15,7 +15,7 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use super::super::Blogpost;
+use super::super::{Blogpost, OgImage};
 use super::{get_secure_filename, parse_language, split_file_content, ParseError};
 use crate::input::file::FileData;
 use crate::input::tag::Tag;
@@ -85,7 +85,20 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
         })?),
     };
     let summary = props.get("summary").map(|s| s.to_string());
-    let image = props.get("image").map(|s| s.to_string());
+    let image_path = props.get("image").map(|s| s.to_string());
+    let image_alt = props.get("image-alt").map(|s| s.to_string());
+
+    let image = if let Some(path) = image_path {
+        let alt = image_alt.ok_or_else(|| {
+            ParseError::new(format!(
+                "Missing image alt text for blogpost {}",
+                original_path.as_str()
+            ))
+        })?;
+        Some(OgImage { path, alt })
+    } else {
+        None
+    };
 
     let tags = props
         .get("tags")
@@ -191,6 +204,7 @@ mod tests {
         allow-html: true\n\
         summary: Bogus!\n\
         image: /file/foo.png\n\
+        image-alt: A foo in its natural habitat.\n\
         language: de\n\
         ---\n\
         IM IN UR CONTENT\n"
@@ -237,7 +251,13 @@ mod tests {
         assert_eq!(result.modified_at, modified_at);
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
         assert_eq!(result.summary, Some("Bogus!".to_owned()));
-        assert_eq!(result.image, Some("/file/foo.png".to_owned()));
+        assert_eq!(
+            result.image,
+            Some(OgImage {
+                path: "/file/foo.png".to_owned(),
+                alt: "A foo in its natural habitat.".to_owned()
+            })
+        );
         assert_eq!(result.language, Some(Language::De));
     }
 
@@ -378,6 +398,73 @@ mod tests {
         assert_eq!(
             result,
             Err(ParseError::from("Missing date for blogpost mad/eye"))
+        );
+    }
+
+    #[test]
+    fn parse_blogpost_metadata_should_fail_for_bad_update_date() {
+        // given
+        let content = "---\n\
+        title: Lorem ipsum\n\
+        filename: lipsum\n\
+        date: 2020-05-11T12:13:14+02:00\n\
+        update-date: 2020-05-11+02:00\n\
+        category: cat\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
+
+        let modified_at = SystemTime::now();
+        let filename = Utf8Path::new("mad/eye").to_path_buf();
+
+        let input = FileData {
+            content,
+            filename,
+            modified_at,
+        };
+
+        // when
+        let result = parse_blogpost(&input);
+
+        // then
+        assert_eq!(
+            result,
+            Err(ParseError::from("Invalid update date date '2020-05-11+02:00': input contains invalid characters (blogpost mad/eye)"))
+        );
+    }
+
+    #[test]
+    fn parse_blogpost_metadata_should_fail_if_image_is_present_but_image_alt_is_not() {
+        // given
+        let content = "---\n\
+        title: Lorem ipsum\n\
+        filename: lipsum\n\
+        date: 2020-05-11T12:13:14+02:00\n\
+        category: cat\n\
+        image: /file/foo.png\n\
+        image-alt:\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
+
+        let modified_at = SystemTime::now();
+        let filename = Utf8Path::new("mad/eye").to_path_buf();
+
+        let input = FileData {
+            content,
+            filename,
+            modified_at,
+        };
+
+        // when
+        let result = parse_blogpost(&input);
+
+        // then
+        assert_eq!(
+            result,
+            Err(ParseError::from(
+                "Missing image alt text for blogpost mad/eye"
+            ))
         );
     }
 

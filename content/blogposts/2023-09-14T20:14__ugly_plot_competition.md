@@ -7,6 +7,7 @@ tags: diagramm, plot, graph, ugly graph competition, kunst, digital art, kompres
 category: ganz_normaler_wahnsinn
 summary: Meine Professorin hat einen kleinen Wettbewerb für möglichst hässliche Diagramme veranstaltet.
 image: /file/ugly_plot_0.jpeg
+image-alt: Ein hässlicher Plot. Vier Graphen sind in einem Koordinatensystem dargestellt. Jeder in einem anderen Stil. Alle bis auf einen schwarz. Die Legende ist in der Mitte des Koordinatensystems und überschneidet sich mit mehreren Graphen. Von der Überschrift ist nur die obere Hälfte zu sehen. Es werden überall unterschiedliche Schriftarten verwendet, darunter Comic Sans. Das Koordinatensystem besteht nicht aus Linien, sondern aus dicken Punkten. Manche Texte stehen auf dem Kopf, andere sind um 90 Grad nach rechts, wiederum andere um 90 Grad nach links gedreht. Überall im Bild sind starke JPEG-Kompressionsartefakte zu sehen.
 language:
 ---
 

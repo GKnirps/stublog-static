@@ -7,6 +7,7 @@ tags: fordite, kunst, digital art, diamond-square-Algorithmus, digitale kunst, r
 category: hoellenmaschinen
 summary: Es gibt einige neue Features in meinem Fordite-Programm, z.B. fraktale Höhenkarten. Allerdings gibt es auch ein paar breaking changes.
 image: /file/fordite_blue_corner_fuzzy.webp
+image-alt: Ein blaues fordite-Bild. Die Kanten sind nicht glatt und gleichmäßig. Sie sehen eher aus, als hätte jemand sie von Hand gezeichnet
 ---
 
 Nachdem ich neulich [ein neues Farbschichtenschema für Fordite](/blogposts/fordite_barber_pole) gebaut habe, habe ich mich letzte Woche an eine neue Höhenkarte gesetzt.

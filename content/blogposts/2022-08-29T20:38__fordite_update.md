@@ -7,6 +7,7 @@ tags: fordite, kunst, digital art, digitale kunst
 category: hoellenmaschinen
 summary: Meine Fordite-Software hat ein paar Updates erhalten.
 image: /file/fordite_blob.webp
+image-alt: ungleichmäßig aussehende, zentrierte Farbblobs
 ---
 
 Vor kurzem habe ich ja endlich den [Blogpost zu meinem fordite-Programm](/blogposts/fordite) fertig gestellt. Das heißt, ich hatte danach endlich Zeit, mal wieder an der Software selber weiter zu arbeiten.

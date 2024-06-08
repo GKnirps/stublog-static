@@ -7,6 +7,7 @@ tags: chaos communication camp, svg, napstablook, undertale, optimierung, inksca
 category: computerspiele
 summary: Ich habe eine Vektorgrafik von Napstablook aus Undertale erzeugt. Hier eine viel zu detaillierte Entstehungsgeschichte.
 image: /file/napstablook_original.webp
+image-alt: Ein traurig aussehender Geist. Das Bild hat eine sehr geringe Auflösung
 language:
 ---
 
