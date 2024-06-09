@@ -83,8 +83,8 @@ impl<'a> HeadData<'a> {
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 struct OgImageData<'a> {
     url: String,
+    alt: &'a str,
     metadata: Option<&'a ImageMetadata>,
-    // TODO: add alt text
 }
 
 fn head(data: &HeadData) -> Markup {
@@ -127,6 +127,7 @@ fn opengraph_tags(data: &HeadData) -> Markup {
         (opengraph_tag("og:locale", Some("de_DE")))
         (opengraph_tag("og:site_name", Some("Stranger Than Usual")))
         (opengraph_tag("og:image", data.og_image.as_ref().map(|img| img.url.as_str())))
+        (opengraph_tag("og:image:alt", data.og_image.as_ref().map(|img| img.alt)))
         (opengraph_tag("og:image:width", data.og_image.as_ref().and_then(|img| img.metadata.map(|meta| meta.width.to_string()))))
         (opengraph_tag("og:image:height", data.og_image.as_ref().and_then(|img| img.metadata.map(|meta| meta.height.to_string()))))
     }
@@ -289,6 +290,7 @@ mod tests {
             .with_canonical_url("https://example.com/moon")
             .with_og_image(OgImageData {
                 url: "https://imgs.xkcd.com/comics/recipes.png".to_owned(),
+                alt: "some description",
                 metadata: Some(&ImageMetadata {
                     width: 663,
                     height: 357,
@@ -308,6 +310,7 @@ mod tests {
             <meta property=\"og:locale\" content=\"de_DE\">\
             <meta property=\"og:site_name\" content=\"Stranger Than Usual\">\
             <meta property=\"og:image\" content=\"https://imgs.xkcd.com/comics/recipes.png\">\
+            <meta property=\"og:image:alt\" content=\"some description\">\
             <meta property=\"og:image:width\" content=\"663\">\
             <meta property=\"og:image:height\" content=\"357\">"
         );
@@ -319,6 +322,7 @@ mod tests {
         let assets = create_assets();
         let head_data = HeadData::new("I blew up the moon", &assets).with_og_image(OgImageData {
             url: "https://imgs.xkcd.com/comics/recipes.png".to_owned(),
+            alt: "some description",
             metadata: None,
         });
 
@@ -331,7 +335,8 @@ mod tests {
             "<meta property=\"og:title\" content=\"I blew up the moon\">\
             <meta property=\"og:locale\" content=\"de_DE\">\
             <meta property=\"og:site_name\" content=\"Stranger Than Usual\">\
-            <meta property=\"og:image\" content=\"https://imgs.xkcd.com/comics/recipes.png\">"
+            <meta property=\"og:image\" content=\"https://imgs.xkcd.com/comics/recipes.png\">\
+            <meta property=\"og:image:alt\" content=\"some description\">"
         );
     }
 

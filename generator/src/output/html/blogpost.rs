@@ -94,13 +94,14 @@ pub fn render_blogpost_page(
 }
 
 fn create_og_image_data<'a>(
-    blogpost: &Blogpost,
+    blogpost: &'a Blogpost,
     hosted_files: &HashMap<&str, &'a HostedFile>,
 ) -> Result<Option<OgImageData<'a>>, RenderError> {
     if let Some(image) = &blogpost.image {
         let url = url_for_absolute_path(&image.path);
+        let alt = &image.alt;
         let metadata = image_metadata_by_path(&image.path, hosted_files)?;
-        Ok(Some(OgImageData { url, metadata }))
+        Ok(Some(OgImageData { url, alt, metadata }))
     } else {
         Ok(None)
     }
@@ -202,6 +203,7 @@ mod tests {
             metadata,
             Some(OgImageData {
                 url: "https://blog.strangerthanusual.de/file/answer.png".to_owned(),
+                alt: "fourty-two",
                 metadata: Some(&ImageMetadata {
                     width: 42,
                     height: 9001
