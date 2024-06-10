@@ -12,7 +12,7 @@ language:
 
 Letzte Woche habe ich erst einen [Post über einen lustigen Mastodon-Bot](/blogposts/i_hope_this_email_finds_you) geschrieben. Jetzt schon hat sich der Account verändert, damit die URL, und ich musste sie anpassen. Immerhin, die alten URLs finden weiterhin ihr Ziel, aber es kommen halt keine neuen Toots hinzu.
 
-Im Gegensatz zu den Links in meinem [Blogpost zu Laschets Rede gegen Rechts](/blogposts/laschet_rede). im Februar. Dort ist mir schon vor ein paar WOchen aufgefallen, dass die wichtigsten Links nicht mehr funktionieren.
+Im Gegensatz zu den Links in meinem [Blogpost zu Laschets Rede gegen Rechts](/blogposts/laschet_rede). im Februar. Dort ist mir schon vor ein paar Wochen aufgefallen, dass die wichtigsten Links nicht mehr funktionieren.
 
 Der eine Link ging zu einem Artikel auf focus.de über diese Rede. Dieser Artikel war schon kurz nach dem Erscheinen nicht mehr auffindbar, zumindest nicht unter derselben URL. Dieser Artikel ist immerhin im Internet-Archiv zu finden.
 
