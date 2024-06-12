@@ -2,7 +2,7 @@
 title: Infinite Screaming
 filename: infinite_screaming
 date: 2024-06-12T19:38:46+02:00
-update-date:
+update-date: 2024-06-12T20:30:00+02:00
 tags: blogs, mastodon, small web, tvtropes, bot
 category: weiteweitewelt
 summary: Ein Mastodon-Nutzer hat das Fediverse nach kleinen, privaten Websites gefragt und Antworten bekommen.
@@ -11,7 +11,7 @@ image-alt:
 language:
 ---
 
-Gestern hat ein Mastodon-Nutzer dort die anderen [nach kleinen, privaten Blogs/websites gefragt](https://strangeobject.space/@james/112597336692849210). Die Idee dahinter war, dass er mal sehen wollte, ob es noch, so wie früher, Leute gibt, die ihre eigenen, kleinen Websites betreuen und nicht alles in den großen sozialen Medien, auf den Websites der großen Konzerne machen:
+Gestern hat ein Mastodon-Nutzer dort die anderen [nach kleinen, privaten Blogs/websites gefragt](https://fosstodon.org/@james@strangeobject.space/112597336937864877). Die Idee dahinter war, dass er mal sehen wollte, ob es noch, so wie früher, Leute gibt, die ihre eigenen, kleinen Websites betreuen und nicht alles in den großen sozialen Medien, auf den Websites der großen Konzerne machen:
 
 > send me your blog that you update
 
@@ -38,3 +38,7 @@ Die Liste lässt sich fortsetzen. Kurz darauf habe ich auch erfahren, dass es da
 Abgesehen davon habe ich auch noch zwei kleine Blogs gefunden, auf denen ich aber schnell je einen sehr interessanten Artikel gefunden habe. Zum einen [dieses Blog](https://tonsky.me/) mit [einem Artikel über Javascript-Bloat](https://tonsky.me/blog/js-bloat/) und zum anderen [dieses Blog](https://williamoconnell.me/blog/) mit [einem Artikel darüber](https://williamoconnell.me/blog/post/noodles/), wie der Autor aus Versehen die E-Mail-Adresse eines Briten gehijacked hat und nun Mails von dessen Banken bekommt. Alle Anfragen bei den Banken wurden entweder ignoriert oder mit einem „da kann ich nichts tun, ich leite das mal weiter“ abgewimmelt. Die Mails bekommt der Typ heute noch.
 
 Fazit: Das Web ist immer noch voll von Leuten, die ihre eigene kleine Website haben. Viele davon sind vielleicht nicht großartig, und auf den Blogs wird nur wenig geschrieben, aber es gibt sie, und sie sind es wert, sie sich anzuschauen.
+
+### Update
+
+Ursprünglich hatte ich auf [den Post auf der ursprünglichen Mastodon-Instanz](https://strangeobject.space/@james/112597336692849210) verwiesen, aber dort sind viel weniger Antworten zu finden. Ich verbuche das mal unter „federated Mastodon weirdness“.
