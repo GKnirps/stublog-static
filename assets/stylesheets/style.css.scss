@@ -36,7 +36,7 @@ $codebox-foreground-color: white;
     }
 
         /* Wide screens get a border left/right */
-        @media only screen and (min-device-width: 481px) {
+        @media (min-width: 53.251em) {
             body {
                 padding: 0 .625em 0 .625em; /* Abstand der Rahmen zum Content (Wird zur width hinzugerechnet) */
 
@@ -45,7 +45,7 @@ $codebox-foreground-color: white;
             }
         }
         /* smaller screens don't get a border */
-        @media only screen and (max-device-width: 480px) {
+        @media (max-width: 53.25em) {
             body {
                 padding: 0;
                 margin: 0 1em 0 1em;
