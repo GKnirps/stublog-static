@@ -3,7 +3,7 @@ title: Infinite Screaming
 filename: infinite_screaming
 date: 2024-06-12T19:38:46+02:00
 update-date: 2024-06-12T20:30:00+02:00
-tags: blogs, mastodon, small web, tvtropes, bot
+tags: blogs, mastodon, web, tvtropes, bot
 category: weiteweitewelt
 summary: Ein Mastodon-Nutzer hat das Fediverse nach kleinen, privaten Websites gefragt und Antworten bekommen.
 image:
