@@ -3,7 +3,7 @@ id: raymond_chen_softram
 source-name: Raymond Chen über SoftRAM
 source-url: https://devblogs.microsoft.com/oldnewthing/20211111-00/?p=105897
 date: 2024-02-05T18:45:20+01:00
-published: false
+published: true
 language: en
 ---
 
