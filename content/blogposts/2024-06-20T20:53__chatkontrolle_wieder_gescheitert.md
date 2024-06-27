@@ -2,7 +2,7 @@
 title: Schon wieder die Chatkontrolle
 filename: chatkontrolle_wieder_gescheitert
 date: 2024-06-20T20:53:20+02:00
-update-date:
+update-date: 2024-06-27T07:36:00+02:00
 tags: chatkontrolle, datenschutz, ard, rant, chaos communication camp, EU, netzpolitik
 category: ganz_normaler_wahnsinn
 summary: Die Chatkontrolle ist schon wieder gescheitert. Aber das Thema ist leider noch nicht vom Tisch.
@@ -28,3 +28,7 @@ Viertens: Geht es um staatliche Kontrollmaßnahmen und Verhältnismäßigkeit. M
 Ich traue unserem Staat weitaus mehr als manch einem anderen Staat, aber auch unsere Geheimdienste haben sich in der Vergangenheit nicht mit Ruhm bekleckert. Es gab [Nazis in der Polizei, die Polizeidatenbanken genutzt haben, um Drohbriefe zu verschicken](https://de.wikipedia.org/wiki/NSU_2.0#Polizeiskandale). Wollen wir da wirklich noch ein weiteres, für den ursprünglichen Zweck nutzloses Überwachungstool aufbauen, dass wunderbares Missbrauchspotential hat? Und was passiert, wenn die AfD es schaffen sollte, im Bundestag Mehrheiten zu bekommen? Wollen wir diesen Nazis wirklich eine solche Waffe in die Hände drücken? Und was ist mit Staaten wie Ungarn, die unter Orbán deutlich sichtbar Demokratieabbau betreibt?
 
 Es gibt so viele gute Argumente gegen die Chatkontrolle, und nur sehr wenige gute Argumente dafür. Ich hätte in den letzten zwei Jahren vielleicht einfach die ganzen Artikel sammeln sollen, die ich darüber gelesen habe, aber das habe ich nicht, und jetzt kann ich sie nicht verlinken. Daher verweise ich einfach auf [netzpolitik.org](https://netzpolitik.org/), [diese Infoseite](https://chat-kontrolle.eu/) von CCC, Digitalcourage und anderen sowie auf [diese Infoseite](https://www.patrick-breyer.de/beitraege/chatkontrolle/) von Patrick Breyer.
+
+### Update 2024-06-27
+
+Gerade eben habe ich [diesen Artikel gefunden](https://www.kuketz-blog.de/tagesschaukommentar-zur-chatkontrolle-empoerte-ahnungslosigkeit/), die die Argumente in dem Tagesschau-Kommentar gründlich auseinandernimmt.
