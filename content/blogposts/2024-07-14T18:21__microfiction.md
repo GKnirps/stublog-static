@@ -30,4 +30,4 @@ Aber wie können diese Geschichten überhaupt so kurz sein? Nun, i.d.R. bauen si
 
 Nicht selten gibt es einen Twist am Ende. Manchmal sind die Geschichten geradeaus zu verstehen. Manchmal versteht man sie erst, wenn man am Ende angekommen ist. Manchmal versteht man sie erst ganz anders, bis am Ende der Twist kommt.
 
-Ich kann nur empfehlen, sich diese Geschichten anzuschauen. Autor_in hat auch [eine Website], aber dort sind nicht alle Geschichten direkt zu finden.
+Ich kann nur empfehlen, sich diese Geschichten anzuschauen. Autor_in hat auch [eine Website](https://microsff.com/), aber dort sind nicht alle Geschichten direkt zu finden.
