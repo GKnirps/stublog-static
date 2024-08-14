@@ -18,7 +18,7 @@
 use super::HostedFile;
 use crate::input::ImageMetadata;
 use camino::{Utf8Path, Utf8PathBuf};
-use image::io::Reader as ImageReader;
+use image::ImageReader;
 use quick_xml::events::Event;
 use quick_xml::reader::Reader as XmlReader;
 use std::error::Error;
@@ -361,7 +361,10 @@ mod tests {
         // then
         let err = result.expect_err("expected error");
         if let SvgError::Xml(e) = err {
-            assert_eq!(e.to_string(), "Expecting </bar> found </foo>");
+            assert_eq!(
+                e.to_string(),
+                "ill-formed document: expected `</bar>`, but `</foo>` was found"
+            );
         } else {
             panic!("expected XML error variant, got {err:?}");
         }
