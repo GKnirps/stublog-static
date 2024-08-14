@@ -120,7 +120,7 @@ System time (seconds): 0.00
 Maximum resident set size (kbytes): 2564
 ```
 
-Wir sehen: Es ist ein bisschen langsamer, aber der Speicherverbrauch ist deutlich geringer. lso behalten wir das mal bei und versuchen, die Geschwindigkeit anderswo wieder hereinzuholen.
+Wir sehen: Es ist ein bisschen langsamer, aber der Speicherverbrauch ist deutlich geringer. Also behalten wir das mal bei und versuchen, die Geschwindigkeit anderswo wieder hereinzuholen.
 
 #### Testfall 4: floating point precision
 
