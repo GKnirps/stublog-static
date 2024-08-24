@@ -88,6 +88,6 @@ Die Kündigung war ein bisschen holprig, aber hat auch funktioniert. Warum bin i
 
 Ich entwickle echt eine posttraumatische Belasttungsstörung durch Onlineshops und dergleichen. Ich kriege flashbacks jedes Mal, wenn ich an mein Deutschlandticket denke. Ich traue mich kaum noch, irgendwo online irgendwas zu kaufen, weil ich jedes Mal in Gefahr laufe, meinen Kopf so lange gegen eine Tür zu hauen, dass mich selbst meine Mutter nicht mehr wiedererkennen würde.
 
-Was für ein Kontrast zum 37C3. Dort ging alles schnell und grötenteils unbürokratisch. Ich bestelle ein Ticket. Keine nutzlosen Cookiebanner, keine „ich stimme zu, dass ich zukünftig nervige Werbemails bekomme“, kein Solvenzcheck (ich gehe in Vorkasse mit den Tickets, wenn ich sie nicht innerhalb einer Woche bezahle, verfallen sie), kein Bullshit, keine schlechten Mailvalidierungen…
+Was für ein Kontrast zum 37C3. Dort ging alles schnell und größtenteils unbürokratisch. Ich bestelle ein Ticket. Keine nutzlosen Cookiebanner, keine „ich stimme zu, dass ich zukünftig nervige Werbemails bekomme“, kein Solvenzcheck (ich gehe in Vorkasse mit den Tickets, wenn ich sie nicht innerhalb einer Woche bezahle, verfallen sie), kein Bullshit, keine schlechten Mailvalidierungen…
 
 Aber mal Ernst: So kann die Verkehrswende nicht funktionieren. Wenn ich aufführen muss wie ein dressierter Delfin, der durch Ringe springen muss, um seinen Fisch zu erhalten, nur um für einen Monat ein günstiges Nahverkehrsticket zu bekommen, dann läuft irgendwo etwas gründlich falsch.
