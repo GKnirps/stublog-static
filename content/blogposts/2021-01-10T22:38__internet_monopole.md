@@ -36,7 +36,7 @@ Nun gibt es die Idee (z.B. in der EU), dass man die großen Plattformen dazu zwi
 
 ### Vendor Lock-In
 
-Außerdem wurde Parler aus dem Google-Play-Store und dem Apple App-Store geworfen. Für Android kein Problem — man kann ja trotzdem noch APKs installieren, und es gibt alternative Shops. Für Apple nicht. Da kriegst du die App über den App-Store oder kannst es vergessen. Nur zur Klarstellung: Ich vergieße keine einzige Träne für Parler, aber das kann auch jeder anderen App passieren. Das ist sogar schon anderen Apps [passiert](https://arstechnica.com/tech-policy/2020/08/apple-apologizes-to-wordpress-no-longer-requires-free-app-to-add-purchases/), wobei Apple in diesem einen Fall einen Rückzieher gemacht hat. Dein iPhone gehört nicht dir, es gehört Apple.
+Außerdem wurde Parler aus dem Google-Play-Store und dem Apple App-Store geworfen. Für Android kein Problem – man kann ja trotzdem noch APKs installieren, und es gibt alternative Shops. Für Apple nicht. Da kriegst du die App über den App-Store oder kannst es vergessen. Nur zur Klarstellung: Ich vergieße keine einzige Träne für Parler, aber das kann auch jeder anderen App passieren. Das ist sogar schon anderen Apps [passiert](https://arstechnica.com/tech-policy/2020/08/apple-apologizes-to-wordpress-no-longer-requires-free-app-to-add-purchases/), wobei Apple in diesem einen Fall einen Rückzieher gemacht hat. Dein iPhone gehört nicht dir, es gehört Apple.
 
 AWS hat Parler auch gekündigt. Amazon, Google und Microsoft dominieren momentan den „cloud“-Markt. Aus Entwicklersicht ist das a so praktisch. Keinen Ärger mit Hardware, man kann es überall auf der Welt deployen, man ist viel flexibler… und man unterstützt Monopole. Man schiebt einfach ein paar Docker-Images irgendwohin, startet Docker-Container und fertig ist die Sache. Kein herumkonfigurieren mit einem Server, der bei irgendeinem speziellen Hoster steht. Um die Server kümmert sich jemand anderes. Bis dieser Andere dich loswerden will.
 
@@ -48,7 +48,7 @@ Und nehmen wir mal an, du hast daran gedacht, nur freie Technologien verwendet, 
 
 ### Alternativen
 
-Es _gibt_ Alternativen. Freie, standardisierte, dezentrale Alternativen. So zum Beispiel das [Fediverse](https://de.wikipedia.org/wiki/Fediverse), als Gegenstück zu Twitter. Da kann man auf dezentralen, untereinander vernetzten Servern Microbloggen. Man kann als Server auch einzelne andere Server blocken, zum Beispiel wenn die zu viel Hetze und Hass verbreiten (das hat noch eigene Probleme, wie ein [Talk](https://media.ccc.de/v/rc3-857362-die_rosarote_brille_des_fediverse) von der rC3 erläutert).
+Es _gibt_ Alternativen. Freie, standardisierte, dezentrale Alternativen. So zum Beispiel das [Fediverse](https://de.wikipedia.org/wiki/Fediverse), als Gegenstück zu Twitter. Da kann man auf dezentralen, untereinander vernetzten Servern microbloggen. Man kann als Server auch einzelne andere Server blocken, zum Beispiel wenn die zu viel Hetze und Hass verbreiten (das hat noch eigene Probleme, wie ein [Talk](https://media.ccc.de/v/rc3-857362-die_rosarote_brille_des_fediverse) von der rC3 erläutert).
 
 Es gibt dezentrale soziale Netwerke als Alternativen zu Facebook. Es gibt [Jabber](https://de.wikipedia.org/wiki/Extensible_Messaging_and_Presence_Protocol) und [Matrix](https://de.wikipedia.org/wiki/Matrix_(Kommunikationsprotokoll)) als Alternativen zu WhatsApp. Man muss sie nur benutzen.
 
