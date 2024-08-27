@@ -22,7 +22,7 @@ Trump ist also von seinem Lieblings-Demagogiekanal abgeschnitten. Und von eigent
 
 Das eigentliche Problem ist also nicht, dass Trump von Twitter verbannt worden ist. Wenn ich eine Website hätte, auf der jemand ständig Lügen, Verschwörungsmythen, Hass und Hetze verbreitet, würde ich die Person vermutlich auch rauswerfen.
 
-Das Problem ist, dass Twitter so mächtig ist, dass ein Bann einen so großen Einfluss auf den fucking _Präsidenten der USA_ hat (der, möchte man anmerken, noch über mehr Kanäle verfügt, seiner Stimme Gehör zu verschaffen als die meisten anderen Leute). Das Problem ist, dass Twitter nicht _ein_ Microbloggingdienst ist, sondern _der_ Microbloggingdienst. Das Problem ist nicht, dass Facebook _ein_ soziales Netzwerk ist, sinder _das_ soziale Netzwerk. Das Problem ist, dass sich im Internet Monopole gebildet haben.
+Das Problem ist, dass Twitter so mächtig ist, dass ein Bann einen so großen Einfluss auf den fucking _Präsidenten der USA_ hat (der, möchte man anmerken, noch über mehr Kanäle verfügt, seiner Stimme Gehör zu verschaffen als die meisten anderen Leute). Das Problem ist, dass Twitter nicht _ein_ Microbloggingdienst ist, sondern _der_ Microbloggingdienst. Das Problem ist nicht, dass Facebook _ein_ soziales Netzwerk ist, sondern _das_ soziale Netzwerk. Das Problem ist, dass sich im Internet Monopole gebildet haben.
 
 Vor fünfundzwanzig Jahren war die Hoffnung groß, dass im Internet eine Kultur dezentraler, untereinander kompatibler Plattformen zum Informationsaustausch bilden. Beim [Usenet](https://de.wikipedia.org/wiki/Usenet) zum Beispiel hatte das schon geklappt.
 
