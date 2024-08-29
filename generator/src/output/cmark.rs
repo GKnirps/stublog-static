@@ -23,42 +23,84 @@ use pulldown_cmark::{CowStr, Tag, TagEnd};
 use pulldown_cmark_escape::{escape_href, escape_html};
 use std::collections::HashMap;
 
-fn handle_images<'ev>(
-    event: Event<'ev>,
-    hosted_files: &HashMap<&str, &HostedFile>,
-) -> Result<Event<'ev>, RenderError> {
-    Ok(match &event {
-        Event::Start(Tag::Image {
-            link_type: _,
-            dest_url: url,
-            title,
-            id: _,
-        }) => {
-            let image_metadata = image_metadata_by_path(url, hosted_files)?;
+struct CustomImageTagIterator<'ev, 'meta, T: Iterator<Item = Event<'ev>>> {
+    source: T,
+    hosted_files: &'meta HashMap<&'meta str, &'meta HostedFile>,
+}
 
-            let mut img_tag = if let Some(image_metadata) = image_metadata {
-                format!(
-                    "<img width=\"{}\" height=\"{}\" src=\"",
-                    image_metadata.width, image_metadata.height
-                )
-            } else {
-                "<img src=\"".to_string()
-            };
-            img_tag.reserve(256);
-            escape_href(&mut img_tag, url).expect("Expected write to string buffer to not fail");
-            img_tag.push_str("\" ");
-            if !title.is_empty() {
-                img_tag.push_str("title=\"");
-                escape_html(&mut img_tag, title)
+impl<'ev, 'meta, T: Iterator<Item = Event<'ev>>> Iterator
+    for CustomImageTagIterator<'ev, 'meta, T>
+{
+    type Item = Result<Event<'ev>, RenderError>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let event = self.source.next()?;
+        Some(match &event {
+            Event::Start(Tag::Image {
+                link_type: _,
+                dest_url: url,
+                title,
+                id: _,
+            }) => {
+                let image_metadata = match image_metadata_by_path(url, self.hosted_files) {
+                    Err(e) => {
+                        return Some(Err(e));
+                    }
+                    Ok(m) => m,
+                };
+
+                let mut img_tag = if let Some(image_metadata) = image_metadata {
+                    format!(
+                        "<img width=\"{}\" height=\"{}\" src=\"",
+                        image_metadata.width, image_metadata.height
+                    )
+                } else {
+                    "<img src=\"".to_string()
+                };
+                img_tag.reserve(256);
+                escape_href(&mut img_tag, url)
                     .expect("Expected write to string buffer to not fail");
                 img_tag.push_str("\" ");
+                if !title.is_empty() {
+                    img_tag.push_str("title=\"");
+                    escape_html(&mut img_tag, title)
+                        .expect("Expected write to string buffer to not fail");
+                    img_tag.push_str("\" ");
+                }
+                img_tag.push_str("alt=\"");
+                let mut next = self.source.next();
+                while next != Some(Event::End(TagEnd::Image)) {
+                    match next {
+                        Some(
+                            Event::InlineHtml(alt_text)
+                            | Event::Code(alt_text)
+                            | Event::Text(alt_text),
+                        ) => {
+                            escape_html(&mut img_tag, &alt_text)
+                                .expect("Expected write to string buffer to not fail");
+                        }
+                        None => {
+                            return Some(Err(RenderError::from(
+                                    "expected image tag end event, but found end of stream (this may be a bug on my side)",
+                                )));
+                        }
+                        Some(e) => {
+                            return Some(Err(RenderError::new(format!("expected text event for image alt attribute, got '{e:?}' (this is due to a workaround in this blog, some other elements may also be possible but unlikely)"))));
+                        }
+                    }
+                    next = self.source.next();
+                }
+                img_tag.push_str("\">");
+                Ok(Event::Html(CowStr::from(img_tag)))
             }
-            img_tag.push_str("alt=\"");
-            Event::Html(CowStr::from(img_tag))
-        }
-        Event::End(TagEnd::Image) => Event::Html(CowStr::Borrowed("\">")),
-        _ => event,
-    })
+            Event::End(TagEnd::Image) => Err(RenderError::from("stray image end event")),
+            _ => Ok(event),
+        })
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.source.size_hint()
+    }
 }
 
 pub fn render_cmark(
@@ -71,35 +113,39 @@ pub fn render_cmark(
     if !allow_html {
         // Assigning image sizes may fail. If we don't collect all events in a Vec here, error handling
         // is far more complicated
-        let parsed_with_custom_img_tags = parser
-            .into_iter()
-            // We have to do the HTML escaping _before_ the image stuff because the image stuff uses HTML events to do its thing
-            .map(|event| match event {
-                Event::Html(html) => Event::Text(html),
-                Event::InlineHtml(html) => Event::Text(html),
-                // the other events are listed explicitly so I can avoid nasty surprises if they
-                // add a new event that contains HTML
-                Event::Start(_)
-                | Event::End(_)
-                | Event::Text(_)
-                | Event::Code(_)
-                | Event::InlineMath(_)
-                | Event::DisplayMath(_)
-                | Event::FootnoteReference(_)
-                | Event::SoftBreak
-                | Event::HardBreak
-                | Event::Rule
-                | Event::TaskListMarker(_) => event,
-            })
-            .map(|e| handle_images(e, hosted_files))
-            .collect::<Result<Vec<Event>, RenderError>>()?;
+        let parsed_with_custom_img_tags = CustomImageTagIterator {
+            source: parser
+                .into_iter()
+                // We have to do the HTML escaping _before_ the image stuff because the image stuff uses HTML events to do its thing
+                .map(|event| match event {
+                    Event::Html(html) => Event::Text(html),
+                    Event::InlineHtml(html) => Event::Text(html),
+                    // the other events are listed explicitly so I can avoid nasty surprises if they
+                    // add a new event that contains HTML
+                    Event::Start(_)
+                    | Event::End(_)
+                    | Event::Text(_)
+                    | Event::Code(_)
+                    | Event::InlineMath(_)
+                    | Event::DisplayMath(_)
+                    | Event::FootnoteReference(_)
+                    | Event::SoftBreak
+                    | Event::HardBreak
+                    | Event::Rule
+                    | Event::TaskListMarker(_) => event,
+                }),
+            hosted_files,
+        }
+        .collect::<Result<Vec<Event>, RenderError>>()?;
         push_html(&mut buf, parsed_with_custom_img_tags.into_iter())
     } else {
         // Assigning image sizes may fail. If we don't collect all events in a Vec here, error handling
         // is far more complicated
-        let parsed_with_custom_img_tags = parser
-            .map(|e| handle_images(e, hosted_files))
-            .collect::<Result<Vec<Event>, RenderError>>()?;
+        let parsed_with_custom_img_tags = CustomImageTagIterator {
+            source: parser,
+            hosted_files,
+        }
+        .collect::<Result<Vec<Event>, RenderError>>()?;
         push_html(&mut buf, parsed_with_custom_img_tags.into_iter());
     }
     Ok(buf)
@@ -260,6 +306,46 @@ mod tests {
 
         // then
         assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? kthxbye\" alt=\"a cat is stealing a fish\"></p>\n");
+    }
+
+    #[test]
+    fn render_cmark_should_escape_image_attributes_correctly() {
+        // given
+        let markdown =
+            "![a cat is \"borrowing\" a fish](/file/lolcat.png \"icanhasfish? \\\"kthxbye\")";
+        let mut hosted_file = create_hosted_file();
+        hosted_file.image_metadata = Some(ImageMetadata {
+            width: 42,
+            height: 9001,
+        });
+        let mut hosted_files = HashMap::with_capacity(1);
+        hosted_files.insert("lolcat.png", &hosted_file);
+
+        // when
+        let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
+
+        // then
+        assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? &quot;kthxbye\" alt=\"a cat is &quot;borrowing&quot; a fish\"></p>\n");
+    }
+
+    #[test]
+    fn render_cmark_should_escape_image_attributes_correctly_if_html_escaping_is_disabled() {
+        // given
+        let markdown =
+            "![a cat is \"borrowing\" a fish](/file/lolcat.png \"icanhasfish? \\\"kthxbye\")";
+        let mut hosted_file = create_hosted_file();
+        hosted_file.image_metadata = Some(ImageMetadata {
+            width: 42,
+            height: 9001,
+        });
+        let mut hosted_files = HashMap::with_capacity(1);
+        hosted_files.insert("lolcat.png", &hosted_file);
+
+        // when
+        let html = render_cmark(markdown, true, &hosted_files).expect("expected no error");
+
+        // then
+        assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? &quot;kthxbye\" alt=\"a cat is &quot;borrowing&quot; a fish\"></p>\n");
     }
 
     #[test]

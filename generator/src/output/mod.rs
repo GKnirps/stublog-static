@@ -69,8 +69,6 @@ impl RenderError {
         RenderError { msg }
     }
 
-    // only used in tests right now
-    #[cfg(test)]
     pub fn from(msg: &str) -> RenderError {
         RenderError {
             msg: msg.to_owned(),
