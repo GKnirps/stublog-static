@@ -21,6 +21,7 @@ use crate::output::OutputError;
 use crate::urls::{atom_feed_url, blogpost_url, CANONICAL_BASE_URL};
 use crate::HostedFile;
 use chrono::{FixedOffset, TimeZone};
+use percent_encoding::{percent_encode, CONTROLS};
 use quick_xml::events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event};
 use quick_xml::Writer;
 use std::collections::HashMap;
@@ -68,7 +69,7 @@ fn write_entry<T: Write>(
         &[],
         &format!(
             "tag:strangerthanusual.de,2005:Blogpost/{}",
-            blogpost.filename.as_str()
+            percent_encode(blogpost.filename.as_str().as_bytes(), CONTROLS),
         ),
     )?;
     write_leaf(writer, "title", &[], &blogpost.title)?;
@@ -204,7 +205,6 @@ mod tests {
         let result = writer.into_inner().into_inner();
         let result_str: String = String::from_utf8(result).expect("valid utf-8");
 
-        // then
         assert_eq!(result_str, "<entry>\
         <id>tag:strangerthanusual.de,2005:Blogpost/foobar</id>\
         <title>Nevermind</title>\
@@ -215,6 +215,26 @@ mod tests {
         <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
         </entry>");
+    }
+
+    #[test]
+    fn write_entry_percent_encodes_id_correctly() {
+        // given
+        let mut post = create_blogpost();
+        post.filename = "föobar".into();
+        let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
+        let hosted_files = HashMap::new();
+
+        // when
+        write_entry(&mut writer, &post, &hosted_files).expect("Expected successful write");
+
+        // then
+        let result = writer.into_inner().into_inner();
+        let result_str: String = String::from_utf8(result).expect("valid utf-8");
+
+        println!("{}", result_str);
+        assert!(result_str
+            .starts_with("<entry><id>tag:strangerthanusual.de,2005:Blogpost/f%C3%B6obar</id>"));
     }
 
     #[test]
