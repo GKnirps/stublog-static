@@ -28,6 +28,7 @@ use crate::input::parser::asset::read_assets;
 use crate::input::{tag::Tag, Blogpost, Category, HostedFile, HostedFileMetadata, Quote};
 use crate::output::error_pages::write_404;
 use camino::{Utf8Path, Utf8PathBuf};
+use chrono::{DateTime, FixedOffset};
 use input::file;
 use input::parser::{
     blogpost, category::parse_categories, files_index::parse_all_file_metadata, quote::parse_quotes,
@@ -129,6 +130,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     let blogposts = blogpost::parse_blogposts(&raw_blogposts)
         .map_err(|e| format!("Failed to parse all blogposts: {e}"))?;
     check_duplicate_blogpost_names(&blogposts)?;
+    check_duplicate_blogpost_dates(&blogposts)?;
 
     let quotes_indir: Utf8PathBuf = [indir, "quotes"].iter().collect();
     let raw_quotes = file::read_files_sorted(&quotes_indir)
@@ -223,6 +225,24 @@ fn check_duplicate_blogpost_names(posts: &[Blogpost]) -> Result<(), String> {
             return Err(format!("Blogpost name {} is a duplicate!", post.filename));
         }
         seen.insert(&post.filename);
+    }
+    Ok(())
+}
+
+// checks for duplicate update (or creation, if update date does not exist) dates
+// required because atom feeds are supposed to have unique update dates
+fn check_duplicate_blogpost_dates(posts: &[Blogpost]) -> Result<(), String> {
+    let mut seen: HashSet<DateTime<FixedOffset>> = HashSet::with_capacity(posts.len() * 2);
+    for post in posts {
+        let date = post.update_date.unwrap_or(post.date);
+        if seen.contains(&date) {
+            return Err(format!(
+                "Blogpost {} has a non-unique update time: {}",
+                post.filename,
+                date.to_rfc3339()
+            ));
+        }
+        seen.insert(date);
     }
     Ok(())
 }
@@ -340,6 +360,7 @@ mod tests {
         create_blogpost, create_category, create_hosted_file, create_hosted_file_metadata,
         create_quote,
     };
+    use chrono::TimeZone;
 
     #[test]
     fn check_duplicate_blogposts_names_returns_ok_for_no_duplicates() {
@@ -375,6 +396,147 @@ mod tests {
         assert_eq!(
             result,
             Err("Blogpost name foobar is a duplicate!".to_owned())
+        );
+    }
+
+    #[test]
+    fn check_duplicate_blogpost_dates_returns_for_no_duplicate_dates() {
+        // given
+        let mut post1 = create_blogpost();
+        post1.date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
+            .unwrap();
+        post1.update_date = None;
+        let mut post2 = create_blogpost();
+        // duplicate, but overriden by update_date
+        post2.date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
+            .unwrap();
+        post2.update_date = Some(
+            FixedOffset::east_opt(3600 * 2)
+                .unwrap()
+                .with_ymd_and_hms(2020, 5, 11, 12, 13, 15)
+                .unwrap(),
+        );
+        let mut post3 = create_blogpost();
+        post3.date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 16)
+            .unwrap();
+        post3.update_date = None;
+
+        // when
+        let result = check_duplicate_blogpost_dates(&[post1, post2, post3]);
+
+        // then
+        assert_eq!(result, Ok(()));
+    }
+
+    #[test]
+    fn check_duplicate_blogpost_dates_fails_for_duplicate_creation_date_without_update_date() {
+        // given
+        let mut post1 = create_blogpost();
+        post1.date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
+            .unwrap();
+        post1.update_date = None;
+        let mut post2 = create_blogpost();
+        // duplicate, but overriden by update_date
+        post2.date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
+            .unwrap();
+        post2.update_date = None;
+
+        // when
+        let result = check_duplicate_blogpost_dates(&[post1, post2]);
+
+        // then
+        assert_eq!(
+            result,
+            Err(
+                "Blogpost foobar has a non-unique update time: 2020-05-11T12:13:14+02:00"
+                    .to_owned()
+            )
+        );
+    }
+
+    #[test]
+    fn check_duplicate_blogpost_dates_fails_for_duplicate_update_date() {
+        // given
+        let mut post1 = create_blogpost();
+        post1.date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
+            .unwrap();
+        post1.update_date = Some(
+            FixedOffset::east_opt(3600 * 2)
+                .unwrap()
+                .with_ymd_and_hms(2020, 5, 11, 12, 13, 16)
+                .unwrap(),
+        );
+        let mut post2 = create_blogpost();
+        // duplicate, but overriden by update_date
+        post2.date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 15)
+            .unwrap();
+        post2.update_date = Some(
+            FixedOffset::east_opt(3600 * 2)
+                .unwrap()
+                .with_ymd_and_hms(2020, 5, 11, 12, 13, 16)
+                .unwrap(),
+        );
+
+        // when
+        let result = check_duplicate_blogpost_dates(&[post1, post2]);
+
+        // then
+        assert_eq!(
+            result,
+            Err(
+                "Blogpost foobar has a non-unique update time: 2020-05-11T12:13:16+02:00"
+                    .to_owned()
+            )
+        );
+    }
+
+    #[test]
+    fn check_duplicate_blogpost_dates_fails_for_duplicate_update_and_creation_date() {
+        // given
+        let mut post1 = create_blogpost();
+        post1.date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 14)
+            .unwrap();
+        post1.update_date = Some(
+            FixedOffset::east_opt(3600 * 2)
+                .unwrap()
+                .with_ymd_and_hms(2020, 5, 11, 12, 13, 16)
+                .unwrap(),
+        );
+        let mut post2 = create_blogpost();
+        // duplicate, but overriden by update_date
+        post2.date = FixedOffset::east_opt(3600 * 2)
+            .unwrap()
+            // not identical to post1.date but to post1.update_date
+            .with_ymd_and_hms(2020, 5, 11, 12, 13, 16)
+            .unwrap();
+        post2.update_date = None;
+
+        // when
+        let result = check_duplicate_blogpost_dates(&[post1, post2]);
+
+        // then
+        assert_eq!(
+            result,
+            Err(
+                "Blogpost foobar has a non-unique update time: 2020-05-11T12:13:16+02:00"
+                    .to_owned()
+            )
         );
     }
 
