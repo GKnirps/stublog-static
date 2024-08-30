@@ -16,7 +16,7 @@
  */
 
 use crate::input::{Assets, ImageMetadata};
-use crate::paths::{archive_path, CATEGORIES_PATH, TAGLIST_PATH};
+use crate::paths::{archive_path, ATOM_FEED_PATH, CATEGORIES_PATH, TAGLIST_PATH};
 use chrono::{DateTime, FixedOffset};
 use maud::{html, Markup, Render, DOCTYPE};
 
@@ -95,7 +95,7 @@ fn head(data: &HeadData) -> Markup {
             title {(data.title)};
             link rel="stylesheet" media="screen" href=(data.assets.stylesheet.web_path);
             link rel="icon" type="image/png" href=(data.assets.favicon.web_path);
-            link rel="alternate" type="application/feed+atom" title="ATOM" href="/feed.atom";
+            link rel="alternate" type="application/feed+atom" title="ATOM" href=(ATOM_FEED_PATH);
             @if let Some(url) = data.canonical_url {
                 link rel="canonical" href={(url)};
             }
@@ -161,6 +161,7 @@ fn header() -> Markup {
                     li { a href=(archive_path(0)) {"Archiv"} }
                     li { a href=(CATEGORIES_PATH) {"Kategorien"} }
                     li { a href=(TAGLIST_PATH) {"Tags"} }
+                    li { a href=(ATOM_FEED_PATH) rel="alternate" type="application/atom+xml" {"Feed"} }
                 }
             }
         }
