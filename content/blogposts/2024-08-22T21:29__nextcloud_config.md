@@ -23,7 +23,7 @@ Warum ist das so? Ich weiß es nicht, aber ich habe eine Vermutung. Nextcloud is
 
 Man stelle sich das mal bei einer anderen Scriptsprache vor. Wenn ich zum Beispiel bei Python erst einmal in einer globalen Konfigurationsdatei festlegen müsste, dass es mehr als 128MiB Speicher verwenden darf. Aber damit hört es natürlich nicht auf. In der PHP-Konfiguration gibt es nicht eins, nicht zwei, sondern _drei_ Verzeichnisse mit Konfigurationsdateien. Gut, `apache2` wird es nicht sein, ich nutze ja nginx. `cli` wohl auch nicht, das wird vermutlich nur für Kommendizeilenprogramme verwendet. Also bleibt eigentlich nur `fpm`.
 
-Nur leider bringt das nichts. Nextcloud bleibt bei seinen 128MiB Speicher. Selbst wenn ich die Limits auch in den anderen Dateien anpasse. Online findet man jede Menge zu den diversen Problemen, nichts davon hilfreich. Di Dokumentation (sogar in der Warnung verlinkt) geht auf diese Details überhaupt nicht ein.
+Nur leider bringt das nichts. Nextcloud bleibt bei seinen 128MiB Speicher. Selbst wenn ich die Limits auch in den anderen Dateien anpasse. Online findet man jede Menge zu den diversen Problemen, nichts davon hilfreich. Die Dokumentation (sogar in der Warnung verlinkt) geht auf diese Details überhaupt nicht ein.
 
 Nun will ich ja nicht sagen, dass diese Einschränkungen nicht wichtig sind. Aus Sicherheitsgründen oder so. Aber wenn es dafür notwendig ist, diese Einstellungen über drei verschiedene Programme hinweg zu machen, während es _grundsätzlich_ auch möglich wäre, das alles in einem Programm zu machen, dann ist beim Design der ganzen Sache irgendwo etwas schief gelaufen.
 
