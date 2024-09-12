@@ -2,7 +2,7 @@
 title: Drei neue oder alte Gründe zur Frustration
 filename: gruende_zur_frustration
 date: 2024-09-12T19:13:38+02:00
-update-date:
+update-date: 2024-09-12T19:56:00+02:00
 tags: rant, einwanderung, afd, cdu, spd, vorratsdatenspeicherung, cookiebanner
 category: rant
 summary: Merz macht Wahlkampf für die AfD, SPD will Vorratsdatenspeicherung wieder einführen, allgemein mehr Überwachung, Grenzkontrollen
@@ -43,6 +43,14 @@ Der Vorschlag der Bundesregierung geht sowieso nicht in diese Richtung. Leut der
 
 - Nachteile: hat dieselben Probleme wie oben beschrieben, außerdem hat jetzt einen Drittpartei Daten darüber, welche Seiten du besuchst. Und wenn dieser Dienst mal ausfällt, ist Land unter.
 - Vorteile: Äh… ich würde welche nennen, wenn ich nur welche wüsste.
+
+#### Update
+
+Ich habe es gerade noch einmal nachgeschlagen laut [Artikel 21, Absatz 5 der DSGVO](https://www.buzer.de/s1.htm?g=Datenschutz-Grundverordnung&a=21) gilt: 
+
+> Im Zusammenhang mit der Nutzung von Diensten der Informationsgesellschaft kann die betroffene Person ungeachtet der Richtlinie 2002/58/EG ihr Widerspruchsrecht mittels automatisierter Verfahren ausüben, bei denen technische Spezifikationen verwendet werden.
+
+Das wäre zum Beispiel auch der Do-Not-Track-Header. Die Tatsache, dass ich den setze und trotzdem noch Cookiebanner angezeigt kriege ist der Beweis dafür, dass das nichts bringt.
 
 ### Fazit
 
