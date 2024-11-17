@@ -11,7 +11,7 @@ image-alt:
 language:
 ---
 
-Am 28. Januar 1986 [zerbrach die Challenger, eines der Space Shuttles 73 Sekunden nach dem Start](https://de.wikipedia.org/wiki/STS-51-L#Das_Challenger-Ungl%C3%BCck). Daraufhin gab es eine große Untersuchung, wie es dazu kommen konnte. Es stellte sich heraus: Warnungen von Ingenieuren über die Kälteempfindlichkeit von Dichtungsringen wurden ignoriert, weil man den Start aus PR-Gründen nicht verschieben wollte.
+Am 28. Januar 1986 [zerbrach die Challenger, eines der Space Shuttles, 73 Sekunden nach dem Start](https://de.wikipedia.org/wiki/STS-51-L#Das_Challenger-Ungl%C3%BCck). Daraufhin gab es eine große Untersuchung, wie es dazu kommen konnte. Es stellte sich heraus: Warnungen von Ingenieuren über die Kälteempfindlichkeit von Dichtungsringen wurden ignoriert, weil man den Start aus PR-Gründen nicht verschieben wollte.
 
 Der berühmt-berüchtigte Physiker Richard Feynman, der im Untersuchungsausschuss saß, [schrieb im Bericht über das Unglück](https://en.wikiquote.org/wiki/Richard_Feynman#Rogers_Commission_Report_(1986)):
 
