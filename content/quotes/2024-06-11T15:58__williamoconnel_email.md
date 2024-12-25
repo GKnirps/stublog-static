@@ -3,7 +3,7 @@ id: williamoconnel_email
 source-name: William O'Connel
 source-url: https://williamoconnell.me/blog/post/noodles/
 date: 2024-06-11T15:58:18+02:00
-published: false
+published: true
 language: en
 ---
 
