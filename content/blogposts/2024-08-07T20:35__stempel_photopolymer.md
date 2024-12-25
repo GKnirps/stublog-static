@@ -37,11 +37,11 @@ Als erstes muss man das Material besorgen. Folgendes Material/Werkzeug braucht m
 9. einen weichen Pinsel oder eine ausrangierte Zahnbürste
 10. Doppelseitiges Klebeband
 
-Ich fand es nicht leicht, an die Photopolymerplatten und die Spezialfolie zu kommen. Der Brief von der Maus hat am Ende eine Liste wo man so etwas bekommt, aber das war vor 28 Jahren. Die meisten der Läden haben mittlerweile dicht gemacht. Klassische Läden (auf neudeutsch „brick and mortar“) habe ich bei mir in der Gegend nicht gefunden. Am Ende habe ich [einen Versandladen in Österreich](https://www.silberladen.at/) gefunden. Da waren die Versandkosten natürlich entsprechend hoch. Vermutlich hätte ich das auch günstiger bekommen können, wenn ich mich nicht geweigert hätte, das bei Amazon zu kaufen.
+Ich fand es nicht leicht, an die Photopolymerplatten und die Spezialfolie zu kommen. Der Brief von der Maus hat am Ende eine Liste wo man so etwas bekommt, aber das war vor 28 Jahren. Die meisten der Läden haben mittlerweile dicht gemacht. Klassische Läden (auf Neudeutsch „brick and mortar“) habe ich bei mir in der Gegend nicht gefunden. Am Ende habe ich [einen Versandladen in Österreich](https://www.silberladen.at/) gefunden. Da waren die Versandkosten natürlich entsprechend hoch. Vermutlich hätte ich das auch günstiger bekommen können, wenn ich mich nicht geweigert hätte, das bei Amazon zu kaufen.
 
 ### Schritt 1: Ein Motiv
 
-Im Mausoriginal hat Armin eine Blume gemalt und die dann kopiert. Das Schöne an dem Verfahren mit dem Photopolymer ist aber, dass es ziemlich einfach ist, Computergrafiken als Stempel zu nehmen. Zum Beispiel das fliegende Spaghettimonster. Oder Napstablook, [von dem ich ja letzts Jahr eine SVG-Datei gemacht habe](/blogposts/napstablook_svg). Im Napstablook-SVG habe ich dann noch die äußeren Linien etwas dicker gemacht. Hätte aber wahrscheinlich auch so funktioniert:
+Im Mausoriginal hat Armin eine Blume gemalt und die dann kopiert. Das Schöne an dem Verfahren mit dem Photopolymer ist aber, dass es ziemlich einfach ist, Computergrafiken als Stempel zu nehmen. Zum Beispiel das fliegende Spaghettimonster. Oder Napstablook, [von dem ich ja letztes Jahr eine SVG-Datei gemacht habe](/blogposts/napstablook_svg). Im Napstablook-SVG habe ich dann noch die äußeren Linien etwas dicker gemacht. Hätte aber wahrscheinlich auch so funktioniert:
 
 ![Ein traurig aussehender Geist](/file/napstablook_stempel.svg "Napstablook is wishing they weren't here.")
 
@@ -61,9 +61,9 @@ Dann Bügeln. Dabei feste drücken. Am Ende ein bisschen warten, bis sich Papier
 
 ### Schritt 3: Die Belichtung
 
-Das [Photopolymer](https://de.wikipedia.org/wiki/Photopolymer) funktioniert so: Dort, wo UV-Licht hinfällt, härtet es aus. Dann kann man den Rest wegwaschen. Um eine brauchbare Belichtung hinzukriegen, gibt es verschiedene Methoden. Ich habe im Internet einige gefunden. Wenn man eine passende UV-Lampe hat (fragt mich nicht, was genau für eine), kann man die nehmen. Andere Quellen meinen, man müsse das Werkstück für eine halbe Minute oder so direkt in die SOnne legen. Ich halte mich aber an das, was in dem Brief von der Maus steht, das hat bei mir gut funktioniert. Dafür brauchen wir erst einmal eine Belichtungsröhre.
+Das [Photopolymer](https://de.wikipedia.org/wiki/Photopolymer) funktioniert so: Dort, wo UV-Licht hinfällt, härtet es aus. Dann kann man den Rest wegwaschen. Um eine brauchbare Belichtung hinzukriegen, gibt es verschiedene Methoden. Ich habe im Internet einige gefunden. Wenn man eine passende UV-Lampe hat (fragt mich nicht, was genau für eine), kann man die nehmen. Andere Quellen meinen, man müsse das Werkstück für eine halbe Minute oder so direkt in die Sonne legen. Ich halte mich aber an das, was in dem Brief von der Maus steht, das hat bei mir gut funktioniert. Dafür brauchen wir erst einmal eine Belichtungsröhre.
 
-Die Belichtungsröhre besteht aus einem Plexiglasstück (in meinem Fall der Deckel einer alten CD-Hülle) und einer Kartonröhre. Im Mausvideo haben die die Röhre selber gebastelt. Im Haus meiner Mutter, wo ich zu besuch war, weil ich keinen Drucker, Bügeleisen oder Fön habe, hat sich noch eine fertige Pappröhre gefunden. Das ist meine Belichtungsröhre:
+Die Belichtungsröhre besteht aus einem Plexiglasstück (in meinem Fall der Deckel einer alten CD-Hülle) und einer Kartonröhre. Im Mausvideo haben die die Röhre selber gebastelt. Im Haus meiner Mutter, wo ich zu Besuch war, weil ich keinen Drucker, Bügeleisen oder Fön habe, hat sich noch eine fertige Pappröhre gefunden. Das ist meine Belichtungsröhre:
 
 ![Auf einem CD-Hüllendeckel ist mit Tesafilm eine Pappröhre aufgeklebt](/file/stempel_belichtungsroehre.webp "Ja, das war eine Verpackung für Unterhosen.")
 
