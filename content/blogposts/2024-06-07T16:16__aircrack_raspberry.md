@@ -14,7 +14,7 @@ Note: I usually write stuff in German here, but people who are interested in thi
 
 ### The Problem
 
-For my current research project I need to do some WiFi sniffing. So I just set up a Raspberry Pi and run `airodump-ng` (part of the [aircrach-ng](https://www.aircrack-ng.org/) project) on it, right?
+For my current research project I need to do some WiFi sniffing. So I just set up a Raspberry Pi and run `airodump-ng` (part of the [aircrack-ng](https://www.aircrack-ng.org/) project) on it, right?
 
 Wrong. The basic idea is simple: put the WiFi card into monitor mode, then run `airodump-ng`. For the first part, aircrack-ng provides a tool that does this for me. It even kills other processes that use the card (important: You won't be able to use your WiFi on that device until you undo this, so make sure you have a separate network connection if you need one):
 
