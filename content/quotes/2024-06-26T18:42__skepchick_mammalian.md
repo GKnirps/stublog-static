@@ -3,7 +3,7 @@ id: skepchick_mammalian
 source-name: Skepchick: Why are Scientists Ignoring all the Gay Animals??
 source-url: https://skepchick.org/2024/06/why-are-scientists-ignoring-all-the-gay-animals/
 date: 2024-06-26T18:42:06+02:00
-published: false
+published: true
 language: en
 ---
 
