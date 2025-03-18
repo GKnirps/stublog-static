@@ -31,7 +31,7 @@ Go hat schon standardmäßig einiges an Tools. Da ist zum Beispiel `gofmt`, um Q
 
 Go hat keinen eigenen Paketmanager. Abhängigkeiten werden üblicherweise über Git-Repos geladen. Lange hatte Go auch keine Möglichkeit, explizit Abhänigkeiten anzugeben, man musste alle zum Projekt gehörigen Sachen in einem Pfad haben, den man durch die Umgebungsvariable `$GOPATH` definiert hatte. Das war umständlich und fehleranfällig. Seit einigen Jahren gibt es *Modules*, die den Umgang mit Projekten, Abhängigkeiten und deren Versionen vereinfachen.
 
-Tools für automatische Tests sind
+Tools für automatische Tests (insbesondere unit tests) sind auch von Haus aus mitgeliefert und bieten ein paar Komfortfunktionen, es gibt also keine Ausrede, keine Tests zu schreiben.
 
 ### Error-Handling
 
