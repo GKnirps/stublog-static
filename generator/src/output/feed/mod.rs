@@ -16,9 +16,9 @@
  */
 
 use super::file::open_for_write;
+use crate::HostedFile;
 use crate::input::Blogpost;
 use crate::output::needs_any_update;
-use crate::HostedFile;
 use camino::Utf8Path;
 use quick_xml::Writer;
 use std::collections::HashMap;

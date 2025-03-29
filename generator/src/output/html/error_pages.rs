@@ -17,7 +17,7 @@
 
 use crate::input::Assets;
 use crate::output::html::HeadData;
-use maud::{html, Markup};
+use maud::{Markup, html};
 
 pub fn render_404(assets: &Assets) -> Markup {
     let content = html! {

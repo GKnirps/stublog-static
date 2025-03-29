@@ -15,11 +15,11 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::input::Blogpost;
-use crate::output::{image_metadata_by_path, RenderError};
 use crate::HostedFile;
-use pulldown_cmark::{html::push_html, Event, Parser};
+use crate::input::Blogpost;
+use crate::output::{RenderError, image_metadata_by_path};
 use pulldown_cmark::{CowStr, Tag, TagEnd};
+use pulldown_cmark::{Event, Parser, html::push_html};
 use pulldown_cmark_escape::{escape_href, escape_html};
 use std::collections::HashMap;
 
@@ -28,9 +28,7 @@ struct CustomImageTagIterator<'ev, 'meta, T: Iterator<Item = Event<'ev>>> {
     hosted_files: &'meta HashMap<&'meta str, &'meta HostedFile>,
 }
 
-impl<'ev, T: Iterator<Item = Event<'ev>>> Iterator
-    for CustomImageTagIterator<'ev, '_, T>
-{
+impl<'ev, T: Iterator<Item = Event<'ev>>> Iterator for CustomImageTagIterator<'ev, '_, T> {
     type Item = Result<Event<'ev>, RenderError>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -81,11 +79,13 @@ impl<'ev, T: Iterator<Item = Event<'ev>>> Iterator
                         }
                         None => {
                             return Some(Err(RenderError::from(
-                                    "expected image tag end event, but found end of stream (this may be a bug on my side)",
-                                )));
+                                "expected image tag end event, but found end of stream (this may be a bug on my side)",
+                            )));
                         }
                         Some(e) => {
-                            return Some(Err(RenderError::new(format!("expected text event for image alt attribute, got '{e:?}' (this is due to a workaround in this blog, some other elements may also be possible but unlikely)"))));
+                            return Some(Err(RenderError::new(format!(
+                                "expected text event for image alt attribute, got '{e:?}' (this is due to a workaround in this blog, some other elements may also be possible but unlikely)"
+                            ))));
                         }
                     }
                     next = self.source.next();
@@ -285,8 +285,11 @@ mod tests {
         let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
 
         // then
-        assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolca%22t.png\" title=\"icanhasfish? kthxbye&amp;\
-        \" alt=\"a cat is &gt;stealing&lt; a fish\"></p>\n");
+        assert_eq!(
+            html,
+            "<p><img width=\"42\" height=\"9001\" src=\"/file/lolca%22t.png\" title=\"icanhasfish? kthxbye&amp;\
+        \" alt=\"a cat is &gt;stealing&lt; a fish\"></p>\n"
+        );
     }
 
     #[test]
@@ -305,7 +308,10 @@ mod tests {
         let html = render_cmark(markdown, true, &hosted_files).expect("expected no error");
 
         // then
-        assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? kthxbye\" alt=\"a cat is stealing a fish\"></p>\n");
+        assert_eq!(
+            html,
+            "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? kthxbye\" alt=\"a cat is stealing a fish\"></p>\n"
+        );
     }
 
     #[test]
@@ -325,7 +331,10 @@ mod tests {
         let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
 
         // then
-        assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? &quot;kthxbye\" alt=\"a cat is &quot;borrowing&quot; a fish\"></p>\n");
+        assert_eq!(
+            html,
+            "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? &quot;kthxbye\" alt=\"a cat is &quot;borrowing&quot; a fish\"></p>\n"
+        );
     }
 
     #[test]
@@ -345,7 +354,10 @@ mod tests {
         let html = render_cmark(markdown, true, &hosted_files).expect("expected no error");
 
         // then
-        assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? &quot;kthxbye\" alt=\"a cat is &quot;borrowing&quot; a fish\"></p>\n");
+        assert_eq!(
+            html,
+            "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" title=\"icanhasfish? &quot;kthxbye\" alt=\"a cat is &quot;borrowing&quot; a fish\"></p>\n"
+        );
     }
 
     #[test]
@@ -364,7 +376,10 @@ mod tests {
         let html = render_cmark(markdown, false, &hosted_files).expect("expected no error");
 
         // then
-        assert_eq!(html, "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" alt=\"a cat is stealing a fish\"></p>\n");
+        assert_eq!(
+            html,
+            "<p><img width=\"42\" height=\"9001\" src=\"/file/lolcat.png\" alt=\"a cat is stealing a fish\"></p>\n"
+        );
     }
 
     #[test]
@@ -442,7 +457,10 @@ mod tests {
         let html = render_cmark(markdown, false, &hosted_files).expect("expected success");
 
         // then
-        assert_eq!(&html, "<p><img src=\"/file/lolcat.svg\" title=\"icanhasfish? kthxbye\" alt=\"a cat is stealing a fish\"></p>\n");
+        assert_eq!(
+            &html,
+            "<p><img src=\"/file/lolcat.svg\" title=\"icanhasfish? kthxbye\" alt=\"a cat is stealing a fish\"></p>\n"
+        );
     }
 
     #[test]

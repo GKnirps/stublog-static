@@ -18,7 +18,7 @@
 use super::super::{Asset, Assets};
 use crate::input::parser::ParseError;
 use camino::{Utf8Path, Utf8PathBuf};
-use sha2::{digest, Digest, Sha256};
+use sha2::{Digest, Sha256, digest};
 use std::fs::File;
 use std::io::{BufReader, Read};
 
@@ -115,6 +115,9 @@ mod tests {
         let result = format_web_path(file_path, &hash).expect("Expected a path");
 
         // then
-        assert_eq!(&result, "/assets/foo.css?cache=8b15b53224ad352e142008a0821464f2988bc1462d0350f11ce0ca414069bb81")
+        assert_eq!(
+            &result,
+            "/assets/foo.css?cache=8b15b53224ad352e142008a0821464f2988bc1462d0350f11ce0ca414069bb81"
+        )
     }
 }

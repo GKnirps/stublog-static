@@ -15,7 +15,7 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use maud::{html, Markup, Render};
+use maud::{Markup, Render, html};
 
 type PathGenerator = dyn Fn(usize) -> String;
 

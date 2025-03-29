@@ -18,8 +18,8 @@
 use super::file::open_for_write;
 use super::html::hosted_file;
 use super::needs_any_update;
-use crate::input::{Assets, HostedFileMetadata};
 use crate::HostedFile;
+use crate::input::{Assets, HostedFileMetadata};
 use camino::{Utf8Path, Utf8PathBuf};
 use std::fs::create_dir;
 use std::io::Write;

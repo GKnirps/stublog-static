@@ -16,9 +16,9 @@
  */
 
 use crate::input::{Assets, ImageMetadata};
-use crate::paths::{archive_path, ATOM_FEED_PATH, CATEGORIES_PATH, TAGLIST_PATH};
+use crate::paths::{ATOM_FEED_PATH, CATEGORIES_PATH, TAGLIST_PATH, archive_path};
 use chrono::{DateTime, FixedOffset};
-use maud::{html, Markup, Render, DOCTYPE};
+use maud::{DOCTYPE, Markup, Render, html};
 
 pub mod archive;
 pub mod blogpost;
@@ -233,8 +233,11 @@ mod tests {
 
         // static fields
         assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
-        assert!(result
-            .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
+        assert!(
+            result.contains(
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+            )
+        );
         assert!(result.contains(
             "<link rel=\"stylesheet\" media=\"screen\" href=\"/assets/style.css?cache=deadbeef\">"
         ));
@@ -267,8 +270,11 @@ mod tests {
 
         // static fields
         assert!(result.starts_with("<head><meta charset=\"utf-8\">"));
-        assert!(result
-            .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
+        assert!(
+            result.contains(
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+            )
+        );
         assert!(result.contains(
             "<link rel=\"stylesheet\" media=\"screen\" href=\"/assets/style.css?cache=deadbeef\">"
         ));
@@ -278,7 +284,9 @@ mod tests {
         assert!(result.contains("<link rel=\"alternate\" type=\"application/feed+atom\" title=\"ATOM\" href=\"/feed.atom\">"));
 
         // just a short check if any opengraph tags are rendered
-        assert!(result.contains("<meta property=\"og:site_name\" content=\"Stranger Than Usual\">"));
+        assert!(
+            result.contains("<meta property=\"og:site_name\" content=\"Stranger Than Usual\">")
+        );
     }
 
     #[test]
@@ -373,8 +381,11 @@ mod tests {
         // then
         println!("Checking headers of {result}");
         assert!(result.contains("<meta charset=\"utf-8\">"));
-        assert!(result
-            .contains("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
+        assert!(
+            result.contains(
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+            )
+        );
         assert!(result.contains("<link rel=\"canonical\" href=\"https://example.com/foo\">"));
         assert!(result.contains("<title>There will be cake</title>"));
         assert!(

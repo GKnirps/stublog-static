@@ -17,7 +17,7 @@
 
 use super::file::open_for_write;
 use super::html;
-use crate::input::{tag::Tag, Assets, Blogpost};
+use crate::input::{Assets, Blogpost, tag::Tag};
 use crate::output::needs_any_update;
 use camino::Utf8Path;
 use std::collections::HashMap;

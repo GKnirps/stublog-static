@@ -27,7 +27,7 @@ use super::file::open_for_write;
 use super::html;
 use crate::input::{Assets, Quote};
 use crate::input::{Blogpost, Category};
-use crate::output::{needs_any_update, OutputError, RenderError};
+use crate::output::{OutputError, RenderError, needs_any_update};
 
 // find categories for all blogposts with a category id. If the ID is present but matches no
 // known category, return an error

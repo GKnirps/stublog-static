@@ -17,12 +17,12 @@
 
 use super::pager::pager;
 use crate::input::{Assets, Quote};
+use crate::output::RenderError;
 use crate::output::cmark::render_cmark;
 use crate::output::html::HeadData;
-use crate::output::RenderError;
-use crate::paths::{quote_list_path, QUOTE_FORTUNE_PATH};
-use crate::{urls, HostedFile};
-use maud::{html, Markup, PreEscaped};
+use crate::paths::{QUOTE_FORTUNE_PATH, quote_list_path};
+use crate::{HostedFile, urls};
+use maud::{Markup, PreEscaped, html};
 use std::collections::HashMap;
 
 fn render_quote_source(quote: &Quote) -> Markup {

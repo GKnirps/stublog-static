@@ -16,12 +16,12 @@
  */
 
 use super::pager::pager;
+use crate::HostedFile;
 use crate::input::{Assets, HostedFileMetadata};
 use crate::output::html::HeadData;
 use crate::paths::{files_metadata_index_path, hosted_file_path};
 use crate::urls::files_metadata_index_url;
-use crate::HostedFile;
-use maud::{html, Markup};
+use maud::{Markup, html};
 
 fn render_file_size(size: u64) -> Markup {
     if size >= 1024 * 1024 {

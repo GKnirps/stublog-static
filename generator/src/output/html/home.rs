@@ -16,14 +16,14 @@
  */
 
 use crate::HostedFile;
-use maud::{html, Markup};
+use maud::{Markup, html};
 use std::collections::HashMap;
 
 use super::blogpost::render_blogpost;
 use super::quote::render_quote;
 use crate::input::{Assets, Blogpost, Category, Quote};
-use crate::output::html::HeadData;
 use crate::output::RenderError;
+use crate::output::html::HeadData;
 use crate::urls::CANONICAL_BASE_URL;
 
 pub fn render_home(

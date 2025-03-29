@@ -16,7 +16,7 @@
  */
 
 use super::super::{Blogpost, OgImage};
-use super::{get_secure_filename, parse_language, split_file_content, ParseError};
+use super::{ParseError, get_secure_filename, parse_language, split_file_content};
 use crate::input::file::FileData;
 use crate::input::tag::Tag;
 use chrono::DateTime;
@@ -429,7 +429,9 @@ mod tests {
         // then
         assert_eq!(
             result,
-            Err(ParseError::from("Invalid update date date '2020-05-11+02:00': input contains invalid characters (blogpost mad/eye)"))
+            Err(ParseError::from(
+                "Invalid update date date '2020-05-11+02:00': input contains invalid characters (blogpost mad/eye)"
+            ))
         );
     }
 

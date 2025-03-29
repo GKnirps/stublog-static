@@ -15,11 +15,11 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::input::{tag::Tag, Assets, Blogpost};
+use crate::input::{Assets, Blogpost, tag::Tag};
 use crate::output::html::HeadData;
 use crate::paths::{blogpost_path, tag_path};
 use crate::urls;
-use maud::{html, Markup};
+use maud::{Markup, html};
 
 pub fn render_tag_list(tags: &[(&Tag, usize)], assets: &Assets) -> Markup {
     let content = html! {

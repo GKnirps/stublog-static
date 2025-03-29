@@ -15,9 +15,9 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use super::{split_file_content, ParseError};
-use crate::input::file::FileData;
+use super::{ParseError, split_file_content};
 use crate::input::HostedFileMetadata;
+use crate::input::file::FileData;
 
 pub fn parse_all_file_metadata(inputs: &[FileData]) -> Result<Vec<HostedFileMetadata>, ParseError> {
     inputs.iter().map(parse_file_metadata).collect()

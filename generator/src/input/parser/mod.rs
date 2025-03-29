@@ -15,8 +15,8 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use super::file::FileData;
 use super::Language;
+use super::file::FileData;
 use camino::{Utf8Path, Utf8PathBuf};
 use std::collections::HashMap;
 use std::error::Error;

@@ -24,9 +24,9 @@ use std::iter::once;
 
 use super::file::open_for_write;
 use super::html;
-use crate::input::{Assets, Blogpost, Category};
-use crate::output::{needs_any_update, OutputError};
 use crate::HostedFile;
+use crate::input::{Assets, Blogpost, Category};
+use crate::output::{OutputError, needs_any_update};
 use std::time::SystemTime;
 
 pub fn categories_with_blogposts<'a>(

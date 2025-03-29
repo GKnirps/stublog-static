@@ -15,9 +15,9 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use super::{get_secure_filename, parse_language, split_file_content, ParseError};
-use crate::input::file::FileData;
+use super::{ParseError, get_secure_filename, parse_language, split_file_content};
 use crate::input::Quote;
+use crate::input::file::FileData;
 
 pub fn parse_quotes(inputs: &[FileData]) -> Result<Vec<Quote>, ParseError> {
     inputs

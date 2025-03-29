@@ -25,7 +25,7 @@ mod urls;
 mod test_utils;
 
 use crate::input::parser::asset::read_assets;
-use crate::input::{tag::Tag, Blogpost, Category, HostedFile, HostedFileMetadata, Quote};
+use crate::input::{Blogpost, Category, HostedFile, HostedFileMetadata, Quote, tag::Tag};
 use crate::output::error_pages::write_404;
 use camino::{Utf8Path, Utf8PathBuf};
 use chrono::{DateTime, FixedOffset};

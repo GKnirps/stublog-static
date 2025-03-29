@@ -16,13 +16,13 @@
  */
 
 use super::super::cmark::render_blogpost_content;
+use crate::HostedFile;
 use crate::input::{Assets, Blogpost, Category};
 use crate::output::html::{HeadData, OgImageData};
-use crate::output::{image_metadata_by_path, RenderError};
+use crate::output::{RenderError, image_metadata_by_path};
 use crate::paths::{blogpost_path, category_path, tag_path};
 use crate::urls::{blogpost_url, url_for_absolute_path};
-use crate::HostedFile;
-use maud::{html, Markup, PreEscaped};
+use maud::{Markup, PreEscaped, html};
 use std::collections::HashMap;
 
 pub fn render_blogpost(

@@ -18,10 +18,10 @@
 use super::file::open_for_write;
 use super::html::quote::render_quote_page;
 use super::needs_any_update;
-use crate::input::{Assets, Quote};
-use crate::output::html::quote::render_quote_list_page;
-use crate::output::OutputError;
 use crate::HostedFile;
+use crate::input::{Assets, Quote};
+use crate::output::OutputError;
+use crate::output::html::quote::render_quote_list_page;
 use camino::{Utf8Path, Utf8PathBuf};
 use std::collections::HashMap;
 use std::fs::create_dir;

@@ -15,8 +15,8 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use crate::input::{tag::Tag, Blogpost, Category, HostedFileMetadata, Quote};
-use percent_encoding::{percent_encode, AsciiSet, CONTROLS};
+use crate::input::{Blogpost, Category, HostedFileMetadata, Quote, tag::Tag};
+use percent_encoding::{AsciiSet, CONTROLS, percent_encode};
 
 pub const ESCAPE_SET: &AsciiSet = &CONTROLS
     .add(b' ')

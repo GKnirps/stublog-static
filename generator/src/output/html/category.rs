@@ -15,13 +15,13 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use crate::HostedFile;
 use crate::input::{Assets, Blogpost, Category};
-use crate::output::html::HeadData;
 use crate::output::RenderError;
+use crate::output::html::HeadData;
 use crate::paths::{blogpost_path, category_path};
 use crate::urls::{categories_url, category_url};
-use crate::HostedFile;
-use maud::{html, Markup, PreEscaped};
+use maud::{Markup, PreEscaped, html};
 use std::collections::HashMap;
 
 pub fn render_categories_index_page(

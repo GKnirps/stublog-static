@@ -15,11 +15,11 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use crate::HostedFile;
 use crate::input::file::FileData;
 use crate::input::{
-    tag::Tag, Asset, Assets, Blogpost, Category, HostedFileMetadata, OgImage, Quote,
+    Asset, Assets, Blogpost, Category, HostedFileMetadata, OgImage, Quote, tag::Tag,
 };
-use crate::HostedFile;
 use camino::{Utf8Path, Utf8PathBuf};
 use chrono::{FixedOffset, TimeZone};
 use std::time::SystemTime;

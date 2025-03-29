@@ -15,9 +15,9 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use super::{get_secure_filename, split_file_content, ParseError};
-use crate::input::file::FileData;
+use super::{ParseError, get_secure_filename, split_file_content};
 use crate::input::Category;
+use crate::input::file::FileData;
 
 pub fn parse_categories(inputs: &[FileData]) -> Result<Vec<Category>, ParseError> {
     inputs.iter().map(parse_category).collect()

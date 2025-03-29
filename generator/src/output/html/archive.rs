@@ -15,16 +15,16 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use maud::{html, Markup};
+use maud::{Markup, html};
 
 use super::blogpost::render_blogpost;
 use super::pager::pager;
+use crate::HostedFile;
 use crate::input::{Assets, Blogpost, Category};
-use crate::output::html::HeadData;
 use crate::output::RenderError;
+use crate::output::html::HeadData;
 use crate::paths::archive_path;
 use crate::urls::archive_url;
-use crate::HostedFile;
 use std::collections::HashMap;
 
 pub fn render_archive(

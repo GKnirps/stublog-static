@@ -16,14 +16,14 @@
  */
 
 use super::super::cmark::render_blogpost_content;
+use crate::HostedFile;
 use crate::input::Blogpost;
 use crate::output::OutputError;
-use crate::urls::{atom_feed_url, blogpost_url, CANONICAL_BASE_URL};
-use crate::HostedFile;
+use crate::urls::{CANONICAL_BASE_URL, atom_feed_url, blogpost_url};
 use chrono::{FixedOffset, TimeZone};
-use percent_encoding::{percent_encode, CONTROLS};
-use quick_xml::events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event};
+use percent_encoding::{CONTROLS, percent_encode};
 use quick_xml::Writer;
+use quick_xml::events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event};
 use std::collections::HashMap;
 use std::io::Write;
 
@@ -188,7 +188,10 @@ mod tests {
         let result = writer.into_inner().into_inner();
         let result_str: String = String::from_utf8(result).expect("valid utf-8");
 
-        assert_eq!(result_str, "<link href=\"https://blog.strangerthanusual.de/\" rel=\"relrelrel\" type=\"text/plain\"/>");
+        assert_eq!(
+            result_str,
+            "<link href=\"https://blog.strangerthanusual.de/\" rel=\"relrelrel\" type=\"text/plain\"/>"
+        );
     }
 
     #[test]
@@ -205,7 +208,9 @@ mod tests {
         let result = writer.into_inner().into_inner();
         let result_str: String = String::from_utf8(result).expect("valid utf-8");
 
-        assert_eq!(result_str, "<entry>\
+        assert_eq!(
+            result_str,
+            "<entry>\
         <id>tag:strangerthanusual.de,2005:Blogpost/foobar</id>\
         <title>Nevermind</title>\
         <published>2020-05-11T12:13:14+02:00</published>\
@@ -214,7 +219,8 @@ mod tests {
         <summary>foo!</summary>\
         <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
-        </entry>");
+        </entry>"
+        );
     }
 
     #[test]
@@ -233,8 +239,10 @@ mod tests {
         let result_str: String = String::from_utf8(result).expect("valid utf-8");
 
         println!("{}", result_str);
-        assert!(result_str
-            .starts_with("<entry><id>tag:strangerthanusual.de,2005:Blogpost/f%C3%B6obar</id>"));
+        assert!(
+            result_str
+                .starts_with("<entry><id>tag:strangerthanusual.de,2005:Blogpost/f%C3%B6obar</id>")
+        );
     }
 
     #[test]
@@ -305,7 +313,9 @@ mod tests {
         let result = writer.into_inner().into_inner();
         let result_str: String = String::from_utf8(result).expect("valid utf-8");
 
-        assert_eq!(result_str, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
+        assert_eq!(
+            result_str,
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
         <feed xml:lang=\"de\" xmlns=\"http://www.w3.org/2005/Atom\">\
         <id>tag:strangerthanusual.de,2005:/feed</id>\
         <title>Stranger Than Usual</title>\
@@ -331,7 +341,8 @@ mod tests {
         <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
         </entry>\
-        </feed>");
+        </feed>"
+        );
     }
 
     #[test]
@@ -350,13 +361,16 @@ mod tests {
         let result = writer.into_inner().into_inner();
         let result_str: String = String::from_utf8(result).expect("valid utf-8");
 
-        assert_eq!(result_str, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
+        assert_eq!(
+            result_str,
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
         <feed xml:lang=\"de\" xmlns=\"http://www.w3.org/2005/Atom\">\
         <id>tag:strangerthanusual.de,2005:/feed</id>\
         <title>Stranger Than Usual</title>\
         <updated>1970-01-01T00:00:00+02:00</updated>\
         <link href=\"https://blog.strangerthanusual.de\" rel=\"alternate\" type=\"text/html\"/>\
         <link href=\"https://blog.strangerthanusual.de/feed.atom\" rel=\"self\" type=\"application/atom+xml\"/>\
-        </feed>");
+        </feed>"
+        );
     }
 }
