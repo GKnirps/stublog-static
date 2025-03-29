@@ -28,8 +28,8 @@ struct CustomImageTagIterator<'ev, 'meta, T: Iterator<Item = Event<'ev>>> {
     hosted_files: &'meta HashMap<&'meta str, &'meta HostedFile>,
 }
 
-impl<'ev, 'meta, T: Iterator<Item = Event<'ev>>> Iterator
-    for CustomImageTagIterator<'ev, 'meta, T>
+impl<'ev, T: Iterator<Item = Event<'ev>>> Iterator
+    for CustomImageTagIterator<'ev, '_, T>
 {
     type Item = Result<Event<'ev>, RenderError>;
 
