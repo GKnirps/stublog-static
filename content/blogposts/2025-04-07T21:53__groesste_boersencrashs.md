@@ -1,5 +1,5 @@
 ---
-title: Ursachen der größten Börsencrashes der letzten 100 Jahre
+title: Stupid Wednesday
 filename: groesste_boersencrashs
 date: 2025-04-07T21:53:13+02:00
 update-date:
