@@ -3,7 +3,7 @@ id: hickey_complexity
 source-name: Rich Hickey
 source-url: https://www.red-gate.com/simple-talk/opinion/geek-of-the-week/rich-hickey-geek-of-the-week/
 date: 2024-08-19T22:48:28+02:00
-published: false
+published: true
 language: en
 ---
 
