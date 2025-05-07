@@ -47,7 +47,7 @@ dist/quotes/strangerthanusual.dat: dist/quotes/strangerthanusual
 dist/quotes/strangerthanusual: generate-html
 
 dist/quotes/strangerthanusual.tar.bz2: dist/quotes/strangerthanusual.dat dist/quotes/strangerthanusual
-	tar -cjf dist/quotes/strangerthanusual.tar.bz2 dist/quotes/strangerthanusual dist/quotes/strangerthanusual.dat
+	tar -C dist/quotes -cjf dist/quotes/strangerthanusual.tar.bz2 strangerthanusual strangerthanusual.dat
 
 ### end fortune cookies
 
