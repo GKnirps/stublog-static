@@ -159,7 +159,7 @@ Doppelseitiges Klebeband auf die Stempelplatte kleben (auf der ebenen Seite offe
 
 ### Fazit
 
-28 Jahre, und endlich ist es was geworden. Und es hat erstaunlich gut funktioniert. Ich habe auch noch ein paar andere Stempel gemacht, z.B. einen für die Spielleiterin einer meiner Rollenspielrunden, mit dem Wappen des (mittlereile sein tausenden von Jahren untergegangenen) Elfenreiches.
+28 Jahre, und endlich ist es was geworden. Und es hat erstaunlich gut funktioniert. Ich habe auch noch ein paar andere Stempel gemacht, z.B. einen für die Spielleiterin einer meiner Rollenspielrunden, mit dem Wappen des (mittlereile seit tausenden von Jahren untergegangenen) Elfenreiches.
 
 Man kann die Belichtung natürlich auch anderes machen als mit dieser Transferfolie. Aber das ist halt die Methode, die bei der Maus verwendet wurde. Als ich nach dem Namen des Erfinders (der sowohl in dem Brief als auch in der Sachgeschichte genannt wurde) habe ich außerdem [dieses Patent](https://patents.google.com/patent/DE4230142C1/de) gefunden.
 
