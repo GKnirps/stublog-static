@@ -38,6 +38,7 @@ pub fn render_tag_list(tags: &[(&Tag, usize)], assets: &Assets) -> Markup {
     super::base(
         &HeadData::new("Stranger Than Usual — Tags", assets)
             .with_canonical_url(&urls::tags_url())
+            .with_description(Some("Liste aller Tags"))
             // make bots not keep tags out of the index
             // friggin' search sites mostly list my tag pages which are not useful in that context
             .with_noindex(),
@@ -64,6 +65,10 @@ pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost], assets: &Assets) -> Marku
     super::base(
         &HeadData::new(&title, assets)
             .with_canonical_url(&urls::tag_url(tag))
+            .with_description(Some(&format!(
+                "Alle Einträge, die mit „{}“ getagged sind.",
+                tag.name
+            )))
             // make bots not keep tags out of the index
             // friggin' search sites mostly list my tag pages which are not useful in that context
             .with_noindex(),
@@ -91,7 +96,8 @@ mod tests {
         assert!(result.contains(
             "<ul><li><a href=\"/tags/foo\">foo (2)</a></li>\
         <li><a href=\"/tags/bar\">bar (42)</a></li></ul>",
-        ))
+        ));
+        assert!(result.contains(r#"<meta name="description" content="Liste aller Tags">"#));
     }
 
     #[test]
@@ -130,6 +136,9 @@ mod tests {
         <a href=\"/blogposts/shaped\">Shaped like itself</a></li></ul>"
             ),
             "Expected a list of tags"
-        )
+        );
+        assert!(result.contains(
+            r#"<meta name="description" content="Alle Einträge, die mit „stuff“ getagged sind.">"#
+        ));
     }
 }
