@@ -2,7 +2,7 @@
 title: Sparkasse pushTAN und das Passwort
 filename: sparkasse-passwort
 date: 2023-10-23T22:26:36+02:00
-update-date:
+update-date: 2025-05-19T21:17:00+02:00
 tags: passwort, sparkasse, pushtan, user interface, user experience
 category: hoellenmaschinen
 summary: Die Sparkasse hält sich mit ihrer pushTAN-App nicht an moderne Passwortrichtlinien. Außerdem ist die Benutzbarkeit verbesserungswürdig.
@@ -14,7 +14,7 @@ Ach ja, Passwortregeln. Darüber habe ich mich ja schon vor einem Jahr [aufgereg
 
 > Es tut uns leid, Ihr Passwort muss mindestens einen Großbuchstaben, zwei Ziffern, ein Symbol, eine inspirierende Nachricht, einen Zauberspruch, ein Gang-Logo, eine Hieroglyphe und das Blut einer Jungfrau enthalten.
 
-Das Problem ist so verbreitet, dass es schon [Spiele dazu gibt](https://passwordgame.io/). Dabei ist der heutige Stand der Wissenschaft: Wenn man überhaupt ein Passwort benutzen muss (anstatt einer anderen Möglichkeit zur Authentifizierung), dann muss es nur zwei Regeln einhalten:
+Das Problem ist so verbreitet, dass es schon [Spiele dazu gibt](https://passwordpurgatory.com/). Dabei ist der heutige Stand der Wissenschaft: Wenn man überhaupt ein Passwort benutzen muss (anstatt einer anderen Möglichkeit zur Authentifizierung), dann muss es nur zwei Regeln einhalten:
 
 1. Es muss eine Mindestlänge haben (häufig wird 10 genannt)
 2. Es darf nicht in einem Wörterbuch stehen (Bonus: Es darf nicht in einer Datenbank von geleakten Passwörtern vorkommen)
@@ -38,3 +38,7 @@ Das ist schon komplett konterintuitive Bedienung. Wenn die Liste wenigstens schw
 Und nicht nur das, es gab sonst _überhaupt keinen Hinweis_, warum der „App-Passwort festlegen“-Button ausgegraut war. Nichts. Man hat keinen Hinweis, dass die Eingabe auch nur in irgendeiner Form ungültig ist. Nur der Absenden-Button ist halt ausgegraut.
 
 Das ist so typisch Sirius Cybernetics Corporation: Die offensichlichen Designschwächen täuschen nur zu gut über die absolut grundlegenden Designprobleme hinweg.
+
+### Update Mai 2025
+
+Kaputten Link zum Passwortspiel durch einen Link auf ein vergleichbares Spiel ersetzt (der kaputte link wurde zu einer völlig anderen Seite weitergeleitet).
