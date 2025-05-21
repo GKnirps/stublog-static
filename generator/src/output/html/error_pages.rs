@@ -19,18 +19,21 @@ use crate::input::Assets;
 use crate::output::html::HeadData;
 use maud::{Markup, html};
 
+static MISSING_PAGE_TEXT: &str = "Was auch immer du gesucht hast, hier ist es nicht. Es sei denn, du hast eine Fehlerseite gesucht. Dann bist du hier genau richtig.";
+
 pub fn render_404(assets: &Assets) -> Markup {
     let content = html! {
         div.error {
             h2 { "404 — nicht gefunden" }
             p {
-                "Was auch immer du gesucht hast, hier ist es nicht. Es sei denn, du hast eine Fehlerseite gesucht. Dann bist du hier genau richtig."
+                (MISSING_PAGE_TEXT)
             }
         }
     };
 
     super::base(
-        &HeadData::new("Stranger Than Usual — Seite nicht gefunden", assets),
+        &HeadData::new("Stranger Than Usual — Seite nicht gefunden", assets)
+            .with_description(Some(MISSING_PAGE_TEXT)),
         content,
     )
 }
