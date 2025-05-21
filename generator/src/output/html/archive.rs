@@ -46,8 +46,11 @@ pub fn render_archive(
     };
 
     Ok(super::base(
-        &HeadData::new("Stranger Than Usual — Archiv", assets)
-            .with_canonical_url(&archive_url(current_page)),
+        &HeadData::new(
+            &format!("Stranger Than Usual — Archiv, Seite {}", current_page + 1),
+            assets,
+        )
+        .with_canonical_url(&archive_url(current_page)),
         html_content,
     ))
 }
@@ -86,6 +89,10 @@ mod tests {
 
         // then
         println!("Checking html: {result}");
+        assert!(
+            result.contains("<title>Stranger Than Usual — Archiv, Seite 4</title>"),
+            "Expected title with page number"
+        );
         assert!(
             result.contains("<div class=\"entry\"><p>hello</p>\n</div>"),
             "Expected first article on page."
