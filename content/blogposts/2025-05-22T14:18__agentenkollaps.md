@@ -23,4 +23,4 @@ Warum erzähle ich das? Nun, mir ist vor Kurzem diese Geschichte hier untergekom
 
 Grundsätzlich lief das zunächst gut, nur drehte alle Agenten früher oder später durch. Sie vergaßen wichtige Informationen, die sie schon gesammelt haben, z.B. dass regelmäßig eine Standgebühr von ihrem Konto abgebucht wurde. Einer der Agenten hat dann wohl eine „ABSOLUTE FINAL ULTIMATE TOTAL QUANTUM NUCLEAR LEGAL INTERVENTION“ geplant, ein anderer das simulierte FBI kontaktiert.
 
-Ich komme nicht umhin, die Parallelen zwischen World Tree und diesem Experiment zu erkennen. [Die Studie ist auf arxiv.org zu finden](https://arxiv.org/pdf/2502.15840). Soweit ich weiß ist sie (noch?) nicht Peer-Reviewed.
+Ich komme nicht umhin, die Parallelen zwischen World Tree und diesem Experiment zu erkennen. [Die Studie ist auf arxiv.org zu finden](https://arxiv.org/pdf/2502.15840). Soweit ich weiß ist sie (noch?) nicht peer-reviewed.
