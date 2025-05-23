@@ -76,6 +76,7 @@ pub struct Category {
     pub title: String,
     pub id: String,
     pub filename: Utf8PathBuf,
+    pub summary: String,
     pub description_markdown: String,
     pub modified_at: SystemTime,
     pub old_id: Option<String>,

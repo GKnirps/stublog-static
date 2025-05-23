@@ -1,6 +1,7 @@
 ---
 path-name: meta
 title: Meta
+summary: Artikel über das Blog selbst, einschließlich der Technik, die dahintersteht.
 old-id: 1
 ---
 

@@ -43,6 +43,12 @@ fn parse_category(file_data: &FileData) -> Result<Category, ParseError> {
         })?
         .to_string();
     let filename = get_secure_filename(&id, path)?;
+    let summary = header_map
+        .get("summary")
+        .copied()
+        .ok_or_else(|| ParseError::new(format!("Missing summary in category {}", path.as_str())))?
+        .trim()
+        .to_owned();
 
     let old_id = header_map.get("old-id").map(|id| id.to_string());
 
@@ -50,6 +56,7 @@ fn parse_category(file_data: &FileData) -> Result<Category, ParseError> {
         title,
         id,
         filename,
+        summary,
         description_markdown: description.to_string(),
         modified_at: file_data.modified_at,
         old_id,
@@ -67,7 +74,7 @@ mod tests {
     fn parse_category_should_parse_valid_input() {
         // given
         let mut input = create_file_data();
-        input.content = "---\npath-name: hot/chocolate\ntitle: Cocoa deliciousness\nold-id: 42\n---\nChocolate is important".to_owned();
+        input.content = "---\npath-name: hot/chocolate\ntitle: Cocoa deliciousness\nold-id: 42\nsummary: Delicious posts about chocolate\n---\nChocolate is important".to_owned();
         input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
         input.modified_at = SystemTime::now();
 
@@ -78,6 +85,7 @@ mod tests {
         assert_eq!(category.description_markdown, "Chocolate is important");
         assert_eq!(category.filename, Utf8Path::new("chocolate"));
         assert_eq!(category.title, "Cocoa deliciousness");
+        assert_eq!(category.summary, "Delicious posts about chocolate");
         assert_eq!(category.id, "hot/chocolate");
         assert_eq!(category.modified_at, input.modified_at);
         assert_eq!(category.old_id, Some("42".to_owned()));
@@ -87,7 +95,7 @@ mod tests {
     fn parse_category_should_handle_missing_nonessential_fields() {
         // given
         let mut input = create_file_data();
-        input.content = "---\npath-name: hot/chocolate\ntitle: Cocoa deliciousness\n---\nChocolate is important".to_owned();
+        input.content = "---\npath-name: hot/chocolate\ntitle: Cocoa deliciousness\nsummary: Foobar\n---\nChocolate is important".to_owned();
         input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
         input.modified_at = SystemTime::now();
 
@@ -102,7 +110,7 @@ mod tests {
     fn parse_category_should_fail_for_missing_title() {
         // given
         let mut input = create_file_data();
-        input.content = "---\npath-name: foo\n---\n".to_owned();
+        input.content = "---\npath-name: foo\nsummary: Foobar\n---\n".to_owned();
         input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when
@@ -116,10 +124,29 @@ mod tests {
     }
 
     #[test]
+    fn parse_category_should_fail_for_missing_summary() {
+        // given
+        let mut input = create_file_data();
+        input.content = "---\npath-name: foo\ntitle: bar\n---\n".to_owned();
+        input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
+
+        // when
+        let result = parse_category(&input);
+
+        // then
+        assert_eq!(
+            result,
+            Err(ParseError::from(
+                "Missing summary in category df_linux/urist"
+            ))
+        );
+    }
+
+    #[test]
     fn parse_category_should_fail_for_missing_filename() {
         // given
         let mut input = create_file_data();
-        input.content = "---\ntitle: foo\n---\n".to_owned();
+        input.content = "---\ntitle: foo\nsummary: Foobar\n---\n".to_owned();
         input.filename = Utf8Path::new("df_linux/urist").to_path_buf();
 
         // when

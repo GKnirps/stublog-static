@@ -1,6 +1,7 @@
 ---
 path-name: tvtropes
 title: TVtropes
+summary: TVtropes wird euer Leben ruinieren. Ich spreche aus Erfahrung.
 old-id: 3
 ---
 

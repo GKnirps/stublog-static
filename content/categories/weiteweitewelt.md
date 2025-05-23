@@ -1,6 +1,7 @@
 ---
 path-name: weiteweitewelt
 title: WeiteWeiteWelt
+summary: Irgenwelcher Krams, den ich im Web gefunden habe.
 old-id: 8
 ---
 

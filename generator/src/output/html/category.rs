@@ -43,7 +43,8 @@ pub fn render_categories_index_page(
     };
     super::base(
         &HeadData::new("Stranger Than Usual — Kategorien", assets)
-            .with_canonical_url(&categories_url()),
+            .with_canonical_url(&categories_url())
+            .with_description(Some("Auflistung aller Kategorien dieses Blogs")),
         content,
     )
 }
@@ -74,7 +75,8 @@ pub fn render_category_page(
             &format!("Stranger Than Usual — {}", &category.title),
             assets,
         )
-        .with_canonical_url(&category_url(category)),
+        .with_canonical_url(&category_url(category))
+        .with_description(Some(&category.summary)),
         content,
     ))
 }
@@ -110,6 +112,9 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{result}");
+        assert!(result.contains(
+            r#"<meta name="description" content="Auflistung aller Kategorien dieses Blogs">"#
+        ));
         assert!(result.contains("<ul><li><a href=\"/categories/mika\">Mikhail</a> (2 Einträge)</li><li><a href=\"/categories/jessi\">Jessica</a> (1 Einträge)</li></ul>"))
     }
 
@@ -125,6 +130,7 @@ mod tests {
 
         let mut category = create_category();
         category.title = "Supervillainy".to_owned();
+        category.summary = "For those who wake up and choose violence".to_owned();
         category.description_markdown = "**Good business!**<div>foo</div>".to_owned();
 
         let assets = create_assets();
@@ -138,6 +144,9 @@ mod tests {
 
         // then
         println!("Checking rendered html:\n{result}");
+        assert!(result.contains(
+            r#"<meta name="description" content="For those who wake up and choose violence">"#
+        ));
         assert!(result.contains("<h2 class=\"section-heading\">Kategorie: Supervillainy</h2>"));
         assert!(result.contains("<strong>Good business!</strong>&lt;div&gt;foo&lt;/div&gt;"));
         assert!(result.contains("<h3>Diese Kategorie hat 2 Einträge</h3>"));

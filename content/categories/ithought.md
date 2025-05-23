@@ -1,6 +1,7 @@
 ---
 path-name: ithought
 title: iThought
+summary: Möchtegern-philosophische Blogposts.
 old-id: 5
 ---
 

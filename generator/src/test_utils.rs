@@ -57,6 +57,7 @@ pub fn create_category() -> Category {
         title: "Cocoa".to_owned(),
         filename: Utf8Path::new("chocolate").to_owned(),
         id: "fesazu".to_owned(),
+        summary: "Choco-choco-la-la".to_owned(),
         description_markdown: "## Chocolate!!!111".to_owned(),
         modified_at: SystemTime::now(),
         old_id: None,

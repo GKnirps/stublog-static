@@ -1,6 +1,7 @@
 ---
 path-name: positiv
 title: Positives
+summary: Mein gescheitertes Positivprojekt von 2021
 ---
 
 Ich schreibe so viele negative Sachen und rants in diesem Blog. Daran wird sich vermutlich auch nicht viel ändern.
