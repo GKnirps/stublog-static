@@ -11,7 +11,7 @@ image-alt:
 language:
 ---
 
-Im Pen & Paper-Rollenspiel „World-Tree“ gibt es die Möglichkeit, dass Charaktere (auch Spielercharaktere) selber Elementare erschaffen, die dann im Sinne der Magierin handeln. Dabei erschafft die Magierin einen Geist (man könnte auch „Bewusstsein“ sagen), dass sie entweder an einen bestehenden Körper bindet oder direkt auch einen Körper miterschafft.
+Im Pen & Paper-Rollenspiel „World Tree“ gibt es die Möglichkeit, dass Charaktere (auch Spielercharaktere) selber Elementare erschaffen, die dann im Sinne der Magierin handeln. Dabei erschafft die Magierin einen Geist (man könnte auch „Bewusstsein“ sagen), dass sie entweder an einen bestehenden Körper bindet oder direkt auch einen Körper miterschafft.
 
 Der entscheidende Punkt hier ist, dass dieses Elementarwesen einen eigenen Willen bekommt und dann im Sinne der Magierin agiert. Das schafft die Magierin, indem sie den erschaffenen Geist mit ihrem eigenen Geist prägt, das Elementar hat also Wissen über die Welt, die Ziele und die Prioritäten der Magierin.
 
