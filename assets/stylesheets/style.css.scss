@@ -149,13 +149,24 @@ $codebox-foreground-color: white;
     }
 
     /* Metadaten unter dem Posting */
-    article.blogpost footer span {
+    article.blogpost footer {
         font-family: Verdana, Arial, sans-serif;
         font-size: .9em;
     }
 
-    article.blogpost footer > span {
-        display: block;
+    article.blogpost footer .tags ul {
+        display: inline;
+
+        padding-left: 0px;
+
+        li {
+            display: inline;
+        }
+
+        li:not(:last-child)::after {
+            content: ", ";
+            display: inline;
+        }
     }
 
     article.blogpost img {

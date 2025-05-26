@@ -40,23 +40,29 @@ pub fn render_blogpost(
             }
             div.entry { (PreEscaped(render_blogpost_content(blogpost, hosted_files)?)) }
             footer {
-                span.post-time {
+                div.post-time {
                     (super::time(&blogpost.date))
                 }
-                    " "
-                span.category {
+                @if let Some(update_date) = &blogpost.update_date {
+                    div.update-time {
+                        "Zuletzt geändert: " (super::time(update_date))
+                    }
+                }
+                div.category {
                     "Kategorie: "
                     a href=(category_path(category)) { (category.title) }
                 }
                 @if !blogpost.tags.is_empty() {
-                    " "
-                    span.tags {
+                    div.tags {
                         "Tags: "
-                        @for (i, tag) in blogpost.tags.iter().enumerate() {
-                            a href=(tag_path(tag)) {
-                                (tag.name)
+                        ul {
+                            @for tag in &blogpost.tags {
+                                li {
+                                    a href=(tag_path(tag)) {
+                                        (tag.name)
+                                    }
+                                }
                             }
-                            @if i + 1 < blogpost.tags.len() { ", " }
                         }
                     }
                 }
@@ -132,7 +138,47 @@ mod tests {
             .contains("<h2 class=\"posttitle\"><a href=\"/blogposts/foobar\" rel=\"bookmark\">Nevermind</a></h2>"));
         assert!(result.contains("<div class=\"entry\"><p><em>foo</em>bar</p>\n</div>"));
         assert!(result.contains("11.05.2020 12:13"));
+        assert!(result.contains(r#"<div class="update-time">Zuletzt geändert: <time datetime="2020-05-25T12:13:14+02:00">25.05.2020 12:13</time></div>"#));
         assert!(result.contains("<a href=\"/categories/chocolate\">Cocoa</a>"));
+        assert!(result.contains(
+            r#"<div class="tags">Tags: <ul><li><a href="/tags/foo">foo</a></li><li><a href="/tags/bar">bar</a></li></ul>"#
+        ));
+    }
+
+    #[test]
+    fn render_blogpost_does_not_render_tags_if_tag_list_is_empty() {
+        // given
+        let mut blogpost = create_blogpost();
+        blogpost.tags = Vec::new();
+        let category = create_category();
+        let hosted_files = HashMap::new();
+
+        // when
+        let result = render_blogpost(&blogpost, &category, &hosted_files)
+            .expect("expected success")
+            .into_string();
+
+        // then
+        println!("Checking rendered html:\n{result}");
+        assert!(!result.contains(r#"class="tags""#));
+    }
+
+    #[test]
+    fn render_blogpost_does_not_render_update_time_if_not_present() {
+        // given
+        let mut blogpost = create_blogpost();
+        blogpost.update_date = None;
+        let category = create_category();
+        let hosted_files = HashMap::new();
+
+        // when
+        let result = render_blogpost(&blogpost, &category, &hosted_files)
+            .expect("expected success")
+            .into_string();
+
+        // then
+        println!("Checking rendered html:\n{result}");
+        assert!(!result.contains(r#"class="update-time""#));
     }
 
     #[test]
