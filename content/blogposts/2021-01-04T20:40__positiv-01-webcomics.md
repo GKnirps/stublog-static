@@ -3,7 +3,7 @@ title: Positivprojekt 01: Webcomics
 filename: positiv_01_webcomics
 date: 2021-01-05T23:03:00+01:00
 update-date: 2024-03-02T15:37:00+01:00
-tags: positivprojekt, webcomics, tvtropes
+tags: positivprojekt, webcomic, webcomics, tvtropes
 category: positiv
 summary: In der ersten Woche meines Positivprojektes stelle ich Webcomics vor, die mir gefallen.
 ---
