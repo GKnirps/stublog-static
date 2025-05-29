@@ -3,7 +3,7 @@ title: Der Computer schummelt!
 filename: computer_cheating
 date: 2025-05-20T21:11:15+02:00
 update-date:
-tags: tvtropes, machine learning, schummeln, glitch
+tags: tvtropes, machine learning, schummeln, glitch, garbage in garbage out
 category: hoellenmaschinen
 summary: Machine learning ist in der Regel ein Optimierungsproblem in irgendeiner Form. Wenn wenn man nicht aufpasst, dann finden gute machine learning-Algorithmen Schlupflöcher in den Randbedingungen und „schummeln“. Ein paar Beispiele.
 image:
