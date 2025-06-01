@@ -5,7 +5,7 @@ date: 2021-05-16T22:42:03+02:00
 update-date:
 tags: podcast, minkorrekt, methodisch inkorrekt, zeitsprung, geschichten aus der geschichte, hoaxilla, ach
 category: positiv
-summary:Ich stelle ein paar Podcasts vor, die mir gefallen: Methodisch inkorrekt, Geschichten aus der Geschichte, hoaxilla und ach.
+summary: Ich stelle ein paar Podcasts vor, die mir gefallen: Methodisch inkorrekt, Geschichten aus der Geschichte, hoaxilla und ach.
 image:
 ---
 

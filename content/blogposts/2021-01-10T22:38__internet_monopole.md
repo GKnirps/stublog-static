@@ -5,7 +5,7 @@ date: 2021-01-10T22:38:49+01:00
 update-date:
 tags: trump, twitter, facebook, parler, aws, google, apple, monopol, internet, rant
 category: ithought
-summary:
+summary: Trump wurde von Twitter verbannt. Das ist gut. Das Problem ist nicht Twitters Verhalten, sondern Twitters quasi-Monopol.
 ---
 
 Trump wurde nun also dauerhaft von Twitter verbannt (seine bisherige Immunität hätte sowieso nur noch bis zum 20.1.2021 gehalten). Und von Facebook. Und die Microblogging-App Parler wurde von Google und Apple aus dem App-Store genommen, außerdem hat AWS denen ihr Webhosting gekündigt. Und alles nur wegen dieses kleinen blutigen Aufstandes gegen den rechtmäßigen Wahlausgang.

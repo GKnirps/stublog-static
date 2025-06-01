@@ -5,7 +5,7 @@ date: 2023-01-17T17:40:51+01:00
 update-date:
 tags: chatgpt, trump, tolkien, limerick, advent of code, zauberlehrling
 category: hoellenmaschinen
-summary:
+summary: Ich habe mal ChatGPT ausprobiert. Technisch ist schon schon beeindruckend.
 image:
 ---
 

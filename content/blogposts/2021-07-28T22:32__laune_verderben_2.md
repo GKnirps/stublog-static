@@ -5,7 +5,7 @@ date: 2021-07-28T22:32:51+02:00
 update-date:
 tags: trottel, idioten, rant, impfung, covid-19, masken, klimawandel
 category: rant
-summary:
+summary: Jetzt, wo mein Positivprojekt gescheitert ist, kann ich ja mal den ganzen Frust rauspusten, der sich angesammelt hat.
 ---
 
 So, nachdem das Positivprojekt ja gescheitert ist, kann ich ja noch einmal mehr meinen ganzen Frust rauspusten, bevor ich wieder in autoagressives Verhalten verfalle und meinen Kopf gegen Möbel, Wände und was sonst gerade so verfügbar ist schlage.
