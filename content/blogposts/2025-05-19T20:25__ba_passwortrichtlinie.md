@@ -6,8 +6,8 @@ update-date:
 tags: bundesagentur für arbeit, passwort, rant, passwordgenerator, pwgen
 category: hoellenmaschinen
 summary: Im Jahr 2025 hat die Bundesagentur für Arbeit immer noch Passwortrichtlinien, die besser ins Jahr 2000 passen würden.
-image:
-image-alt:
+image: /file/ba_passwortrichtlinien_2025.webp
+image-alt: Eine Liste von Passwortkriterien. Darunter die üblichen Verdächtigen (Groß-/Kleinschreibung, Ziffern, Sonderzeichen) aber auch „Keine unerlaubten Zeichen“.
 language:
 ---
 
