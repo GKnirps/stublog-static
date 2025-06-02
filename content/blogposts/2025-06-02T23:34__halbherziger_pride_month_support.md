@@ -27,7 +27,7 @@ Was das wohl bedeutet? Eine kurze Suche ergab diesen [Eintrag in den FAQ](https:
 
 > Please be aware that this item will only be available in the following countries:
 
-Es folgt eine lange Liste von Ländern. Aber nicht alle Länder, in denen das Spiel verfügbar ist. Ungarn zum Beispiel habe ich vergeblich gesucht. Ich nehme ganz stark an, dass das an [einem homophoben Gesetzt liegt, weswegen die EU auch schon Ungarn verklagt hat](https://de.wikipedia.org/wiki/Ungarn#Politik). Mit anderen Worten: Rare ist zu feige, um LGBTQIA+-Symbole auch in Länderversionen zu verwenden, wo gegen sie diskriminiert wird. Also dort, wo sie am ehesten gebraucht werden. Da ist ihnen ihr Gewinn wichtiger als der Support.
+Es folgt eine lange Liste von Ländern. Aber nicht alle Länder, in denen das Spiel verfügbar ist. Ungarn zum Beispiel habe ich vergeblich gesucht. Ich nehme ganz stark an, dass das an [einem homophoben Gesetz liegt, weswegen die EU auch schon Ungarn verklagt hat](https://de.wikipedia.org/wiki/Ungarn#Politik). Mit anderen Worten: Rare ist zu feige, um LGBTQIA+-Symbole auch in Länderversionen zu verwenden, wo gegen sie diskriminiert wird. Also dort, wo sie am ehesten gebraucht werden. Da ist ihnen ihr Gewinn wichtiger als der Support.
 
 Oder umgekehrt betrachtet: das erweckt den Eindruck, dass es sich bei diesem Support nur um einen PR-Stunt handelt. In den vergangenen Jahren haben sich immer wieder Freunde von mir aufgeregt, wenn große Firmen um Juni große Pride-Kampagnen starteten. Ich dachte damals: „Gut, die wollen nur Geld machen, aber trotzdem ist der Support ein Schritt in die richtige Richtung.“
 
