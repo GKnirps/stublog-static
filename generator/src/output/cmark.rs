@@ -162,6 +162,27 @@ pub fn render_blogpost_content(
     )
 }
 
+// go through the markdown, take all paths to hosted files (i.e. where the path starts with
+// `/file/`), return an iterator over those paths
+// Can be used to check if a page has to be updated because a hosted file changed.
+// Takes both commonmark images and commonmark links into account. Ignores HTML `<a>` and `<img>`
+pub fn hosted_files_from_markdown(markdown: &str) -> impl Iterator<Item = CowStr> {
+    Parser::new(markdown).filter_map(|event| {
+        let dest = match event {
+            Event::Start(Tag::Link { dest_url, .. }) => dest_url,
+            Event::Start(Tag::Image { dest_url, .. }) => dest_url,
+            _ => {
+                return None;
+            }
+        };
+        if dest.starts_with("/file/") {
+            Some(dest)
+        } else {
+            None
+        }
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -184,7 +205,7 @@ mod tests {
         );
     }
 
-    // TODO: due to the trick I use to escape HTML, escaped flow elements (such as diff) do not have a <p> around them
+    // TODO: due to the trick I use to escape HTML, escaped flow elements (such as div) do not have a <p> around them
     // whereas escaped phrasing element (such as span, see next test) do. This is not very
     // consistent and I should change it.
     #[test]
@@ -520,5 +541,27 @@ mod tests {
 
         // then
         assert_eq!(html, "<p><em>dangit</em></p>\n")
+    }
+
+    #[test]
+    fn hosted_files_from_markdown_finds_and_filters_urls() {
+        // given
+        let markdown = r#"# OHAI
+I CAN HAZ [KITTEHS](https://xkcd.com/231/)?
+
+![a grey cat](/file/lolcat.jpeg "I CAN HAZ CHEEZBURGER?")
+
+[SRSLY](/file/foo.tar.gz)
+
+![IM IN UR REALITY](https://imgs.xkcd.com/comics/in_ur_reality.png)
+"#;
+
+        // when
+        let mut files = hosted_files_from_markdown(markdown);
+
+        // then
+        assert_eq!(files.next(), Some(CowStr::Borrowed("/file/lolcat.jpeg")));
+        assert_eq!(files.next(), Some(CowStr::Borrowed("/file/foo.tar.gz")));
+        assert_eq!(files.next(), None);
     }
 }

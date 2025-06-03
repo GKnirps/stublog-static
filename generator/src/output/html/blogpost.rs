@@ -81,7 +81,6 @@ pub fn render_blogpost_page(
         let r: &str = s;
         r
     });
-    // FIXME: blogpost HTML should update when image file changes
     let og_image = create_og_image_data(blogpost, hosted_files)?;
 
     let post_url = blogpost_url(blogpost);

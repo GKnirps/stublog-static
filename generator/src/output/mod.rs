@@ -17,6 +17,7 @@
 
 use crate::input::{HostedFile, ImageMetadata};
 use camino::Utf8Path;
+use cmark::hosted_files_from_markdown;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs::metadata;
@@ -166,10 +167,55 @@ pub fn image_metadata_by_path<'a>(
     Ok(image_metadata)
 }
 
+// return the most recent modification date of all local hosted files (paths starting with
+// `/file/`) that are referenced in `markdown`. Ignores HTML tags (`<img>` or `<a`> in the
+// markdown). Returns errors if path is not in `hosted_files` Returns Ok(None) if no files are
+// referenced.
+pub fn hosted_files_modified_at_from_markdown(
+    markdown: &str,
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Option<SystemTime>, RenderError> {
+    hosted_files_from_markdown(markdown)
+        .map(|path| {
+            let filename = path.strip_prefix("/file/").ok_or_else(|| {
+                RenderError::new(format!("unexpected hosted file path: '{path}'"))
+            })?;
+            Ok(hosted_files
+                .get(filename)
+                .ok_or_else(|| RenderError::new(format!("hosted file '{path}' has no metadata")))?
+                .modified_at)
+        })
+        .try_fold(None, |max: Option<SystemTime>, t| {
+            let t = t?;
+            Ok(match max {
+                None => Some(t),
+                Some(m) => Some(m.max(t)),
+            })
+        })
+}
+
+pub fn hosted_files_modified_at_from_any_markdown<'a>(
+    markdown_snippets: impl Iterator<Item = &'a str>,
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<Option<SystemTime>, RenderError> {
+    markdown_snippets
+        .filter_map(|markdown| {
+            hosted_files_modified_at_from_markdown(markdown, hosted_files).transpose()
+        })
+        .try_fold(None, |max: Option<SystemTime>, t| {
+            let t = t?;
+            match max {
+                None => Ok(Some(t)),
+                Some(m) => Ok(Some(m.max(t))),
+            }
+        })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::test_utils::create_hosted_file;
+    use std::time::Duration;
 
     #[test]
     fn image_metadata_by_path_returns_dimensions_of_image_file() {
@@ -273,5 +319,143 @@ mod tests {
         // then
         let metadata = result.expect("expected success");
         assert_eq!(metadata, None);
+    }
+
+    #[test]
+    fn hosted_files_modified_at_from_markdown_yields_youngest_modification_date() {
+        // given
+        let markdown = "[some file](/file/some_file) ![image file](/file/image_file.svg)";
+
+        let file_modified_at = SystemTime::UNIX_EPOCH + Duration::from_secs(42);
+        let mut hosted_file = create_hosted_file();
+        hosted_file.modified_at = file_modified_at;
+
+        let img_modified_at = SystemTime::UNIX_EPOCH + Duration::from_secs(11);
+        let mut hosted_image = create_hosted_file();
+        hosted_image.modified_at = img_modified_at;
+
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::from([
+            ("some_file", &hosted_file),
+            ("image_file.svg", &hosted_image),
+        ]);
+
+        // when
+        let time = hosted_files_modified_at_from_markdown(markdown, &hosted_files);
+
+        // then
+        assert_eq!(time, Ok(Some(file_modified_at)));
+    }
+
+    #[test]
+    fn hosted_files_modified_at_from_markdown_yields_nothing_if_no_files_are_referenced() {
+        // given
+        let markdown = "# Awesome headline!";
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::new();
+
+        // when
+        let time = hosted_files_modified_at_from_markdown(markdown, &hosted_files);
+
+        // then
+        assert_eq!(time, Ok(None));
+    }
+
+    #[test]
+    fn hosted_files_modified_at_from_markdown_yields_error_for_missing_file() {
+        // given
+        let markdown = "[some file](/file/some_file)";
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::new();
+
+        // when
+        let time = hosted_files_modified_at_from_markdown(markdown, &hosted_files);
+
+        // then
+        assert_eq!(
+            time,
+            Err(RenderError::from(
+                "hosted file '/file/some_file' has no metadata"
+            ))
+        );
+    }
+
+    #[test]
+    fn hosted_files_modified_at_from_any_markdown_returns_youngest_modification_date() {
+        // given
+        let markdown1 = "[some file](/file/some_file)";
+        let markdown2 = "![image file](/file/image_file.svg)";
+
+        let file_modified_at = SystemTime::UNIX_EPOCH + Duration::from_secs(42);
+        let mut hosted_file = create_hosted_file();
+        hosted_file.modified_at = file_modified_at;
+
+        let img_modified_at = SystemTime::UNIX_EPOCH + Duration::from_secs(11);
+        let mut hosted_image = create_hosted_file();
+        hosted_image.modified_at = img_modified_at;
+
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::from([
+            ("some_file", &hosted_file),
+            ("image_file.svg", &hosted_image),
+        ]);
+
+        // when
+        let time = hosted_files_modified_at_from_any_markdown(
+            [markdown2, markdown1].into_iter(),
+            &hosted_files,
+        );
+
+        // then
+        assert_eq!(time, Ok(Some(file_modified_at)));
+    }
+
+    #[test]
+    fn hosted_files_modified_at_from_any_markdown_returns_none_for_empty_input() {
+        // given
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::new();
+
+        // when
+        let time = hosted_files_modified_at_from_any_markdown(std::iter::empty(), &hosted_files);
+
+        // then
+        assert_eq!(time, Ok(None));
+    }
+
+    #[test]
+    fn hosted_files_modified_at_from_any_markdown_returns_none_if_input_contains_no_hosted_files() {
+        // given
+        let markdown1 = "# Boring heading";
+        let markdown2 = "*this*";
+
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::new();
+
+        // when
+        let time = hosted_files_modified_at_from_any_markdown(
+            [markdown2, markdown1].into_iter(),
+            &hosted_files,
+        );
+
+        // then
+        assert_eq!(time, Ok(None));
+    }
+
+    #[test]
+    fn hosted_files_modified_at_from_any_markdown_returns_error_for_missing_file() {
+        // given
+        let markdown1 = "[no file](/file/no_file)";
+        let markdown2 = "*this*";
+
+        let hosted_files: HashMap<&str, &HostedFile> = HashMap::new();
+
+        // when
+        let time = hosted_files_modified_at_from_any_markdown(
+            [markdown2, markdown1].into_iter(),
+            &hosted_files,
+        );
+
+        // then
+        assert_eq!(
+            time,
+            Err(RenderError::from(
+                "hosted file '/file/no_file' has no metadata"
+            ))
+        );
     }
 }

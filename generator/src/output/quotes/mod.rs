@@ -17,15 +17,18 @@
 
 use super::file::open_for_write;
 use super::html::quote::render_quote_page;
-use super::needs_any_update;
 use crate::HostedFile;
 use crate::input::{Assets, Quote};
-use crate::output::OutputError;
 use crate::output::html::quote::render_quote_list_page;
+use crate::output::{
+    OutputError, hosted_files_modified_at_from_any_markdown,
+    hosted_files_modified_at_from_markdown, needs_any_update,
+};
 use camino::{Utf8Path, Utf8PathBuf};
 use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
+use std::iter::once;
 
 mod fortune;
 
@@ -38,14 +41,17 @@ fn write_quote_page(
     let mut filename = dir.to_path_buf();
     filename.push(&quote.filename);
     filename.set_extension("html");
-    // FIXME: check if hosted files changed
+
+    let newest_hosted_file =
+        hosted_files_modified_at_from_markdown(&quote.content_markdown, hosted_files)?;
     if !needs_any_update(
         &filename,
         assets
             .modification_dates()
             .iter()
             .copied()
-            .chain(Some(quote.modified_at)),
+            .chain(once(quote.modified_at))
+            .chain(newest_hosted_file),
     ) {
         // target file is newer, no update needed
         return Ok(());
@@ -86,13 +92,19 @@ fn write_quote_list_page(
     index_updated: bool,
 ) -> Result<(), OutputError> {
     let filename = index_path(dir, current_page);
-    // FIXME: check if hosted files changed
+
+    let newest_hosted_file = hosted_files_modified_at_from_any_markdown(
+        quotes.iter().map(|quote| &quote.content_markdown as &str),
+        hosted_files,
+    )?;
+
     if !needs_any_update(
         &filename,
         quotes
             .iter()
             .map(|q| q.modified_at)
-            .chain(assets.modification_dates()),
+            .chain(assets.modification_dates())
+            .chain(newest_hosted_file),
     ) && !index_updated
     {
         return Ok(());

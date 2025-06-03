@@ -107,7 +107,7 @@ pub fn write_feed<T: Write>(
     blogposts: &[Blogpost],
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<(), OutputError> {
-    // FIXME: check if hosted files have been updated in a relevant way
+    // For the update timestamp, we do not take changes to hosted files into account.
     let updated = blogposts
         .iter()
         .map(|post| post.update_date.as_ref().unwrap_or(&post.date))

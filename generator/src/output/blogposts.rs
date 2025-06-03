@@ -27,7 +27,10 @@ use super::file::open_for_write;
 use super::html;
 use crate::input::{Assets, Quote};
 use crate::input::{Blogpost, Category};
-use crate::output::{OutputError, RenderError, needs_any_update};
+use crate::output::{
+    OutputError, RenderError, hosted_files_modified_at_from_any_markdown,
+    hosted_files_modified_at_from_markdown, needs_any_update,
+};
 
 // find categories for all blogposts with a category id. If the ID is present but matches no
 // known category, return an error
@@ -80,14 +83,16 @@ fn write_blogpost(
     let mut filename = dir.to_path_buf();
     filename.push(&blogpost.filename);
     filename.set_extension("html");
-    // FIXME: blogposts may need an update if the relevant hosted files changed
+    let hosted_files_modified_at =
+        hosted_files_modified_at_from_markdown(&blogpost.content_markdown, hosted_files)?;
     if !needs_any_update(
         &filename,
         assets
             .modification_dates()
             .iter()
             .copied()
-            .chain(once(blogpost.modified_at)),
+            .chain(once(blogpost.modified_at))
+            .chain(hosted_files_modified_at),
     ) {
         // target file is newer, no update needed
         return Ok(());
@@ -107,17 +112,24 @@ fn blogposts_with_categories_need_update(
     posts: &[(&Blogpost, &Category)],
     quote: Option<&Quote>,
     assets: &Assets,
-) -> bool {
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<bool, RenderError> {
+    let newest_hosted_file = hosted_files_modified_at_from_any_markdown(
+        posts.iter().map(|(post, _)| &post.content_markdown as &str),
+        hosted_files,
+    )?;
+
     // get the newest modification date of all blogposts and categories here, only update if the
     // target file is older
-    needs_any_update(
+    Ok(needs_any_update(
         target_file,
         posts
             .iter()
             .map(|(post, cat)| max(cat.modified_at, post.modified_at))
             .chain(quote.map(|q| q.modified_at))
-            .chain(assets.modification_dates()),
-    )
+            .chain(assets.modification_dates())
+            .chain(newest_hosted_file),
+    ))
 }
 
 pub fn write_home(
@@ -139,8 +151,7 @@ pub fn write_home(
         &all_posts[all_posts.len() - 10..]
     };
 
-    // FIXME: check if hosted files changed
-    if !blogposts_with_categories_need_update(&filename, posts, qotd, assets) {
+    if !blogposts_with_categories_need_update(&filename, posts, qotd, assets, hosted_files)? {
         return Ok(());
     }
 
@@ -208,8 +219,9 @@ fn write_archive_page(
 ) -> Result<(), OutputError> {
     let filename = index_path(dir, page_index);
 
-    // FIXME: blogposts may need an update if the relevant hosted files changed
-    if !blogposts_with_categories_need_update(&filename, posts, None, assets) && !index_updated {
+    if !blogposts_with_categories_need_update(&filename, posts, None, assets, hosted_files)?
+        && !index_updated
+    {
         return Ok(());
     }
 

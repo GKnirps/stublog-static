@@ -21,6 +21,10 @@ use std::io::Write;
 // write quote in a nicer way:
 // - do not render some markdown stuff such as \ for hard line breaks
 // - do not parse markdown, too much of a hassle. Just assume it's looking somewhat okay-ish
+// IMPORTANT: currently, hosted files are ignored here, so the fortune DB won't update if
+// a hosted file changes. This is no problem, because we don't render HTML here and don't include
+// any file metadata into the fortune DB. Should that change, we may need to include hosted files
+// here as well.
 fn write_fortune_quote(writer: &mut dyn Write, quote: &Quote) -> std::io::Result<()> {
     for line in quote
         .content_markdown

@@ -26,8 +26,19 @@ use std::io::Write;
 
 mod atom;
 
-pub fn feed_needs_update(filename: &Utf8Path, blogposts: &[Blogpost]) -> bool {
-    let times = blogposts.iter().map(|p| p.modified_at);
+pub fn feed_needs_update(
+    filename: &Utf8Path,
+    blogposts: &[Blogpost],
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> bool {
+    // In other places, we check whether a file is referenced in the markdown that we want to
+    // render. The feed is only one file that contains all blogposts. References to files in other
+    // places (quotes, categories, etc) are edge cases that we can ignore. So for simplicity, we
+    // just use the modification times of _all_ hosted files.
+    let times = blogposts
+        .iter()
+        .map(|p| p.modified_at)
+        .chain(hosted_files.values().map(|f| f.modified_at));
     needs_any_update(filename, times)
 }
 
@@ -38,7 +49,7 @@ pub fn write_atom_feed(
 ) -> Result<(), String> {
     let mut filename = dir.to_path_buf();
     filename.push("feed.atom");
-    if !feed_needs_update(&filename, blogposts) {
+    if !feed_needs_update(&filename, blogposts, hosted_files) {
         return Ok(());
     }
 

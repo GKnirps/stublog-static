@@ -26,7 +26,7 @@ use super::file::open_for_write;
 use super::html;
 use crate::HostedFile;
 use crate::input::{Assets, Blogpost, Category};
-use crate::output::{OutputError, needs_any_update};
+use crate::output::{OutputError, hosted_files_modified_at_from_markdown, needs_any_update};
 use std::time::SystemTime;
 
 pub fn categories_with_blogposts<'a>(
@@ -112,14 +112,16 @@ fn write_category_page(
     filename.push(&category.filename);
     filename.set_extension("html");
 
-    // FIXME: check if hosted files changed
+    let newest_hosted_file =
+        hosted_files_modified_at_from_markdown(&category.description_markdown, hosted_files)?;
     if !needs_any_update(
         &filename,
         assets
             .modification_dates()
             .iter()
             .copied()
-            .chain(once(newest_modification(category, blogposts))),
+            .chain(once(newest_modification(category, blogposts)))
+            .chain(newest_hosted_file),
     ) {
         return Ok(());
     }
