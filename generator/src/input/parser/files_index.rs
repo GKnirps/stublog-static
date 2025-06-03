@@ -53,7 +53,7 @@ fn parse_file_metadata(file_data: &FileData) -> Result<HostedFileMetadata, Parse
         old_id,
         path,
         mime_type,
-        description: description.to_string(),
+        description_markdown: description.to_string(),
         modified_at: file_data.modified_at,
     })
 }
@@ -79,7 +79,7 @@ mod tests {
         assert_eq!(result.old_id, Some("42".to_string()));
         assert_eq!(result.path, "foobar.png");
         assert_eq!(result.mime_type, "image/png");
-        assert_eq!(result.description, "des-des-des-description!");
+        assert_eq!(result.description_markdown, "des-des-des-description!");
 
         assert_eq!(result.modified_at, input.modified_at);
     }

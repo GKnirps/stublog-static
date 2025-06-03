@@ -17,10 +17,11 @@
 
 use super::file::open_for_write;
 use super::html::hosted_file;
-use super::needs_any_update;
 use crate::HostedFile;
 use crate::input::{Assets, HostedFileMetadata};
+use crate::output::{OutputError, hosted_files_modified_at_from_any_markdown, needs_any_update};
 use camino::{Utf8Path, Utf8PathBuf};
+use std::collections::HashMap;
 use std::fs::create_dir;
 use std::io::Write;
 
@@ -31,13 +32,22 @@ fn write_hosted_file_index_page(
     num_pages: usize,
     assets: &Assets,
     index_updated: bool,
-) -> std::io::Result<()> {
+    all_hosted_files_by_path: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
+    let newest_hosted_file_in_markdown = hosted_files_modified_at_from_any_markdown(
+        files
+            .iter()
+            .map(|(meta, _)| &meta.description_markdown as &str),
+        all_hosted_files_by_path,
+    )?;
+
     let filename = index_path(dir, current_page);
     if !needs_any_update(
         &filename,
         files
             .iter()
             .flat_map(|f| [f.0.modified_at, f.1.modified_at])
+            .chain(newest_hosted_file_in_markdown)
             .chain(assets.modification_dates()),
     ) && !index_updated
     {
@@ -47,9 +57,16 @@ fn write_hosted_file_index_page(
     write!(
         writer,
         "{}",
-        hosted_file::render_file_index_page(files, current_page, num_pages, assets).into_string()
+        hosted_file::render_file_index_page(
+            files,
+            current_page,
+            num_pages,
+            assets,
+            all_hosted_files_by_path
+        )?
+        .into_string()
     )?;
-    writer.flush()
+    writer.flush().map_err(OutputError::from)
 }
 
 fn index_path(dir: &Utf8Path, page_index: usize) -> Utf8PathBuf {
@@ -63,7 +80,8 @@ pub fn write_hosted_file_index_pages(
     dir: &Utf8Path,
     files: &[(&HostedFileMetadata, &HostedFile)],
     assets: &Assets,
-) -> std::io::Result<()> {
+    all_hosted_files_by_path: &HashMap<&str, &HostedFile>,
+) -> Result<(), OutputError> {
     if !dir.is_dir() {
         // TODO: check if the error message here is confusing
         create_dir(dir)?;
@@ -82,7 +100,15 @@ pub fn write_hosted_file_index_pages(
 
     for (index, chunk) in files.chunks(chunk_size).enumerate() {
         // TODO: it would be more helpful if we knew which chunk failed
-        write_hosted_file_index_page(dir, chunk, index, num_chunks, assets, index_updated)?;
+        write_hosted_file_index_page(
+            dir,
+            chunk,
+            index,
+            num_chunks,
+            assets,
+            index_updated,
+            all_hosted_files_by_path,
+        )?;
     }
 
     Ok(())

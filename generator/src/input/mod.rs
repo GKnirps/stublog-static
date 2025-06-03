@@ -88,7 +88,7 @@ pub struct HostedFileMetadata {
     pub old_id: Option<String>,
     pub path: String,
     pub mime_type: String,
-    pub description: String,
+    pub description_markdown: String,
     pub modified_at: SystemTime,
 }
 

@@ -18,10 +18,13 @@
 use super::pager::pager;
 use crate::HostedFile;
 use crate::input::{Assets, HostedFileMetadata};
+use crate::output::RenderError;
+use crate::output::cmark::render_cmark;
 use crate::output::html::HeadData;
 use crate::paths::{files_metadata_index_path, hosted_file_path};
 use crate::urls::files_metadata_index_url;
-use maud::{Markup, html};
+use maud::{Markup, PreEscaped, html};
+use std::collections::HashMap;
 
 fn render_file_size(size: u64) -> Markup {
     if size >= 1024 * 1024 {
@@ -41,16 +44,18 @@ fn render_file_size(size: u64) -> Markup {
     }
 }
 
-fn render_file_data(metadata: &HostedFileMetadata, hosted_file: &HostedFile) -> Markup {
-    html! {
+fn render_file_data(
+    metadata: &HostedFileMetadata,
+    hosted_file: &HostedFile,
+    all_hosted_files_by_name: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
+    Ok(html! {
         div.hosted-file #(metadata.path) {
             h3 {
                 "Datei: "
                 (metadata.path)
             }
-            p.file-description {
-                (metadata.description)
-            }
+            (PreEscaped(render_cmark(&metadata.description_markdown, false, all_hosted_files_by_name)?))
             footer {
                 table {
                     tr {
@@ -73,7 +78,7 @@ fn render_file_data(metadata: &HostedFileMetadata, hosted_file: &HostedFile) -> 
                 }
             }
         }
-    }
+    })
 }
 
 pub fn render_file_index_page(
@@ -81,20 +86,21 @@ pub fn render_file_index_page(
     current_page: usize,
     num_pages: usize,
     assets: &Assets,
-) -> Markup {
+    all_hosted_files_by_name: &HashMap<&str, &HostedFile>,
+) -> Result<Markup, RenderError> {
     let html_pager = pager(current_page, num_pages, &files_metadata_index_path);
     let content = html! {
         h2 { "Dateien" }
         (html_pager)
         section {
             @for (metadata, hosted_file) in files {
-                (render_file_data(metadata, hosted_file))
+                (render_file_data(metadata, hosted_file, all_hosted_files_by_name)?)
             }
         }
         (html_pager)
     };
 
-    super::base(
+    Ok(super::base(
         &HeadData::new(
             &format!(
                 "Stranger Than Usual — Dateien, Seite {} von {}",
@@ -108,7 +114,7 @@ pub fn render_file_index_page(
             "Eine Liste von Dateien, die hier gehostet und in Blogposts referenziert werden",
         )),
         content,
-    )
+    ))
 }
 
 #[cfg(test)]
@@ -140,17 +146,19 @@ mod tests {
         let metadata = create_hosted_file_metadata();
         let mut file = create_hosted_file();
         file.file_size = 1024;
+        let all_hosted_files: HashMap<&str, &HostedFile> = HashMap::from([("answer.txt", &file)]);
 
         // when
-        let result = render_file_data(&metadata, &file).into_string();
+        let result = render_file_data(&metadata, &file, &all_hosted_files);
 
         // then
+        let result = result.expect("expected successful rendering").into_string();
         assert_eq!(
             result,
             "<div class=\"hosted-file\" id=\"answer.txt\">\
         <h3>Datei: answer.txt</h3>\
-        <p class=\"file-description\">You\'re really not going to like it.</p>\
-        <footer>\
+        <p>You\'re <em>really</em> not going to like it.</p>
+<footer>\
         <table>\
         <tr><td>Typ</td><td>text/plain</td></tr>\
         <tr><td>Größe</td><td>≈ 1 kiB</td></tr>\
@@ -174,17 +182,19 @@ mod tests {
             width: 42,
             height: 9001,
         });
+        let all_hosted_files: HashMap<&str, &HostedFile> = HashMap::from([("answer.txt", &file)]);
 
         // when
-        let result = render_file_data(&metadata, &file).into_string();
+        let result = render_file_data(&metadata, &file, &all_hosted_files);
 
         // then
+        let result = result.expect("expected successful rendering").into_string();
         assert_eq!(
             result,
             "<div class=\"hosted-file\" id=\"answer.txt\">\
         <h3>Datei: answer.txt</h3>\
-        <p class=\"file-description\">You\'re really not going to like it.</p>\
-        <footer>\
+        <p>You\'re <em>really</em> not going to like it.</p>
+<footer>\
         <table>\
         <tr><td>Typ</td><td>image/webp</td></tr>\
         <tr><td>Größe</td><td>≈ 1 kiB</td></tr>\
@@ -217,10 +227,15 @@ mod tests {
 
         let assets = create_assets();
 
+        let all_hosted_files: HashMap<&str, &HostedFile> =
+            HashMap::from([("path", &file1), ("ninjad", &file2)]);
+
         // when
-        let result = render_file_index_page(files, current_page, num_pages, &assets).into_string();
+        let result =
+            render_file_index_page(files, current_page, num_pages, &assets, &all_hosted_files);
 
         // then
+        let result = result.expect("expected successful rendering").into_string();
         println!("Checking generated html:\n{result}");
         assert!(result.starts_with("<!DOCTYPE html><html lang=\"de\">"));
         assert!(result.contains("<h3>Datei: first</h3>"));

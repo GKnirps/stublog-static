@@ -69,7 +69,7 @@ pub fn create_hosted_file_metadata() -> HostedFileMetadata {
         old_id: None,
         path: "answer.txt".to_owned(),
         mime_type: "text/plain".to_owned(),
-        description: "You're really not going to like it.".to_owned(),
+        description_markdown: "You're *really* not going to like it.".to_owned(),
         modified_at: SystemTime::now(),
     }
 }

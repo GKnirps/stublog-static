@@ -214,6 +214,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
         &hosted_files_index_dir,
         &hosted_file_pairs,
         &assets,
+        &hosted_files_by_name,
     )
     .map_err(|e| format!("Unable to write all file metadata pages: {e}"))
 }
