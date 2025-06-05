@@ -13,7 +13,7 @@ language:
 
 Vor ein paar Tagen habe ich herausgefunden, dass man für Bezeichner in C und C++ auch nicht-ASCII Unicode Code Points verwenden darf. Mit Einschränkungen.
 
-Es ist leider ein bisschen schwierig, definitive Informationen dafür zu finden. Für C++ sieht die Lage recht eindeutig aus: auf cppreference.com gibt es [eine Liste von Zeichen, die in in Bezeichnern](https://en.cppreference.com/w/cpp/language/identifiers.html) die am Anfang oder nicht am Anfang für Bezeichner zugelassen sind.
+Es ist leider ein bisschen schwierig, definitive Informationen dafür zu finden. Für C++ sieht die Lage recht eindeutig aus: auf cppreference.com gibt es [eine Liste von Zeichen](https://en.cppreference.com/w/cpp/language/identifiers.html) die am Anfang oder nicht am Anfang von Bezeichnern zugelassen sind.
 
 Für C habe ich keine so schöne Auflistung gefunden. Im [Wikipedia-Artikel über C](https://en.wikipedia.org/wiki/C_(programming_language)#C99) steht, dass ab C99 Escape-Sequenzen für Unicode in Bezeichnern zugelassen ist und dass auch vorgeschlagen wird, direkte Unicode-Code Points zuzulassen. Was genau erlaubt ist steht dort nicht.
 
