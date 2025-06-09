@@ -31,7 +31,7 @@ generate-html: assets
 copy-hosted-files: $(patsubst content/file/%, dist/file/%, $(wildcard content/file/*))
 
 dist/file/%: content/file/% | directories
-	cp $< $@
+	cp "$<" "$@"
 ###
 
 ### fortune cookies

@@ -32,61 +32,61 @@ dist/404.html.br: dist/404.html
 	$(BR) dist/404.html
 
 dist/blogposts/%.html.gz: dist/blogposts/%.html
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/blogposts/%.html.br: dist/blogposts/%.html
-	$(BR) $<
+	$(BR) "$<"
 
 dist/quote/%.html.gz: dist/quote/%.html
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/quote/%.html.br: dist/quote/%.html
-	$(BR) $<
+	$(BR) "$<"
 
 dist/quotes/%.html.gz: dist/quotes/%.html
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/quotes/%.html.br: dist/quotes/%.html
-	$(BR) $<
+	$(BR) "$<"
 
 dist/categories/%.html.gz: dist/categories/%.html
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/categories/%.html.br: dist/categories/%.html
-	$(BR) $<
+	$(BR) "$<"
 
 dist/archive/%.html.gz: dist/archive/%.html
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/archive/%.html.br: dist/archive/%.html
-	$(BR) $<
+	$(BR) "$<"
 
 dist/tags/%.html.gz: dist/tags/%.html
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/tags/%.html.br: dist/tags/%.html
-	$(BR) $<
+	$(BR) "$<"
 
 dist/assets/%.gz: dist/assets/%
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/assets/%.br: dist/assets/%
-	$(BR) $<
+	$(BR) "$<"
 
 dist/feed.atom.gz: dist/feed.atom
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/feed.atom.br: dist/feed.atom
-	$(BR) $<
+	$(BR) "$<"
 
 dist/files_metadata/%.gz: dist/files_metadata/%
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/files_metadata/%.br: dist/files_metadata/%
-	$(BR) $<
+	$(BR) "$<"
 
 dist/file/%.gz: dist/file/%
-	$(GZ) $<
+	$(GZ) "$<"
 
 dist/file/%.br: dist/file/%
-	$(BR) $<
+	$(BR) "$<"
