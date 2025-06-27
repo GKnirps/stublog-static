@@ -2,7 +2,7 @@
 title: Riesen-Bärenklau, Schafe und Hunde
 filename: riesenbaerenklau_schafe_hunde
 date: 2025-06-18T17:54:16+02:00
-update-date: 2025-06-17T19:20:00+02:00
+update-date: 2025-06-27T19:20:00+02:00
 tags: riesen-bärenklau, essen, schafe, hunde, neophyten
 category: ganz_normaler_wahnsinn
 summary: In Essen werden Schafe zur Bekämpfung des Riesen-Bärenklaus eingesetzt. Im Ludwig-Kessing-Park habe ich keine gesehen. Warum nicht?
