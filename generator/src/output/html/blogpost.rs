@@ -77,10 +77,7 @@ pub fn render_blogpost_page(
     assets: &Assets,
     hosted_files: &HashMap<&str, &HostedFile>,
 ) -> Result<Markup, RenderError> {
-    let description: Option<&str> = blogpost.summary.as_ref().map(|s| {
-        let r: &str = s;
-        r
-    });
+    let description: Option<&str> = Some(&blogpost.summary);
     let og_image = create_og_image_data(blogpost, hosted_files)?;
 
     let post_url = blogpost_url(blogpost);

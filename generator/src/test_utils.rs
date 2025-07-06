@@ -43,7 +43,7 @@ pub fn create_blogpost() -> Blogpost {
         allow_html: false,
         modified_at: SystemTime::now(),
         content_markdown: "*foo*bar".to_owned(),
-        summary: Some("foo!".to_owned()),
+        summary: "foo!".to_owned(),
         image: Some(OgImage {
             path: "/file/recipes.png".to_owned(),
             alt: "A stack of recipes.".to_owned(),

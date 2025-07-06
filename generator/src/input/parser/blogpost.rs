@@ -42,34 +42,22 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
     let title = props
         .get("title")
         .copied()
-        .ok_or_else(|| {
-            ParseError::new(format!(
-                "Missing title for blogpost: {}",
-                original_path.as_str()
-            ))
-        })?
+        .ok_or_else(|| ParseError::new(format!("Missing title for blogpost: {original_path}")))?
         .to_owned();
     let filename = get_secure_filename(
         props.get("filename").ok_or_else(|| {
             ParseError::new(format!(
-                "Missing output filename for blogpost {}",
-                original_path.as_str()
+                "Missing output filename for blogpost {original_path}"
             ))
         })?,
         original_path,
     )?;
-    let date_string = props.get("date").ok_or_else(|| {
-        ParseError::new(format!(
-            "Missing date for blogpost {}",
-            original_path.as_str()
-        ))
-    })?;
+    let date_string = props
+        .get("date")
+        .ok_or_else(|| ParseError::new(format!("Missing date for blogpost {original_path}")))?;
     let date = DateTime::parse_from_rfc3339(date_string).map_err(|e| {
         ParseError::new(format!(
-            "Invalid date '{}': {} (blogpost {})",
-            date_string,
-            e,
-            original_path.as_str()
+            "Invalid date '{date_string}': {e} (blogpost {original_path})"
         ))
     })?;
     let update_date_string = props.get("update-date");
@@ -77,22 +65,21 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
         None => None,
         Some(date_str) => Some(DateTime::parse_from_rfc3339(date_str).map_err(|e| {
             ParseError::new(format!(
-                "Invalid update date date '{}': {} (blogpost {})",
-                date_str,
-                e,
-                original_path.as_str()
+                "Invalid update date date '{date_str}': {e} (blogpost {original_path})"
             ))
         })?),
     };
-    let summary = props.get("summary").map(|s| s.to_string());
+    let summary = props
+        .get("summary")
+        .map(|s| s.to_string())
+        .ok_or_else(|| ParseError::new(format!("Missing summary for blogpost: {original_path}")))?;
     let image_path = props.get("image").map(|s| s.to_string());
     let image_alt = props.get("image-alt").map(|s| s.to_string());
 
     let image = if let Some(path) = image_path {
         let alt = image_alt.ok_or_else(|| {
             ParseError::new(format!(
-                "Missing image alt text for blogpost {}",
-                original_path.as_str()
+                "Missing image alt text for blogpost {original_path}"
             ))
         })?;
         Some(OgImage { path, alt })
@@ -108,10 +95,7 @@ fn parse_blogpost(file_data: &FileData) -> Result<Blogpost, ParseError> {
         .get("category")
         .map(|s| s.to_string())
         .ok_or_else(|| {
-            ParseError::new(format!(
-                "Missing category for blogpost: {}",
-                original_path.as_str()
-            ))
+            ParseError::new(format!("Missing category for blogpost: {original_path}"))
         })?;
     let allow_html = props
         .get("allow-html")
@@ -155,6 +139,7 @@ mod tests {
         filename: lipsum\n\
         date: 2020-05-11T12:13:14+02:00\n\
         category: cat\n\
+        summary: Dolor sit\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -186,7 +171,7 @@ mod tests {
         assert!(!result.allow_html);
         assert_eq!(result.modified_at, modified_at);
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
-        assert_eq!(result.summary, None);
+        assert_eq!(result.summary, "Dolor sit");
         assert_eq!(result.image, None);
         assert_eq!(result.language, None);
     }
@@ -250,7 +235,7 @@ mod tests {
         assert!(result.allow_html);
         assert_eq!(result.modified_at, modified_at);
         assert_eq!(result.content_markdown, "IM IN UR CONTENT\n");
-        assert_eq!(result.summary, Some("Bogus!".to_owned()));
+        assert_eq!(result.summary, "Bogus!");
         assert_eq!(
             result.image,
             Some(OgImage {
@@ -268,6 +253,7 @@ mod tests {
         filename: lipsum\n\
         date: 2020-05-11T12:13:14+02:00\n\
         category: bananas\n\
+        summary: Dolor sit\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -295,6 +281,7 @@ mod tests {
         filename: lipsum\n\
         title: Lorem Ipsum\n\
         date: 2020-05-11T12:13:14+02:00\n\
+        summary: Dolor sit\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -322,6 +309,7 @@ mod tests {
         title: Lorem ipsum\n\
         date: 2020-05-11T12:13:14+02:00\n\
         category: bananas\n\
+        summary: Dolor sit\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -352,6 +340,7 @@ mod tests {
         filename: lipsum\n\
         date: 2020-05-11+02:00\n\
         category: bananas\n\
+        summary: Dolor sit\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -381,6 +370,7 @@ mod tests {
         title: Lorem ipsum\n\
         filename: lipsum\n\
         category: bananas\n\
+        summary: Dolor sit\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -410,6 +400,7 @@ mod tests {
         date: 2020-05-11T12:13:14+02:00\n\
         update-date: 2020-05-11+02:00\n\
         category: cat\n\
+        summary: Dolor sit\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -445,6 +436,7 @@ mod tests {
         category: cat\n\
         image: /file/foo.png\n\
         image-alt:\n\
+        summary: Dolor sit\n\
         ---\n\
         IM IN UR CONTENT\n"
             .to_owned();
@@ -467,6 +459,37 @@ mod tests {
             Err(ParseError::from(
                 "Missing image alt text for blogpost mad/eye"
             ))
+        );
+    }
+
+    #[test]
+    fn parse_blogpost_metadata_should_fail_for_missing_summary() {
+        // given
+        let content = "---\n\
+        title: Lorem ipsum\n\
+        filename: lipsum\n\
+        date: 2020-05-11T12:13:14+02:00\n\
+        category: cat\n\
+        ---\n\
+        IM IN UR CONTENT\n"
+            .to_owned();
+
+        let modified_at = SystemTime::now();
+        let filename = Utf8Path::new("mad/eye").to_path_buf();
+
+        let input = FileData {
+            content,
+            filename,
+            modified_at,
+        };
+
+        // when
+        let result = parse_blogpost(&input);
+
+        // then
+        assert_eq!(
+            result,
+            Err(ParseError::from("Missing summary for blogpost: mad/eye"))
         );
     }
 

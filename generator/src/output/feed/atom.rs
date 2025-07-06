@@ -85,9 +85,7 @@ fn write_entry<T: Write>(
     write_leaf(writer, "name", &[], "Knirps")?;
     writer.write_event(Event::End(BytesEnd::new("author")))?;
 
-    if let Some(ref summary) = blogpost.summary {
-        write_leaf(writer, "summary", &[], summary)?;
-    }
+    write_leaf(writer, "summary", &[], &blogpost.summary)?;
 
     write_leaf(
         writer,
@@ -238,7 +236,7 @@ mod tests {
         let result = writer.into_inner().into_inner();
         let result_str: String = String::from_utf8(result).expect("valid utf-8");
 
-        println!("{}", result_str);
+        println!("{result_str}");
         assert!(
             result_str
                 .starts_with("<entry><id>tag:strangerthanusual.de,2005:Blogpost/f%C3%B6obar</id>")
