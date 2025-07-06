@@ -17,7 +17,8 @@
 
 use crate::input::{Assets, Blogpost, tag::Tag};
 use crate::output::html::HeadData;
-use crate::paths::{blogpost_path, tag_path};
+use crate::output::html::blogpost::render_blogpost_summary_list;
+use crate::paths::tag_path;
 use crate::urls;
 use maud::{Markup, html};
 
@@ -50,17 +51,12 @@ pub fn render_tag_page(tag: &Tag, posts: &[&Blogpost], assets: &Assets) -> Marku
     let title = format!("Stranger Than Usual — Tag: {}", tag.name);
     let content = html! {
         h2.section-heading {
-            "Es gibt " (posts.len()) " Einträge mit dem Tag „" (tag.name) "“"
+            "Tag „" (tag.name) "“"
         }
-        ul {
-            @for post in posts {
-                li {
-                    a href=(blogpost_path(post)) {
-                        (post.title)
-                    }
-                }
-            }
+        h3.section-heading {
+            "Es gibt " (posts.len()) " Einträge mit diesem Tag"
         }
+        (render_blogpost_summary_list(posts))
     };
     super::base(
         &HeadData::new(&title, assets)
@@ -125,15 +121,16 @@ mod tests {
             "Expected a title"
         );
         assert!(
-            result.contains(
-                "<h2 class=\"section-heading\">Es gibt 2 Einträge mit dem Tag „stuff“</h2>"
-            ),
+            result.contains("<h2 class=\"section-heading\">Tag „stuff“</h2>"),
+            "Expected a section heading"
+        );
+        assert!(
+            result.contains("<h3 class=\"section-heading\">Es gibt 2 Einträge mit diesem Tag</h3>"),
             "Expected a section heading"
         );
         assert!(
             result.contains(
-                "<ul><li><a href=\"/blogposts/postface\">Posty McPostface</a></li><li>\
-        <a href=\"/blogposts/shaped\">Shaped like itself</a></li></ul>"
+                r#"<ul><li><h4 class="posttitle"><a href="/blogposts/postface">Posty McPostface</a> (<time datetime="2020-05-11T12:13:14+02:00">11.05.2020 12:13</time>)</h4><p>foo!</p></li><li><h4 class="posttitle"><a href="/blogposts/shaped">Shaped like itself</a> (<time datetime="2020-05-11T12:13:14+02:00">11.05.2020 12:13</time>)</h4><p>foo!</p></li></ul>"#
             ),
             "Expected a list of tags"
         );

@@ -19,7 +19,8 @@ use crate::HostedFile;
 use crate::input::{Assets, Blogpost, Category};
 use crate::output::RenderError;
 use crate::output::html::HeadData;
-use crate::paths::{blogpost_path, category_path};
+use crate::output::html::blogpost::render_blogpost_summary_list;
+use crate::paths::category_path;
 use crate::urls::{categories_url, category_url};
 use maud::{Markup, PreEscaped, html};
 use std::collections::HashMap;
@@ -60,15 +61,7 @@ pub fn render_category_page(
         (PreEscaped(crate::output::cmark::render_cmark(&category.description_markdown, false, hosted_files)?))
 
         h3 { "Diese Kategorie hat " (blogposts.len()) " Einträge" }
-        ul {
-            @for post in blogposts {
-                li {
-                    a href=(blogpost_path(post)){
-                        (post.title)
-                    }
-                }
-            }
-        }
+        (render_blogpost_summary_list(blogposts))
     };
     Ok(super::base(
         &HeadData::new(
@@ -150,6 +143,6 @@ mod tests {
         assert!(result.contains("<h2 class=\"section-heading\">Kategorie: Supervillainy</h2>"));
         assert!(result.contains("<strong>Good business!</strong>&lt;div&gt;foo&lt;/div&gt;"));
         assert!(result.contains("<h3>Diese Kategorie hat 2 Einträge</h3>"));
-        assert!(result.contains("<ul><li><a href=\"/blogposts/sprvlln\">How to be a supervillain</a></li><li><a href=\"/blogposts/caught\">How not to get caught</a></li></ul>"))
+        assert!(result.contains(r#"<ul><li><h4 class="posttitle"><a href="/blogposts/sprvlln">How to be a supervillain</a> (<time datetime="2020-05-11T12:13:14+02:00">11.05.2020 12:13</time>)</h4><p>foo!</p></li><li><h4 class="posttitle"><a href="/blogposts/caught">How not to get caught</a> (<time datetime="2020-05-11T12:13:14+02:00">11.05.2020 12:13</time>)</h4><p>foo!</p></li></ul>"#))
     }
 }

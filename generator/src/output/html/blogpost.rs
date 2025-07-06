@@ -71,6 +71,26 @@ pub fn render_blogpost(
     })
 }
 
+/// render a list of blogposts with just title, description and creation time
+/// meant to be used for overviews of blogposts (e.g. on category or tag pages)
+pub fn render_blogpost_summary_list(blogposts: &[&Blogpost]) -> Markup {
+    html!(
+        ul {
+            @for blogpost in blogposts {
+                li lang = [blogpost.language]{
+                    h4.posttitle {
+                        a href=(blogpost_path(blogpost)) {
+                            (blogpost.title)
+                        }
+                        " (" (super::time(&blogpost.date)) ")"
+                    }
+                    p { (blogpost.summary) }
+                }
+            }
+        }
+    )
+}
+
 pub fn render_blogpost_page(
     blogpost: &Blogpost,
     category: &Category,
@@ -193,6 +213,30 @@ mod tests {
         // then
         println!("Checking rendered html:\n{result}");
         assert!(result.contains(r#"<article class="blogpost" lang="en">"#));
+    }
+
+    #[test]
+    fn render_blogpost_summary_list_renders_title_date_and_summary() {
+        // given
+        let mut blogpost1 = create_blogpost();
+        blogpost1.title = "Teil 1: Deutsch".to_string();
+        blogpost1.summary = "Irgendwas auf Deutsch".to_string();
+
+        let mut blogpost2 = create_blogpost();
+        blogpost2.title = "Part 2: English".to_string();
+        blogpost2.summary = "Something in English".to_string();
+        blogpost2.language = Some(Language::En);
+
+        let blogposts = &[&blogpost1, &blogpost2];
+
+        // when
+        let html = render_blogpost_summary_list(blogposts);
+
+        // then
+        assert_eq!(
+            html.into_string(),
+            "<ul><li><h4 class=\"posttitle\"><a href=\"/blogposts/foobar\">Teil 1: Deutsch</a> (<time datetime=\"2020-05-11T12:13:14+02:00\">11.05.2020 12:13</time>)</h4><p>Irgendwas auf Deutsch</p></li><li lang=\"en\"><h4 class=\"posttitle\"><a href=\"/blogposts/foobar\">Part 2: English</a> (<time datetime=\"2020-05-11T12:13:14+02:00\">11.05.2020 12:13</time>)</h4><p>Something in English</p></li></ul>"
+        );
     }
 
     #[test]
