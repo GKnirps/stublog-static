@@ -527,11 +527,11 @@ Console.WriteLine(string.Format("g.Equals(g): {0}, g.Equals(h) {1}, g.Equals(i) 
 ```
 public struct Foos
 {
-public Foos(int a)
-{
-    A = a;
-}
-public int A { get; }
+    public Foos(int a)
+    {
+        A = a;
+    }
+    public int A { get; }
 }
 
 // woanders
