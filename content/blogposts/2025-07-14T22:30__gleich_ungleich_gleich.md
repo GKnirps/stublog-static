@@ -2,7 +2,7 @@
 title: Gleich ungleich Gleich
 filename: gleich_ungleich_gleich
 date: 2025-07-14T22:30:00+02:00
-update-date:
+update-date: 2025-07-15T07:45:00+02:00
 tags: programmieren, C, C++, rust, c-sharp, golang, python, java, javascript
 category: hoellenmaschinen
 summary: Ich vergleiche Vergleichsoperationen in verschiedenen Programmiersprachen
@@ -852,7 +852,7 @@ Rust kann alles, was die anderen Sprachen auch können, und vieles besser. Progr
 
 ### Zusammenfassung
 
-Meine Güte, ich habe jetzt schon wieder drei Stunden an diesem Artikel geschrieben. Und das schließt nicht die Zeit ein, die ich beim Implementieren der Codebeispiele verwendet habe. Die vollständigen Codebeispiele lade ich bald auch irgendwo hoch, aber nicht mehr jetzt. Fassen wir also zusammen:
+Meine Güte, ich habe jetzt schon wieder drei Stunden an diesem Artikel geschrieben. Und das schließt nicht die Zeit ein, die ich beim Implementieren der Codebeispiele verwendet habe. Die vollständigen Codebeispiele habe ich [auf Gitlab hochgeladen](https://gitlab.com/GKnirps/gleich-ungleich-gleich). Fassen wir also zusammen:
 
 - C bietet kaum Hilfe, geht aber offen damit um
 - C++ bietet Operatorüberladung und macht es ganz ordentlich, man muss aber viel selber machen
