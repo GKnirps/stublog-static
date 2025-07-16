@@ -11,7 +11,7 @@ image-alt:
 language:
 ---
 
-Rollenspielszene. Wir sind in einer besetzten Stadt. Wir suchen eine befreundete (und berüchtigte) Ætherwissenschaftlerin, Dr. Sejöstroem. Wir haben ein verschwörerisches Treffen mit Olive, einer Journalistin, und Jaro, einem Angestellten der Besatzerarmee.
+Rollenspielszene. Wir sind in einer besetzten Stadt. Wir suchen eine befreundete (und berüchtigte) Ætherwissenschaftlerin, Dr. Sjöstroem. Wir haben ein verschwörerisches Treffen mit Olive, einer Journalistin, und Jaro, einem Angestellten der Besatzerarmee.
 
 Die beiden erzählen uns, dass Dr. Sjöstroem in einem Sperrgebiet im Sperrgebiet verschollen ist, bei dem Versuch, die dort stattfindenden Entwicklungen gefährlicher Ætherwaffen (inklusive Tests an lebenden Menschen) offenzulegen. Wir entscheiden uns, in das Sperrgebiet einzudringen und sie zu retten. Allerdings brauchen wir dafür eine Ablenkung. Wir entscheiden uns, der örtlichen Journalisten dazu einzuspannen, für einen Aufruhr zu sorgen (im Austausch für eine Druckerpresse, denn deren eigene Pressen wurden von den Besatzern zerstört).
 
