@@ -5,13 +5,13 @@ date: 2023-02-17T20:45:11+01:00
 update-date:
 tags: optimierung, rust, curl, brainfuck
 category: hoellenmaschinen
-summary: Wie eine versuchte Code-Optimierung alles schlimmer machte. Zusätzlich dazu ein paar Resourcen zu Code-Optimierung.
+summary: Wie eine versuchte Code-Optimierung alles schlimmer machte. Zusätzlich dazu ein paar Ressourcen zu Code-Optimierung.
 image:
 ---
 
 Diesen Blogpost schiebe ich schon eine Weile vor mir her. Glücklicherweise hat sich in der Zeit mehr Material für den Blogpost angesammelt, so dass ich es nicht bereue, ihn jetzt erst zu schreiben.
 
-### Resourcen zu Optimierungen
+### Ressourcen zu Optimierungen
 
 Kurz nachdem ich meinen [letzten Blogpost über Optimierung](/blogposts/optimierungsspass) geschrieben habe, bin ich auf einen [Vortrag aus 2019](https://www.youtube.com/watch?v=r-TLSBdHe1A) aufmerksam geworden. Darin geht es auch um Optimierung von Programmen, und dass es nicht immer offensichtlich ist, ob eine Verbesserung statistisch signifikant ist und ob die vorgenommene Änderung wirklich Ursache für die bessere Performance war. Oft genug sind es einfach Nebeneffekte der Compileroptimierung, die halbzufällig anders arbeiten.
 
@@ -19,7 +19,7 @@ Wenn man ernstzunehmende Optimierung machen will, ist der Vortrag sehenswert. Da
 
 Noch ein paar Tage später hat dann Daniel Stenberg, der Maintainer von curl [einen Blogpost](https://daniel.haxx.se/blog/2022/12/06/faster-base64-in-curl/) über eine Optimierung des base-64 encoders in curl geschrieben. Auch durchaus lesenswert.
 
-Und dann, noch ein bisschen später, habe ich [diesen Vortrag](https://www.youtube.com/watch?v=JRMOIE_wAFk) über code-profiling in rust gelesen (gefunden dank [This Week in Rust](https://this-week-in-rust.org/). Ein schöner Vortrag, die meisten Methoden habe ich noch nicht angewandt.
+Und dann, noch ein bisschen später, habe ich [diesen Vortrag](https://www.youtube.com/watch?v=JRMOIE_wAFk) über code-profiling in rust gelesen (gefunden dank [This Week in Rust](https://this-week-in-rust.org/)). Ein schöner Vortrag, die meisten Methoden habe ich noch nicht angewandt.
 
 ### Fallstudie: Ein Brainfuckinterpreter
 
