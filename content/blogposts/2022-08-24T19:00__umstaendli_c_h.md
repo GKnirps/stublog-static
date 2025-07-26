@@ -111,7 +111,7 @@ Aber es ist doch schon sehr von hinten durch die Brust ins Auge. Man muss einige
 
 ##### Jede Menge Makros
 
-Doch damit hört es nicht auf- Auffällig ist, dass über die gesamte Datei verteilt sehr viele Makros verwendet werden.
+Doch damit hört es nicht auf. Auffällig ist, dass über die gesamte Datei verteilt sehr viele Makros verwendet werden.
 
 Nun sind C-Makros so eine Sache. Der C-Präprozessor ist unglaublich dumm, deswegen ist es möglich mit ihm so typunabhägige Sachen zu machen, weil die Typen erst später vom Compiler überprüft werden.
 
