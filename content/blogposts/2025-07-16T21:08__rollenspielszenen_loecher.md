@@ -3,7 +3,7 @@ title: Rollenspielszenen: Löcher
 filename: rollenspielszenen_loecher
 date: 2025-07-16T21:08:15+02:00
 update-date:
-tags: rollespielszenen, rollenspiel, geisel, schrottplatz
+tags: rollenspielszenen, rollenspiel, geisel, schrottplatz
 category: rollenspiele
 summary: Eine Verhandlung mit Teenager-Geiselnehmern führt zu Stürzen in Löcher auf dem Trauma-Schrottplatz.
 image:
