@@ -1,5 +1,5 @@
 ---
-title: Horelbuchungshorror
+title: Hotelbuchungshorror
 filename: hotelbuchungshorror
 date: 2025-08-03T14:36:43+02:00
 update-date:
