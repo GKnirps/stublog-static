@@ -25,4 +25,4 @@ Beim vierten Hotel lädt nicht einmal die Website. Die Verbindung wurde noch wä
 
 Und das ist nur die Kurzzusammenfassung, ohne die ganzen Mikroaggressionen, die mir diese Buchungswebsites über den Verlauf des Besuchs entgegenwerfen.
 
-Dẹr Tag ̇ist im ̒Eiṁer. Ėig̒eṅtl̇i̇c̣h müss̒te ịcḣ ̇jetzt a̒uch ̒noc̣h Ḃạhntickets b̒uchėn, abẹr dafür ḟehl̒ṫ ̒mi̒r ḍėr N̒erv. Es kann doch ̜nic̔h͓t̔ s͓ein͘, das͓s i̜ch JE͘D̜E̔S MAL, ⃒MAL, WE⃓NN IC̵H⃓ E⃫IN H⃫O̷TELZ̵IMMER BU̸C⃦H⃒E, E̶I⃒NE̸N̶ N⃦E̷RVE⃦NZUSA̶M̵ME̶NBRUC̸H̶ K⃒R̶I̶EGE⃓!
+Dẹr Tag ̇ist im ̒Eiṁer. Ėig̒eṅtl̇i̇c̣h müss̒te ịcḣ ̇jetzt a̒uch ̒noc̣h Ḃạhntickets b̒uchėn, abẹr dafür ḟehl̒ṫ ̒mi̒r ḍėr N̒erv. Es kann doch ̜nic̔h͓t̔ s͓ein͘, das͓s i̜ch JE͘D̜E̔S ⃒MAL, WE⃓NN IC̵H⃓ E⃫IN H⃫O̷TELZ̵IMMER BU̸C⃦H⃒E, E̶I⃒NE̸N̶ N⃦E̷RVE⃦NZUSA̶M̵ME̶NBRUC̸H̶ K⃒R̶I̶EGE⃓!
