@@ -163,38 +163,38 @@ fn parse_svg_size<T: BufRead>(source: T) -> Result<Option<ImageMetadata>, SvgErr
     // let's just assume the SVG element has to be _somewhere_ at the document's start
     // if not… well, I have control over all SVG files here, so…
     for _ in 0..5 {
-        if let Event::Start(tag) = reader.read_event_into(&mut buf).map_err(SvgError::Xml)? {
-            if tag.name().into_inner() == b"svg" {
-                let width_str = match tag
-                    .attributes()
-                    .filter_map(|a| a.ok())
-                    .find(|a| a.key.into_inner() == b"width")
-                {
-                    Some(a) => a,
-                    None => {
-                        return Ok(None);
-                    }
+        if let Event::Start(tag) = reader.read_event_into(&mut buf).map_err(SvgError::Xml)?
+            && tag.name().into_inner() == b"svg"
+        {
+            let width_str = match tag
+                .attributes()
+                .filter_map(|a| a.ok())
+                .find(|a| a.key.into_inner() == b"width")
+            {
+                Some(a) => a,
+                None => {
+                    return Ok(None);
                 }
-                .value;
-                let height_str = match tag
-                    .attributes()
-                    .filter_map(|a| a.ok())
-                    .find(|a| a.key.into_inner() == b"height")
-                {
-                    Some(a) => a,
-                    None => {
-                        return Ok(None);
-                    }
-                }
-                .value;
-                let width_str = std::str::from_utf8(&width_str)
-                    .map_err(|e| SvgError::Svg(format!("invalid width encoding: {e}")))?;
-                let height_str = std::str::from_utf8(&height_str)
-                    .map_err(|e| SvgError::Svg(format!("invalid height encoding: {e}")))?;
-                let width = parse_svg_unit(width_str).map_err(SvgError::Svg)?;
-                let height = parse_svg_unit(height_str).map_err(SvgError::Svg)?;
-                return Ok(Some(ImageMetadata { width, height }));
             }
+            .value;
+            let height_str = match tag
+                .attributes()
+                .filter_map(|a| a.ok())
+                .find(|a| a.key.into_inner() == b"height")
+            {
+                Some(a) => a,
+                None => {
+                    return Ok(None);
+                }
+            }
+            .value;
+            let width_str = std::str::from_utf8(&width_str)
+                .map_err(|e| SvgError::Svg(format!("invalid width encoding: {e}")))?;
+            let height_str = std::str::from_utf8(&height_str)
+                .map_err(|e| SvgError::Svg(format!("invalid height encoding: {e}")))?;
+            let width = parse_svg_unit(width_str).map_err(SvgError::Svg)?;
+            let height = parse_svg_unit(height_str).map_err(SvgError::Svg)?;
+            return Ok(Some(ImageMetadata { width, height }));
         }
         buf.clear()
     }

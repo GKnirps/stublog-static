@@ -166,7 +166,7 @@ pub fn render_blogpost_content(
 // `/file/`), return an iterator over those paths
 // Can be used to check if a page has to be updated because a hosted file changed.
 // Takes both commonmark images and commonmark links into account. Ignores HTML `<a>` and `<img>`
-pub fn hosted_files_from_markdown(markdown: &str) -> impl Iterator<Item = CowStr> {
+pub fn hosted_files_from_markdown(markdown: &str) -> impl Iterator<Item = CowStr<'_>> {
     Parser::new(markdown).filter_map(|event| {
         let dest = match event {
             Event::Start(Tag::Link { dest_url, .. }) => dest_url,
