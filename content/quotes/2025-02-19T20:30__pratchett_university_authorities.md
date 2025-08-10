@@ -3,7 +3,7 @@ id: pratchett_university_authorities
 source-name: Mustrum Ridcully, Soul Music
 source-url:
 date: 2025-02-19T20:30:38+01:00
-published: false
+published: true
 language: en
 ---
 
