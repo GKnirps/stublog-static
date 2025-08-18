@@ -3,7 +3,7 @@ title: Rollenspielszenen: Heilergildenmitgliedschaft
 filename: rollenspielszenen_vergesslich
 date: 2025-08-03T00:10:44+02:00
 update-date:
-tags: rollenspiel, rollenspielszenen, vergesslich
+tags: rollenspiel, rollenspielszenen, vergesslich, world tree
 category: rollenspiele
 summary: Vergessliche Spielercharaktere machen die Handlung interessanter.
 image:
