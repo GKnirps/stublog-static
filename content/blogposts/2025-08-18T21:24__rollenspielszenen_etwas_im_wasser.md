@@ -11,7 +11,7 @@ image-alt:
 language:
 ---
 
-Rollenspielszene: Die Helden haben jetzt [eine Heilerin und einen Heilzauber für eine gefährliche Krankheit](/blogposts/rollenspielszenen_vergesslich). Sie haben den ganzen Tag gebraucht, um alles zu organisieren, und jetzt fahren sie in der Nachr zurück über den See nach Hause.
+Rollenspielszene: Die Helden haben jetzt [eine Heilerin und einen Heilzauber für eine gefährliche Krankheit](/blogposts/rollenspielszenen_vergesslich). Sie haben den ganzen Tag gebraucht, um alles zu organisieren, und jetzt fahren sie in der Nacht zurück über den See nach Hause.
 
 Alle schlafen, nur die Steuerfrau des Bootes (Fizzle) und das junge Zi Ri, Nini, sind noch wach. Plötzlich sieht Nini einen Schatten im Wasser! Aufgeregt zischt Nini von Reling zu Reling und versucht, Genaueres zu erkennen, aber es ist zu dunkel. Fizzle tut alle ihre Hinweise ab. „Nein, da ist nichts im Wasser, du bildest dir das nur ein“.
 
