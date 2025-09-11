@@ -21,8 +21,10 @@ directories:
 	mkdir -p dist/assets
 	mkdir -p dist/file
 
+# We explicitly name the quote fortune-DB as target here as well, so the dat-file gets updates
+# when a quote changes
 .PHONY: generate-html
-generate-html: assets
+dist/quotes/strangerthanusual generate-html: assets
 	cd generator && cargo run --release ../content ../dist
 
 ### content files (such as images used in posts)
@@ -36,15 +38,8 @@ dist/file/%: content/file/% | directories
 
 ### fortune cookies
 
-# TODO: since generate-html is a phony target, the dat file will be generated on each run.
-#       this is not an easy problem to solve, but I have no clue how to fix this other than
-#       create another sub-makefile (such as I did for compression). For compression, this
-#       was necessary due to the long time the compression takes. In this case it is fast enough
-#       so I will fix this some time in the future.
 dist/quotes/strangerthanusual.dat: dist/quotes/strangerthanusual
 	strfile -s dist/quotes/strangerthanusual
-
-dist/quotes/strangerthanusual: generate-html
 
 dist/quotes/strangerthanusual.tar.bz2: dist/quotes/strangerthanusual.dat dist/quotes/strangerthanusual
 	tar -C dist/quotes -cjf dist/quotes/strangerthanusual.tar.bz2 strangerthanusual strangerthanusual.dat
