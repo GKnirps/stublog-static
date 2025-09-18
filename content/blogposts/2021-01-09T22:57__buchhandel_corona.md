@@ -16,7 +16,7 @@ Wenn man gerne liest, gibt es aber glücklicherweise noch andere Möglichkeiten,
 
 Was aber, wenn ich jetzt die kleine Buchhandlung um die Ecke unterstützen möchte? In meinem Fall zum Beispiel kenne ich da eine [Buchhandlung in Essen-Überruhr namens Schirrmeister](https://schirrmeister.buchhandlung.de/shop/), in der ich immer gerne Bücher kaufe, und in der mir die Leute auch Bücher empfehlen können. Ich möchte nicht, dass die pleite gehen. Was also tun?
 
-Nun, erst einmal sollte man sich informieren. Viele Buchhandlungen sind kreativ (oder verzweifelt) genug, Bücher doch irgendwie unter die Leute zu bringen. Schirrmeister zum Beispiel bietet Kontaktlose Abholung vor der Tür ihres Ladens an. Außerdem hat auch Schirrmeister einen Online-Shop, bei dem man sich Bücher nach Hause bestellen kann (man kann dort auch Tolino-Ebooks kaufen).
+Nun, erst einmal sollte man sich informieren. Viele Buchhandlungen sind kreativ (oder verzweifelt) genug, Bücher doch irgendwie unter die Leute zu bringen. Schirrmeister zum Beispiel bietet kontaktlose Abholung vor der Tür ihres Ladens an. Außerdem hat auch Schirrmeister einen Online-Shop, bei dem man sich Bücher nach Hause bestellen kann (man kann dort auch Tolino-Ebooks kaufen).
 
 Wie kann sich eine solche kleine Buchhandlung einen Online-Shop (sogar mit Tolino-Anbindung) leisten? Nun, zufälligerweise habe ich hier Insiderinformationen. Es gibt mindestens einen Buchgroßhändler in Deutschland, der Partnern Zugang zu einem Onlineshop bietet, der auch ein paar Einstellungsmöglichkeiten bietet, wie sich der Shop präsentiert. Üblicherweise kann man damit auch Bücher direkt in den Laden bestellen, sie sind dann im Gegensatz zum regulären Versand deutlich schneller da (am nächsten Tag, wenn sie auf Lager sind).
 
