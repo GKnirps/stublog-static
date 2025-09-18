@@ -6,8 +6,8 @@ update-date:
 tags: geschirr, porzellan, reparatur, kanarische inseln, el hierro
 category: ganz_normaler_wahnsinn
 summary: Bevor es modernen Kleber gab, hat man Geschirr auf andere Weise geflickt.
-image:
-image-alt:
+image: /file/el_hierro_keramik_repariert.webp
+image-alt: Hinten steht ein weißer Keramikteller (vielleicht Porzellan) an die aufrecht and die Wand gelehnt. Er hat Risse und wurde mit grobem Draht geflickt. Es sieht so aus, als hätte jemand ihn wieder zusammengetackert. Um diesen Teller herum stehen andere alte, aber nicht zerbrochene, Teller.
 language:
 ---
 
