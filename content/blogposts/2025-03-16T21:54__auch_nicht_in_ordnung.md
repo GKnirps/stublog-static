@@ -3,7 +3,7 @@ title: Auch nicht in Ordnung
 filename: auch_nicht_in_ordnung
 date: 2025-03-16T21:54:16+01:00
 update-date:
-tags: trump, legislative, judikative, exekutive, presse, gewaltenteilung, rant, grenze
+tags: trump, legislative, judikative, exekutive, presse, gewaltenteilung, rant, grenze, politik
 category: ithought
 summary: Noch ein paar mehr Dinge, bei denen ich gerne daran erinnern würde, dass sie nicht normal, nicht in Ordnung und nicht akzeptabel sind. Sonst gewöhnen wir uns vielleicht noch daran.
 image:
