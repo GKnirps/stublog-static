@@ -25,7 +25,7 @@ Aber schauen wir uns mal den Zeitverlauf an: Anfangs war es noch leicht [Sicherh
 
 Im Vergleich dazu die neue Blogsoftware: Auch nach fünf Jahren finde ich mich im Code gut zurecht. Schwerwiegende Sicherheitslücken in den Abhängigkeiten gab es keine. Updates der Abhängigkeiten waren nie ein Problem. Ich habe immer wieder neue Features hinzufügen können, zum Beispiel [Bilddimensionsattribute](/blogposts/lang_und_breit), Opengraph-Attribute und ein paar andere Kleinigkeiten. Auch der [Import von Blogposts aus meinem ganz alten Blog](/blogposts/import_export), den ich lange vor mir hergeschoben habe, war ganz einfach.
 
-Kurz: Rails war einfach zu Komplex für meinen use case.
+Kurz: Rails war einfach zu komplex für meinen use case.
 
 ### Komplexität
 
