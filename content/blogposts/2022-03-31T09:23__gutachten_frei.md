@@ -11,7 +11,7 @@ image:
 
 ### 1. Akt: Das Gutachten
 
-Ich hatte im Mai 2019 [schon davon berichtet](https://blog.strangerthanusual.de/blogposts/222): Fragdenstaat.de, eine Organisation, die staatliche Informationen via Informationsfreiheitsgesetz anfordert und dann veröffentlicht, musste ein Gutachten über Glyphosat wegen einer Urheberrechtsbeschwerde des Bundesinstituts für Risikobewertung (BfI) wieder offline nehmen.
+Ich hatte im Mai 2019 [schon davon berichtet](/blogposts/222): Fragdenstaat.de, eine Organisation, die staatliche Informationen via Informationsfreiheitsgesetz anfordert und dann veröffentlicht, musste ein Gutachten über Glyphosat wegen einer Urheberrechtsbeschwerde des Bundesinstituts für Risikobewertung (BfI) wieder offline nehmen.
 
 Nun ist es natürlich absurd, dass ein Gutachten, das von Steuergeldern finanziert wurde, für politische Entscheidungsfindung genutzt wurde und für jeden, der es lesen will, per Anfrage einsehbar ist, nicht einfach offen im Netz stehen darf.
 
@@ -21,7 +21,7 @@ Fragdenstaat.de hat daraufhin getan, was sie in solchen Fällen immer tun: Statt
 
 Die Idee dahinter: Wenn nur genug Leute das anfragen, hat die entsprechende Behörde keine Lust mehr, alle Anfragen einzeln zu beantworten und stellt die Dokumente entweder auf der eigenen Website frei zu Verfügung oder erlaubt fragdenstaat.de die Veröffentlichung.
 
-Beim BfR hat das nicht so gut funktioniert. Obwohl innerhalb kürzester Zeit zehntausende Anfragen eingingen, hat das BfR die Dokumente nicht einfach online gestellt. Stattdessen haben sie eine Website mit Zugriffsschutz gebaut, die [meiner eigenen Analyse nach](https://blog.strangerthanusual.de/blogposts/223) _absichtlich umständlich zu bedienen ist_, einen (leicht zu umgehenden) Schutz gegen rechte Mausklicks hat und dazu noch nicht barrierefrei ist, weil die Dokumente nicht in einem Textformat, sondern als Bilddateien veröffentlicht wurden.
+Beim BfR hat das nicht so gut funktioniert. Obwohl innerhalb kürzester Zeit zehntausende Anfragen eingingen, hat das BfR die Dokumente nicht einfach online gestellt. Stattdessen haben sie eine Website mit Zugriffsschutz gebaut, die [meiner eigenen Analyse nach](/blogposts/223) _absichtlich umständlich zu bedienen ist_, einen (leicht zu umgehenden) Schutz gegen rechte Mausklicks hat und dazu noch nicht barrierefrei ist, weil die Dokumente nicht in einem Textformat, sondern als Bilddateien veröffentlicht wurden.
 
 ### 3. Akt: Freiklagen des Gutachtens
 

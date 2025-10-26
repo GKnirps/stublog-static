@@ -34,7 +34,7 @@ Kein Link hier, aus Datenschutzgründen. Sie haben sogar die Dreistigkeit, Homö
 
 [Staatstrojaner-Einsatz auch „gegen Personen […], gegen die noch kein Tatverdacht begründet ist“](https://netzpolitik.org/2021/bundespolizeigesetz-grosse-koalition-einigt-sich-auf-staatstrojaner-einsatz-schon-vor-straftaten/). 
 
-[Uploadfilter werden Gesetz](https://netzpolitik.org/2021/urheberrechtsreform-uploadfilter-werden-gesetz/). Erinnert ihr euch an [2019](https://blog.strangerthanusual.de/blogposts/221)? Da gab es große Demos gegen die Urheberrechtsreform. Demonstranten wurde die Legitimation abgesprochen (sind ja alles Bots/dumme Leute, die sich von Google einspannen lassen/bezahlt), und die Befürchtungen heruntergespielt (im Gesetzestext steht nichts von Uploadfiltern, wird keine Uplodfilter geben!).
+[Uploadfilter werden Gesetz](https://netzpolitik.org/2021/urheberrechtsreform-uploadfilter-werden-gesetz/). Erinnert ihr euch an [2019](/blogposts/221)? Da gab es große Demos gegen die Urheberrechtsreform. Demonstranten wurde die Legitimation abgesprochen (sind ja alles Bots/dumme Leute, die sich von Google einspannen lassen/bezahlt), und die Befürchtungen heruntergespielt (im Gesetzestext steht nichts von Uploadfiltern, wird keine Uplodfilter geben!).
 
 Jetzt ist die Urheberrechtsreform in Deutschland umgesetzt worden und natürlich gibt es Uploadfilter. Niemand hat die Absicht, eine Mauer zu bauen!
 

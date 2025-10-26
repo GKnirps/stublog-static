@@ -9,7 +9,7 @@ summary: Ich habe immer noch keine Erklärung für das Abiturklausurdownloaddeba
 image:
 ---
 
-Das ist jetzt natürlich ein paar Monate zu spät, aber ich wollte im Rahmen [der](https://blog.strangerthanusual.de/blogposts/logging) [Dinge](https://blog.strangerthanusual.de/blogposts/ms_preiserhoehung), über die ich nach meinem Urlaub schreiben wollte, auch über das [Abiturdownloaddebakel](https://www.heise.de/news/Technikpanne-bei-Abitur-in-NRW-Ueberlastete-Server-sollen-Ursache-gewesen-sein-8976516.html) in NRW schreiben. Dann mache ich das halt jetzt.
+Das ist jetzt natürlich ein paar Monate zu spät, aber ich wollte im Rahmen [der](/blogposts/logging) [Dinge](/blogposts/ms_preiserhoehung), über die ich nach meinem Urlaub schreiben wollte, auch über das [Abiturdownloaddebakel](https://www.heise.de/news/Technikpanne-bei-Abitur-in-NRW-Ueberlastete-Server-sollen-Ursache-gewesen-sein-8976516.html) in NRW schreiben. Dann mache ich das halt jetzt.
 
 Über die [Sicherheitslücken](https://www.heise.de/news/Technikpanne-bei-Abitur-in-NRW-Ueberlastete-Server-sollen-Ursache-gewesen-sein-8976516.html), die im Anschluss gefunden wurden, lasse ich mich mal nicht aus. Das kann [Lilith Wittmann](https://twitter.com/LilithWittmann/status/1650586828099993602) viel besser.
 

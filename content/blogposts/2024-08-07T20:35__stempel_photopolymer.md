@@ -7,7 +7,7 @@ tags: sendung mit der maus, maus, armin maiwald, stempel, photopolymer, laserdru
 category: ganz_normaler_wahnsinn
 summary: 1996 gab es in der Sendung mit der Maus eine Sachgeschichte, wie man Stempel mit Photopolymer selber macht. Jetzt, 2024, habe ich das endlich mal ausprobiert.
 image: /file/napstablook_gestempelt.webp
-image-alt: https://blog.strangerthanusual.de/blogposts/stempel_photopolymer
+image-alt: Vier Stempelabdrücke von Napstablook in blauer Farbe auf weißem Papier. Daneben mit dem Motiv nach oben der dazugehörige Stempel
 language:
 allow-html: true
 ---
