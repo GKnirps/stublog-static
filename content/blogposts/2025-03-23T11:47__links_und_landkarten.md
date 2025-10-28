@@ -3,7 +3,7 @@ title: Links und Landkarten
 filename: links_und_landkarten
 date: 2025-03-23T11:47:48+01:00
 update-date:
-tags: ebstorfer weltkarte, irmimi, toter link, tvtropes
+tags: ebstorfer weltkarte, irmimi, toter link, tvtropes, podcast
 category: weiteweitewelt
 summary: Der Irmimi-Podcast hatte eine Folge zur Ebstorfer Weltkarte. Dabei war ein Link zu einer großen Darstellung auf der Seite des Museum Lüneburg. Aber nur wenige Wochen nach Erscheinen der Folge ist der Link tot.
 image:
