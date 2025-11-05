@@ -13,7 +13,7 @@ language:
 
 Rollenspielszene. Wir spielen die Band *Spice of Life*, die es gerade geschafft hat, im Staat Ikaris populär zu werden. So populär, dass wir eine Tournee durch die Militärlager des Landes machen, um die Moral der Soldaten an der Front zu heben.
 
-Was das ikarische Militär nicht weiß: Wir sind in Wirklichkeit Spione (*Spies of Life*) aus dem Nachbarland, den Wasted Lands, mit denen Ikaris gerade Krieg führt (im vorherigen Abenteur, mit anderen Charakteren, [sind wir gerade aus einer von Ikaris besetzten Stadt geflohen](/rollenspielszenen_kerbie_der_wunderhund). Unsere Aufgabe: Bei der Tournee möglichst viele Informationen sammeln, aus Leuten herauskitzeln und wenn es eine gute Gelegenheit gibt, Sabotage.
+Was das ikarische Militär nicht weiß: Wir sind in Wirklichkeit Spione (*Spies of Life*) aus dem Nachbarland, den Wasted Lands, mit denen Ikaris gerade Krieg führt (im vorherigen Abenteur, mit anderen Charakteren, [sind wir gerade aus einer von Ikaris besetzten Stadt geflohen](/rollenspielszenen_kerbie_der_wunderhund)). Unsere Aufgabe: Bei der Tournee möglichst viele Informationen sammeln, aus Leuten herauskitzeln und wenn es eine gute Gelegenheit gibt, Sabotage.
 
 Wir sind also auf einer Militärgala zum Auftakt unserer Tournee. Wir haben einen kurzen Auftritt, und dann stellt Ianthe, die PR-Frau der Tournee die Überraschung vor: Eine zweite Band begleitet uns. Und nicht irgendeine Band.
 
