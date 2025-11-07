@@ -88,7 +88,7 @@ pub fn write_hosted_file_index_pages(
     }
 
     let chunk_size: usize = 45;
-    let num_chunks = files.len() / chunk_size + usize::from(files.len() % chunk_size != 0);
+    let num_chunks = files.len() / chunk_size + usize::from(!files.len().is_multiple_of(chunk_size));
 
     // we need this because when another page is added, all previous pages need to update because the
     // pager needs to include the new page
