@@ -38,7 +38,7 @@ Ein besonderes Merkmal ist, dass immer einer der beiden die Geschichte erzählt 
 
 ### HerStory
 
-_Noch_ ein Geschichtspodcast. [HerStory](https://herstorypod.de/) ist ein Podcast von Jasmin Störcher und behandelt historische Frauen und queere Personen, die ja in der Geschichtsschreibung häufig ignoriert wurden. Dabei sind die Protagonist_innen nicht immer Helden. Genauso wie bei Männern gibt es auch bei Frauen welche, die Gutes getan haben, welche die Böses getan haben und welche, bei denen es gute und schlechte Seiten gibt. So oder so, wenn man nur die Geschichten von Männern erzählt, lässt man einen großen Teil aus.
+_Noch_ ein Geschichtspodcast. [HerStory](https://herstorypod.de/) ist ein Podcast von Jasmin Lörchner und behandelt historische Frauen und queere Personen, die ja in der Geschichtsschreibung häufig ignoriert wurden. Dabei sind die Protagonist_innen nicht immer Helden. Genauso wie bei Männern gibt es auch bei Frauen welche, die Gutes getan haben, welche die Böses getan haben und welche, bei denen es gute und schlechte Seiten gibt. So oder so, wenn man nur die Geschichten von Männern erzählt, lässt man einen großen Teil aus.
 
 ### Déjà-vu Geschichte
 
