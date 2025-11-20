@@ -175,7 +175,8 @@ pub fn write_archive(
     }
 
     let chunk_size: usize = 15;
-    let num_chunks = all_posts.len() / chunk_size + usize::from(!all_posts.len().is_multiple_of(chunk_size));
+    let num_chunks =
+        all_posts.len() / chunk_size + usize::from(!all_posts.len().is_multiple_of(chunk_size));
 
     // we need this because when another page is added, all previous pages need to update because the
     // pager needs to include the new page

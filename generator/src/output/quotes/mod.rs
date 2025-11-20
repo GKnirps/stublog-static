@@ -139,7 +139,8 @@ pub fn write_quote_list_pages(
     }
 
     let chunk_size: usize = 50;
-    let num_chunks = quotes.len() / chunk_size + usize::from(!quotes.len().is_multiple_of(chunk_size));
+    let num_chunks =
+        quotes.len() / chunk_size + usize::from(!quotes.len().is_multiple_of(chunk_size));
 
     // we need this because when another page is added, all previous pages need to update because the
     // pager needs to include the new page

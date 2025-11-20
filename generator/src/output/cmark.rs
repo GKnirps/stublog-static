@@ -103,6 +103,28 @@ impl<'ev, T: Iterator<Item = Event<'ev>>> Iterator for CustomImageTagIterator<'e
     }
 }
 
+pub fn escape_markdown_html<'ev>(
+    input: impl Iterator<Item = Event<'ev>>,
+) -> impl Iterator<Item = Event<'ev>> {
+    input.map(|event| match event {
+        Event::Html(html) => Event::Text(html),
+        Event::InlineHtml(html) => Event::Text(html),
+        // the other events are listed explicitly so I can avoid nasty surprises if they
+        // add a new event that contains HTML
+        Event::Start(_)
+        | Event::End(_)
+        | Event::Text(_)
+        | Event::Code(_)
+        | Event::InlineMath(_)
+        | Event::DisplayMath(_)
+        | Event::FootnoteReference(_)
+        | Event::SoftBreak
+        | Event::HardBreak
+        | Event::Rule
+        | Event::TaskListMarker(_) => event,
+    })
+}
+
 pub fn render_cmark(
     input: &str,
     allow_html: bool,
@@ -114,26 +136,8 @@ pub fn render_cmark(
         // Assigning image sizes may fail. If we don't collect all events in a Vec here, error handling
         // is far more complicated
         let parsed_with_custom_img_tags = CustomImageTagIterator {
-            source: parser
-                .into_iter()
-                // We have to do the HTML escaping _before_ the image stuff because the image stuff uses HTML events to do its thing
-                .map(|event| match event {
-                    Event::Html(html) => Event::Text(html),
-                    Event::InlineHtml(html) => Event::Text(html),
-                    // the other events are listed explicitly so I can avoid nasty surprises if they
-                    // add a new event that contains HTML
-                    Event::Start(_)
-                    | Event::End(_)
-                    | Event::Text(_)
-                    | Event::Code(_)
-                    | Event::InlineMath(_)
-                    | Event::DisplayMath(_)
-                    | Event::FootnoteReference(_)
-                    | Event::SoftBreak
-                    | Event::HardBreak
-                    | Event::Rule
-                    | Event::TaskListMarker(_) => event,
-                }),
+            // We have to do the HTML escaping _before_ the image stuff because the image stuff uses HTML events to do its thing
+            source: escape_markdown_html(parser.into_iter()),
             hosted_files,
         }
         .collect::<Result<Vec<Event>, RenderError>>()?;
@@ -160,6 +164,84 @@ pub fn render_blogpost_content(
         blogpost.allow_html,
         hosted_files,
     )
+}
+
+pub fn render_blogpost_for_atom(
+    blogpost: &Blogpost,
+    hosted_files: &HashMap<&str, &HostedFile>,
+) -> Result<String, RenderError> {
+    let parser = Parser::new(&blogpost.content_markdown);
+    let mut buf = String::with_capacity(blogpost.content_markdown.len() * 2);
+    if !blogpost.allow_html {
+        // Assigning image sizes may fail. If we don't collect all events in a Vec here, error handling
+        // is far more complicated
+        let parsed_with_custom_img_tags = CustomImageTagIterator {
+            // We have to do the HTML escaping _before_ the image stuff because the image stuff uses HTML events to do its thing
+            source: escape_markdown_html(parser.into_iter()),
+            hosted_files,
+        }
+        .collect::<Result<Vec<Event>, RenderError>>()?;
+        push_html(
+            &mut buf,
+            make_urls_absolute(parsed_with_custom_img_tags.into_iter()),
+        )
+    } else {
+        // Assigning image sizes may fail. If we don't collect all events in a Vec here, error handling
+        // is far more complicated
+        let parsed_with_custom_img_tags = CustomImageTagIterator {
+            source: parser,
+            hosted_files,
+        }
+        .collect::<Result<Vec<Event>, RenderError>>()?;
+        push_html(
+            &mut buf,
+            make_urls_absolute(parsed_with_custom_img_tags.into_iter()),
+        );
+    }
+    Ok(buf)
+}
+
+fn make_url_absolute<'url>(input: CowStr<'url>) -> CowStr<'url> {
+    if input.starts_with("//") {
+        let url = format!("https:{input}");
+        CowStr::Boxed(url.into_boxed_str())
+    } else if input.starts_with('/') {
+        let url = format!("https://blog.strangerthanusual.de{input}");
+        CowStr::Boxed(url.into_boxed_str())
+    } else {
+        // TODO: handle relative paths as well
+        input
+    }
+}
+
+fn make_urls_absolute<'ev>(
+    input: impl Iterator<Item = Event<'ev>>,
+) -> impl Iterator<Item = Event<'ev>> {
+    input.map(|event| match event {
+        Event::Start(Tag::Link {
+            link_type,
+            dest_url,
+            title,
+            id,
+        }) => Event::Start(Tag::Link {
+            dest_url: make_url_absolute(dest_url),
+            link_type,
+            title,
+            id,
+        }),
+        Event::Start(Tag::Image {
+            link_type,
+            dest_url,
+            title,
+            id,
+        }) => Event::Start(Tag::Image {
+            dest_url: make_url_absolute(dest_url),
+            link_type,
+            title,
+            id,
+        }),
+        _ => event,
+    })
 }
 
 // go through the markdown, take all paths to hosted files (i.e. where the path starts with
@@ -563,5 +645,22 @@ I CAN HAZ [KITTEHS](https://xkcd.com/231/)?
         assert_eq!(files.next(), Some(CowStr::Borrowed("/file/lolcat.jpeg")));
         assert_eq!(files.next(), Some(CowStr::Borrowed("/file/foo.tar.gz")));
         assert_eq!(files.next(), None);
+    }
+
+    #[test]
+    fn make_urls_absolute_works_for_links_and_images() {
+        // given
+        let input = "[relative](/relative)[absolute](https://example.com/absolute)[no_schema](//example.com/no_schema)\
+![imgrel](/file/img)";
+        let mut buffer = String::with_capacity(1024);
+
+        // when
+        push_html(&mut buffer, make_urls_absolute(Parser::new(input)));
+
+        // then
+        assert_eq!(
+            buffer,
+            "<p><a href=\"https://blog.strangerthanusual.de/relative\">relative</a><a href=\"https://example.com/absolute\">absolute</a><a href=\"https://example.com/no_schema\">no_schema</a><img src=\"https://blog.strangerthanusual.de/file/img\" alt=\"imgrel\" /></p>\n"
+        );
     }
 }

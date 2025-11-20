@@ -15,7 +15,7 @@
  *  along with stublog-static. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use super::super::cmark::render_blogpost_content;
+use super::super::cmark::render_blogpost_for_atom;
 use crate::HostedFile;
 use crate::input::Blogpost;
 use crate::output::OutputError;
@@ -91,7 +91,7 @@ fn write_entry<T: Write>(
         writer,
         "content",
         &[("type", "html")],
-        &render_blogpost_content(blogpost, hosted_files)?,
+        &render_blogpost_for_atom(blogpost, hosted_files)?,
     )?;
 
     write_link(writer, &blogpost_url(blogpost), "alternate", "text/html")?;
@@ -195,7 +195,8 @@ mod tests {
     #[test]
     fn write_entry_writes_full_entry() {
         // given
-        let post = create_blogpost();
+        let mut post = create_blogpost();
+        post.content_markdown.push_str("[click](/relative)");
         let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
         let hosted_files = HashMap::new();
 
@@ -215,7 +216,7 @@ mod tests {
         <updated>2020-05-25T12:13:14+02:00</updated>\
         <author><name>Knirps</name></author>\
         <summary>foo!</summary>\
-        <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;/p&gt;\n</content>\
+        <content type=\"html\">&lt;p&gt;&lt;em&gt;foo&lt;/em&gt;bar&lt;a href=&quot;https://blog.strangerthanusual.de/relative&quot;&gt;click&lt;/a&gt;&lt;/p&gt;\n</content>\
         <link href=\"https://blog.strangerthanusual.de/blogposts/foobar\" rel=\"alternate\" type=\"text/html\"/>\
         </entry>"
         );
