@@ -3,7 +3,7 @@ title: Rollenspielszene: Das Wiesel oder ich
 filename: rollenspielszenen_das_wiesel_oder_ich
 date: 2025-12-03T22:30:47+01:00
 update-date:
-tags: rollenspiel, rollenspielszene, wiesel
+tags: rollenspiel, rollenspielszenen, wiesel
 category: rollenspiele
 summary: Wie Kiki an sein Wiesel kam.
 image:
