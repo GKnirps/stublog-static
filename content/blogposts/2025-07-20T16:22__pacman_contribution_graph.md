@@ -3,7 +3,7 @@ title: Pacman contribution graph für GitHub und GitLab
 filename: pacman_contribution_graph
 date: 2025-07-20T16:22:23+02:00
 update-date:
-tags: pacman, github, gitlab, kunst, digitale kunst, digital art
+tags: pacman, github, gitlab, kunst, digitale kunst, digital art, svg
 category: hoellenmaschinen
 summary: Ein Arbeitskollege hat ein Programm geschrieben, dass einen GitHub oder GitLab contribution graph in ein animiertes Pacman-Spiel verwandelt.
 image:
