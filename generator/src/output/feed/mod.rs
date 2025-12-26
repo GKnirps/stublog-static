@@ -17,7 +17,7 @@
 
 use super::file::open_for_write;
 use crate::HostedFile;
-use crate::input::Blogpost;
+use crate::input::{Assets, Blogpost};
 use crate::output::needs_any_update;
 use camino::Utf8Path;
 use quick_xml::Writer;
@@ -46,6 +46,7 @@ pub fn write_atom_feed(
     dir: &Utf8Path,
     blogposts: &[Blogpost],
     hosted_files: &HashMap<&str, &HostedFile>,
+    assets: &Assets,
 ) -> Result<(), String> {
     let mut filename = dir.to_path_buf();
     filename.push("feed.atom");
@@ -57,7 +58,7 @@ pub fn write_atom_feed(
         open_for_write(&filename).map_err(|e| format!("Unable to open atom feed file: {e}"))?;
     let mut writer = Writer::new(file);
 
-    atom::write_feed(&mut writer, blogposts, hosted_files)
+    atom::write_feed(&mut writer, blogposts, hosted_files, assets)
         .map_err(|e| format!("Unable to write atom feed: {e}"))?;
 
     writer

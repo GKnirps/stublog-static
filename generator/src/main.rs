@@ -168,7 +168,12 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
     )
     .map_err(|e| format!("Failed to write home page: {e}"))?;
 
-    feed::write_atom_feed(Utf8Path::new(odir), &blogposts, &hosted_files_by_name)?;
+    feed::write_atom_feed(
+        Utf8Path::new(odir),
+        &blogposts,
+        &hosted_files_by_name,
+        &assets,
+    )?;
 
     let quote_dir: Utf8PathBuf = [odir, "quote"].iter().collect();
     quotes::write_quote_pages(

@@ -17,8 +17,9 @@
 
 use super::super::cmark::render_blogpost_for_atom;
 use crate::HostedFile;
-use crate::input::Blogpost;
+use crate::input::{Assets, Blogpost};
 use crate::output::OutputError;
+use crate::urls::favicon_url;
 use crate::urls::{CANONICAL_BASE_URL, atom_feed_url, blogpost_url};
 use chrono::{FixedOffset, TimeZone};
 use percent_encoding::{CONTROLS, percent_encode};
@@ -104,6 +105,7 @@ pub fn write_feed<T: Write>(
     writer: &mut Writer<T>,
     blogposts: &[Blogpost],
     hosted_files: &HashMap<&str, &HostedFile>,
+    assets: &Assets,
 ) -> Result<(), OutputError> {
     // For the update timestamp, we do not take changes to hosted files into account.
     let updated = blogposts
@@ -129,6 +131,7 @@ pub fn write_feed<T: Write>(
 
     write_leaf(writer, "id", &[], "tag:strangerthanusual.de,2005:/feed")?;
     write_leaf(writer, "title", &[], "Stranger Than Usual")?;
+    write_leaf(writer, "icon", &[], &favicon_url(assets))?;
     write_leaf(writer, "updated", &[], &updated.to_rfc3339())?;
 
     write_link(writer, CANONICAL_BASE_URL, "alternate", "text/html")?;
@@ -146,7 +149,7 @@ pub fn write_feed<T: Write>(
 mod tests {
     use super::*;
     use crate::output::RenderError;
-    use crate::test_utils::create_blogpost;
+    use crate::test_utils::{create_assets, create_blogpost};
     use chrono::Duration;
     use std::io::Cursor;
 
@@ -301,6 +304,9 @@ mod tests {
 
         let posts = &[post1, post2];
 
+        let mut assets = create_assets();
+        assets.favicon.web_path = "/assets/fav&icon.png".to_owned();
+
         let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
 
         let hosted_files = HashMap::new();
@@ -324,6 +330,7 @@ mod tests {
         <entry>\
         <id>tag:strangerthanusual.de,2005:Blogpost/foobar</id>\
         <title>p2</title>\
+        <icon>https://blog.strangerthanusual.de/assets/fav&amp;icon.png</icon>\
         <published>2020-05-11T12:11:34+02:00</published>\
         <updated>2020-05-11T12:11:34+02:00</updated>\
         <author><name>Knirps</name></author>\

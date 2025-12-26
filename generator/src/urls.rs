@@ -16,7 +16,7 @@
  */
 
 use crate::input::tag::Tag;
-use crate::input::{Blogpost, Category, Quote};
+use crate::input::{Assets, Blogpost, Category, Quote};
 use crate::paths;
 use percent_encoding::percent_encode;
 
@@ -72,6 +72,10 @@ pub fn files_metadata_index_url(page: usize) -> String {
         CANONICAL_BASE_URL,
         paths::files_metadata_index_path(page)
     )
+}
+
+pub fn favicon_url(assets: &Assets) -> String {
+    format!("{}{}", CANONICAL_BASE_URL, assets.favicon.web_path)
 }
 
 #[cfg(test)]
