@@ -2,7 +2,7 @@
 title: Animierte SVG und CPU-Last
 filename: svg_animationen_cpu_load
 date: 2025-12-20T20:24:47+01:00
-update-date:
+update-date: 2025-12-26T18:25:00+01:00
 tags: svg, optimierung, animation, napstablook, mdn, browser, svgo
 category: hoellenmaschinen
 summary: Animierte SVG erzeugen hohe CPU-Last. Ich versuche, eine Lösung dafür zu finden, aber zufriedenstellend ist das nicht.
@@ -39,9 +39,40 @@ Lustig ist, dass man an der Struktur der SVG-Datei gut erkennen kann, wie die er
 
 Ich habe einige Zeit gebraucht, die größtenteils daraus bestand, mich in der Ursprungsdatei zurechtzufinden, unnützen krams wegzuwerfen und Translationen zu berechnen. Am Ende jedoch hatte ich die Animation, die ich auch zu meinem geklonten Repo auf Github gepushed habe. Die Sache hat nur einen Nachteil: Meine CPU-Lst geht auf 30% hoch, sobald ich die Animation im Browser betrachte.
 
+```
+  <use> <!-- "use" referenziert ein anderes Objekt, das gerendert werden soll.-->
+    <!-- Das "href"-Attribut von "use" wird durch das "animation"-Tag gesetzt. -->
+    <animate attributeName="href" values="#f1;#f2;#f3;#f4;#f5;#f6;#f7;#f8;#f9;#f10;#f11;#f12;#f13;#f14;#f15;#f16;#f17" dur="1.5s" repeatCount="indefinite"/>
+  </use>
+  
+  <!-- das sind die einzelnen Animationsschritte, sie sind in einer Gruppe, die sie aus
+       dem gerenderten Bereich heraus verschiebt -->
+  <g transform="translate(135,253)">
+    <path
+       transform="matrix(0.5,0,0,0.5,0,-273)"
+       id="f1"
+       d="m 50.917047,1047.8813 c -9.810776,-5.1114 [sehr langer Pfad]"/>
+    <!-- 16 andere Pfade mit IDs von "f2" bis "f17" -->
+  </g>
+```
+
 ### Die CPU-Last animierter SVG
 
-30% auf einem halbwegs modernen CPU-Kern… das ist zu viel für einen kleinen animierten Geist in schwarz-weiß. Aber wie gesagt, die SVG-Pfade für den Geist sind sehr lang und umständlich. Also nehme ich eine einfachere Animation. So einfach wie möglich. Ich nehme das Beispiel von der [MDN-Dokumentation zum `<animate>`-Tag](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/animate). Das ist nur ein Quadrat, und die Animation ist so, dass sie langsam die Ecken immer weiter abrundet, bis ein Kreis dabei heraus kommt, und wieder zurück. Ad infinitum. Das kann doch nicht so schlimm sein, oder?
+30% auf einem halbwegs modernen CPU-Kern… das ist zu viel für einen kleinen animierten Geist in schwarz-weiß. Aber wie gesagt, die SVG-Pfade für den Geist sind sehr lang und umständlich. Also nehme ich eine einfachere Animation. So einfach wie möglich. Ich nehme das Beispiel von der [MDN-Dokumentation zum `<animate>`-Tag](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/animate):
+
+```
+<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+  <rect width="10" height="10">
+    <animate
+      attributeName="rx"
+      values="0;5;0"
+      dur="10s"
+      repeatCount="indefinite" />
+  </rect>
+</svg>
+```
+
+Das ist nur ein Quadrat, und die Animation ist so, dass sie langsam die Ecken immer weiter abrundet, bis ein Kreis dabei heraus kommt, und wieder zurück. Ad infinitum. Das kann doch nicht so schlimm sein, oder?
 
 **70 Prozent?!?**
 
@@ -51,7 +82,21 @@ Ich kann doch nicht die einzige Person mit diesem Problem sein, oder?
 
 Nein, natürlich nicht. Vor über 7 Jahren schon hat zum Beispiel jemand [auf Stackoverflow um Hilfe gebeten](https://stackoverflow.com/questions/49906314/animated-svg-spinner-uses-excessive-cpu-and-gpu). Und das ist kein alleiniges Firefox-Problem. Chrome (bzw. Chromium) macht das Gleiche. Und damit in aller Wahrscheinlichkeit auch Safari und Edge.
 
-Ich habe noch ein paar Experimente angestellt. Bewegen von Elementen (in diesem Fall eines Quadrats) hat auch für 70% Auslastung gesorgt (Beispiel von der [MDN-Seite über das `repeatCount`-Attribut](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/repeatCount)). Tatsächlich bin ich mit den 20% noch ganz gut dabei gewesen.
+Ich habe noch ein paar Experimente angestellt. Bewegen von Elementen (in diesem Fall eines Quadrats) hat auch für 70% Auslastung gesorgt (Beispiel von der [MDN-Seite über das `repeatCount`-Attribut](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/repeatCount)). Tatsächlich bin ich mit den 30% noch ganz gut dabei gewesen.
+
+```
+<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+  <rect x="120" y="0" width="100" height="100">
+    <animate
+      attributeType="XML"
+      attributeName="y"
+      from="0"
+      to="50"
+      dur="1s"
+      repeatCount="indefinite" />
+  </rect>
+</svg>
+```
 
 Ironischerweise hat [dieses Tutorial, um SVG-Animationen auf Page Speed zu optimieren](https://www.svgator.com/blog/svg-optimizations-improve-page-speed/) als Titelbild eine animierte SVG, die meine CPU-Last auf 200% bis 250% hochtreibt. Super hilfreich ist die Seite auch nicht. Ein paar gute Tipps (z.B. zum Verkleinern der SVG-Dateien) sind aber dabei.
 
@@ -68,3 +113,7 @@ Wenn ich etwas herausfinden sollte, schreibe ich hier wieder etwas dazu.
 ### PS: svgo
 
 Ach ja: Seit vorsichtig mit SVG-Optimierungstools wie `svgo`, wenn ihr animierte SVG-Dateien habt. SVGO fügt nämlich mehrere Pfade zu einem Pfad zusammen, entfernt Gruppen und IDs, und ignoriert dabei, dass die vielleicht von Animationen als getrennte, identifizierbare Elemente benötigt werden. Man kann das teilweise wegkonfigurieren, aber das ist ein bisschen aufwändig und man muss trotzdem aufpassen.
+
+### Edit 2025-12-26
+
+Ich hatte ganz vergessen, ein paar Codebeispiele einzufügen. Das habe ich jetzt nachgeholt.
