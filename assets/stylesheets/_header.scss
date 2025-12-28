@@ -19,7 +19,6 @@
 
     /* Blog-Überschrift */
     h1 {
-        font-family: Georgia, serif;
         color: $main-foreground-color;
         text-align: center;
 
@@ -53,8 +52,6 @@
 
     /* Element-Beschriftungen Inaktiv (Unbesucht & Besucht) */
     ul.main-nav li a:link, ul.main-nav li a:visited {
-        font-family: Georgia, serif;
-
         margin-right: .3125em;  /* Abstand zwischen den Elementen */
         font-size: 1.5em;
     }
