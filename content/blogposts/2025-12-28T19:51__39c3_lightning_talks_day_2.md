@@ -25,7 +25,7 @@ Man kann sich die [Aufzeichnung der Lightning Talks auf media.ccc.de](https://me
 - „Youth Hacking 4 Freedom: the European Free Software competition for teenagers“: Der Titel sagt es schon
 - „From word clouds to Word Rain: A new text visualisation technique“: Word Clouds sind für Textanalyse nicht hilfreich genug, Word Rain ist hilfreicher (inklusive einer Erklärung, was Word Rain ist)
 - „Spaß mit Brettspielen“: Werbung für Brettspiele als Hobby
-- „Creative Commons Radio - I really didn't want to become a copyright activist!“: Der Sprecher wollte nur mit Musik im Hintergrund streamen. Trotz Copyright-strikes gegen CClLizenzierte Musik
+- „Creative Commons Radio - I really didn't want to become a copyright activist!“: Der Sprecher wollte nur mit Musik im Hintergrund streamen. Trotz Copyright-strikes gegen CC-lizenzierte Musik
 - „lernOS für Dich - Selbstmanagement & persönliches Wissensmanagement leicht gemacht“: Irgendwas mit Wissensmanagement
 - „Was man in Bluetooth Advertisements so alles findet“: Viele Bluetooth-Geräte schicken Payload unverschlüsselt. Das führt in vielen Fällen zu Privacy-Problemen
 - „The Sorbus Computer“: Ich bin mir nicht mehr sicher, aber ich glaube es ging um einen Emulator mehrerer alter Computer (z.B. Apple ][)
