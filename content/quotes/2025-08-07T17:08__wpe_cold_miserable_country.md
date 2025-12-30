@@ -3,7 +3,7 @@ id: wpe_cold_miserable_country
 source-name: Worst Premade Ever
 source-url: https://youtu.be/uA6GjVlsGRI?t=945
 date: 2025-08-07T17:08:01+02:00
-published: false
+published: true
 language: en
 ---
 
