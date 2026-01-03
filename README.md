@@ -58,4 +58,4 @@ Files / directories
 License
 -------
 
-The generator software, scripts, scss and makefiles are published as stublog-static under the GNU Affero General Public License (see the COPYING file). The blog content (everything in the content directory is published under the [Creative Commons BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.
+The generator software, scripts, scss and makefiles are published as stublog-static under the GNU Affero General Public License (see the COPYING file). The blog content (everything in the content directory) is published under the [Creative Commons BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.
