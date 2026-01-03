@@ -90,7 +90,7 @@ pub fn list_all_files(path: &Utf8Path) -> Result<Vec<HostedFile>, ListFilesError
             let file_extension = entry_path.extension();
             // we take a shortcut here and rely on the file extensions, this makes things a little faster
             let image_metadata = if file_extension
-                .map(|ext| ["png", "gif", "jpg", "jpeg", "webp"].contains(&ext))
+                .map(|ext| ["png", "gif", "jpg", "jpeg", "webp", "avif"].contains(&ext))
                 .unwrap_or(false)
             {
                 Some(read_image_metadata(entry_path)?)

@@ -42,6 +42,7 @@ Requirements
 - the [zopfli command line tool](https://github.com/google/zopfli) for gz compression (or you can just use gz, but then you need to change compression.makefile)
 - [nginx](https://nginx.org/) (and possibly some plugins I implicitly used) to run a local test server
 - [sassc](https://github.com/sass/sassc) for compiling the style sheets
+- the library [dav1d](https://code.videolan.org/videolan/dav1d/) (on ubuntu/debian: `libdav1d-dev`) to decode avif files
 - maybe some other stuff I forgot to mention
 
 Files / directories

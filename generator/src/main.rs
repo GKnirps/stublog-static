@@ -112,7 +112,7 @@ fn generate_blog(indir: &str, odir: &str) -> Result<(), String> {
 
     let hosted_files_indir: Utf8PathBuf = [indir, "file"].iter().collect();
     let hosted_files = input::hosted_files::list_all_files(&hosted_files_indir)
-        .map_err(|e| format!("Unable to list all hosted files:{e}"))?;
+        .map_err(|e| format!("Unable to list all hosted files: {e}"))?;
 
     let (hosted_file_pairs, hosted_files_by_name) =
         match_hosted_files(&hosted_files_meta, &hosted_files)?;

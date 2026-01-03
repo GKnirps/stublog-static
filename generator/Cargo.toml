@@ -30,5 +30,5 @@ pulldown-cmark-escape = { version = "^0.11.0", features = ["simd"] }
 percent-encoding = "^2.3.1"
 quick-xml = "^0.38.0"
 sha2 = "^0.10.9"
-image = { version = "^0.25.6", default-features = false, features = ["jpeg", "gif", "webp", "png" ]}
+image = { version = "^0.25.6", default-features = false, features = ["jpeg", "gif", "webp", "png", "avif-native" ]}
 camino = "^1.1.10"
