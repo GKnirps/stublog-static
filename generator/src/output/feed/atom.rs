@@ -312,7 +312,7 @@ mod tests {
         let hosted_files = HashMap::new();
 
         // when
-        write_feed(&mut writer, posts, &hosted_files).expect("Expected successful write");
+        write_feed(&mut writer, posts, &hosted_files, &assets).expect("Expected successful write");
 
         // then
         let result = writer.into_inner().into_inner();
@@ -324,13 +324,13 @@ mod tests {
         <feed xml:lang=\"de\" xmlns=\"http://www.w3.org/2005/Atom\">\
         <id>tag:strangerthanusual.de,2005:/feed</id>\
         <title>Stranger Than Usual</title>\
+        <icon>https://blog.strangerthanusual.de/assets/fav&amp;icon.png</icon>\
         <updated>2020-05-11T12:12:32+02:00</updated>\
         <link href=\"https://blog.strangerthanusual.de\" rel=\"alternate\" type=\"text/html\"/>\
         <link href=\"https://blog.strangerthanusual.de/feed.atom\" rel=\"self\" type=\"application/atom+xml\"/>\
         <entry>\
         <id>tag:strangerthanusual.de,2005:Blogpost/foobar</id>\
         <title>p2</title>\
-        <icon>https://blog.strangerthanusual.de/assets/fav&amp;icon.png</icon>\
         <published>2020-05-11T12:11:34+02:00</published>\
         <updated>2020-05-11T12:11:34+02:00</updated>\
         <author><name>Knirps</name></author>\
@@ -359,9 +359,10 @@ mod tests {
         let mut writer = Writer::new(Cursor::new(Vec::with_capacity(1000)));
 
         let hosted_files = HashMap::new();
+        let assets = create_assets();
 
         // when
-        write_feed(&mut writer, posts, &hosted_files).expect("Expected successful write");
+        write_feed(&mut writer, posts, &hosted_files, &assets).expect("Expected successful write");
 
         // then
         let result = writer.into_inner().into_inner();
@@ -373,6 +374,7 @@ mod tests {
         <feed xml:lang=\"de\" xmlns=\"http://www.w3.org/2005/Atom\">\
         <id>tag:strangerthanusual.de,2005:/feed</id>\
         <title>Stranger Than Usual</title>\
+        <icon>https://blog.strangerthanusual.de/assets/favicon.png</icon>\
         <updated>1970-01-01T00:00:00+02:00</updated>\
         <link href=\"https://blog.strangerthanusual.de\" rel=\"alternate\" type=\"text/html\"/>\
         <link href=\"https://blog.strangerthanusual.de/feed.atom\" rel=\"self\" type=\"application/atom+xml\"/>\
