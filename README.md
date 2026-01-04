@@ -2,6 +2,15 @@ Stranger Than Usual blog generator
 ==================================
 
 This is a static HTML generator for my blog „[Stranger Than Usual](https://blog.strangerthanusual.de/)“.
+
+IMPORTANT: Github repository archived, moved to Codeberg
+------------------------------
+
+This repository used to be hosted at [github](https://github.com/GKnirps/stublog-static). As of 2026-01-04, I have moved it to [codeberg](https://codeberg.org/GKnirps/stublog-static). I keep the old repository on github but I mark it as archived.
+
+Why a static site generator?
+---------------------------
+
 Before 2020-10-03 Stranger Than Usual was dynamically created via ruby on rails.
 
 There are several reasons why I don't use rails anymore. The most important ones are:

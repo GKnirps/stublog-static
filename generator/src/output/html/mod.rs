@@ -179,7 +179,7 @@ fn footer() -> Markup {
             }
             p.license-generator {
                 "Dieses Blog wurde mit "
-                a href="https://github.com/GKnirps/stublog-static" {
+                a href="https://codeberg.org/GKnirps/stublog-static" {
                     "stublog-static"
                 }
                 " generiert."

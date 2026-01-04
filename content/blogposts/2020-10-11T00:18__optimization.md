@@ -2,7 +2,7 @@
 title: Optimier mich!
 filename: blog-optimization
 date: 2020-10-11T00:18:31+02:00
-update-date:
+update-date: 2026-01-04T14:54:00+01:00
 tags: optimization, optimierung, premature optimization, brotli, zopfli, kompression, make
 category: meta
 summary: Optimierungen in meinem Bloggenerator. Manche aus Spaß, manche aus Notwendigkeit.
@@ -16,7 +16,7 @@ summary: Optimierungen in meinem Bloggenerator. Manche aus Spaß, manche aus Not
 
 Spätere Optimierung hingegen macht weniger Spaß, ist aber gelegentlich notwendig.
 
-So auch bei der Blogsoftware, mit der ich dieses Blog hier generiere (seit Kurzem veröffentlicht [auf github](https://github.com/GKnirps/stublog-static)). Und ich gebe zu, ich habe auch tatsächlich eine vorzeitige Optimierung eingebaut, die ich später bereut und wieder entfernt habe: Ich habe das Parsen und das in-html-Umwandeln des Markdowns von Blogpost an eine Stelle verlagert, wo es eigentlich nicht hingehört, damit es nur einmal durchgeführt werden muss (anstatt von bis zu drei Mal: einmal für den Blogpost selber, einmal für die Archivseite und einmal für die Homepage).
+So auch bei der Blogsoftware, mit der ich dieses Blog hier generiere (seit Kurzem veröffentlicht [auf github](https://codeberg.org/GKnirps/stublog-static)). Und ich gebe zu, ich habe auch tatsächlich eine vorzeitige Optimierung eingebaut, die ich später bereut und wieder entfernt habe: Ich habe das Parsen und das in-html-Umwandeln des Markdowns von Blogpost an eine Stelle verlagert, wo es eigentlich nicht hingehört, damit es nur einmal durchgeführt werden muss (anstatt von bis zu drei Mal: einmal für den Blogpost selber, einmal für die Archivseite und einmal für die Homepage).
 
 Allgemein ist es in Rust relativ verführend, Optimierungen einzubauen. Man kann es aber auch sein lassen, und ist damit trotzdem meistens schnell genug. In manchen Fällen, wie zum Beispiel [xml-rs](https://crates.io/crates/xml-rs) vs. [quick-xml](https://crates.io/crates/quick-xml) habe ich in der Vergangenheit feststellen müssen, dass ich bei einer mehreren hundert MB großen Datei einen signifikanten Unterschied (ein paar Minuten vs. ein paar Sekunden) beim Parsen habe.
 
@@ -107,3 +107,7 @@ Die Sache hat nur zwei Haken: Zum einen müssen jedes Mal, wenn ich etwas am CSS
 Zum anderen aber wird es mit meinem momentanen Setup eine unschöne Angelegenheit, diese Dateien mit Cache-Hashes zu generieren und gleichzeitig den Hash in den HTML-Generator zu bringen. Nicht unmöglich, aber unschön. Gegeben der Größe der CSS-Datei (<3kB unkomprimiert, <900 Byte komprimiert) könnte ich mir das auch sparen und erst umsetzen, wenn es ein Performance-Problem gibt. Das wäre der sensible Ansatz.
 
 Aber ich kenne mich selbst zu gut. Ich werde nicht den vernünftigen Ansatz nehmen, sondern den, bei dem ich so viel wie möglich optimieren kann, ohne dass es wirklich notwendig ist. Das ist so eine Art Berufskrankheit.
+
+### Update 2026-01-04
+
+Ich habe das Repo für dieses Blog nach Codeberg verschoben und den Link zum Repo oben angepasst.
